@@ -2,8 +2,8 @@
 #define LVGL_CPP_WIDGETS_SPINBOX_H_
 
 
-#include "lvgl.h"
-#include "textarea.h"
+#include "lvgl.h" // IWYU pragma: export
+#include "textarea.h" // IWYU pragma: export
 
 /**
  * @file spinbox.h

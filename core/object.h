@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_CORE_OBJECT_H_
 #define LVGL_CPP_CORE_OBJECT_H_
 
-#include "lvgl.h"
+#include "lvgl.h" // IWYU pragma: export
 #include <functional>
 #include <memory>
 
@@ -11,13 +11,11 @@
  *
  * # Usage Guide
  *
- * ## Memory Management
- * The `Object` class (and all Widget classes) uses a robust RAII-style memory
+ * ## Memory Management* The `Object` class (and all Widget classes) uses a robust RAII-style memory
  * management model designed to work seamlessly with LVGL's parent-child
  * deletion logic.
  *
- * ### 1. Owned Objects
- * When you create an object with a parent using the C++ constructor, the C++
+ * ### 1. Owned Objects* When you create an object with a parent using the C++ constructor, the C++
  * wrapper assumes ownership.
  *
  * ```cpp
@@ -28,8 +26,7 @@
  * screen.
  * ```
  *
- * ### 2. Wrappers / Proxies
- * When you wrap an existing `lv_obj_t*` (e.g., returned by a helper function),
+ * ### 2. Wrappers / Proxies* When you wrap an existing `lv_obj_t*` (e.g., returned by a helper function),
  * the C++ wrapper acts as a non-owning proxy.
  *
  * ```cpp
@@ -37,8 +34,7 @@
  * // 'tab' wrapper can go out of scope without deleting the actual tab page.
  * ```
  *
- * ### 3. Safety Mechanism
- * The wrapper listens for the `LV_EVENT_DELETE` event.
+ * ### 3. Safety Mechanism* The wrapper listens for the `LV_EVENT_DELETE` event.
  * - If the *parent* deletes the child (e.g., screen clear), the C++ wrapper is
  * notified and marks itself as invalid (`obj_ = nullptr`).
  * - Subsequent usage of the C++ wrapper needs `is_valid()` checks if unsure,
@@ -195,7 +191,7 @@ public:
    */
   void center();
 
-  // --- Flags & States ---
+  // --- Flags& States ---
 
   /**
    * @brief Add a flag to the object.

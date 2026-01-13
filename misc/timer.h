@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_MISC_TIMER_H_
 #define LVGL_CPP_MISC_TIMER_H_
 
-#include "lvgl.h"
+#include "lvgl.h" // IWYU pragma: export
 #include <functional>
 #include <memory>
 

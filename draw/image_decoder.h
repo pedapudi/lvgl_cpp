@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_DRAW_IMAGE_DECODER_H_
 #define LVGL_CPP_DRAW_IMAGE_DECODER_H_
 
-#include "lvgl.h"
+#include "lvgl.h" // IWYU pragma: export
 
 namespace lvgl {
 

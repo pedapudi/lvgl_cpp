@@ -2,8 +2,8 @@
 #define LVGL_CPP_WIDGETS_KEYBOARD_H_
 
 
-#include "button_matrix.h"
-#include "lvgl.h"
+#include "button_matrix.h" // IWYU pragma: export
+#include "lvgl.h" // IWYU pragma: export
 
 /**
  * @file keyboard.h

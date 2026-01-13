@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SLIDER_H_
 #define LVGL_CPP_WIDGETS_SLIDER_H_
 
-#include "bar.h"
-#include "lvgl.h"
+#include "bar.h" // IWYU pragma: export
+#include "lvgl.h" // IWYU pragma: export
 
 /**
  * @file slider.h

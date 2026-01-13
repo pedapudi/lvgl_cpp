@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_MISC_ANIMATION_H_
 #define LVGL_CPP_MISC_ANIMATION_H_
 
-#include "../core/object.h"
-#include "lvgl.h"
+#include "../core/object.h" // IWYU pragma: export
+#include "lvgl.h" // IWYU pragma: export
 #include <functional>
 #include <memory>
 
@@ -19,8 +19,7 @@ public:
   // Builder pattern
   Animation &set_var(void *var);
   Animation &set_exec_cb(lv_anim_exec_xcb_t exec_cb); // C style callback
-  Animation &
-  set_exec_cb(ExecCallback cb); // C++ style, requires keeping Animation object
+  Animation& set_exec_cb(ExecCallback cb); // C++ style, requires keeping Animation object
                                 // alive or careful management
   Animation &set_duration(uint32_t duration);
   Animation &set_delay(uint32_t delay);

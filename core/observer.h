@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_CORE_OBSERVER_H_
 #define LVGL_CPP_CORE_OBSERVER_H_
 
-#include "lvgl.h"
-#include "object.h" // For bindings
+#include "lvgl.h" // IWYU pragma: export
+#include "object.h" // For bindings // IWYU pragma: export
 #include <string>
 #include <vector>
 

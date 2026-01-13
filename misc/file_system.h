@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_MISC_FILE_SYSTEM_H_
 #define LVGL_CPP_MISC_FILE_SYSTEM_H_
 
-#include "lvgl.h"
+#include "lvgl.h" // IWYU pragma: export
 #include <string>
 #include <vector>
 

@@ -2,8 +2,8 @@
 #define LVGL_CPP_WIDGETS_IMAGE_BUTTON_H_
 
 
-#include "../core/object.h"
-#include "lvgl.h"
+#include "../core/object.h" // IWYU pragma: export
+#include "lvgl.h" // IWYU pragma: export
 
 /**
  * @file image_button.h

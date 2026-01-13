@@ -2,8 +2,8 @@
 #define LVGL_CPP_WIDGETS_CANVAS_H_
 
 
-#include "image.h"
-#include "lvgl.h"
+#include "image.h" // IWYU pragma: export
+#include "lvgl.h" // IWYU pragma: export
 
 /**
  * @file canvas.h

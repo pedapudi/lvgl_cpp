@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_MENU_H_
 #define LVGL_CPP_WIDGETS_MENU_H_
 
-#include "../core/object.h"
-#include "lvgl.h"
+#include "../core/object.h" // IWYU pragma: export
+#include "lvgl.h" // IWYU pragma: export
 
 /**
  * @file menu.h
