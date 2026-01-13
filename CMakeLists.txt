@@ -7,14 +7,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Find LVGL (Assuming it's in the parent directory)
 # In a real scenario, this might need more robust finding logic
 # or be added as a subdirectory.
-# For now, we assume this project is part of a larger build or LVGL is available.
 
-# If building as a standalone library trying to find LVGL:
-# This part is tricky because LVGL usually expects to be configured in a certain way.
-# We will assume headers are available.
-
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl) # Look for lvgl.h in sibling lvgl directory
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
+if(NOT TARGET lvgl)
+    # If LVGL is not already a target (e.g. from parent project), we include it here.
+    # This is primarily for building the tests or standalone development of lvgl_cpp.
+    
+    # Use the test configuration for internal builds/tests
+    set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
+    
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
+        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
+    else()
+        message(WARNING "LVGL not found at ../lvgl. Tests might fail to build.")
+    endif()
+endif()
 
 add_library(lvgl_cpp STATIC
     core/object.cc
@@ -67,6 +73,7 @@ add_library(lvgl_cpp STATIC
 
 target_include_directories(lvgl_cpp PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/.. # Allow including via lvgl_cpp/...
 )
 
 # Link against LVGL
