@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_MENU_H_
 #define LVGL_CPP_WIDGETS_MENU_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file menu.h
@@ -20,27 +20,27 @@
 namespace lvgl {
 
 class MenuPage : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class MenuCont : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class MenuSection : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class MenuSeparator : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class Menu : public Object {
-public:
+ public:
   /**
    * @brief Create a Menu on the active screen.
    */
@@ -79,6 +79,6 @@ public:
   void clear_history();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_MENU_H_
+#endif  // LVGL_CPP_WIDGETS_MENU_H_

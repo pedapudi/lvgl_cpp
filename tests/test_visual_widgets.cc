@@ -1,3 +1,6 @@
+#include <iostream>
+#include <vector>
+
 #include "../core/object.h"
 #include "../widgets/anim_image.h"
 #include "../widgets/canvas.h"
@@ -8,8 +11,6 @@
 #include "../widgets/span.h"
 #include "../widgets/spinner.h"
 #include "lvgl.h"
-#include <iostream>
-#include <vector>
 
 using namespace lvgl;
 
@@ -24,9 +25,9 @@ void test_chart_1() {
   chart.center();
   chart.set_type(LV_CHART_TYPE_LINE);
 
-  lv_chart_series_t *ser1 = chart.add_series(lv_palette_main(LV_PALETTE_GREEN),
+  lv_chart_series_t* ser1 = chart.add_series(lv_palette_main(LV_PALETTE_GREEN),
                                              LV_CHART_AXIS_PRIMARY_Y);
-  lv_chart_series_t *ser2 = chart.add_series(lv_palette_main(LV_PALETTE_RED),
+  lv_chart_series_t* ser2 = chart.add_series(lv_palette_main(LV_PALETTE_RED),
                                              LV_CHART_AXIS_SECONDARY_Y);
 
   for (int i = 0; i < 10; i++) {
@@ -75,7 +76,7 @@ void test_animimg_1() {
       {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
   static lv_image_dsc_t img2 = {
       {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
-  static const void *anim_imgs[] = {&img1, &img2};
+  static const void* anim_imgs[] = {&img1, &img2};
 
   animimg.set_src(anim_imgs, 2);
   animimg.set_duration(1000);
@@ -136,7 +137,7 @@ void test_spangroup_1() {
   spans.set_height(LV_SIZE_CONTENT);
   spans.center();
 
-  lv_span_t *span = spans.add_span();
+  lv_span_t* span = spans.add_span();
   spans.set_span_text(span, "China is a beautiful country.");
 
   span = spans.add_span();

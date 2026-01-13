@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_LED_H_
 #define LVGL_CPP_WIDGETS_LED_H_
 
-
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file led.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class Led : public Object {
-public:
+ public:
   /**
    * @brief Create a Led on the active screen.
    */
@@ -55,6 +54,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_LED_H_
+#endif  // LVGL_CPP_WIDGETS_LED_H_

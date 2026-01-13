@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../core/object.h"
 #include "../widgets/button.h"
 #include "../widgets/button_matrix.h"
@@ -10,7 +12,6 @@
 #include "../widgets/tileview.h"
 #include "../widgets/win.h"
 #include "lvgl.h"
-#include <iostream>
 
 using namespace lvgl;
 
@@ -165,7 +166,7 @@ void test_btnmatrix_1() {
   Object screen = get_screen();
   ButtonMatrix btnm(&screen);
 
-  static const char *btnm_map[] = {"1", "2", "3", "\n", "4", "5", "6", ""};
+  static const char* btnm_map[] = {"1", "2", "3", "\n", "4", "5", "6", ""};
   btnm.set_map(btnm_map);
   btnm.align(LV_ALIGN_CENTER, 0, 0);
 

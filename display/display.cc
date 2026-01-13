@@ -18,33 +18,27 @@ Display* Display::get_default() {
 }
 
 void Display::set_resolution(int32_t hor_res, int32_t ver_res) {
-  if (disp_)
-    lv_display_set_resolution(disp_, hor_res, ver_res);
+  if (disp_) lv_display_set_resolution(disp_, hor_res, ver_res);
 }
 
 void Display::set_physical_resolution(int32_t hor_res, int32_t ver_res) {
-  if (disp_)
-    lv_display_set_physical_resolution(disp_, hor_res, ver_res);
+  if (disp_) lv_display_set_physical_resolution(disp_, hor_res, ver_res);
 }
 
 void Display::set_offset(int32_t x, int32_t y) {
-  if (disp_)
-    lv_display_set_offset(disp_, x, y);
+  if (disp_) lv_display_set_offset(disp_, x, y);
 }
 
 void Display::set_rotation(lv_display_rotation_t rotation) {
-  if (disp_)
-    lv_display_set_rotation(disp_, rotation);
+  if (disp_) lv_display_set_rotation(disp_, rotation);
 }
 
 void Display::set_dpi(int32_t dpi) {
-  if (disp_)
-    lv_display_set_dpi(disp_, dpi);
+  if (disp_) lv_display_set_dpi(disp_, dpi);
 }
 
 void Display::set_render_mode(lv_display_render_mode_t render_mode) {
-  if (disp_)
-    lv_display_set_render_mode(disp_, render_mode);
+  if (disp_) lv_display_set_render_mode(disp_, render_mode);
 }
 
 int32_t Display::get_horizontal_resolution() const {
@@ -84,14 +78,12 @@ lv_obj_t* Display::get_layer_bottom() {
 }
 
 void Display::load_screen(Object* scr) {
-  if (scr)
-    lv_screen_load(scr->raw());
+  if (scr) lv_screen_load(scr->raw());
 }
 
 void Display::load_screen_anim(Object* scr, lv_screen_load_anim_t anim_type,
                                uint32_t time, uint32_t delay, bool auto_del) {
-  if (scr)
-    lv_screen_load_anim(scr->raw(), anim_type, time, delay, auto_del);
+  if (scr) lv_screen_load_anim(scr->raw(), anim_type, time, delay, auto_del);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

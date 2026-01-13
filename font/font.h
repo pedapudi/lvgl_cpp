@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_FONT_FONT_H_
 #define LVGL_CPP_FONT_FONT_H_
 
-#include "lvgl.h" // IWYU pragma: export
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
@@ -10,7 +10,7 @@ namespace lvgl {
  * Typically fonts are global constants, so this wrapper holds a pointer.
  */
 class Font {
-public:
+ public:
   explicit Font(const lv_font_t* font);
 
   // Accessors
@@ -40,10 +40,10 @@ public:
   static const Font& montserrat_30();
   static const Font& montserrat_32();
 
-private:
+ private:
   const lv_font_t* font_;
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_FONT_FONT_H_
+#endif  // LVGL_CPP_FONT_FONT_H_

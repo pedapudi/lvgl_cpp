@@ -1,12 +1,12 @@
 #ifndef LVGL_CPP_DRAW_DRAW_H_
 #define LVGL_CPP_DRAW_DRAW_H_
 
-#include "lvgl.h" // IWYU pragma: export
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
 class DrawTask {
-public:
+ public:
   explicit DrawTask(lv_draw_task_t* task);
 
   lv_draw_task_type_t get_type() const;
@@ -17,12 +17,12 @@ public:
   // casted to specific structs. We can provide helpers like:
   // lv_draw_fill_dsc_t* as_fill_dsc();
 
-private:
+ private:
   lv_draw_task_t* task_;
 };
 
 class Layer {
-public:
+ public:
   explicit Layer(lv_layer_t* layer);
 
   void init();
@@ -32,10 +32,10 @@ public:
   DrawTask add_task(const lv_area_t* coords, lv_draw_task_type_t type);
   void finalize_task_creation(DrawTask& t);
 
-private:
+ private:
   lv_layer_t* layer_;
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_DRAW_DRAW_H_
+#endif  // LVGL_CPP_DRAW_DRAW_H_

@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_ANIM_IMAGE_H_
 #define LVGL_CPP_WIDGETS_ANIM_IMAGE_H_
 
-
-#include "image.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "image.h"  // IWYU pragma: export
+#include "lvgl.h"   // IWYU pragma: export
 
 /**
  * @file anim_image.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class AnimImage : public Image {
-public:
+ public:
   /**
    * @brief Create a AnimImage on the active screen.
    */
@@ -52,6 +51,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_ANIM_IMAGE_H_
+#endif  // LVGL_CPP_WIDGETS_ANIM_IMAGE_H_

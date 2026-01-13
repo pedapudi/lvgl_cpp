@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_MSGBOX_H_
 #define LVGL_CPP_WIDGETS_MSGBOX_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file msgbox.h
@@ -23,22 +23,22 @@ class Button;
 class Label;
 
 class MsgBoxHeader : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class MsgBoxFooter : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class MsgBoxContent : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class MsgBox : public Object {
-public:
+ public:
   /**
    * @brief Create a MsgBox on the active screen.
    */
@@ -47,9 +47,9 @@ public:
    * @brief Create a MsgBox with a parent.
    * @param parent The parent object.
    */
-  explicit MsgBox(Object* parent); // Creates modal if parent is NULL?
-                                   // No, lv_msgbox_create creates
-                                   // modal if parent is NULL.
+  explicit MsgBox(Object* parent);  // Creates modal if parent is NULL?
+                                    // No, lv_msgbox_create creates
+                                    // modal if parent is NULL.
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
@@ -71,6 +71,6 @@ public:
   void close_async();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_MSGBOX_H_
+#endif  // LVGL_CPP_WIDGETS_MSGBOX_H_

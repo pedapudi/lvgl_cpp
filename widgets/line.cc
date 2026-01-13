@@ -10,18 +10,15 @@ Line::Line(Object* parent)
 Line::Line(lv_obj_t* obj) : Object(obj) {}
 
 void Line::set_points(const lv_point_precise_t points[], uint32_t point_num) {
-  if (obj_)
-    lv_line_set_points(obj_, points, point_num);
+  if (obj_) lv_line_set_points(obj_, points, point_num);
 }
 
 void Line::set_points_mutable(lv_point_precise_t points[], uint32_t point_num) {
-  if (obj_)
-    lv_line_set_points_mutable(obj_, points, point_num);
+  if (obj_) lv_line_set_points_mutable(obj_, points, point_num);
 }
 
 void Line::set_y_invert(bool en) {
-  if (obj_)
-    lv_line_set_y_invert(obj_, en);
+  if (obj_) lv_line_set_y_invert(obj_, en);
 }
 
 const lv_point_precise_t* Line::get_points() const {
@@ -44,4 +41,4 @@ bool Line::get_y_invert() const {
   return obj_ ? lv_line_get_y_invert(obj_) : false;
 }
 
-} // namespace lvgl
+}  // namespace lvgl

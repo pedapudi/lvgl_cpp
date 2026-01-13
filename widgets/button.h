@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_BUTTON_H_
 #define LVGL_CPP_WIDGETS_BUTTON_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file button.h
@@ -28,7 +28,7 @@ namespace lvgl {
  * A button is a simple container that can be clicked.
  */
 class Button : public Object {
-public:
+ public:
   /**
    * @brief Create a Button on the active screen.
    * Takes ownership.
@@ -48,6 +48,6 @@ public:
   explicit Button(lv_obj_t* obj);
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_BUTTON_H_
+#endif  // LVGL_CPP_WIDGETS_BUTTON_H_

@@ -17,23 +17,19 @@ ImageDecoder::~ImageDecoder() {
 }
 
 void ImageDecoder::set_info_cb(lv_image_decoder_info_f_t cb) {
-  if (decoder_)
-    lv_image_decoder_set_info_cb(decoder_, cb);
+  if (decoder_) lv_image_decoder_set_info_cb(decoder_, cb);
 }
 
 void ImageDecoder::set_open_cb(lv_image_decoder_open_f_t cb) {
-  if (decoder_)
-    lv_image_decoder_set_open_cb(decoder_, cb);
+  if (decoder_) lv_image_decoder_set_open_cb(decoder_, cb);
 }
 
 void ImageDecoder::set_get_area_cb(lv_image_decoder_get_area_cb_t cb) {
-  if (decoder_)
-    lv_image_decoder_set_get_area_cb(decoder_, cb);
+  if (decoder_) lv_image_decoder_set_get_area_cb(decoder_, cb);
 }
 
 void ImageDecoder::set_close_cb(lv_image_decoder_close_f_t cb) {
-  if (decoder_)
-    lv_image_decoder_set_close_cb(decoder_, cb);
+  if (decoder_) lv_image_decoder_set_close_cb(decoder_, cb);
 }
 
 lv_image_decoder_t* ImageDecoder::release() {
@@ -42,4 +38,4 @@ lv_image_decoder_t* ImageDecoder::release() {
   return ptr;
 }
 
-} // namespace lvgl
+}  // namespace lvgl

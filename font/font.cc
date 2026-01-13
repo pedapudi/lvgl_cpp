@@ -20,10 +20,10 @@ uint16_t Font::get_glyph_width(uint32_t letter, uint32_t letter_next) const {
 // However, since Font is just a pointer, copying is cheap.
 // We'll return references to static instances.
 
-#define DEFINE_FONT_ACCESSOR(name, lv_name)                                    \
-  const Font& Font::name() {                                                   \
-    static Font f(&lv_name);                                                   \
-    return f;                                                                  \
+#define DEFINE_FONT_ACCESSOR(name, lv_name) \
+  const Font& Font::name() {                \
+    static Font f(&lv_name);                \
+    return f;                               \
   }
 
 #if LV_FONT_MONTSERRAT_8
@@ -143,4 +143,4 @@ const Font& Font::montserrat_32() {
 }
 #endif
 
-} // namespace lvgl
+}  // namespace lvgl

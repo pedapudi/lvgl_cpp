@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../core/object.h"
 #include "../widgets/button.h"
 #include "../widgets/button_matrix.h"
@@ -9,7 +11,6 @@
 #include "../widgets/spinbox.h"
 #include "../widgets/textarea.h"
 #include "lvgl.h"
-#include <iostream>
 
 // Textarea Example 1: Simple Text area
 void test_textarea_1() {
@@ -100,8 +101,9 @@ void test_spinbox_1() {
 void test_dropdown_1() {
   std::cout << "Testing Dropdown Example 1..." << std::endl;
   lvgl::Dropdown dd;
-  dd.set_options("Apple\nBanana\nOrange\nCherry\nGrape\nRaspberry\nMelon\nOrang"
-                 "e\nLemon\nNuts");
+  dd.set_options(
+      "Apple\nBanana\nOrange\nCherry\nGrape\nRaspberry\nMelon\nOrang"
+      "e\nLemon\nNuts");
   dd.align(LV_ALIGN_TOP_MID, 0, 20);
 
   // Example 2 bits
@@ -117,15 +119,16 @@ void test_dropdown_1() {
 void test_roller_1() {
   std::cout << "Testing Roller Example 1..." << std::endl;
   lvgl::Roller roller1;
-  roller1.set_options("January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust"
-                      "\nSeptember\nOctober\nNovember\nDecember",
-                      LV_ROLLER_MODE_INFINITE);
+  roller1.set_options(
+      "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust"
+      "\nSeptember\nOctober\nNovember\nDecember",
+      LV_ROLLER_MODE_INFINITE);
   roller1.set_visible_row_count(4);
   roller1.center();
 
   // Example 2 bits (Styling)
   lvgl::Roller roller2;
-  const char *opts = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
+  const char* opts = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
   roller2.set_options(opts, LV_ROLLER_MODE_NORMAL);
   roller2.set_visible_row_count(2);
   roller2.set_width(100);

@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_CALENDAR_H_
 #define LVGL_CPP_WIDGETS_CALENDAR_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file calendar.h
@@ -20,7 +20,7 @@ namespace lvgl {
 
 class ButtonMatrix;
 class Calendar : public Object {
-public:
+ public:
   /**
    * @brief Create a Calendar on the active screen.
    */
@@ -39,7 +39,7 @@ public:
   void set_today_date(uint32_t year, uint32_t month, uint32_t day);
   void set_shown_date(uint32_t year, uint32_t month);
   void set_highlighted_dates(lv_calendar_date_t highlighted[], size_t date_num);
-  void set_day_names(const char **day_names);
+  void set_day_names(const char** day_names);
 
   ButtonMatrix get_btnmatrix();
   const lv_calendar_date_t* get_today_date();
@@ -54,6 +54,6 @@ public:
   lv_obj_t* create_dropdown_header();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_CALENDAR_H_
+#endif  // LVGL_CPP_WIDGETS_CALENDAR_H_

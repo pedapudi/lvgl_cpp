@@ -1,9 +1,10 @@
 #include "roller.h"
+
 #include "../core/observer.h"
 
 namespace lvgl {
 
-Roller::Roller() : Roller((Object *)nullptr) {}
+Roller::Roller() : Roller((Object*)nullptr) {}
 
 Roller::Roller(Object* parent)
     : Object(lv_roller_create(parent ? parent->raw() : nullptr)) {}
@@ -11,13 +12,11 @@ Roller::Roller(Object* parent)
 Roller::Roller(lv_obj_t* obj) : Object(obj) {}
 
 void Roller::set_options(const char* options, lv_roller_mode_t mode) {
-  if (obj_)
-    lv_roller_set_options(obj_, options, mode);
+  if (obj_) lv_roller_set_options(obj_, options, mode);
 }
 
 void Roller::set_selected(uint32_t sel_opt, lv_anim_enable_t anim) {
-  if (obj_)
-    lv_roller_set_selected(obj_, sel_opt, anim);
+  if (obj_) lv_roller_set_selected(obj_, sel_opt, anim);
 }
 
 bool Roller::set_selected_str(const char* sel_opt, lv_anim_enable_t anim) {
@@ -25,8 +24,7 @@ bool Roller::set_selected_str(const char* sel_opt, lv_anim_enable_t anim) {
 }
 
 void Roller::set_visible_row_count(uint32_t row_cnt) {
-  if (obj_)
-    lv_roller_set_visible_row_count(obj_, row_cnt);
+  if (obj_) lv_roller_set_visible_row_count(obj_, row_cnt);
 }
 
 uint32_t Roller::get_selected() {
@@ -34,8 +32,7 @@ uint32_t Roller::get_selected() {
 }
 
 void Roller::get_selected_str(char* buf, uint32_t buf_size) {
-  if (obj_)
-    lv_roller_get_selected_str(obj_, buf, buf_size);
+  if (obj_) lv_roller_get_selected_str(obj_, buf, buf_size);
 }
 
 const char* Roller::get_options() {
@@ -56,4 +53,4 @@ Observer Roller::bind_value(Subject& subject) {
   return Observer(lv_roller_bind_value(raw(), subject.raw()));
 }
 
-} // namespace lvgl
+}  // namespace lvgl

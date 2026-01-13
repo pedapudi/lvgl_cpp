@@ -1,14 +1,14 @@
 #ifndef LVGL_CPP_DRAW_IMAGE_DECODER_H_
 #define LVGL_CPP_DRAW_IMAGE_DECODER_H_
 
-#include "lvgl.h" // IWYU pragma: export
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
 class ImageDecoder {
-public:
-  ImageDecoder(); // Registered automatically in constructor? Or pure wrapper?
-                  // Custom decoder creation: lv_image_decoder_create()
+ public:
+  ImageDecoder();  // Registered automatically in constructor? Or pure wrapper?
+                   // Custom decoder creation: lv_image_decoder_create()
   virtual ~ImageDecoder();
 
   // If wrapping an existing decoder
@@ -25,11 +25,11 @@ public:
    */
   lv_image_decoder_t* release();
 
-protected:
+ protected:
   lv_image_decoder_t* decoder_;
   bool owned_ = false;
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_DRAW_IMAGE_DECODER_H_
+#endif  // LVGL_CPP_DRAW_IMAGE_DECODER_H_

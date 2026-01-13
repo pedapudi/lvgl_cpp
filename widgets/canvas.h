@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_CANVAS_H_
 #define LVGL_CPP_WIDGETS_CANVAS_H_
 
-
-#include "image.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "image.h"  // IWYU pragma: export
+#include "lvgl.h"   // IWYU pragma: export
 
 /**
  * @file canvas.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class Canvas : public Image {
-public:
+ public:
   /**
    * @brief Create a Canvas on the active screen.
    */
@@ -63,6 +62,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_CANVAS_H_
+#endif  // LVGL_CPP_WIDGETS_CANVAS_H_

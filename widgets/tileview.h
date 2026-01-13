@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_TILEVIEW_H_
 #define LVGL_CPP_WIDGETS_TILEVIEW_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file tileview.h
@@ -19,12 +19,12 @@
 namespace lvgl {
 
 class Tile : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class TileView : public Object {
-public:
+ public:
   /**
    * @brief Create a TileView on the active screen.
    */
@@ -47,6 +47,6 @@ public:
   Tile get_tile_active();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_TILEVIEW_H_
+#endif  // LVGL_CPP_WIDGETS_TILEVIEW_H_

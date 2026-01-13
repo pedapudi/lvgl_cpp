@@ -3,7 +3,7 @@
 namespace lvgl {
 
 void Timer::timer_proxy(lv_timer_t* t) {
-  auto* timer_instance = static_cast<Timer *>(lv_timer_get_user_data(t));
+  auto* timer_instance = static_cast<Timer*>(lv_timer_get_user_data(t));
   if (timer_instance && timer_instance->cb_ && *timer_instance->cb_) {
     (*timer_instance->cb_)(timer_instance);
   }
@@ -23,8 +23,7 @@ Timer::~Timer() {
 }
 
 void Timer::set_period(uint32_t period) {
-  if (timer_)
-    lv_timer_set_period(timer_, period);
+  if (timer_) lv_timer_set_period(timer_, period);
 }
 
 void Timer::set_cb(TimerCallback cb) {
@@ -38,35 +37,29 @@ void Timer::set_cb(TimerCallback cb) {
 }
 
 void Timer::ready() {
-  if (timer_)
-    lv_timer_ready(timer_);
+  if (timer_) lv_timer_ready(timer_);
 }
 
 void Timer::pause() {
-  if (timer_)
-    lv_timer_pause(timer_);
+  if (timer_) lv_timer_pause(timer_);
 }
 
 void Timer::resume() {
-  if (timer_)
-    lv_timer_resume(timer_);
+  if (timer_) lv_timer_resume(timer_);
 }
 
 void Timer::reset() {
-  if (timer_)
-    lv_timer_reset(timer_);
+  if (timer_) lv_timer_reset(timer_);
 }
 
 void Timer::set_repeat_count(int32_t repeat_count) {
-  if (timer_)
-    lv_timer_set_repeat_count(timer_, repeat_count);
+  if (timer_) lv_timer_set_repeat_count(timer_, repeat_count);
 }
 
 void Timer::set_auto_delete(bool auto_delete) {
-  if (timer_)
-    lv_timer_set_auto_delete(timer_, auto_delete);
+  if (timer_) lv_timer_set_auto_delete(timer_, auto_delete);
 }
 
 void Timer::enable(bool en) { lv_timer_enable(en); }
 
-} // namespace lvgl
+}  // namespace lvgl

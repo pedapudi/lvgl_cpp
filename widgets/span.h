@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SPAN_H_
 #define LVGL_CPP_WIDGETS_SPAN_H_
 
-
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file span.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class SpanGroup : public Object {
-public:
+ public:
   /**
    * @brief Create a SpanGroup on the active screen.
    */
@@ -66,6 +65,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_SPAN_H_
+#endif  // LVGL_CPP_WIDGETS_SPAN_H_

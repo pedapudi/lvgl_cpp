@@ -1,10 +1,11 @@
 #ifndef LVGL_CPP_CORE_OBSERVER_H_
 #define LVGL_CPP_CORE_OBSERVER_H_
 
-#include "lvgl.h" // IWYU pragma: export
-#include "object.h" // For bindings // IWYU pragma: export
 #include <string>
 #include <vector>
+
+#include "lvgl.h"    // IWYU pragma: export
+#include "object.h"  // For bindings // IWYU pragma: export
 
 namespace lvgl {
 
@@ -15,14 +16,14 @@ namespace lvgl {
  * trivially because C pointers in the observer list might reference it.
  */
 class Subject {
-public:
+ public:
   virtual ~Subject();
 
   // Non-copyable, Non-moveable to ensure pointer stability
-  Subject(const Subject &) = delete;
-  Subject& operator=(const Subject &) = delete;
-  Subject(Subject &&) = delete;
-  Subject& operator=(Subject &&) = delete;
+  Subject(const Subject&) = delete;
+  Subject& operator=(const Subject&) = delete;
+  Subject(Subject&&) = delete;
+  Subject& operator=(Subject&&) = delete;
 
   lv_subject_t* raw() { return &subject_; }
   const lv_subject_t* raw() const { return &subject_; }
@@ -70,13 +71,13 @@ public:
   // For now, let's stick to the C-style callback as a base, and maybe a C++
   // one.
 
-protected:
-  Subject(); // abstract
+ protected:
+  Subject();  // abstract
   lv_subject_t subject_;
 };
 
 class IntSubject : public Subject {
-public:
+ public:
   explicit IntSubject(int32_t value);
 
   void set(int32_t value);
@@ -87,7 +88,7 @@ public:
 };
 
 class FloatSubject : public Subject {
-public:
+ public:
   explicit FloatSubject(float value);
 
   void set(float value);
@@ -98,21 +99,21 @@ public:
 };
 
 class StringSubject : public Subject {
-public:
-  explicit StringSubject(const std::string &value, size_t buf_size = 128);
+ public:
+  explicit StringSubject(const std::string& value, size_t buf_size = 128);
   ~StringSubject();
 
-  void set(const std::string &value);
+  void set(const std::string& value);
   const char* get();
   const char* get_previous();
 
-private:
+ private:
   std::vector<char> buf_;
   std::vector<char> prev_buf_;
 };
 
 class PointerSubject : public Subject {
-public:
+ public:
   explicit PointerSubject(void* ptr);
 
   void set(void* ptr);
@@ -121,7 +122,7 @@ public:
 };
 
 class ColorSubject : public Subject {
-public:
+ public:
   explicit ColorSubject(lv_color_t color);
 
   void set(lv_color_t color);
@@ -130,21 +131,21 @@ public:
 };
 
 class GroupSubject : public Subject {
-public:
+ public:
   /**
    * @brief Create a group subject from a list of subjects.
    * Warning: The subjects in the list must outlive the GroupSubject.
    * @param subjects List of subjects to group.
    */
-  explicit GroupSubject(const std::vector<Subject *> &subjects);
+  explicit GroupSubject(const std::vector<Subject*>& subjects);
 
   // No specific set/get for group, as it aggregates others.
   // But we can get elements.
   Subject* get_element(int32_t index);
 
-private:
-  std::vector<lv_subject_t *> raw_subjects_;
-  std::vector<Subject *> wrapped_subjects_;
+ private:
+  std::vector<lv_subject_t*> raw_subjects_;
+  std::vector<Subject*> wrapped_subjects_;
 };
 
 /**
@@ -162,15 +163,15 @@ private:
  * to be active.
  */
 class Observer {
-public:
+ public:
   explicit Observer(lv_observer_t* obs, bool owned = false);
   ~Observer();
 
   // Move-only to prevent double-free if we own it.
-  Observer(const Observer &) = delete;
-  Observer& operator=(const Observer &) = delete;
-  Observer(Observer &&other) noexcept;
-  Observer& operator=(Observer &&other) noexcept;
+  Observer(const Observer&) = delete;
+  Observer& operator=(const Observer&) = delete;
+  Observer(Observer&& other) noexcept;
+  Observer& operator=(Observer&& other) noexcept;
 
   void remove();
 
@@ -187,11 +188,11 @@ public:
    */
   lv_obj_t* get_target_obj() const;
 
-private:
+ private:
   lv_observer_t* obs_;
-  bool owned_; // If true, we call lv_observer_remove in destructor.
+  bool owned_;  // If true, we call lv_observer_remove in destructor.
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_CORE_OBSERVER_H_
+#endif  // LVGL_CPP_CORE_OBSERVER_H_

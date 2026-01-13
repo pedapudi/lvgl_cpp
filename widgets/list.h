@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_LIST_H_
 #define LVGL_CPP_WIDGETS_LIST_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file list.h
@@ -22,7 +22,7 @@ namespace lvgl {
 class Button;
 class Label;
 class List : public Object {
-public:
+ public:
   /**
    * @brief Create a List on the active screen.
    */
@@ -44,6 +44,6 @@ public:
   void set_button_text(lv_obj_t* btn, const char* txt);
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_LIST_H_
+#endif  // LVGL_CPP_WIDGETS_LIST_H_

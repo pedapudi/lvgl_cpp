@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_ROLLER_H_
 #define LVGL_CPP_WIDGETS_ROLLER_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file roller.h
@@ -20,7 +20,7 @@ class Subject;
 class Observer;
 
 class Roller : public Object {
-public:
+ public:
   /**
    * @brief Create a Roller on the active screen.
    */
@@ -67,6 +67,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_ROLLER_H_
+#endif  // LVGL_CPP_WIDGETS_ROLLER_H_

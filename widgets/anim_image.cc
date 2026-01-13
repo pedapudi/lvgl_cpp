@@ -10,23 +10,19 @@ AnimImage::AnimImage(Object* parent)
 AnimImage::AnimImage(lv_obj_t* obj) : Image(obj) {}
 
 void AnimImage::set_src(const void* dsc[], size_t num) {
-  if (obj_)
-    lv_animimg_set_src(obj_, dsc, num);
+  if (obj_) lv_animimg_set_src(obj_, dsc, num);
 }
 
 void AnimImage::start() {
-  if (obj_)
-    lv_animimg_start(obj_);
+  if (obj_) lv_animimg_start(obj_);
 }
 
 void AnimImage::set_duration(uint32_t duration) {
-  if (obj_)
-    lv_animimg_set_duration(obj_, duration);
+  if (obj_) lv_animimg_set_duration(obj_, duration);
 }
 
 void AnimImage::set_repeat_count(uint32_t count) {
-  if (obj_)
-    lv_animimg_set_repeat_count(obj_, count);
+  if (obj_) lv_animimg_set_repeat_count(obj_, count);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

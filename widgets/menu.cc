@@ -2,7 +2,7 @@
 
 namespace lvgl {
 
-Menu::Menu() : Menu((Object *)nullptr) {}
+Menu::Menu() : Menu((Object*)nullptr) {}
 
 Menu::Menu(Object* parent)
     : Object(lv_menu_create(parent ? parent->raw() : nullptr)) {}
@@ -26,8 +26,7 @@ MenuSeparator Menu::separator_create(MenuPage& parent_page) {
 }
 
 void Menu::set_page(MenuPage& page) {
-  if (obj_)
-    lv_menu_set_page(obj_, page.raw());
+  if (obj_) lv_menu_set_page(obj_, page.raw());
 }
 
 void Menu::set_page_title(lv_obj_t* page, const char* title) {
@@ -39,23 +38,19 @@ void Menu::set_page_title_static(lv_obj_t* page, const char* title) {
 }
 
 void Menu::set_sidebar_page(MenuPage& page) {
-  if (obj_)
-    lv_menu_set_sidebar_page(obj_, page.raw());
+  if (obj_) lv_menu_set_sidebar_page(obj_, page.raw());
 }
 
 void Menu::set_mode_header(lv_menu_mode_header_t mode) {
-  if (obj_)
-    lv_menu_set_mode_header(obj_, mode);
+  if (obj_) lv_menu_set_mode_header(obj_, mode);
 }
 
 void Menu::set_mode_root_back_button(lv_menu_mode_root_back_button_t mode) {
-  if (obj_)
-    lv_menu_set_mode_root_back_button(obj_, mode);
+  if (obj_) lv_menu_set_mode_root_back_button(obj_, mode);
 }
 
 void Menu::set_load_page_event(lv_obj_t* obj, MenuPage& page) {
-  if (obj_)
-    lv_menu_set_load_page_event(obj_, obj, page.raw());
+  if (obj_) lv_menu_set_load_page_event(obj_, obj, page.raw());
 }
 
 MenuPage Menu::get_cur_main_page() {
@@ -87,8 +82,7 @@ bool Menu::back_button_is_root(lv_obj_t* obj) {
 }
 
 void Menu::clear_history() {
-  if (obj_)
-    lv_menu_clear_history(obj_);
+  if (obj_) lv_menu_clear_history(obj_);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

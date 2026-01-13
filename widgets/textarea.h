@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_TEXTAREA_H_
 #define LVGL_CPP_WIDGETS_TEXTAREA_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file textarea.h
@@ -20,7 +20,7 @@ namespace lvgl {
 
 class Label;
 class Textarea : public Object {
-public:
+ public:
   /**
    * @brief Create a Textarea on the active screen.
    */
@@ -76,6 +76,6 @@ public:
   void cursor_up();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_TEXTAREA_H_
+#endif  // LVGL_CPP_WIDGETS_TEXTAREA_H_

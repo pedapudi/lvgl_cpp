@@ -122,7 +122,7 @@ void FloatSubject::set_range(float min, float max) {
 
 // StringSubject
 
-StringSubject::StringSubject(const std::string &value, size_t buf_size) {
+StringSubject::StringSubject(const std::string& value, size_t buf_size) {
   buf_.resize(buf_size);
   prev_buf_.resize(buf_size);
   lv_subject_init_string(&subject_, buf_.data(), prev_buf_.data(), buf_size,
@@ -133,7 +133,7 @@ StringSubject::~StringSubject() {
   // Subject destructor calls deinit, buffers are freed by vector dtor.
 }
 
-void StringSubject::set(const std::string &value) {
+void StringSubject::set(const std::string& value) {
   lv_subject_copy_string(&subject_, value.c_str());
 }
 
@@ -175,7 +175,7 @@ lv_color_t ColorSubject::get_previous() {
 
 // GroupSubject
 
-GroupSubject::GroupSubject(const std::vector<Subject *> &subjects) {
+GroupSubject::GroupSubject(const std::vector<Subject*>& subjects) {
   raw_subjects_.reserve(subjects.size());
   wrapped_subjects_ = subjects;
   for (auto* s : subjects) {
@@ -195,33 +195,32 @@ Subject* GroupSubject::get_element(int32_t index) {
 
 Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {
   if (owned)
-    printf("Observer created (owned) %p\n", (void *)obs);
+    printf("Observer created (owned) %p\n", (void*)obs);
   else
-    printf("Observer created (unowned) %p\n", (void *)obs);
+    printf("Observer created (unowned) %p\n", (void*)obs);
 }
 
-Observer::Observer(Observer &&other) noexcept
+Observer::Observer(Observer&& other) noexcept
     : obs_(other.obs_), owned_(other.owned_) {
   other.obs_ = nullptr;
   other.owned_ = false;
-  printf("Observer moved %p\n", (void *)obs_);
+  printf("Observer moved %p\n", (void*)obs_);
 }
 
-Observer& Observer::operator=(Observer &&other) noexcept {
+Observer& Observer::operator=(Observer&& other) noexcept {
   if (this != &other) {
     remove();
     obs_ = other.obs_;
     owned_ = other.owned_;
     other.obs_ = nullptr;
     other.owned_ = false;
-    printf("Observer move-assigned %p\n", (void *)obs_);
+    printf("Observer move-assigned %p\n", (void*)obs_);
   }
   return *this;
 }
 
 Observer::~Observer() {
-  if (obs_)
-    printf("Observer dtor %p owned=%d\n", (void *)obs_, owned_);
+  if (obs_) printf("Observer dtor %p owned=%d\n", (void*)obs_, owned_);
   if (owned_) {
     remove();
   }
@@ -235,15 +234,13 @@ void Observer::remove() {
 }
 
 void* Observer::get_target() const {
-  if (!obs_)
-    return nullptr;
+  if (!obs_) return nullptr;
   return lv_observer_get_target(obs_);
 }
 
 lv_obj_t* Observer::get_target_obj() const {
-  if (!obs_)
-    return nullptr;
+  if (!obs_) return nullptr;
   return lv_observer_get_target_obj(obs_);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

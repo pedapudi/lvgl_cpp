@@ -1,10 +1,11 @@
 #include "msgbox.h"
+
 #include "button.h"
 #include "label.h"
 
 namespace lvgl {
 
-MsgBox::MsgBox() : MsgBox((Object *)nullptr) {}
+MsgBox::MsgBox() : MsgBox((Object*)nullptr) {}
 
 MsgBox::MsgBox(Object* parent)
     : Object(lv_msgbox_create(parent ? parent->raw() : nullptr)) {}
@@ -48,13 +49,11 @@ Label MsgBox::get_title() {
 }
 
 void MsgBox::close() {
-  if (obj_)
-    lv_msgbox_close(obj_);
+  if (obj_) lv_msgbox_close(obj_);
 }
 
 void MsgBox::close_async() {
-  if (obj_)
-    lv_msgbox_close_async(obj_);
+  if (obj_) lv_msgbox_close_async(obj_);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

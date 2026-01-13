@@ -2,7 +2,7 @@
 
 namespace lvgl {
 
-TabView::TabView() : TabView((Object *)nullptr) {}
+TabView::TabView() : TabView((Object*)nullptr) {}
 
 TabView::TabView(Object* parent)
     : Object(lv_tabview_create(parent ? parent->raw() : nullptr)) {}
@@ -14,23 +14,19 @@ TabPage TabView::add_tab(const char* name) {
 }
 
 void TabView::rename_tab(uint32_t idx, const char* new_name) {
-  if (obj_)
-    lv_tabview_rename_tab(obj_, idx, new_name);
+  if (obj_) lv_tabview_rename_tab(obj_, idx, new_name);
 }
 
 void TabView::set_active(uint32_t idx, lv_anim_enable_t anim_en) {
-  if (obj_)
-    lv_tabview_set_active(obj_, idx, anim_en);
+  if (obj_) lv_tabview_set_active(obj_, idx, anim_en);
 }
 
 void TabView::set_tab_bar_position(lv_dir_t dir) {
-  if (obj_)
-    lv_tabview_set_tab_bar_position(obj_, dir);
+  if (obj_) lv_tabview_set_tab_bar_position(obj_, dir);
 }
 
 void TabView::set_tab_bar_size(int32_t size) {
-  if (obj_)
-    lv_tabview_set_tab_bar_size(obj_, size);
+  if (obj_) lv_tabview_set_tab_bar_size(obj_, size);
 }
 
 uint32_t TabView::get_tab_count() {
@@ -53,4 +49,4 @@ lv_obj_t* TabView::get_tab_bar() {
   return obj_ ? lv_tabview_get_tab_bar(obj_) : nullptr;
 }
 
-} // namespace lvgl
+}  // namespace lvgl

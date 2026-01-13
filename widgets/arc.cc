@@ -1,9 +1,10 @@
 #include "arc.h"
+
 #include "../core/observer.h"
 
 namespace lvgl {
 
-Arc::Arc() : Arc((Object *)nullptr) {}
+Arc::Arc() : Arc((Object*)nullptr) {}
 
 Arc::Arc(Object* parent)
     : Object(lv_arc_create(parent ? parent->raw() : nullptr)) {}
@@ -11,73 +12,59 @@ Arc::Arc(Object* parent)
 Arc::Arc(lv_obj_t* obj) : Object(obj) {}
 
 void Arc::set_start_angle(lv_value_precise_t start) {
-  if (obj_)
-    lv_arc_set_start_angle(obj_, start);
+  if (obj_) lv_arc_set_start_angle(obj_, start);
 }
 
 void Arc::set_end_angle(lv_value_precise_t end) {
-  if (obj_)
-    lv_arc_set_end_angle(obj_, end);
+  if (obj_) lv_arc_set_end_angle(obj_, end);
 }
 
 void Arc::set_angles(lv_value_precise_t start, lv_value_precise_t end) {
-  if (obj_)
-    lv_arc_set_angles(obj_, start, end);
+  if (obj_) lv_arc_set_angles(obj_, start, end);
 }
 
 void Arc::set_bg_start_angle(lv_value_precise_t start) {
-  if (obj_)
-    lv_arc_set_bg_start_angle(obj_, start);
+  if (obj_) lv_arc_set_bg_start_angle(obj_, start);
 }
 
 void Arc::set_bg_end_angle(lv_value_precise_t end) {
-  if (obj_)
-    lv_arc_set_bg_end_angle(obj_, end);
+  if (obj_) lv_arc_set_bg_end_angle(obj_, end);
 }
 
 void Arc::set_bg_angles(lv_value_precise_t start, lv_value_precise_t end) {
-  if (obj_)
-    lv_arc_set_bg_angles(obj_, start, end);
+  if (obj_) lv_arc_set_bg_angles(obj_, start, end);
 }
 
 void Arc::set_rotation(int32_t rotation) {
-  if (obj_)
-    lv_arc_set_rotation(obj_, rotation);
+  if (obj_) lv_arc_set_rotation(obj_, rotation);
 }
 
 void Arc::set_mode(lv_arc_mode_t type) {
-  if (obj_)
-    lv_arc_set_mode(obj_, type);
+  if (obj_) lv_arc_set_mode(obj_, type);
 }
 
 void Arc::set_value(int32_t value) {
-  if (obj_)
-    lv_arc_set_value(obj_, value);
+  if (obj_) lv_arc_set_value(obj_, value);
 }
 
 void Arc::set_range(int32_t min, int32_t max) {
-  if (obj_)
-    lv_arc_set_range(obj_, min, max);
+  if (obj_) lv_arc_set_range(obj_, min, max);
 }
 
 void Arc::set_min_value(int32_t min) {
-  if (obj_)
-    lv_arc_set_min_value(obj_, min);
+  if (obj_) lv_arc_set_min_value(obj_, min);
 }
 
 void Arc::set_max_value(int32_t max) {
-  if (obj_)
-    lv_arc_set_max_value(obj_, max);
+  if (obj_) lv_arc_set_max_value(obj_, max);
 }
 
 void Arc::set_change_rate(uint32_t rate) {
-  if (obj_)
-    lv_arc_set_change_rate(obj_, rate);
+  if (obj_) lv_arc_set_change_rate(obj_, rate);
 }
 
 void Arc::set_knob_offset(int32_t offset) {
-  if (obj_)
-    lv_arc_set_knob_offset(obj_, offset);
+  if (obj_) lv_arc_set_knob_offset(obj_, offset);
 }
 
 lv_value_precise_t Arc::get_angle_start() {
@@ -122,4 +109,4 @@ Observer Arc::bind_value(Subject& subject) {
   return Observer(lv_arc_bind_value(raw(), subject.raw()));
 }
 
-} // namespace lvgl
+}  // namespace lvgl

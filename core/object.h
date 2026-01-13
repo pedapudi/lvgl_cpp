@@ -1,9 +1,10 @@
 #ifndef LVGL_CPP_CORE_OBJECT_H_
 #define LVGL_CPP_CORE_OBJECT_H_
 
-#include "lvgl.h" // IWYU pragma: export
 #include <functional>
 #include <memory>
+
+#include "lvgl.h"  // IWYU pragma: export
 
 /**
  * @file object.h
@@ -11,12 +12,12 @@
  *
  * # Usage Guide
  *
- * ## Memory Management* The `Object` class (and all Widget classes) uses a robust RAII-style memory
- * management model designed to work seamlessly with LVGL's parent-child
- * deletion logic.
+ * ## Memory Management* The `Object` class (and all Widget classes) uses a
+ * robust RAII-style memory management model designed to work seamlessly with
+ * LVGL's parent-child deletion logic.
  *
- * ### 1. Owned Objects* When you create an object with a parent using the C++ constructor, the C++
- * wrapper assumes ownership.
+ * ### 1. Owned Objects* When you create an object with a parent using the C++
+ * constructor, the C++ wrapper assumes ownership.
  *
  * ```cpp
  * {
@@ -26,8 +27,8 @@
  * screen.
  * ```
  *
- * ### 2. Wrappers / Proxies* When you wrap an existing `lv_obj_t*` (e.g., returned by a helper function),
- * the C++ wrapper acts as a non-owning proxy.
+ * ### 2. Wrappers / Proxies* When you wrap an existing `lv_obj_t*` (e.g.,
+ * returned by a helper function), the C++ wrapper acts as a non-owning proxy.
  *
  * ```cpp
  * lvgl::Object tab = tabview.add_tab("Settings"); // Returns a proxy object
@@ -49,14 +50,14 @@
 
 namespace lvgl {
 
-class Style; // Forward declaration
+class Style;  // Forward declaration
 
 /**
  * @brief Base class for all LVGL objects.
  * Wraps lv_obj_t and provides RAII semantics.
  */
 class Object {
-public:
+ public:
   /**
    * @brief Create a wrapper around an existing LVGL object.
    * @param obj The LVGL object to wrap.
@@ -91,12 +92,12 @@ public:
   virtual ~Object();
 
   // Non-copyable to prevent ambiguous ownership
-  Object(const Object &) = delete;
-  Object& operator=(const Object &) = delete;
+  Object(const Object&) = delete;
+  Object& operator=(const Object&) = delete;
 
   // Moveable
-  Object(Object &&other) noexcept;
-  Object& operator=(Object &&other) noexcept;
+  Object(Object&& other) noexcept;
+  Object& operator=(Object&& other) noexcept;
 
   /**
    * @brief Release ownership of the underlying LVGL object.
@@ -234,7 +235,7 @@ public:
   /**
    * @brief Functional event callback type.
    */
-  using EventCallback = std::function<void(lv_event_t *)>;
+  using EventCallback = std::function<void(lv_event_t*)>;
 
   /**
    * @brief Add a functional event callback.
@@ -296,7 +297,7 @@ public:
                      int32_t col_span, lv_grid_align_t row_align,
                      int32_t row_pos, int32_t row_span);
 
-protected:
+ protected:
   lv_obj_t* obj_ = nullptr;
   bool owned_ = false;
 
@@ -321,6 +322,6 @@ protected:
   void install_delete_hook();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_CORE_OBJECT_H_
+#endif  // LVGL_CPP_CORE_OBJECT_H_

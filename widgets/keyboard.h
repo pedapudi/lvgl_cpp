@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_KEYBOARD_H_
 #define LVGL_CPP_WIDGETS_KEYBOARD_H_
 
-
-#include "button_matrix.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "button_matrix.h"  // IWYU pragma: export
+#include "lvgl.h"           // IWYU pragma: export
 
 /**
  * @file keyboard.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class Keyboard : public ButtonMatrix {
-public:
+ public:
   /**
    * @brief Create a Keyboard on the active screen.
    */
@@ -45,7 +44,7 @@ public:
   lv_obj_t* get_textarea();
   lv_keyboard_mode_t get_mode();
   bool get_popovers();
-  const char* const *get_map_array();
+  const char* const* get_map_array();
   uint32_t get_selected_button();
   const char* get_button_text(uint32_t btn_id);
 };
@@ -61,6 +60,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_KEYBOARD_H_
+#endif  // LVGL_CPP_WIDGETS_KEYBOARD_H_

@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_BAR_H_
 #define LVGL_CPP_WIDGETS_BAR_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file bar.h
@@ -23,7 +23,7 @@ class Observer;
  * @brief Wrapper for lv_bar.
  */
 class Bar : public Object {
-public:
+ public:
   /**
    * @brief Create a new Bar.
    * @param parent Parent object.
@@ -71,6 +71,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_BAR_H_
+#endif  // LVGL_CPP_WIDGETS_BAR_H_

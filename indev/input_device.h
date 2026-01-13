@@ -1,14 +1,14 @@
 #ifndef LVGL_CPP_INDEV_INPUT_DEVICE_H_
 #define LVGL_CPP_INDEV_INPUT_DEVICE_H_
 
-#include "../core/group.h" // IWYU pragma: export
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/group.h"   // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 namespace lvgl {
 
 class InputDevice {
-public:
+ public:
   explicit InputDevice(lv_indev_t* indev);
 
   static InputDevice* get_act();
@@ -28,10 +28,10 @@ public:
 
   lv_indev_t* raw() const { return indev_; }
 
-private:
+ private:
   lv_indev_t* indev_;
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_INDEV_INPUT_DEVICE_H_
+#endif  // LVGL_CPP_INDEV_INPUT_DEVICE_H_

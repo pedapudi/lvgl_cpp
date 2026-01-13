@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_TABVIEW_H_
 #define LVGL_CPP_WIDGETS_TABVIEW_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file tabview.h
@@ -23,7 +23,7 @@ namespace lvgl {
  * @brief Represents a single tab page container.
  */
 class TabPage : public Object {
-public:
+ public:
   using Object::Object;
 };
 
@@ -31,7 +31,7 @@ public:
  * @brief Wrapper for lv_tabview.
  */
 class TabView : public Object {
-public:
+ public:
   /**
    * @brief Create a TabView on the active screen.
    */
@@ -60,6 +60,6 @@ public:
   lv_obj_t* get_tab_bar();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_TABVIEW_H_
+#endif  // LVGL_CPP_WIDGETS_TABVIEW_H_

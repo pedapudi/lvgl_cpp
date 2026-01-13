@@ -74,4 +74,4 @@ Animation& Animation::set_playback_delay(uint32_t delay) {
 
 void Animation::start() { lv_anim_start(&anim_); }
 
-} // namespace lvgl
+}  // namespace lvgl

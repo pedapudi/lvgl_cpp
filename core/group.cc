@@ -16,53 +16,43 @@ Group::~Group() {
 }
 
 void Group::add_obj(Object* obj) {
-  if (group_ && obj)
-    lv_group_add_obj(group_, obj->raw());
+  if (group_ && obj) lv_group_add_obj(group_, obj->raw());
 }
 
 void Group::remove_obj(Object* obj) {
-  if (obj)
-    lv_group_remove_obj(obj->raw());
+  if (obj) lv_group_remove_obj(obj->raw());
 }
 
 void Group::remove_all_objs() {
-  if (group_)
-    lv_group_remove_all_objs(group_);
+  if (group_) lv_group_remove_all_objs(group_);
 }
 
 void Group::focus_obj(Object* obj) {
-  if (obj)
-    lv_group_focus_obj(obj->raw());
+  if (obj) lv_group_focus_obj(obj->raw());
 }
 
 void Group::focus_next() {
-  if (group_)
-    lv_group_focus_next(group_);
+  if (group_) lv_group_focus_next(group_);
 }
 
 void Group::focus_prev() {
-  if (group_)
-    lv_group_focus_prev(group_);
+  if (group_) lv_group_focus_prev(group_);
 }
 
 void Group::focus_freeze(bool en) {
-  if (group_)
-    lv_group_focus_freeze(group_, en);
+  if (group_) lv_group_focus_freeze(group_, en);
 }
 
 void Group::set_default() {
-  if (group_)
-    lv_group_set_default(group_);
+  if (group_) lv_group_set_default(group_);
 }
 
 void Group::set_editing(bool edit) {
-  if (group_)
-    lv_group_set_editing(group_, edit);
+  if (group_) lv_group_set_editing(group_, edit);
 }
 
 void Group::set_wrap(bool en) {
-  if (group_)
-    lv_group_set_wrap(group_, en);
+  if (group_) lv_group_set_wrap(group_, en);
 }
 
 lv_obj_t* Group::get_focused() {
@@ -90,4 +80,4 @@ uint32_t Group::get_obj_count() {
 // pointer? I will skip get_default wrapper for now or return void. Attempting
 // to implement it safely is out of scope for quick wrapper.
 
-} // namespace lvgl
+}  // namespace lvgl

@@ -11,13 +11,11 @@ ImageButton::ImageButton(lv_obj_t* obj) : Object(obj) {}
 
 void ImageButton::set_src(lv_imagebutton_state_t state, const void* src_left,
                           const void* src_mid, const void* src_right) {
-  if (obj_)
-    lv_imagebutton_set_src(obj_, state, src_left, src_mid, src_right);
+  if (obj_) lv_imagebutton_set_src(obj_, state, src_left, src_mid, src_right);
 }
 
 void ImageButton::set_state(lv_imagebutton_state_t state) {
-  if (obj_)
-    lv_imagebutton_set_state(obj_, state);
+  if (obj_) lv_imagebutton_set_state(obj_, state);
 }
 
 const void* ImageButton::get_src_left(lv_imagebutton_state_t state) {
@@ -32,4 +30,4 @@ const void* ImageButton::get_src_right(lv_imagebutton_state_t state) {
   return obj_ ? lv_imagebutton_get_src_right(obj_, state) : nullptr;
 }
 
-} // namespace lvgl
+}  // namespace lvgl

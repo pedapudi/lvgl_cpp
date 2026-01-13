@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_TABLE_H_
 #define LVGL_CPP_WIDGETS_TABLE_H_
 
-
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file table.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class Table : public Object {
-public:
+ public:
   /**
    * @brief Create a Table on the active screen.
    */
@@ -64,6 +63,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_TABLE_H_
+#endif  // LVGL_CPP_WIDGETS_TABLE_H_

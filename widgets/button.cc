@@ -9,4 +9,4 @@ Button::Button(Object* parent)
 
 Button::Button(lv_obj_t* obj) : Object(obj) {}
 
-} // namespace lvgl
+}  // namespace lvgl

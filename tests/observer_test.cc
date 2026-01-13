@@ -1,5 +1,6 @@
 
 #include "../core/observer.h"
+
 #include <cassert>
 #include <iostream>
 

@@ -18,4 +18,4 @@ void Style::set_text_color(lv_color_t color) {
 
 void Style::set_pad_all(int32_t pad) { lv_style_set_pad_all(&style_, pad); }
 
-} // namespace lvgl
+}  // namespace lvgl

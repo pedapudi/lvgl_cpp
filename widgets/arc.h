@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_ARC_H_
 #define LVGL_CPP_WIDGETS_ARC_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file arc.h
@@ -20,7 +20,7 @@ class Subject;
 class Observer;
 
 class Arc : public Object {
-public:
+ public:
   /**
    * @brief Create a Arc on the active screen.
    */
@@ -81,6 +81,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_ARC_H_
+#endif  // LVGL_CPP_WIDGETS_ARC_H_

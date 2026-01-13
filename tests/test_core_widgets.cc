@@ -1,3 +1,7 @@
+#include <cassert>
+#include <iostream>
+#include <vector>
+
 #include "../core/object.h"
 #include "../core/style.h"
 #include "../misc/color.h"
@@ -12,12 +16,9 @@
 #include "../widgets/slider.h"
 #include "../widgets/switch.h"
 #include "lvgl.h"
-#include <cassert>
-#include <iostream>
-#include <vector>
 
 // Mock event handler
-static void event_handler(lv_event_t *e) {
+static void event_handler(lv_event_t* e) {
   lv_event_code_t code = lv_event_get_code(e);
   if (code == LV_EVENT_CLICKED) {
     std::cout << "Clicked" << std::endl;
@@ -62,9 +63,10 @@ void test_label_1() {
   // matches internal LVGL version. lvgl_cpp wrapper should be checked. For now,
   // assuming standard API. label1.set_recolor(true); // If this method exists
 
-  label1.set_text("#0000ff Re-color# #ff00ff words# #ff0000 of a# label, align "
-                  "the lines to the center "
-                  "and wrap long text automatically.");
+  label1.set_text(
+      "#0000ff Re-color# #ff00ff words# #ff0000 of a# label, align "
+      "the lines to the center "
+      "and wrap long text automatically.");
   label1.set_width(150);
   label1.set_style_text_align(LV_TEXT_ALIGN_CENTER, 0);
   label1.align(LV_ALIGN_CENTER, 0, -40);

@@ -1,10 +1,11 @@
 #include "list.h"
+
 #include "button.h"
 #include "label.h"
 
 namespace lvgl {
 
-List::List() : List((Object *)nullptr) {}
+List::List() : List((Object*)nullptr) {}
 
 List::List(Object* parent)
     : Object(lv_list_create(parent ? parent->raw() : nullptr)) {}
@@ -24,8 +25,7 @@ const char* List::get_button_text(lv_obj_t* btn) {
 }
 
 void List::set_button_text(lv_obj_t* btn, const char* txt) {
-  if (obj_)
-    lv_list_set_button_text(obj_, btn, txt);
+  if (obj_) lv_list_set_button_text(obj_, btn, txt);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

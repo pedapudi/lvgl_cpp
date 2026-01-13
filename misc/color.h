@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_MISC_COLOR_H_
 #define LVGL_CPP_MISC_COLOR_H_
 
-#include "lvgl.h" // IWYU pragma: export
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
@@ -10,11 +10,11 @@ namespace lvgl {
  * This class is lightweight and can be treated as a value type.
  */
 class Color {
-public:
+ public:
   Color();
   Color(lv_color_t c);
   Color(uint8_t r, uint8_t g, uint8_t b);
-  Color(uint32_t hex); // 0xRRGGBB
+  Color(uint32_t hex);  // 0xRRGGBB
 
   // Implicit conversion to lv_color_t
   operator lv_color_t() const { return color_; }
@@ -31,7 +31,7 @@ public:
   bool operator==(const Color& other) const;
   bool operator!=(const Color& other) const;
 
-  Color mix(const Color& other, uint8_t ratio) const; // 0: other, 255: this
+  Color mix(const Color& other, uint8_t ratio) const;  // 0: other, 255: this
   Color lighten(lv_opa_t lvl) const;
   Color darken(lv_opa_t lvl) const;
 
@@ -46,10 +46,10 @@ public:
   void set_g(uint8_t g) { color_.green = g; }
   void set_b(uint8_t b) { color_.blue = b; }
 
-private:
+ private:
   lv_color_t color_;
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_MISC_COLOR_H_
+#endif  // LVGL_CPP_MISC_COLOR_H_

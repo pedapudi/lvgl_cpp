@@ -1,9 +1,10 @@
 #include "bar.h"
+
 #include "../core/observer.h"
 
 namespace lvgl {
 
-Bar::Bar() : Bar((Object *)nullptr) {}
+Bar::Bar() : Bar((Object*)nullptr) {}
 
 Bar::Bar(Object* parent)
     : Object(lv_bar_create(parent ? parent->raw() : nullptr)) {}
@@ -11,38 +12,31 @@ Bar::Bar(Object* parent)
 Bar::Bar(lv_obj_t* obj) : Object(obj) {}
 
 void Bar::set_value(int32_t value, lv_anim_enable_t anim) {
-  if (obj_)
-    lv_bar_set_value(obj_, value, anim);
+  if (obj_) lv_bar_set_value(obj_, value, anim);
 }
 
 void Bar::set_start_value(int32_t value, lv_anim_enable_t anim) {
-  if (obj_)
-    lv_bar_set_start_value(obj_, value, anim);
+  if (obj_) lv_bar_set_start_value(obj_, value, anim);
 }
 
 void Bar::set_range(int32_t min, int32_t max) {
-  if (obj_)
-    lv_bar_set_range(obj_, min, max);
+  if (obj_) lv_bar_set_range(obj_, min, max);
 }
 
 void Bar::set_min_value(int32_t min) {
-  if (obj_)
-    lv_bar_set_min_value(obj_, min);
+  if (obj_) lv_bar_set_min_value(obj_, min);
 }
 
 void Bar::set_max_value(int32_t max) {
-  if (obj_)
-    lv_bar_set_max_value(obj_, max);
+  if (obj_) lv_bar_set_max_value(obj_, max);
 }
 
 void Bar::set_mode(lv_bar_mode_t mode) {
-  if (obj_)
-    lv_bar_set_mode(obj_, mode);
+  if (obj_) lv_bar_set_mode(obj_, mode);
 }
 
 void Bar::set_orientation(lv_bar_orientation_t orientation) {
-  if (obj_)
-    lv_bar_set_orientation(obj_, orientation);
+  if (obj_) lv_bar_set_orientation(obj_, orientation);
 }
 
 int32_t Bar::get_value() const { return obj_ ? lv_bar_get_value(obj_) : 0; }
@@ -75,4 +69,4 @@ Observer Bar::bind_value(Subject& subject) {
   return Observer(lv_bar_bind_value(raw(), subject.raw()));
 }
 
-} // namespace lvgl
+}  // namespace lvgl

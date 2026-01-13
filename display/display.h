@@ -1,13 +1,13 @@
 #ifndef LVGL_CPP_DISPLAY_DISPLAY_H_
 #define LVGL_CPP_DISPLAY_DISPLAY_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 namespace lvgl {
 
 class Display {
-public:
+ public:
   // Usually displays are created by drivers, but we can wrap them.
   explicit Display(lv_display_t* disp);
 
@@ -38,10 +38,10 @@ public:
 
   lv_display_t* raw() const { return disp_; }
 
-private:
+ private:
   lv_display_t* disp_;
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_DISPLAY_DISPLAY_H_
+#endif  // LVGL_CPP_DISPLAY_DISPLAY_H_

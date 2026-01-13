@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_WIN_H_
 #define LVGL_CPP_WIDGETS_WIN_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file win.h
@@ -23,17 +23,17 @@ class Button;
 class Label;
 
 class WinHeader : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class WinContent : public Object {
-public:
+ public:
   using Object::Object;
 };
 
 class Win : public Object {
-public:
+ public:
   /**
    * @brief Create a Win on the active screen.
    */
@@ -55,6 +55,6 @@ public:
   WinContent get_content();
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_WIN_H_
+#endif  // LVGL_CPP_WIDGETS_WIN_H_

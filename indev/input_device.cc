@@ -15,23 +15,19 @@ lv_indev_type_t InputDevice::get_type() {
 }
 
 void InputDevice::reset(Object* obj) {
-  if (indev_)
-    lv_indev_reset(indev_, obj ? obj->raw() : nullptr);
+  if (indev_) lv_indev_reset(indev_, obj ? obj->raw() : nullptr);
 }
 
 void InputDevice::stop_processing() {
-  if (indev_)
-    lv_indev_stop_processing(indev_);
+  if (indev_) lv_indev_stop_processing(indev_);
 }
 
 void InputDevice::set_group(Group* group) {
-  if (indev_ && group)
-    lv_indev_set_group(indev_, group->raw());
+  if (indev_ && group) lv_indev_set_group(indev_, group->raw());
 }
 
 void InputDevice::set_cursor(Object* cur_obj) {
-  if (indev_ && cur_obj)
-    lv_indev_set_cursor(indev_, cur_obj->raw());
+  if (indev_ && cur_obj) lv_indev_set_cursor(indev_, cur_obj->raw());
 }
 
 lv_indev_state_t InputDevice::get_state() {
@@ -39,8 +35,7 @@ lv_indev_state_t InputDevice::get_state() {
 }
 
 void InputDevice::get_point(lv_point_t* point) {
-  if (indev_)
-    lv_indev_get_point(indev_, point);
+  if (indev_) lv_indev_get_point(indev_, point);
 }
 
 lv_dir_t InputDevice::get_gesture_dir() {
@@ -59,4 +54,4 @@ lv_obj_t* InputDevice::get_scroll_obj() {
   return indev_ ? lv_indev_get_scroll_obj(indev_) : nullptr;
 }
 
-} // namespace lvgl
+}  // namespace lvgl

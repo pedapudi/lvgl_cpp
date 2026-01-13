@@ -1,10 +1,11 @@
 #include "win.h"
+
 #include "button.h"
 #include "label.h"
 
 namespace lvgl {
 
-Win::Win() : Win((Object *)nullptr) {}
+Win::Win() : Win((Object*)nullptr) {}
 
 Win::Win(Object* parent)
     : Object(lv_win_create(parent ? parent->raw() : nullptr)) {}
@@ -27,4 +28,4 @@ WinContent Win::get_content() {
   return WinContent(obj_ ? lv_win_get_content(obj_) : nullptr);
 }
 
-} // namespace lvgl
+}  // namespace lvgl

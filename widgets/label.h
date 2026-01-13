@@ -1,9 +1,10 @@
 #ifndef LVGL_CPP_WIDGETS_LABEL_H_
 #define LVGL_CPP_WIDGETS_LABEL_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
 #include <string>
+
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file label.h
@@ -24,7 +25,7 @@ class Observer;
  * @brief Wrapper for lv_label.
  */
 class Label : public Object {
-public:
+ public:
   /**
    * @brief Create a new Label.
    * @param parent Parent object.
@@ -41,7 +42,7 @@ public:
    * @brief Set the text of the label.
    * @param text The text to set.
    */
-  void set_text(const std::string &text);
+  void set_text(const std::string& text);
 
   /**
    * @brief Set the text with C-style string.
@@ -101,6 +102,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_LABEL_H_
+#endif  // LVGL_CPP_WIDGETS_LABEL_H_

@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_DROPDOWN_H_
 #define LVGL_CPP_WIDGETS_DROPDOWN_H_
 
-#include "../core/object.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "../core/object.h"  // IWYU pragma: export
+#include "lvgl.h"            // IWYU pragma: export
 
 /**
  * @file dropdown.h
@@ -20,7 +20,7 @@ class Subject;
 class Observer;
 
 class Dropdown : public Object {
-public:
+ public:
   /**
    * @brief Create a Dropdown on the active screen.
    */
@@ -80,6 +80,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_DROPDOWN_H_
+#endif  // LVGL_CPP_WIDGETS_DROPDOWN_H_

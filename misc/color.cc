@@ -2,7 +2,7 @@
 
 namespace lvgl {
 
-Color::Color() : color_{0, 0, 0} {} // Default black
+Color::Color() : color_{0, 0, 0} {}  // Default black
 Color::Color(lv_color_t c) : color_(c) {}
 Color::Color(uint8_t r, uint8_t g, uint8_t b)
     : color_(lv_color_make(r, g, b)) {}
@@ -65,4 +65,4 @@ Color Color::darken(lv_opa_t lvl) const {
 
 uint8_t Color::luminance() const { return lv_color_luminance(color_); }
 
-} // namespace lvgl
+}  // namespace lvgl

@@ -1,15 +1,16 @@
 #ifndef LVGL_CPP_MISC_TIMER_H_
 #define LVGL_CPP_MISC_TIMER_H_
 
-#include "lvgl.h" // IWYU pragma: export
 #include <functional>
 #include <memory>
+
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
 class Timer {
-public:
-  using TimerCallback = std::function<void(Timer *)>;
+ public:
+  using TimerCallback = std::function<void(Timer*)>;
 
   Timer();
   Timer(uint32_t period, TimerCallback cb);
@@ -27,13 +28,13 @@ public:
 
   lv_timer_t* raw() const { return timer_; }
 
-private:
+ private:
   lv_timer_t* timer_;
   std::unique_ptr<TimerCallback> cb_;
 
   static void timer_proxy(lv_timer_t* t);
 };
 
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_MISC_TIMER_H_
+#endif  // LVGL_CPP_MISC_TIMER_H_

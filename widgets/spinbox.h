@@ -1,9 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SPINBOX_H_
 #define LVGL_CPP_WIDGETS_SPINBOX_H_
 
-
-#include "lvgl.h" // IWYU pragma: export
-#include "textarea.h" // IWYU pragma: export
+#include "lvgl.h"      // IWYU pragma: export
+#include "textarea.h"  // IWYU pragma: export
 
 /**
  * @file spinbox.h
@@ -19,7 +18,7 @@
 namespace lvgl {
 
 class Spinbox : public Textarea {
-public:
+ public:
   /**
    * @brief Create a Spinbox on the active screen.
    */
@@ -69,6 +68,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_SPINBOX_H_
+#endif  // LVGL_CPP_WIDGETS_SPINBOX_H_

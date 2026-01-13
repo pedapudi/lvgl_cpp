@@ -15,8 +15,7 @@ void* DrawTask::get_draw_dsc() const {
 }
 
 void DrawTask::get_area(lv_area_t* area) const {
-  if (task_ && area)
-    lv_draw_task_get_area(task_, area);
+  if (task_ && area) lv_draw_task_get_area(task_, area);
 }
 
 // Layer
@@ -24,13 +23,11 @@ void DrawTask::get_area(lv_area_t* area) const {
 Layer::Layer(lv_layer_t* layer) : layer_(layer) {}
 
 void Layer::init() {
-  if (layer_)
-    lv_layer_init(layer_);
+  if (layer_) lv_layer_init(layer_);
 }
 
 void Layer::reset() {
-  if (layer_)
-    lv_layer_reset(layer_);
+  if (layer_) lv_layer_reset(layer_);
 }
 
 void* Layer::alloc_buf() {
@@ -38,13 +35,12 @@ void* Layer::alloc_buf() {
 }
 
 DrawTask Layer::add_task(const lv_area_t* coords, lv_draw_task_type_t type) {
-  if (layer_)
-    return DrawTask(lv_draw_add_task(layer_, coords, type));
+  if (layer_) return DrawTask(lv_draw_add_task(layer_, coords, type));
   return DrawTask(nullptr);
 }
 
 void Layer::finalize_task_creation(DrawTask& t) {
-  if (layer_ && t.get_draw_dsc()) { // simplistic check
+  if (layer_ && t.get_draw_dsc()) {  // simplistic check
     // We need raw pointer from task wrapper. Accessing private member...
     // Need to add friend or getter.
     // Assuming DrawTask is friend or has method.
@@ -58,4 +54,4 @@ void Layer::finalize_task_creation(DrawTask& t) {
   }
 }
 
-} // namespace lvgl
+}  // namespace lvgl

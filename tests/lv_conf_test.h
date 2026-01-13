@@ -8,7 +8,7 @@
 #define LV_USE_LABEL 1
 #define LV_USE_SLIDER 1
 #define LV_USE_OBJ_PROPERTY 1
-#define LV_USE_FLOAT 1 // Label formatting might need this
+#define LV_USE_FLOAT 1  // Label formatting might need this
 
 // Core
 #define LV_USE_GROUP 1
@@ -45,7 +45,7 @@
 #define LV_USE_TABVIEW 1
 #define LV_USE_WIN 1
 #define LV_USE_SCALE 1
-#define LV_USE_ANIMIMG 1 // check name, usually LV_USE_ANIMIMG
+#define LV_USE_ANIMIMG 1  // check name, usually LV_USE_ANIMIMG
 #define LV_USE_SPAN 1
 #define LV_USE_LIST 1
 #define LV_USE_LED 1

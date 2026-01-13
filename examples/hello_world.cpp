@@ -1,5 +1,6 @@
-#include "../lvgl_cpp.h"
 #include <iostream>
+
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 
@@ -49,7 +50,7 @@ int main() {
   Calendar cal(&screen);
   cal.set_size(200, 200);
   cal.center();
-  cal.add_flag(LV_OBJ_FLAG_HIDDEN); // Hide it for now
+  cal.add_flag(LV_OBJ_FLAG_HIDDEN);  // Hide it for now
 
   return 0;
 }

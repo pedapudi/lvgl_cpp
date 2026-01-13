@@ -1,8 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SLIDER_H_
 #define LVGL_CPP_WIDGETS_SLIDER_H_
 
-#include "bar.h" // IWYU pragma: export
-#include "lvgl.h" // IWYU pragma: export
+#include "bar.h"   // IWYU pragma: export
+#include "lvgl.h"  // IWYU pragma: export
 
 /**
  * @file slider.h
@@ -23,7 +23,7 @@ class Observer;
  * @brief Wrapper for lv_slider.
  */
 class Slider : public Bar {
-public:
+ public:
   /**
    * @brief Create a new Slider.
    * @param parent Parent object.
@@ -62,6 +62,6 @@ public:
  * widget.center();
  * ```
  */
-} // namespace lvgl
+}  // namespace lvgl
 
-#endif // LVGL_CPP_WIDGETS_SLIDER_H_
+#endif  // LVGL_CPP_WIDGETS_SLIDER_H_

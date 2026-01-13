@@ -14,43 +14,35 @@ lv_span_t* SpanGroup::add_span() {
 }
 
 void SpanGroup::delete_span(lv_span_t* span) {
-  if (obj_)
-    lv_spangroup_delete_span(obj_, span);
+  if (obj_) lv_spangroup_delete_span(obj_, span);
 }
 
 void SpanGroup::set_span_text(lv_span_t* span, const char* text) {
-  if (obj_)
-    lv_spangroup_set_span_text(obj_, span, text);
+  if (obj_) lv_spangroup_set_span_text(obj_, span, text);
 }
 
 void SpanGroup::set_span_style(lv_span_t* span, const lv_style_t* style) {
-  if (obj_)
-    lv_spangroup_set_span_style(obj_, span, style);
+  if (obj_) lv_spangroup_set_span_style(obj_, span, style);
 }
 
 void SpanGroup::set_align(lv_text_align_t align) {
-  if (obj_)
-    lv_spangroup_set_align(obj_, align);
+  if (obj_) lv_spangroup_set_align(obj_, align);
 }
 
 void SpanGroup::set_overflow(lv_span_overflow_t overflow) {
-  if (obj_)
-    lv_spangroup_set_overflow(obj_, overflow);
+  if (obj_) lv_spangroup_set_overflow(obj_, overflow);
 }
 
 void SpanGroup::set_indent(int32_t indent) {
-  if (obj_)
-    lv_spangroup_set_indent(obj_, indent);
+  if (obj_) lv_spangroup_set_indent(obj_, indent);
 }
 
 void SpanGroup::set_mode(lv_span_mode_t mode) {
-  if (obj_)
-    lv_spangroup_set_mode(obj_, mode);
+  if (obj_) lv_spangroup_set_mode(obj_, mode);
 }
 
 void SpanGroup::set_max_lines(int32_t lines) {
-  if (obj_)
-    lv_spangroup_set_max_lines(obj_, lines);
+  if (obj_) lv_spangroup_set_max_lines(obj_, lines);
 }
 
 lv_span_t* SpanGroup::get_child(int32_t id) {
@@ -82,8 +74,7 @@ int32_t SpanGroup::get_max_lines() {
 }
 
 void SpanGroup::refresh() {
-  if (obj_)
-    lv_spangroup_refresh(obj_);
+  if (obj_) lv_spangroup_refresh(obj_);
 }
 
-} // namespace lvgl
+}  // namespace lvgl
