@@ -1,0 +1,53 @@
+#ifndef LVGL_CPP_LVGLCPP_H_
+#define LVGL_CPP_LVGLCPP_H_
+
+#include "core/object.h"
+#include "widgets/anim_image.h"
+#include "widgets/arc.h"
+#include "widgets/bar.h"
+#include "widgets/button.h"
+#include "widgets/button_matrix.h"
+#include "widgets/calendar.h"
+#include "widgets/canvas.h"
+#include "widgets/chart.h"
+#include "widgets/checkbox.h"
+#include "widgets/dropdown.h"
+#include "widgets/image.h"
+#include "widgets/image_button.h"
+#include "widgets/keyboard.h"
+#include "widgets/label.h"
+#include "widgets/led.h"
+#include "widgets/line.h"
+#include "widgets/list.h"
+#include "widgets/menu.h"
+#include "widgets/msgbox.h"
+#include "widgets/roller.h"
+#include "widgets/scale.h"
+#include "widgets/slider.h"
+#include "widgets/span.h"
+#include "widgets/spinner.h"
+
+#include "core/group.h"
+#include "display/display.h"
+#include "indev/input_device.h"
+#include "misc/animation.h"
+#include "misc/timer.h"
+#include "widgets/spinbox.h"
+#include "widgets/switch.h"
+#include "widgets/table.h"
+#include "widgets/tabview.h"
+#include "widgets/textarea.h"
+#include "widgets/tileview.h"
+#include "widgets/win.h"
+
+#include "core/observer.h"
+#include "draw/draw.h"
+#include "draw/image_decoder.h"
+#include "font/font.h"
+#include "misc/color.h"
+#include "misc/file_system.h"
+
+// Expose underlying LVGL headers if needed (optional)
+#include "lvgl.h"
+
+#endif // LVGL_CPP_LVGLCPP_H_

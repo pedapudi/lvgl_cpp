@@ -1,0 +1,56 @@
+lvgl_build/CMakeFiles/lvgl.dir/src/misc/cache/class/lv_cache_sc_da.c.o: \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/lv_cache_sc_da.c \
+ /usr/include/stdc-predef.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/lv_cache_sc_da.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../lv_cache_private.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_types.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../lv_conf_internal.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl_cpp/lv_conf.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/include/features.h /usr/include/features-time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/bits/timesize.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/long-double.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/include/x86_64-linux-gnu/bits/types.h \
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+ /usr/include/x86_64-linux-gnu/bits/time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stddef.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stdbool.h \
+ /usr/include/inttypes.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stdarg.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_os_private.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../osal/../lv_conf_internal.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_os.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../osal/../misc/lv_types.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_linux.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_os_none.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../lv_cache_entry.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../lv_cache_entry_private.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../stdlib/lv_sprintf.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../stdlib/../misc/lv_types.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../stdlib/lv_string.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../stdlib/../lv_conf_internal.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_iter.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_types.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_assert.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_log.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../stdlib/lv_mem.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../../stdlib/lv_string.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_math.h \
+ /home/sunil/code/git/lvgl/lvgl/lvgl/src/misc/cache/class/../../lv_types.h
