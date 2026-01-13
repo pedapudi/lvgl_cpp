@@ -5,10 +5,10 @@ namespace lvgl {
 
 Arc::Arc() : Arc((Object *)nullptr) {}
 
-Arc::Arc(Object *parent)
+Arc::Arc(Object* parent)
     : Object(lv_arc_create(parent ? parent->raw() : nullptr)) {}
 
-Arc::Arc(lv_obj_t *obj) : Object(obj) {}
+Arc::Arc(lv_obj_t* obj) : Object(obj) {}
 
 void Arc::set_start_angle(lv_value_precise_t start) {
   if (obj_)
@@ -118,7 +118,7 @@ int32_t Arc::get_knob_offset() const {
   return obj_ ? lv_arc_get_knob_offset(obj_) : 0;
 }
 
-Observer Arc::bind_value(Subject &subject) {
+Observer Arc::bind_value(Subject& subject) {
   return Observer(lv_arc_bind_value(raw(), subject.raw()));
 }
 

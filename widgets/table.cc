@@ -4,12 +4,12 @@ namespace lvgl {
 
 Table::Table() : Table((Object*)nullptr) {}
 
-Table::Table(Object *parent)
+Table::Table(Object* parent)
     : Object(lv_table_create(parent ? parent->raw() : nullptr)) {}
 
-Table::Table(lv_obj_t *obj) : Object(obj) {}
+Table::Table(lv_obj_t* obj) : Object(obj) {}
 
-void Table::set_cell_value(uint32_t row, uint32_t col, const char *txt) {
+void Table::set_cell_value(uint32_t row, uint32_t col, const char* txt) {
   if (obj_)
     lv_table_set_cell_value(obj_, row, col, txt);
 }
@@ -41,7 +41,7 @@ void Table::clear_cell_ctrl(uint32_t row, uint32_t col,
     lv_table_clear_cell_ctrl(obj_, row, col, ctrl);
 }
 
-void Table::set_cell_user_data(uint16_t row, uint16_t col, void *user_data) {
+void Table::set_cell_user_data(uint16_t row, uint16_t col, void* user_data) {
   if (obj_)
     lv_table_set_cell_user_data(obj_, row, col, user_data);
 }
@@ -51,7 +51,7 @@ void Table::set_selected_cell(uint16_t row, uint16_t col) {
     lv_table_set_selected_cell(obj_, row, col);
 }
 
-const char *Table::get_cell_value(uint32_t row, uint32_t col) {
+const char* Table::get_cell_value(uint32_t row, uint32_t col) {
   return obj_ ? lv_table_get_cell_value(obj_, row, col) : nullptr;
 }
 
@@ -72,12 +72,12 @@ bool Table::has_cell_ctrl(uint32_t row, uint32_t col,
   return obj_ ? lv_table_has_cell_ctrl(obj_, row, col, ctrl) : false;
 }
 
-void Table::get_selected_cell(uint32_t *row, uint32_t *col) {
+void Table::get_selected_cell(uint32_t* row, uint32_t* col) {
   if (obj_)
     lv_table_get_selected_cell(obj_, row, col);
 }
 
-void *Table::get_cell_user_data(uint16_t row, uint16_t col) {
+void* Table::get_cell_user_data(uint16_t row, uint16_t col) {
   return obj_ ? lv_table_get_cell_user_data(obj_, row, col) : nullptr;
 }
 

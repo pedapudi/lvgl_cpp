@@ -28,12 +28,12 @@ public:
    * @brief Create a Chart with a parent.
    * @param parent The parent object.
    */
-  explicit Chart(Object *parent);
+  explicit Chart(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Chart(lv_obj_t *obj);
+  explicit Chart(lv_obj_t* obj);
 
   void set_type(lv_chart_type_t type);
   void set_point_count(uint32_t cnt);
@@ -44,13 +44,13 @@ public:
   lv_chart_type_t get_type();
   uint32_t get_point_count();
 
-  lv_chart_series_t *add_series(lv_color_t color, lv_chart_axis_t axis);
-  void remove_series(lv_chart_series_t *series);
-  void set_series_color(lv_chart_series_t *series, lv_color_t color);
-  void set_next_value(lv_chart_series_t *series, int32_t value);
-  void set_next_value2(lv_chart_series_t *series, int32_t x_value,
+  lv_chart_series_t* add_series(lv_color_t color, lv_chart_axis_t axis);
+  void remove_series(lv_chart_series_t* series);
+  void set_series_color(lv_chart_series_t* series, lv_color_t color);
+  void set_next_value(lv_chart_series_t* series, int32_t value);
+  void set_next_value2(lv_chart_series_t* series, int32_t x_value,
                        int32_t y_value);
-  void set_all_values(lv_chart_series_t *series, int32_t value);
+  void set_all_values(lv_chart_series_t* series, int32_t value);
   void refresh();
 };
 

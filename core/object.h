@@ -66,7 +66,7 @@ public:
    * @note Use this to wrap objects returned by LVGL C API or callback
    * parameters.
    */
-  explicit Object(lv_obj_t *obj, bool owned = false);
+  explicit Object(lv_obj_t* obj, bool owned = false);
 
   /**
    * @brief Create a new Object (Screen).
@@ -81,7 +81,7 @@ public:
    * Takes ownership.
    * @param parent The parent object. Must not be null for standard widgets.
    */
-  explicit Object(Object *parent);
+  explicit Object(Object* parent);
 
   /**
    * @brief Destructor.
@@ -92,11 +92,11 @@ public:
 
   // Non-copyable to prevent ambiguous ownership
   Object(const Object &) = delete;
-  Object &operator=(const Object &) = delete;
+  Object& operator=(const Object &) = delete;
 
   // Moveable
   Object(Object &&other) noexcept;
-  Object &operator=(Object &&other) noexcept;
+  Object& operator=(Object &&other) noexcept;
 
   /**
    * @brief Release ownership of the underlying LVGL object.
@@ -104,13 +104,13 @@ public:
    * Useful when passing ownership to another system.
    * @return The raw pointer (same as raw()).
    */
-  lv_obj_t *release();
+  lv_obj_t* release();
 
   /**
    * @brief Get the raw LVGL object pointer.
    * @return lv_obj_t* pointer or nullptr if invalid.
    */
-  lv_obj_t *raw() const { return obj_; }
+  lv_obj_t* raw() const { return obj_; }
 
   /**
    * @brief Check if the object is valid.
@@ -182,7 +182,7 @@ public:
    * @param x_ofs X offset.
    * @param y_ofs Y offset.
    */
-  void align_to(const Object *base, lv_align_t align, int32_t x_ofs = 0,
+  void align_to(const Object* base, lv_align_t align, int32_t x_ofs = 0,
                 int32_t y_ofs = 0);
 
   /**
@@ -251,14 +251,14 @@ public:
    * @param style The C++ style wrapper.
    * @param selector The part/state selector (default `LV_PART_MAIN`).
    */
-  void add_style(Style &style, lv_style_selector_t selector = LV_PART_MAIN);
+  void add_style(Style& style, lv_style_selector_t selector = LV_PART_MAIN);
 
   /**
    * @brief Remove a style from the object.
    * @param style The C++ style wrapper.
    * @param selector The part/state selector.
    */
-  void remove_style(Style *style, lv_style_selector_t selector = LV_PART_MAIN);
+  void remove_style(Style* style, lv_style_selector_t selector = LV_PART_MAIN);
 
   // Local style properties (common subset)
   void set_style_anim_duration(uint32_t value,
@@ -273,7 +273,7 @@ public:
                                    lv_style_selector_t selector = LV_PART_MAIN);
   void set_style_image_recolor(lv_color_t value,
                                lv_style_selector_t selector = LV_PART_MAIN);
-  void set_style_bg_image_src(const void *value,
+  void set_style_bg_image_src(const void* value,
                               lv_style_selector_t selector = LV_PART_MAIN);
 
   // --- Layouts ---
@@ -297,7 +297,7 @@ public:
                      int32_t row_pos, int32_t row_span);
 
 protected:
-  lv_obj_t *obj_ = nullptr;
+  lv_obj_t* obj_ = nullptr;
   bool owned_ = false;
 
   struct CallbackNode {
@@ -307,13 +307,13 @@ protected:
   // Keep track of event callback closures
   std::vector<std::unique_ptr<CallbackNode>> callback_nodes_;
 
-  static void event_proxy(lv_event_t *e);
+  static void event_proxy(lv_event_t* e);
 
   /**
    * @brief Internal hook to handle LVGL deletion event.
    * Updates safety flag when external deletion happens.
    */
-  static void on_delete_event(lv_event_t *e);
+  static void on_delete_event(lv_event_t* e);
 
   /**
    * @brief Install the safety event hook.

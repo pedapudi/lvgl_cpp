@@ -4,12 +4,12 @@ namespace lvgl {
 
 ButtonMatrix::ButtonMatrix() : ButtonMatrix((Object*)nullptr) {}
 
-ButtonMatrix::ButtonMatrix(Object *parent)
+ButtonMatrix::ButtonMatrix(Object* parent)
     : Object(lv_buttonmatrix_create(parent ? parent->raw() : nullptr)) {}
 
-ButtonMatrix::ButtonMatrix(lv_obj_t *obj) : Object(obj) {}
+ButtonMatrix::ButtonMatrix(lv_obj_t* obj) : Object(obj) {}
 
-void ButtonMatrix::set_map(const char *const map[]) {
+void ButtonMatrix::set_map(const char* const map[]) {
   if (obj_)
     lv_buttonmatrix_set_map(obj_, map);
 }
@@ -56,7 +56,7 @@ void ButtonMatrix::set_one_checked(bool en) {
     lv_buttonmatrix_set_one_checked(obj_, en);
 }
 
-const char *const *ButtonMatrix::get_map() {
+const char* const *ButtonMatrix::get_map() {
   return obj_ ? lv_buttonmatrix_get_map(obj_) : nullptr;
 }
 
@@ -65,7 +65,7 @@ uint32_t ButtonMatrix::get_selected_button() {
               : LV_BUTTONMATRIX_BUTTON_NONE;
 }
 
-const char *ButtonMatrix::get_button_text(uint32_t btn_id) {
+const char* ButtonMatrix::get_button_text(uint32_t btn_id) {
   return obj_ ? lv_buttonmatrix_get_button_text(obj_, btn_id) : nullptr;
 }
 

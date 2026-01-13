@@ -28,14 +28,14 @@ public:
    * @brief Create a ButtonMatrix with a parent.
    * @param parent The parent object.
    */
-  explicit ButtonMatrix(Object *parent);
+  explicit ButtonMatrix(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit ButtonMatrix(lv_obj_t *obj);
+  explicit ButtonMatrix(lv_obj_t* obj);
 
-  void set_map(const char *const map[]);
+  void set_map(const char* const map[]);
   void set_ctrl_map(const lv_buttonmatrix_ctrl_t ctrl_map[]);
   void set_selected_button(uint32_t btn_id);
   void set_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
@@ -45,9 +45,9 @@ public:
   void set_button_width(uint32_t btn_id, uint32_t width);
   void set_one_checked(bool en);
 
-  const char *const *get_map();
+  const char* const *get_map();
   uint32_t get_selected_button();
-  const char *get_button_text(uint32_t btn_id);
+  const char* get_button_text(uint32_t btn_id);
   bool has_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
   bool get_one_checked();
 };

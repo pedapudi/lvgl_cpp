@@ -12,74 +12,74 @@ Subject::~Subject() { lv_subject_deinit(&subject_); }
 
 void Subject::notify() { lv_subject_notify(&subject_); }
 
-void Subject::bind_flag_if_eq(Object &obj, lv_obj_flag_t flag,
+void Subject::bind_flag_if_eq(Object& obj, lv_obj_flag_t flag,
                               int32_t ref_value) {
   lv_obj_bind_flag_if_eq(obj.raw(), &subject_, flag, ref_value);
 }
 
-void Subject::bind_flag_if_not_eq(Object &obj, lv_obj_flag_t flag,
+void Subject::bind_flag_if_not_eq(Object& obj, lv_obj_flag_t flag,
                                   int32_t ref_value) {
   lv_obj_bind_flag_if_not_eq(obj.raw(), &subject_, flag, ref_value);
 }
 
-void Subject::bind_flag_if_gt(Object &obj, lv_obj_flag_t flag,
+void Subject::bind_flag_if_gt(Object& obj, lv_obj_flag_t flag,
                               int32_t ref_value) {
   lv_obj_bind_flag_if_gt(obj.raw(), &subject_, flag, ref_value);
 }
 
-void Subject::bind_flag_if_ge(Object &obj, lv_obj_flag_t flag,
+void Subject::bind_flag_if_ge(Object& obj, lv_obj_flag_t flag,
                               int32_t ref_value) {
   lv_obj_bind_flag_if_ge(obj.raw(), &subject_, flag, ref_value);
 }
 
-void Subject::bind_flag_if_lt(Object &obj, lv_obj_flag_t flag,
+void Subject::bind_flag_if_lt(Object& obj, lv_obj_flag_t flag,
                               int32_t ref_value) {
   lv_obj_bind_flag_if_lt(obj.raw(), &subject_, flag, ref_value);
 }
 
-void Subject::bind_flag_if_le(Object &obj, lv_obj_flag_t flag,
+void Subject::bind_flag_if_le(Object& obj, lv_obj_flag_t flag,
                               int32_t ref_value) {
   lv_obj_bind_flag_if_le(obj.raw(), &subject_, flag, ref_value);
 }
 
-void Subject::bind_state_if_eq(Object &obj, lv_state_t state,
+void Subject::bind_state_if_eq(Object& obj, lv_state_t state,
                                int32_t ref_value) {
   lv_obj_bind_state_if_eq(obj.raw(), &subject_, state, ref_value);
 }
 
-void Subject::bind_state_if_not_eq(Object &obj, lv_state_t state,
+void Subject::bind_state_if_not_eq(Object& obj, lv_state_t state,
                                    int32_t ref_value) {
   lv_obj_bind_state_if_not_eq(obj.raw(), &subject_, state, ref_value);
 }
 
-void Subject::bind_state_if_gt(Object &obj, lv_state_t state,
+void Subject::bind_state_if_gt(Object& obj, lv_state_t state,
                                int32_t ref_value) {
   lv_obj_bind_state_if_gt(obj.raw(), &subject_, state, ref_value);
 }
 
-void Subject::bind_state_if_ge(Object &obj, lv_state_t state,
+void Subject::bind_state_if_ge(Object& obj, lv_state_t state,
                                int32_t ref_value) {
   lv_obj_bind_state_if_ge(obj.raw(), &subject_, state, ref_value);
 }
 
-void Subject::bind_state_if_lt(Object &obj, lv_state_t state,
+void Subject::bind_state_if_lt(Object& obj, lv_state_t state,
                                int32_t ref_value) {
   lv_obj_bind_state_if_lt(obj.raw(), &subject_, state, ref_value);
 }
 
-void Subject::bind_state_if_le(Object &obj, lv_state_t state,
+void Subject::bind_state_if_le(Object& obj, lv_state_t state,
                                int32_t ref_value) {
   lv_obj_bind_state_if_le(obj.raw(), &subject_, state, ref_value);
 }
 
-void Subject::bind_checked(Object &obj) {
+void Subject::bind_checked(Object& obj) {
   lv_obj_bind_checked(obj.raw(), &subject_);
 }
 
-Observer *Subject::add_observer(lv_observer_cb_t cb, void *user_data) {
+Observer* Subject::add_observer(lv_observer_cb_t cb, void* user_data) {
   // We use add_observer_with_target to store user_data in the target field
   // if it's not a widget.
-  lv_observer_t *obs =
+  lv_observer_t* obs =
       lv_subject_add_observer_with_target(&subject_, cb, user_data, nullptr);
   return new Observer(obs, true);
 }
@@ -137,23 +137,23 @@ void StringSubject::set(const std::string &value) {
   lv_subject_copy_string(&subject_, value.c_str());
 }
 
-const char *StringSubject::get() { return lv_subject_get_string(&subject_); }
+const char* StringSubject::get() { return lv_subject_get_string(&subject_); }
 
-const char *StringSubject::get_previous() {
+const char* StringSubject::get_previous() {
   return lv_subject_get_previous_string(&subject_);
 }
 
 // PointerSubject
 
-PointerSubject::PointerSubject(void *ptr) {
+PointerSubject::PointerSubject(void* ptr) {
   lv_subject_init_pointer(&subject_, ptr);
 }
 
-void PointerSubject::set(void *ptr) { lv_subject_set_pointer(&subject_, ptr); }
+void PointerSubject::set(void* ptr) { lv_subject_set_pointer(&subject_, ptr); }
 
-const void *PointerSubject::get() { return lv_subject_get_pointer(&subject_); }
+const void* PointerSubject::get() { return lv_subject_get_pointer(&subject_); }
 
-const void *PointerSubject::get_previous() {
+const void* PointerSubject::get_previous() {
   return lv_subject_get_previous_pointer(&subject_);
 }
 
@@ -178,13 +178,13 @@ lv_color_t ColorSubject::get_previous() {
 GroupSubject::GroupSubject(const std::vector<Subject *> &subjects) {
   raw_subjects_.reserve(subjects.size());
   wrapped_subjects_ = subjects;
-  for (auto *s : subjects) {
+  for (auto* s : subjects) {
     raw_subjects_.push_back(s->raw());
   }
   lv_subject_init_group(&subject_, raw_subjects_.data(), raw_subjects_.size());
 }
 
-Subject *GroupSubject::get_element(int32_t index) {
+Subject* GroupSubject::get_element(int32_t index) {
   if (index < 0 || index >= static_cast<int32_t>(wrapped_subjects_.size())) {
     return nullptr;
   }
@@ -193,7 +193,7 @@ Subject *GroupSubject::get_element(int32_t index) {
 
 // Observer
 
-Observer::Observer(lv_observer_t *obs, bool owned) : obs_(obs), owned_(owned) {
+Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {
   if (owned)
     printf("Observer created (owned) %p\n", (void *)obs);
   else
@@ -207,7 +207,7 @@ Observer::Observer(Observer &&other) noexcept
   printf("Observer moved %p\n", (void *)obs_);
 }
 
-Observer &Observer::operator=(Observer &&other) noexcept {
+Observer& Observer::operator=(Observer &&other) noexcept {
   if (this != &other) {
     remove();
     obs_ = other.obs_;
@@ -234,13 +234,13 @@ void Observer::remove() {
   }
 }
 
-void *Observer::get_target() const {
+void* Observer::get_target() const {
   if (!obs_)
     return nullptr;
   return lv_observer_get_target(obs_);
 }
 
-lv_obj_t *Observer::get_target_obj() const {
+lv_obj_t* Observer::get_target_obj() const {
   if (!obs_)
     return nullptr;
   return lv_observer_get_target_obj(obs_);

@@ -31,17 +31,17 @@ public:
    * @brief Create a List with a parent.
    * @param parent The parent object.
    */
-  explicit List(Object *parent);
+  explicit List(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit List(lv_obj_t *obj);
+  explicit List(lv_obj_t* obj);
 
-  Label add_text(const char *txt);
-  Button add_button(const void *icon, const char *txt);
-  const char *get_button_text(lv_obj_t *btn);
-  void set_button_text(lv_obj_t *btn, const char *txt);
+  Label add_text(const char* txt);
+  Button add_button(const void* icon, const char* txt);
+  const char* get_button_text(lv_obj_t* btn);
+  void set_button_text(lv_obj_t* btn, const char* txt);
 };
 
 } // namespace lvgl

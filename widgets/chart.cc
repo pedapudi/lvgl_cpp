@@ -4,10 +4,10 @@ namespace lvgl {
 
 Chart::Chart() : Chart((Object*)nullptr) {}
 
-Chart::Chart(Object *parent)
+Chart::Chart(Object* parent)
     : Object(lv_chart_create(parent ? parent->raw() : nullptr)) {}
 
-Chart::Chart(lv_obj_t *obj) : Object(obj) {}
+Chart::Chart(lv_obj_t* obj) : Object(obj) {}
 
 void Chart::set_type(lv_chart_type_t type) {
   if (obj_)
@@ -42,32 +42,32 @@ uint32_t Chart::get_point_count() {
   return obj_ ? lv_chart_get_point_count(obj_) : 0;
 }
 
-lv_chart_series_t *Chart::add_series(lv_color_t color, lv_chart_axis_t axis) {
+lv_chart_series_t* Chart::add_series(lv_color_t color, lv_chart_axis_t axis) {
   return obj_ ? lv_chart_add_series(obj_, color, axis) : nullptr;
 }
 
-void Chart::remove_series(lv_chart_series_t *series) {
+void Chart::remove_series(lv_chart_series_t* series) {
   if (obj_)
     lv_chart_remove_series(obj_, series);
 }
 
-void Chart::set_series_color(lv_chart_series_t *series, lv_color_t color) {
+void Chart::set_series_color(lv_chart_series_t* series, lv_color_t color) {
   if (obj_)
     lv_chart_set_series_color(obj_, series, color);
 }
 
-void Chart::set_next_value(lv_chart_series_t *series, int32_t value) {
+void Chart::set_next_value(lv_chart_series_t* series, int32_t value) {
   if (obj_)
     lv_chart_set_next_value(obj_, series, value);
 }
 
-void Chart::set_next_value2(lv_chart_series_t *series, int32_t x_value,
+void Chart::set_next_value2(lv_chart_series_t* series, int32_t x_value,
                             int32_t y_value) {
   if (obj_)
     lv_chart_set_next_value2(obj_, series, x_value, y_value);
 }
 
-void Chart::set_all_values(lv_chart_series_t *series, int32_t value) {
+void Chart::set_all_values(lv_chart_series_t* series, int32_t value) {
   if (obj_)
     lv_chart_set_all_values(obj_, series, value);
 }

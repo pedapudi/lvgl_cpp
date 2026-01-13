@@ -28,14 +28,14 @@ public:
    * @brief Create a Image with a parent.
    * @param parent The parent object.
    */
-  explicit Image(Object *parent);
+  explicit Image(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Image(lv_obj_t *obj);
+  explicit Image(lv_obj_t* obj);
 
-  void set_src(const void *src);
+  void set_src(const void* src);
   void set_offset_x(int32_t x);
   void set_offset_y(int32_t y);
   void set_rotation(int32_t angle);
@@ -47,11 +47,11 @@ public:
   void set_antialias(bool antialias);
   void set_inner_align(lv_image_align_t align);
 
-  const void *get_src() const;
+  const void* get_src() const;
   int32_t get_offset_x();
   int32_t get_offset_y();
   int32_t get_rotation();
-  void get_pivot(lv_point_t *pivot);
+  void get_pivot(lv_point_t* pivot);
   int32_t get_scale();
   int32_t get_scale_x();
   int32_t get_scale_y();

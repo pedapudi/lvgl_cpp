@@ -11,10 +11,10 @@ namespace lvgl {
  */
 class Font {
 public:
-  explicit Font(const lv_font_t *font);
+  explicit Font(const lv_font_t* font);
 
   // Accessors
-  const lv_font_t *raw() const { return font_; }
+  const lv_font_t* raw() const { return font_; }
   bool is_valid() const { return font_ != nullptr; }
 
   // Properties
@@ -26,22 +26,22 @@ public:
 
   // Static access to built-in fonts if enabled in lv_conf.h
   // Returns nullptr if not enabled.
-  static const Font &montserrat_8();
-  static const Font &montserrat_10();
-  static const Font &montserrat_12();
-  static const Font &montserrat_14();
-  static const Font &montserrat_16();
-  static const Font &montserrat_18();
-  static const Font &montserrat_20();
-  static const Font &montserrat_22();
-  static const Font &montserrat_24();
-  static const Font &montserrat_26();
-  static const Font &montserrat_28();
-  static const Font &montserrat_30();
-  static const Font &montserrat_32();
+  static const Font& montserrat_8();
+  static const Font& montserrat_10();
+  static const Font& montserrat_12();
+  static const Font& montserrat_14();
+  static const Font& montserrat_16();
+  static const Font& montserrat_18();
+  static const Font& montserrat_20();
+  static const Font& montserrat_22();
+  static const Font& montserrat_24();
+  static const Font& montserrat_26();
+  static const Font& montserrat_28();
+  static const Font& montserrat_30();
+  static const Font& montserrat_32();
 
 private:
-  const lv_font_t *font_;
+  const lv_font_t* font_;
 };
 
 } // namespace lvgl

@@ -3,7 +3,7 @@
 
 using namespace lvgl;
 
-void my_event_cb(lv_event_t *e) { std::cout << "Button clicked!" << std::endl; }
+void my_event_cb(lv_event_t* e) { std::cout << "Button clicked!" << std::endl; }
 
 int main() {
   // Initialize LVGL (mocking the init call as we might not link against full
@@ -19,7 +19,7 @@ int main() {
   btn.align(LV_ALIGN_CENTER, 0, 0);
 
   // Add callback
-  btn.add_event_cb(LV_EVENT_CLICKED, [](lv_event_t *e) {
+  btn.add_event_cb(LV_EVENT_CLICKED, [](lv_event_t* e) {
     std::cout << "Lambda clicked!" << std::endl;
   });
 

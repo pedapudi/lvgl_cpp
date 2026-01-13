@@ -39,13 +39,13 @@ public:
    * @brief Create a Button with a parent.
    * @param parent The parent object.
    */
-  explicit Button(Object *parent);
+  explicit Button(Object* parent);
 
   /**
    * @brief Wrap an existing lv_button object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Button(lv_obj_t *obj);
+  explicit Button(lv_obj_t* obj);
 };
 
 } // namespace lvgl

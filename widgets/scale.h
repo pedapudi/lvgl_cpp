@@ -28,12 +28,12 @@ public:
    * @brief Create a Scale with a parent.
    * @param parent The parent object.
    */
-  explicit Scale(Object *parent);
+  explicit Scale(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Scale(lv_obj_t *obj);
+  explicit Scale(lv_obj_t* obj);
 
   void set_mode(lv_scale_mode_t mode);
   void set_total_tick_count(uint32_t total_tick_count);
@@ -42,10 +42,10 @@ public:
   void set_range(int32_t min, int32_t max);
   void set_angle_range(uint32_t angle_range);
   void set_rotation(int32_t rotation);
-  void set_line_needle_value(lv_obj_t *needle_line, int32_t needle_length,
+  void set_line_needle_value(lv_obj_t* needle_line, int32_t needle_length,
                              int32_t value);
-  void set_image_needle_value(lv_obj_t *needle_img, int32_t value);
-  void set_text_src(const char *txt_src[]);
+  void set_image_needle_value(lv_obj_t* needle_img, int32_t value);
+  void set_text_src(const char* txt_src[]);
   void set_post_draw(bool en);
   void set_draw_ticks_on_top(bool en);
 

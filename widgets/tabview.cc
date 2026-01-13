@@ -4,16 +4,16 @@ namespace lvgl {
 
 TabView::TabView() : TabView((Object *)nullptr) {}
 
-TabView::TabView(Object *parent)
+TabView::TabView(Object* parent)
     : Object(lv_tabview_create(parent ? parent->raw() : nullptr)) {}
 
-TabView::TabView(lv_obj_t *obj) : Object(obj) {}
+TabView::TabView(lv_obj_t* obj) : Object(obj) {}
 
-TabPage TabView::add_tab(const char *name) {
+TabPage TabView::add_tab(const char* name) {
   return TabPage(obj_ ? lv_tabview_add_tab(obj_, name) : nullptr);
 }
 
-void TabView::rename_tab(uint32_t idx, const char *new_name) {
+void TabView::rename_tab(uint32_t idx, const char* new_name) {
   if (obj_)
     lv_tabview_rename_tab(obj_, idx, new_name);
 }
@@ -41,15 +41,15 @@ uint32_t TabView::get_tab_active() {
   return obj_ ? lv_tabview_get_tab_active(obj_) : 0;
 }
 
-lv_obj_t *TabView::get_tab_button(int32_t idx) {
+lv_obj_t* TabView::get_tab_button(int32_t idx) {
   return obj_ ? lv_tabview_get_tab_button(obj_, idx) : nullptr;
 }
 
-lv_obj_t *TabView::get_content() {
+lv_obj_t* TabView::get_content() {
   return obj_ ? lv_tabview_get_content(obj_) : nullptr;
 }
 
-lv_obj_t *TabView::get_tab_bar() {
+lv_obj_t* TabView::get_tab_bar() {
   return obj_ ? lv_tabview_get_tab_bar(obj_) : nullptr;
 }
 

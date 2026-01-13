@@ -28,26 +28,26 @@ public:
    * @brief Create a Keyboard with a parent.
    * @param parent The parent object.
    */
-  explicit Keyboard(Object *parent);
+  explicit Keyboard(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Keyboard(lv_obj_t *obj);
+  explicit Keyboard(lv_obj_t* obj);
 
-  void set_textarea(lv_obj_t *ta);
-  void set_textarea(Object *ta);
+  void set_textarea(lv_obj_t* ta);
+  void set_textarea(Object* ta);
   void set_mode(lv_keyboard_mode_t mode);
   void set_popovers(bool en);
-  void set_map(lv_keyboard_mode_t mode, const char *const map[],
+  void set_map(lv_keyboard_mode_t mode, const char* const map[],
                const lv_buttonmatrix_ctrl_t ctrl_map[]);
 
-  lv_obj_t *get_textarea();
+  lv_obj_t* get_textarea();
   lv_keyboard_mode_t get_mode();
   bool get_popovers();
-  const char *const *get_map_array();
+  const char* const *get_map_array();
   uint32_t get_selected_button();
-  const char *get_button_text(uint32_t btn_id);
+  const char* get_button_text(uint32_t btn_id);
 };
 
 /**

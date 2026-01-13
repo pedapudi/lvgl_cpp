@@ -7,7 +7,7 @@ ImageDecoder::ImageDecoder() {
   owned_ = true;
 }
 
-ImageDecoder::ImageDecoder(lv_image_decoder_t *decoder)
+ImageDecoder::ImageDecoder(lv_image_decoder_t* decoder)
     : decoder_(decoder), owned_(false) {}
 
 ImageDecoder::~ImageDecoder() {
@@ -36,8 +36,8 @@ void ImageDecoder::set_close_cb(lv_image_decoder_close_f_t cb) {
     lv_image_decoder_set_close_cb(decoder_, cb);
 }
 
-lv_image_decoder_t *ImageDecoder::release() {
-  lv_image_decoder_t *ptr = decoder_;
+lv_image_decoder_t* ImageDecoder::release() {
+  lv_image_decoder_t* ptr = decoder_;
   owned_ = false;
   return ptr;
 }

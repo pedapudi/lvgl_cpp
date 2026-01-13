@@ -6,22 +6,22 @@ namespace lvgl {
 
 Label::Label() : Label((Object *)nullptr) {}
 
-Label::Label(Object *parent)
+Label::Label(Object* parent)
     : Object(lv_label_create(parent ? parent->raw() : nullptr)) {}
 
-Label::Label(lv_obj_t *obj) : Object(obj) {}
+Label::Label(lv_obj_t* obj) : Object(obj) {}
 
 void Label::set_text(const std::string &text) {
   if (obj_)
     lv_label_set_text(obj_, text.c_str());
 }
 
-void Label::set_text(const char *text) {
+void Label::set_text(const char* text) {
   if (obj_)
     lv_label_set_text(obj_, text);
 }
 
-void Label::set_text_fmt(const char *fmt, ...) {
+void Label::set_text_fmt(const char* fmt, ...) {
   if (!obj_)
     return;
   va_list args;
@@ -33,7 +33,7 @@ void Label::set_text_fmt(const char *fmt, ...) {
 std::string Label::get_text() const {
   if (!obj_)
     return "";
-  const char *txt = lv_label_get_text(obj_);
+  const char* txt = lv_label_get_text(obj_);
   return txt ? std::string(txt) : "";
 }
 
@@ -75,7 +75,7 @@ bool Label::get_recolor() const {
   return obj_ ? lv_label_get_recolor(obj_) : false;
 }
 
-Observer Label::bind_text(Subject &subject, const char *fmt) {
+Observer Label::bind_text(Subject& subject, const char* fmt) {
   return Observer(lv_label_bind_text(raw(), subject.raw(), fmt));
 }
 

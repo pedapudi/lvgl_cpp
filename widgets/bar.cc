@@ -5,10 +5,10 @@ namespace lvgl {
 
 Bar::Bar() : Bar((Object *)nullptr) {}
 
-Bar::Bar(Object *parent)
+Bar::Bar(Object* parent)
     : Object(lv_bar_create(parent ? parent->raw() : nullptr)) {}
 
-Bar::Bar(lv_obj_t *obj) : Object(obj) {}
+Bar::Bar(lv_obj_t* obj) : Object(obj) {}
 
 void Bar::set_value(int32_t value, lv_anim_enable_t anim) {
   if (obj_)
@@ -71,7 +71,7 @@ bool Bar::is_symmetrical() const {
   return obj_ ? lv_bar_is_symmetrical(obj_) : false;
 }
 
-Observer Bar::bind_value(Subject &subject) {
+Observer Bar::bind_value(Subject& subject) {
   return Observer(lv_bar_bind_value(raw(), subject.raw()));
 }
 

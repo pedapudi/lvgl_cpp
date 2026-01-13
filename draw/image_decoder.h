@@ -12,7 +12,7 @@ public:
   virtual ~ImageDecoder();
 
   // If wrapping an existing decoder
-  explicit ImageDecoder(lv_image_decoder_t *decoder);
+  explicit ImageDecoder(lv_image_decoder_t* decoder);
 
   // Configuration
   void set_info_cb(lv_image_decoder_info_f_t cb);
@@ -23,10 +23,10 @@ public:
   /**
    * @brief Release ownership of the decoder.
    */
-  lv_image_decoder_t *release();
+  lv_image_decoder_t* release();
 
 protected:
-  lv_image_decoder_t *decoder_;
+  lv_image_decoder_t* decoder_;
   bool owned_ = false;
 };
 

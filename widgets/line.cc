@@ -4,10 +4,10 @@ namespace lvgl {
 
 Line::Line() : Line((Object*)nullptr) {}
 
-Line::Line(Object *parent)
+Line::Line(Object* parent)
     : Object(lv_line_create(parent ? parent->raw() : nullptr)) {}
 
-Line::Line(lv_obj_t *obj) : Object(obj) {}
+Line::Line(lv_obj_t* obj) : Object(obj) {}
 
 void Line::set_points(const lv_point_precise_t points[], uint32_t point_num) {
   if (obj_)
@@ -24,7 +24,7 @@ void Line::set_y_invert(bool en) {
     lv_line_set_y_invert(obj_, en);
 }
 
-const lv_point_precise_t *Line::get_points() const {
+const lv_point_precise_t* Line::get_points() const {
   return obj_ ? lv_line_get_points(obj_) : nullptr;
 }
 
@@ -36,7 +36,7 @@ bool Line::is_point_array_mutable() const {
   return obj_ ? lv_line_is_point_array_mutable(obj_) : false;
 }
 
-lv_point_precise_t *Line::get_points_mutable() {
+lv_point_precise_t* Line::get_points_mutable() {
   return obj_ ? lv_line_get_points_mutable(obj_) : nullptr;
 }
 

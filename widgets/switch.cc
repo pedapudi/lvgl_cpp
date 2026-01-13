@@ -4,10 +4,10 @@ namespace lvgl {
 
 Switch::Switch() : Switch((Object*)nullptr) {}
 
-Switch::Switch(Object *parent)
+Switch::Switch(Object* parent)
     : Object(lv_switch_create(parent ? parent->raw() : nullptr)) {}
 
-Switch::Switch(lv_obj_t *obj) : Object(obj) {}
+Switch::Switch(lv_obj_t* obj) : Object(obj) {}
 
 void Switch::set_orientation(lv_switch_orientation_t orientation) {
   if (obj_)

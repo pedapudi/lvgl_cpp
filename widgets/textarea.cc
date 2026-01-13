@@ -5,17 +5,17 @@ namespace lvgl {
 
 Textarea::Textarea() : Textarea((Object *)nullptr) {}
 
-Textarea::Textarea(Object *parent)
+Textarea::Textarea(Object* parent)
     : Object(lv_textarea_create(parent ? parent->raw() : nullptr)) {}
 
-Textarea::Textarea(lv_obj_t *obj) : Object(obj) {}
+Textarea::Textarea(lv_obj_t* obj) : Object(obj) {}
 
 void Textarea::add_char(uint32_t c) {
   if (obj_)
     lv_textarea_add_char(obj_, c);
 }
 
-void Textarea::add_text(const char *txt) {
+void Textarea::add_text(const char* txt) {
   if (obj_)
     lv_textarea_add_text(obj_, txt);
 }
@@ -30,12 +30,12 @@ void Textarea::delete_char_forward() {
     lv_textarea_delete_char_forward(obj_);
 }
 
-void Textarea::set_text(const char *txt) {
+void Textarea::set_text(const char* txt) {
   if (obj_)
     lv_textarea_set_text(obj_, txt);
 }
 
-void Textarea::set_placeholder_text(const char *txt) {
+void Textarea::set_placeholder_text(const char* txt) {
   if (obj_)
     lv_textarea_set_placeholder_text(obj_, txt);
 }
@@ -55,7 +55,7 @@ void Textarea::set_password_mode(bool en) {
     lv_textarea_set_password_mode(obj_, en);
 }
 
-void Textarea::set_password_bullet(const char *bullet) {
+void Textarea::set_password_bullet(const char* bullet) {
   if (obj_)
     lv_textarea_set_password_bullet(obj_, bullet);
 }
@@ -65,7 +65,7 @@ void Textarea::set_one_line(bool en) {
     lv_textarea_set_one_line(obj_, en);
 }
 
-void Textarea::set_accepted_chars(const char *list) {
+void Textarea::set_accepted_chars(const char* list) {
   if (obj_)
     lv_textarea_set_accepted_chars(obj_, list);
 }
@@ -75,7 +75,7 @@ void Textarea::set_max_length(uint32_t num) {
     lv_textarea_set_max_length(obj_, num);
 }
 
-void Textarea::set_insert_replace(const char *txt) {
+void Textarea::set_insert_replace(const char* txt) {
   if (obj_)
     lv_textarea_set_insert_replace(obj_, txt);
 }
@@ -95,11 +95,11 @@ void Textarea::set_align(lv_text_align_t align) {
     lv_textarea_set_align(obj_, align);
 }
 
-const char *Textarea::get_text() const {
+const char* Textarea::get_text() const {
   return obj_ ? lv_textarea_get_text(obj_) : nullptr;
 }
 
-const char *Textarea::get_placeholder_text() {
+const char* Textarea::get_placeholder_text() {
   return obj_ ? lv_textarea_get_placeholder_text(obj_) : nullptr;
 }
 
@@ -119,7 +119,7 @@ bool Textarea::get_password_mode() const {
   return obj_ ? lv_textarea_get_password_mode(obj_) : false;
 }
 
-const char *Textarea::get_password_bullet() {
+const char* Textarea::get_password_bullet() {
   return obj_ ? lv_textarea_get_password_bullet(obj_) : nullptr;
 }
 
@@ -127,7 +127,7 @@ bool Textarea::get_one_line() const {
   return obj_ ? lv_textarea_get_one_line(obj_) : false;
 }
 
-const char *Textarea::get_accepted_chars() {
+const char* Textarea::get_accepted_chars() {
   return obj_ ? lv_textarea_get_accepted_chars(obj_) : nullptr;
 }
 

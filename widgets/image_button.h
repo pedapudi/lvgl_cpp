@@ -28,20 +28,20 @@ public:
    * @brief Create a ImageButton with a parent.
    * @param parent The parent object.
    */
-  explicit ImageButton(Object *parent);
+  explicit ImageButton(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit ImageButton(lv_obj_t *obj);
+  explicit ImageButton(lv_obj_t* obj);
 
-  void set_src(lv_imagebutton_state_t state, const void *src_left,
-               const void *src_mid, const void *src_right);
+  void set_src(lv_imagebutton_state_t state, const void* src_left,
+               const void* src_mid, const void* src_right);
   void set_state(lv_imagebutton_state_t state);
 
-  const void *get_src_left(lv_imagebutton_state_t state);
-  const void *get_src_middle(lv_imagebutton_state_t state);
-  const void *get_src_right(lv_imagebutton_state_t state);
+  const void* get_src_left(lv_imagebutton_state_t state);
+  const void* get_src_middle(lv_imagebutton_state_t state);
+  const void* get_src_right(lv_imagebutton_state_t state);
 };
 
 /**

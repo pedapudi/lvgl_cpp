@@ -6,24 +6,24 @@ namespace lvgl {
 
 MsgBox::MsgBox() : MsgBox((Object *)nullptr) {}
 
-MsgBox::MsgBox(Object *parent)
+MsgBox::MsgBox(Object* parent)
     : Object(lv_msgbox_create(parent ? parent->raw() : nullptr)) {}
 
-MsgBox::MsgBox(lv_obj_t *obj) : Object(obj) {}
+MsgBox::MsgBox(lv_obj_t* obj) : Object(obj) {}
 
-Label MsgBox::add_title(const char *title) {
+Label MsgBox::add_title(const char* title) {
   return Label(obj_ ? lv_msgbox_add_title(obj_, title) : nullptr);
 }
 
-Button MsgBox::add_header_button(const void *icon) {
+Button MsgBox::add_header_button(const void* icon) {
   return Button(obj_ ? lv_msgbox_add_header_button(obj_, icon) : nullptr);
 }
 
-Label MsgBox::add_text(const char *text) {
+Label MsgBox::add_text(const char* text) {
   return Label(obj_ ? lv_msgbox_add_text(obj_, text) : nullptr);
 }
 
-Button MsgBox::add_footer_button(const char *text) {
+Button MsgBox::add_footer_button(const char* text) {
   return Button(obj_ ? lv_msgbox_add_footer_button(obj_, text) : nullptr);
 }
 

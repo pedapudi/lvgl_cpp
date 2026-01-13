@@ -29,12 +29,12 @@ public:
    * @param parent Parent object.
    */
   Slider();
-  explicit Slider(Object *parent);
+  explicit Slider(Object* parent);
 
   /**
    * @brief Wrap an existing lv_slider object.
    */
-  explicit Slider(lv_obj_t *obj);
+  explicit Slider(lv_obj_t* obj);
 
   // Inherits set_value, set_range, etc. from Bar
 
@@ -48,7 +48,7 @@ public:
    * @param subject The integer subject to bind.
    * @return An Observer object. Keep this object alive to maintain the binding.
    */
-  [[nodiscard]] Observer bind_value(Subject &subject);
+  [[nodiscard]] Observer bind_value(Subject& subject);
 };
 
 /**

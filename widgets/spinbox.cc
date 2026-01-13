@@ -4,10 +4,10 @@ namespace lvgl {
 
 Spinbox::Spinbox() : Spinbox((Object*)nullptr) {}
 
-Spinbox::Spinbox(Object *parent)
+Spinbox::Spinbox(Object* parent)
     : Textarea(lv_spinbox_create(parent ? parent->raw() : nullptr)) {}
 
-Spinbox::Spinbox(lv_obj_t *obj) : Textarea(obj) {}
+Spinbox::Spinbox(lv_obj_t* obj) : Textarea(obj) {}
 
 void Spinbox::set_value(int32_t v) {
   if (obj_)

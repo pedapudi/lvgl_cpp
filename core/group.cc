@@ -7,7 +7,7 @@ Group::Group() {
   owned_ = true;
 }
 
-Group::Group(lv_group_t *g, bool owned) : group_(g), owned_(owned) {}
+Group::Group(lv_group_t* g, bool owned) : group_(g), owned_(owned) {}
 
 Group::~Group() {
   if (owned_ && group_) {
@@ -15,12 +15,12 @@ Group::~Group() {
   }
 }
 
-void Group::add_obj(Object *obj) {
+void Group::add_obj(Object* obj) {
   if (group_ && obj)
     lv_group_add_obj(group_, obj->raw());
 }
 
-void Group::remove_obj(Object *obj) {
+void Group::remove_obj(Object* obj) {
   if (obj)
     lv_group_remove_obj(obj->raw());
 }
@@ -30,7 +30,7 @@ void Group::remove_all_objs() {
     lv_group_remove_all_objs(group_);
 }
 
-void Group::focus_obj(Object *obj) {
+void Group::focus_obj(Object* obj) {
   if (obj)
     lv_group_focus_obj(obj->raw());
 }
@@ -65,7 +65,7 @@ void Group::set_wrap(bool en) {
     lv_group_set_wrap(group_, en);
 }
 
-lv_obj_t *Group::get_focused() {
+lv_obj_t* Group::get_focused() {
   return group_ ? lv_group_get_focused(group_) : nullptr;
 }
 

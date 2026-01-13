@@ -25,13 +25,13 @@ public:
   void set_auto_delete(bool auto_delete);
   void enable(bool en);
 
-  lv_timer_t *raw() const { return timer_; }
+  lv_timer_t* raw() const { return timer_; }
 
 private:
-  lv_timer_t *timer_;
+  lv_timer_t* timer_;
   std::unique_ptr<TimerCallback> cb_;
 
-  static void timer_proxy(lv_timer_t *t);
+  static void timer_proxy(lv_timer_t* t);
 };
 
 } // namespace lvgl

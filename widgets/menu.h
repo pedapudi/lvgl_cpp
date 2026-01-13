@@ -49,33 +49,33 @@ public:
    * @brief Create a Menu with a parent.
    * @param parent The parent object.
    */
-  explicit Menu(Object *parent);
+  explicit Menu(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Menu(lv_obj_t *obj);
+  explicit Menu(lv_obj_t* obj);
 
-  MenuPage page_create(const char *title);
-  MenuCont cont_create(MenuPage &parent_page);
-  MenuSection section_create(MenuPage &parent_page);
-  MenuSeparator separator_create(MenuPage &parent_page);
+  MenuPage page_create(const char* title);
+  MenuCont cont_create(MenuPage& parent_page);
+  MenuSection section_create(MenuPage& parent_page);
+  MenuSeparator separator_create(MenuPage& parent_page);
 
-  void set_page(MenuPage &page);
-  void set_page_title(lv_obj_t *page, const char *title);
-  void set_page_title_static(lv_obj_t *page, const char *title);
-  void set_sidebar_page(MenuPage &page);
+  void set_page(MenuPage& page);
+  void set_page_title(lv_obj_t* page, const char* title);
+  void set_page_title_static(lv_obj_t* page, const char* title);
+  void set_sidebar_page(MenuPage& page);
   void set_mode_header(lv_menu_mode_header_t mode);
   void set_mode_root_back_button(lv_menu_mode_root_back_button_t mode);
-  void set_load_page_event(lv_obj_t *obj, MenuPage &page);
+  void set_load_page_event(lv_obj_t* obj, MenuPage& page);
 
   MenuPage get_cur_main_page();
   MenuPage get_cur_sidebar_page();
-  lv_obj_t *get_main_header();
-  lv_obj_t *get_main_header_back_button();
-  lv_obj_t *get_sidebar_header();
-  lv_obj_t *get_sidebar_header_back_button();
-  bool back_button_is_root(lv_obj_t *obj);
+  lv_obj_t* get_main_header();
+  lv_obj_t* get_main_header_back_button();
+  lv_obj_t* get_sidebar_header();
+  lv_obj_t* get_sidebar_header_back_button();
+  bool back_button_is_root(lv_obj_t* obj);
   void clear_history();
 };
 

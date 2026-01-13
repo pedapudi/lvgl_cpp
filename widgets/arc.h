@@ -29,12 +29,12 @@ public:
    * @brief Create a Arc with a parent.
    * @param parent The parent object.
    */
-  explicit Arc(Object *parent);
+  explicit Arc(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Arc(lv_obj_t *obj);
+  explicit Arc(lv_obj_t* obj);
 
   void set_start_angle(lv_value_precise_t start);
   void set_end_angle(lv_value_precise_t end);
@@ -67,7 +67,7 @@ public:
    * @param subject The integer subject to bind.
    * @return An Observer object. Keep this object alive to maintain the binding.
    */
-  [[nodiscard]] Observer bind_value(Subject &subject);
+  [[nodiscard]] Observer bind_value(Subject& subject);
 };
 
 /**

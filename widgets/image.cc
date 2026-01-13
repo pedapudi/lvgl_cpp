@@ -4,12 +4,12 @@ namespace lvgl {
 
 Image::Image() : Image((Object*)nullptr) {}
 
-Image::Image(Object *parent)
+Image::Image(Object* parent)
     : Object(lv_image_create(parent ? parent->raw() : nullptr)) {}
 
-Image::Image(lv_obj_t *obj) : Object(obj) {}
+Image::Image(lv_obj_t* obj) : Object(obj) {}
 
-void Image::set_src(const void *src) {
+void Image::set_src(const void* src) {
   if (obj_)
     lv_image_set_src(obj_, src);
 }
@@ -64,7 +64,7 @@ void Image::set_inner_align(lv_image_align_t align) {
     lv_image_set_inner_align(obj_, align);
 }
 
-const void *Image::get_src() const {
+const void* Image::get_src() const {
   return obj_ ? lv_image_get_src(obj_) : nullptr;
 }
 
@@ -74,7 +74,7 @@ int32_t Image::get_offset_y() { return obj_ ? lv_image_get_offset_y(obj_) : 0; }
 
 int32_t Image::get_rotation() { return obj_ ? lv_image_get_rotation(obj_) : 0; }
 
-void Image::get_pivot(lv_point_t *pivot) {
+void Image::get_pivot(lv_point_t* pivot) {
   if (obj_)
     lv_image_get_pivot(obj_, pivot);
 }

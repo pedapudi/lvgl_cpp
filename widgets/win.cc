@@ -6,16 +6,16 @@ namespace lvgl {
 
 Win::Win() : Win((Object *)nullptr) {}
 
-Win::Win(Object *parent)
+Win::Win(Object* parent)
     : Object(lv_win_create(parent ? parent->raw() : nullptr)) {}
 
-Win::Win(lv_obj_t *obj) : Object(obj) {}
+Win::Win(lv_obj_t* obj) : Object(obj) {}
 
-Label Win::add_title(const char *txt) {
+Label Win::add_title(const char* txt) {
   return Label(obj_ ? lv_win_add_title(obj_, txt) : nullptr);
 }
 
-Button Win::add_button(const void *icon, int32_t btn_w) {
+Button Win::add_button(const void* icon, int32_t btn_w) {
   return Button(obj_ ? lv_win_add_button(obj_, icon, btn_w) : nullptr);
 }
 

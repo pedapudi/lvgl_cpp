@@ -20,12 +20,12 @@ Color Color::from_hsv(uint16_t h, uint8_t s, uint8_t v) {
 
 uint32_t Color::to_int() const { return lv_color_to_int(color_); }
 
-bool Color::operator==(const Color &other) const {
+bool Color::operator==(const Color& other) const {
   return lv_color_eq(color_, other.color_);
 }
-bool Color::operator!=(const Color &other) const { return !(*this == other); }
+bool Color::operator!=(const Color& other) const { return !(*this == other); }
 
-Color Color::mix(const Color &other, uint8_t ratio) const {
+Color Color::mix(const Color& other, uint8_t ratio) const {
   // Note: lv_color_mix usage might defer depending on version, checking define.
   // In strict C API, checking implementation.
   // lv_color_mix(c1, c2, ratio) -> mix c1 (fg) and c2 (bg).

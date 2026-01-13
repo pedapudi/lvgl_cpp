@@ -4,10 +4,10 @@ namespace lvgl {
 
 Led::Led() : Led((Object*)nullptr) {}
 
-Led::Led(Object *parent)
+Led::Led(Object* parent)
     : Object(lv_led_create(parent ? parent->raw() : nullptr)) {}
 
-Led::Led(lv_obj_t *obj) : Object(obj) {}
+Led::Led(lv_obj_t* obj) : Object(obj) {}
 
 void Led::set_color(lv_color_t color) {
   if (obj_)

@@ -28,10 +28,10 @@ public:
 
   // Operations
   uint32_t to_int() const;
-  bool operator==(const Color &other) const;
-  bool operator!=(const Color &other) const;
+  bool operator==(const Color& other) const;
+  bool operator!=(const Color& other) const;
 
-  Color mix(const Color &other, uint8_t ratio) const; // 0: other, 255: this
+  Color mix(const Color& other, uint8_t ratio) const; // 0: other, 255: this
   Color lighten(lv_opa_t lvl) const;
   Color darken(lv_opa_t lvl) const;
 

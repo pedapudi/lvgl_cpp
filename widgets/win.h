@@ -42,15 +42,15 @@ public:
    * @brief Create a Win with a parent.
    * @param parent The parent object.
    */
-  explicit Win(Object *parent);
+  explicit Win(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Win(lv_obj_t *obj);
+  explicit Win(lv_obj_t* obj);
 
-  Label add_title(const char *txt);
-  Button add_button(const void *icon, int32_t btn_w);
+  Label add_title(const char* txt);
+  Button add_button(const void* icon, int32_t btn_w);
   WinHeader get_header();
   WinContent get_content();
 };

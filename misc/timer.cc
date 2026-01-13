@@ -2,8 +2,8 @@
 
 namespace lvgl {
 
-void Timer::timer_proxy(lv_timer_t *t) {
-  auto *timer_instance = static_cast<Timer *>(lv_timer_get_user_data(t));
+void Timer::timer_proxy(lv_timer_t* t) {
+  auto* timer_instance = static_cast<Timer *>(lv_timer_get_user_data(t));
   if (timer_instance && timer_instance->cb_ && *timer_instance->cb_) {
     (*timer_instance->cb_)(timer_instance);
   }

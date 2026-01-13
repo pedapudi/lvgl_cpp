@@ -28,16 +28,16 @@ public:
    * @brief Create a Checkbox with a parent.
    * @param parent The parent object.
    */
-  explicit Checkbox(Object *parent);
+  explicit Checkbox(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Checkbox(lv_obj_t *obj);
+  explicit Checkbox(lv_obj_t* obj);
 
-  void set_text(const char *txt);
-  void set_text_static(const char *txt);
-  const char *get_text() const;
+  void set_text(const char* txt);
+  void set_text_static(const char* txt);
+  const char* get_text() const;
 };
 
 /**

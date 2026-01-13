@@ -28,12 +28,12 @@ public:
    * @brief Create a Spinner with a parent.
    * @param parent The parent object.
    */
-  explicit Spinner(Object *parent);
+  explicit Spinner(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Spinner(lv_obj_t *obj);
+  explicit Spinner(lv_obj_t* obj);
 
   void set_anim_params(uint32_t t, uint32_t angle);
 };

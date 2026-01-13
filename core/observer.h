@@ -20,33 +20,33 @@ public:
 
   // Non-copyable, Non-moveable to ensure pointer stability
   Subject(const Subject &) = delete;
-  Subject &operator=(const Subject &) = delete;
+  Subject& operator=(const Subject &) = delete;
   Subject(Subject &&) = delete;
-  Subject &operator=(Subject &&) = delete;
+  Subject& operator=(Subject &&) = delete;
 
-  lv_subject_t *raw() { return &subject_; }
-  const lv_subject_t *raw() const { return &subject_; }
+  lv_subject_t* raw() { return &subject_; }
+  const lv_subject_t* raw() const { return &subject_; }
 
   void notify();
 
   // Flag Bindings
-  void bind_flag_if_eq(Object &obj, lv_obj_flag_t flag, int32_t ref_value);
-  void bind_flag_if_not_eq(Object &obj, lv_obj_flag_t flag, int32_t ref_value);
-  void bind_flag_if_gt(Object &obj, lv_obj_flag_t flag, int32_t ref_value);
-  void bind_flag_if_ge(Object &obj, lv_obj_flag_t flag, int32_t ref_value);
-  void bind_flag_if_lt(Object &obj, lv_obj_flag_t flag, int32_t ref_value);
-  void bind_flag_if_le(Object &obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_eq(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_not_eq(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_gt(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_ge(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_lt(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_le(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
 
   // State Bindings
-  void bind_state_if_eq(Object &obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_not_eq(Object &obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_gt(Object &obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_ge(Object &obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_lt(Object &obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_le(Object &obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_eq(Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_not_eq(Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_gt(Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_ge(Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_lt(Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_le(Object& obj, lv_state_t state, int32_t ref_value);
 
   // Checked Binding
-  void bind_checked(Object &obj);
+  void bind_checked(Object& obj);
 
   /**
    * @brief Add a generic observer callback.
@@ -56,8 +56,8 @@ public:
    * @warning The returned Observer* is managed by the caller if not bound to an
    * LVGL object lifecycle.
    */
-  [[nodiscard]] class Observer *add_observer(lv_observer_cb_t cb,
-                                             void *user_data);
+  [[nodiscard]] class Observer* add_observer(lv_observer_cb_t cb,
+                                             void* user_data);
 
   /**
    * @brief Add a C++ observer callback.
@@ -103,8 +103,8 @@ public:
   ~StringSubject();
 
   void set(const std::string &value);
-  const char *get();
-  const char *get_previous();
+  const char* get();
+  const char* get_previous();
 
 private:
   std::vector<char> buf_;
@@ -113,11 +113,11 @@ private:
 
 class PointerSubject : public Subject {
 public:
-  explicit PointerSubject(void *ptr);
+  explicit PointerSubject(void* ptr);
 
-  void set(void *ptr);
-  const void *get();
-  const void *get_previous();
+  void set(void* ptr);
+  const void* get();
+  const void* get_previous();
 };
 
 class ColorSubject : public Subject {
@@ -140,7 +140,7 @@ public:
 
   // No specific set/get for group, as it aggregates others.
   // But we can get elements.
-  Subject *get_element(int32_t index);
+  Subject* get_element(int32_t index);
 
 private:
   std::vector<lv_subject_t *> raw_subjects_;
@@ -163,32 +163,32 @@ private:
  */
 class Observer {
 public:
-  explicit Observer(lv_observer_t *obs, bool owned = false);
+  explicit Observer(lv_observer_t* obs, bool owned = false);
   ~Observer();
 
   // Move-only to prevent double-free if we own it.
   Observer(const Observer &) = delete;
-  Observer &operator=(const Observer &) = delete;
+  Observer& operator=(const Observer &) = delete;
   Observer(Observer &&other) noexcept;
-  Observer &operator=(Observer &&other) noexcept;
+  Observer& operator=(Observer &&other) noexcept;
 
   void remove();
 
-  lv_observer_t *raw() const { return obs_; }
+  lv_observer_t* raw() const { return obs_; }
 
   /**
    * @brief Get the target object associated with this observer (if any).
    */
-  void *get_target() const;
+  void* get_target() const;
 
   /**
    * @brief Get the target widget associated with this observer (if any).
    * Returns raw lv_obj_t pointer.
    */
-  lv_obj_t *get_target_obj() const;
+  lv_obj_t* get_target_obj() const;
 
 private:
-  lv_observer_t *obs_;
+  lv_observer_t* obs_;
   bool owned_; // If true, we call lv_observer_remove in destructor.
 };
 

@@ -30,12 +30,12 @@ public:
    * @param parent Parent object.
    */
   Label();
-  explicit Label(Object *parent);
+  explicit Label(Object* parent);
 
   /**
    * @brief Wrap an existing lv_label object.
    */
-  explicit Label(lv_obj_t *obj);
+  explicit Label(lv_obj_t* obj);
 
   /**
    * @brief Set the text of the label.
@@ -47,13 +47,13 @@ public:
    * @brief Set the text with C-style string.
    * @param text The text to set.
    */
-  void set_text(const char *text);
+  void set_text(const char* text);
 
   /**
    * @brief Set the text using printf-style formatting.
    * @param fmt Format string.
    */
-  void set_text_fmt(const char *fmt, ...);
+  void set_text_fmt(const char* fmt, ...);
 
   /**
    * @brief Get the text of the label.
@@ -87,7 +87,7 @@ public:
    * @param fmt Optional format string (e.g. "%d").
    * @return An Observer object. Keep this object alive to maintain the binding.
    */
-  [[nodiscard]] Observer bind_text(Subject &subject, const char *fmt = nullptr);
+  [[nodiscard]] Observer bind_text(Subject& subject, const char* fmt = nullptr);
 };
 
 /**

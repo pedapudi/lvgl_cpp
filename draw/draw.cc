@@ -4,24 +4,24 @@ namespace lvgl {
 
 // DrawTask
 
-DrawTask::DrawTask(lv_draw_task_t *task) : task_(task) {}
+DrawTask::DrawTask(lv_draw_task_t* task) : task_(task) {}
 
 lv_draw_task_type_t DrawTask::get_type() const {
   return task_ ? lv_draw_task_get_type(task_) : LV_DRAW_TASK_TYPE_NONE;
 }
 
-void *DrawTask::get_draw_dsc() const {
+void* DrawTask::get_draw_dsc() const {
   return task_ ? lv_draw_task_get_draw_dsc(task_) : nullptr;
 }
 
-void DrawTask::get_area(lv_area_t *area) const {
+void DrawTask::get_area(lv_area_t* area) const {
   if (task_ && area)
     lv_draw_task_get_area(task_, area);
 }
 
 // Layer
 
-Layer::Layer(lv_layer_t *layer) : layer_(layer) {}
+Layer::Layer(lv_layer_t* layer) : layer_(layer) {}
 
 void Layer::init() {
   if (layer_)
@@ -33,17 +33,17 @@ void Layer::reset() {
     lv_layer_reset(layer_);
 }
 
-void *Layer::alloc_buf() {
+void* Layer::alloc_buf() {
   return layer_ ? lv_draw_layer_alloc_buf(layer_) : nullptr;
 }
 
-DrawTask Layer::add_task(const lv_area_t *coords, lv_draw_task_type_t type) {
+DrawTask Layer::add_task(const lv_area_t* coords, lv_draw_task_type_t type) {
   if (layer_)
     return DrawTask(lv_draw_add_task(layer_, coords, type));
   return DrawTask(nullptr);
 }
 
-void Layer::finalize_task_creation(DrawTask &t) {
+void Layer::finalize_task_creation(DrawTask& t) {
   if (layer_ && t.get_draw_dsc()) { // simplistic check
     // We need raw pointer from task wrapper. Accessing private member...
     // Need to add friend or getter.

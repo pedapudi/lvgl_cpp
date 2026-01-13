@@ -15,10 +15,10 @@ public:
 
   // Non-copyable (styles are usually referenced by pointer, copying needs care)
   Style(const Style &) = delete;
-  Style &operator=(const Style &) = delete;
+  Style& operator=(const Style &) = delete;
 
-  lv_style_t *raw() { return &style_; }
-  const lv_style_t *raw() const { return &style_; }
+  lv_style_t* raw() { return &style_; }
+  const lv_style_t* raw() const { return &style_; }
 
   void set_bg_color(lv_color_t color);
   void set_bg_opa(lv_opa_t opa);

@@ -23,7 +23,7 @@ File::File(File &&other) noexcept
   std::memset(&other.file_, 0, sizeof(other.file_));
 }
 
-File &File::operator=(File &&other) noexcept {
+File& File::operator=(File &&other) noexcept {
   if (this != &other) {
     close();
     file_ = other.file_;
@@ -52,13 +52,13 @@ lv_fs_res_t File::close() {
   return LV_FS_RES_OK;
 }
 
-lv_fs_res_t File::read(void *buf, uint32_t btr, uint32_t *br) {
+lv_fs_res_t File::read(void* buf, uint32_t btr, uint32_t* br) {
   if (!is_opened_)
     return LV_FS_RES_NOT_EX;
   return lv_fs_read(&file_, buf, btr, br);
 }
 
-lv_fs_res_t File::write(const void *buf, uint32_t btw, uint32_t *bw) {
+lv_fs_res_t File::write(const void* buf, uint32_t btw, uint32_t* bw) {
   if (!is_opened_)
     return LV_FS_RES_NOT_EX;
   return lv_fs_write(&file_, buf, btw, bw);
@@ -70,7 +70,7 @@ lv_fs_res_t File::seek(uint32_t pos, lv_fs_whence_t whence) {
   return lv_fs_seek(&file_, pos, whence);
 }
 
-lv_fs_res_t File::tell(uint32_t *pos) {
+lv_fs_res_t File::tell(uint32_t* pos) {
   if (!is_opened_)
     return LV_FS_RES_NOT_EX;
   return lv_fs_tell(&file_, pos);
@@ -100,7 +100,7 @@ Directory::Directory(Directory &&other) noexcept
   std::memset(&other.dir_, 0, sizeof(other.dir_));
 }
 
-Directory &Directory::operator=(Directory &&other) noexcept {
+Directory& Directory::operator=(Directory &&other) noexcept {
   if (this != &other) {
     close();
     dir_ = other.dir_;

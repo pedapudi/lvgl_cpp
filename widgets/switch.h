@@ -28,12 +28,12 @@ public:
    * @brief Create a Switch with a parent.
    * @param parent The parent object.
    */
-  explicit Switch(Object *parent);
+  explicit Switch(Object* parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Switch(lv_obj_t *obj);
+  explicit Switch(lv_obj_t* obj);
 
   void set_orientation(lv_switch_orientation_t orientation);
   lv_switch_orientation_t get_orientation() const;

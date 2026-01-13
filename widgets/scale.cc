@@ -4,10 +4,10 @@ namespace lvgl {
 
 Scale::Scale() : Scale((Object*)nullptr) {}
 
-Scale::Scale(Object *parent)
+Scale::Scale(Object* parent)
     : Object(lv_scale_create(parent ? parent->raw() : nullptr)) {}
 
-Scale::Scale(lv_obj_t *obj) : Object(obj) {}
+Scale::Scale(lv_obj_t* obj) : Object(obj) {}
 
 void Scale::set_mode(lv_scale_mode_t mode) {
   if (obj_)
@@ -44,18 +44,18 @@ void Scale::set_rotation(int32_t rotation) {
     lv_scale_set_rotation(obj_, rotation);
 }
 
-void Scale::set_line_needle_value(lv_obj_t *needle_line, int32_t needle_length,
+void Scale::set_line_needle_value(lv_obj_t* needle_line, int32_t needle_length,
                                   int32_t value) {
   if (obj_)
     lv_scale_set_line_needle_value(obj_, needle_line, needle_length, value);
 }
 
-void Scale::set_image_needle_value(lv_obj_t *needle_img, int32_t value) {
+void Scale::set_image_needle_value(lv_obj_t* needle_img, int32_t value) {
   if (obj_)
     lv_scale_set_image_needle_value(obj_, needle_img, value);
 }
 
-void Scale::set_text_src(const char *txt_src[]) {
+void Scale::set_text_src(const char* txt_src[]) {
   if (obj_)
     lv_scale_set_text_src(obj_, txt_src);
 }

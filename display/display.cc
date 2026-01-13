@@ -2,9 +2,9 @@
 
 namespace lvgl {
 
-Display::Display(lv_display_t *disp) : disp_(disp) {}
+Display::Display(lv_display_t* disp) : disp_(disp) {}
 
-Display *Display::get_default() {
+Display* Display::get_default() {
   static Display default_display(lv_display_get_default());
   // Update internal pointer as default display might change
   // But this static object approach is flawed if default changes.
@@ -63,32 +63,32 @@ lv_display_rotation_t Display::get_rotation() {
   return disp_ ? lv_display_get_rotation(disp_) : LV_DISPLAY_ROTATION_0;
 }
 
-lv_obj_t *Display::get_screen_active() {
+lv_obj_t* Display::get_screen_active() {
   return disp_ ? lv_display_get_screen_active(disp_) : nullptr;
 }
 
-lv_obj_t *Display::get_screen_prev() {
+lv_obj_t* Display::get_screen_prev() {
   return disp_ ? lv_display_get_screen_prev(disp_) : nullptr;
 }
 
-lv_obj_t *Display::get_layer_top() {
+lv_obj_t* Display::get_layer_top() {
   return disp_ ? lv_display_get_layer_top(disp_) : nullptr;
 }
 
-lv_obj_t *Display::get_layer_sys() {
+lv_obj_t* Display::get_layer_sys() {
   return disp_ ? lv_display_get_layer_sys(disp_) : nullptr;
 }
 
-lv_obj_t *Display::get_layer_bottom() {
+lv_obj_t* Display::get_layer_bottom() {
   return disp_ ? lv_display_get_layer_bottom(disp_) : nullptr;
 }
 
-void Display::load_screen(Object *scr) {
+void Display::load_screen(Object* scr) {
   if (scr)
     lv_screen_load(scr->raw());
 }
 
-void Display::load_screen_anim(Object *scr, lv_screen_load_anim_t anim_type,
+void Display::load_screen_anim(Object* scr, lv_screen_load_anim_t anim_type,
                                uint32_t time, uint32_t delay, bool auto_del) {
   if (scr)
     lv_screen_load_anim(scr->raw(), anim_type, time, delay, auto_del);

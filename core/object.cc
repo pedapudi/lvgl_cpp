@@ -4,7 +4,7 @@
 
 namespace lvgl {
 
-Object::Object(lv_obj_t *obj, bool owned) : obj_(obj), owned_(owned) {
+Object::Object(lv_obj_t* obj, bool owned) : obj_(obj), owned_(owned) {
   if (obj_) {
     install_delete_hook();
   }
@@ -12,8 +12,8 @@ Object::Object(lv_obj_t *obj, bool owned) : obj_(obj), owned_(owned) {
 
 Object::Object() : Object((Object *)nullptr) {}
 
-Object::Object(Object *parent) : owned_(true) {
-  lv_obj_t *parent_obj = parent ? parent->raw() : nullptr;
+Object::Object(Object* parent) : owned_(true) {
+  lv_obj_t* parent_obj = parent ? parent->raw() : nullptr;
   obj_ = lv_obj_create(parent_obj);
   install_delete_hook();
 }
@@ -41,7 +41,7 @@ Object::Object(Object &&other) noexcept
   }
 }
 
-Object &Object::operator=(Object &&other) noexcept {
+Object& Object::operator=(Object &&other) noexcept {
   if (this != &other) {
     if (obj_) {
       // ALWAYS remove our callback first.
@@ -65,8 +65,8 @@ Object &Object::operator=(Object &&other) noexcept {
   return *this;
 }
 
-lv_obj_t *Object::release() {
-  lv_obj_t *ptr = obj_;
+lv_obj_t* Object::release() {
+  lv_obj_t* ptr = obj_;
   owned_ = false;
   return ptr;
 }
@@ -75,8 +75,8 @@ void Object::install_delete_hook() {
   lv_obj_add_event_cb(obj_, on_delete_event, LV_EVENT_DELETE, this);
 }
 
-void Object::on_delete_event(lv_event_t *e) {
-  Object *self = static_cast<Object *>(lv_event_get_user_data(e));
+void Object::on_delete_event(lv_event_t* e) {
+  Object* self = static_cast<Object *>(lv_event_get_user_data(e));
   if (self) {
     self->obj_ = nullptr; // Invalidate wrapper
   }
@@ -117,7 +117,7 @@ void Object::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
     lv_obj_align(obj_, align, x_ofs, y_ofs);
 }
 
-void Object::align_to(const Object *base, lv_align_t align, int32_t x_ofs,
+void Object::align_to(const Object* base, lv_align_t align, int32_t x_ofs,
                       int32_t y_ofs) {
   if (obj_ && base && base->raw())
     lv_obj_align_to(obj_, base->raw(), align, x_ofs, y_ofs);
@@ -165,12 +165,12 @@ void Object::add_event_cb(lv_event_code_t event_code, EventCallback callback) {
   callback_nodes_.push_back(std::move(node));
 }
 
-void Object::add_style(Style &style, lv_style_selector_t selector) {
+void Object::add_style(Style& style, lv_style_selector_t selector) {
   if (obj_)
     lv_obj_add_style(obj_, style.raw(), selector);
 }
 
-void Object::remove_style(Style *style, lv_style_selector_t selector) {
+void Object::remove_style(Style* style, lv_style_selector_t selector) {
   if (obj_)
     lv_obj_remove_style(obj_, style ? style->raw() : nullptr, selector);
 }
@@ -210,14 +210,14 @@ void Object::set_style_image_recolor(lv_color_t value,
     lv_obj_set_style_image_recolor(obj_, value, selector);
 }
 
-void Object::set_style_bg_image_src(const void *value,
+void Object::set_style_bg_image_src(const void* value,
                                     lv_style_selector_t selector) {
   if (obj_)
     lv_obj_set_style_bg_image_src(obj_, value, selector);
 }
 
-void Object::event_proxy(lv_event_t *e) {
-  CallbackNode *node = static_cast<CallbackNode *>(lv_event_get_user_data(e));
+void Object::event_proxy(lv_event_t* e) {
+  CallbackNode* node = static_cast<CallbackNode *>(lv_event_get_user_data(e));
   if (node && node->callback) {
     node->callback(e);
   }

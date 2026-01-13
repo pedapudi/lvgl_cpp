@@ -11,10 +11,10 @@ public:
   Group();
   ~Group();
 
-  void add_obj(Object *obj);
-  void remove_obj(Object *obj);
+  void add_obj(Object* obj);
+  void remove_obj(Object* obj);
   void remove_all_objs();
-  void focus_obj(Object *obj);
+  void focus_obj(Object* obj);
   void focus_next();
   void focus_prev();
   void focus_freeze(bool en);
@@ -30,20 +30,20 @@ public:
   void set_editing(bool edit);
   void set_wrap(bool en);
 
-  lv_obj_t *get_focused();
+  lv_obj_t* get_focused();
   bool get_editing();
   bool get_wrap();
   uint32_t get_obj_count();
 
-  lv_group_t *raw() const { return group_; }
+  lv_group_t* raw() const { return group_; }
 
 private:
-  lv_group_t *group_;
+  lv_group_t* group_;
   bool owned_;
 
   // Private constructor for wrapping existing group without taking ownership
   // (or maybe default group shouldn't be deleted)
-  explicit Group(lv_group_t *g, bool owned = false);
+  explicit Group(lv_group_t* g, bool owned = false);
 };
 
 } // namespace lvgl

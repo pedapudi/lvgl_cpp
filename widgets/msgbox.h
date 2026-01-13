@@ -47,19 +47,19 @@ public:
    * @brief Create a MsgBox with a parent.
    * @param parent The parent object.
    */
-  explicit MsgBox(Object *parent); // Creates modal if parent is NULL?
+  explicit MsgBox(Object* parent); // Creates modal if parent is NULL?
                                    // No, lv_msgbox_create creates
                                    // modal if parent is NULL.
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit MsgBox(lv_obj_t *obj);
+  explicit MsgBox(lv_obj_t* obj);
 
-  Label add_title(const char *title);
-  Button add_header_button(const void *icon);
-  Label add_text(const char *text);
-  Button add_footer_button(const char *text);
+  Label add_title(const char* title);
+  Button add_header_button(const void* icon);
+  Label add_text(const char* text);
+  Button add_footer_button(const char* text);
   Button add_close_button();
 
   MsgBoxHeader get_header();
