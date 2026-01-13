@@ -1,8 +1,7 @@
-#include "../core/object.h" // For binding tests
+
 #include "../core/observer.h"
 #include <cassert>
 #include <iostream>
-#include <vector>
 
 void test_basic_types() {
   std::cout << "Testing Basic Types..." << std::endl;
