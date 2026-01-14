@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_LABEL_H_
 #define LVGL_CPP_WIDGETS_LABEL_H_
 
+#include <cstdint>
+
 #include <string>
 
 #include "../core/object.h"  // IWYU pragma: export

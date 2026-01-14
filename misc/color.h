@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_MISC_COLOR_H_
 #define LVGL_CPP_MISC_COLOR_H_
 
+#include <cstdint>
+
 #include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {

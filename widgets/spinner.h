@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SPINNER_H_
 #define LVGL_CPP_WIDGETS_SPINNER_H_
 
+#include <cstdint>
+
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 

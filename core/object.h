@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_CORE_OBJECT_H_
 #define LVGL_CPP_CORE_OBJECT_H_
 
+#include <cstdint>
+
 #include <functional>
 #include <memory>
 

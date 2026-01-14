@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_CORE_OBSERVER_H_
 #define LVGL_CPP_CORE_OBSERVER_H_
 
+#include <cstdint>
+
 #include <string>
 #include <vector>
 

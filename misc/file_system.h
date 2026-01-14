@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_MISC_FILE_SYSTEM_H_
 #define LVGL_CPP_MISC_FILE_SYSTEM_H_
 
+#include <cstdint>
+
 #include <string>
 #include <vector>
 

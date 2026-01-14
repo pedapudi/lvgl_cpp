@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SPINBOX_H_
 #define LVGL_CPP_WIDGETS_SPINBOX_H_
 
+#include <cstdint>
+
 #include "lvgl.h"      // IWYU pragma: export
 #include "textarea.h"  // IWYU pragma: export
 

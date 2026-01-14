@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_ANIM_IMAGE_H_
 #define LVGL_CPP_WIDGETS_ANIM_IMAGE_H_
 
+#include <cstdint>
+
 #include "image.h"  // IWYU pragma: export
 #include "lvgl.h"   // IWYU pragma: export
 

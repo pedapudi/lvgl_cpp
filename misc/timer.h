@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_MISC_TIMER_H_
 #define LVGL_CPP_MISC_TIMER_H_
 
+#include <cstdint>
+
 #include <functional>
 #include <memory>
 

@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_DISPLAY_DISPLAY_H_
 #define LVGL_CPP_DISPLAY_DISPLAY_H_
 
+#include <cstdint>
+
 #include <functional>
 
 #include "../core/object.h"  // IWYU pragma: export

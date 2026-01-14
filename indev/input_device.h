@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_INDEV_INPUT_DEVICE_H_
 #define LVGL_CPP_INDEV_INPUT_DEVICE_H_
 
+#include <cstdint>
+
 #include "../core/group.h"   // IWYU pragma: export
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export

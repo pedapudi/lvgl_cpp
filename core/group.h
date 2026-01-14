@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_CORE_GROUP_H_
 #define LVGL_CPP_CORE_GROUP_H_
 
+#include <cstdint>
+
 #include "lvgl.h"    // IWYU pragma: export
 #include "object.h"  // IWYU pragma: export
 

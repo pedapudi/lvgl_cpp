@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_KEYBOARD_H_
 #define LVGL_CPP_WIDGETS_KEYBOARD_H_
 
+#include <cstdint>
+
 #include "button_matrix.h"  // IWYU pragma: export
 #include "lvgl.h"           // IWYU pragma: export
 

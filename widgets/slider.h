@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_WIDGETS_SLIDER_H_
 #define LVGL_CPP_WIDGETS_SLIDER_H_
 
+#include <cstdint>
+
 #include "bar.h"   // IWYU pragma: export
 #include "lvgl.h"  // IWYU pragma: export
 
