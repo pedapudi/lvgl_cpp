@@ -88,8 +88,51 @@ void test_lambda_callbacks() {
   }
 }
 
+static bool manual_stop_deleted = false;
+
+void test_manual_stop() {
+  std::cout << "Testing Manual Stop..." << std::endl;
+  manual_stop_deleted = false;
+
+  // Create animation and start it
+  {
+    lvgl::Animation a;
+    a.set_values(0, 100);
+    a.set_duration(1000);
+    a.set_var(&test_val);
+
+    a.set_deleted_cb([]() {
+      std::cout << "Callback: Deleted (Manual Stop)" << std::endl;
+      manual_stop_deleted = true;
+    });
+
+    a.start();
+    std::cout << "Animation started." << std::endl;
+  }
+
+  // Now stop it manually using the variable
+  // We need to match the variable pointer
+  bool removed = lv_anim_del(&test_val, NULL);
+  if (removed) {
+    std::cout << "Animation removed successfully." << std::endl;
+  } else {
+    std::cerr << "FAIL: Animation not found to remove!" << std::endl;
+    exit(1);
+  }
+
+  // deleted_cb should have been called
+  if (manual_stop_deleted) {
+    std::cout << "PASS: Callback data deleted after manual stop." << std::endl;
+  } else {
+    std::cerr << "FAIL: Callback data NOT deleted after manual stop!"
+              << std::endl;
+    exit(1);
+  }
+}
+
 int main() {
   lv_init();
   test_lambda_callbacks();
+  test_manual_stop();
   return 0;
 }
