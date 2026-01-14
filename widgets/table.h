@@ -29,12 +29,12 @@ class Table : public Object {
    * @brief Create a Table with a parent.
    * @param parent The parent object.
    */
-  explicit Table(Object* parent);
+  explicit Table(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Table(lv_obj_t* obj);
+  explicit Table(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_cell_value(uint32_t row, uint32_t col, const char* txt);
   void set_row_count(uint32_t row_cnt);

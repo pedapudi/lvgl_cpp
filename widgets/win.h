@@ -44,12 +44,12 @@ class Win : public Object {
    * @brief Create a Win with a parent.
    * @param parent The parent object.
    */
-  explicit Win(Object* parent);
+  explicit Win(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Win(lv_obj_t* obj);
+  explicit Win(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Label add_title(const char* txt);
   Button add_button(const void* icon, int32_t btn_w);

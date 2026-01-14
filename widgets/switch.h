@@ -29,12 +29,12 @@ class Switch : public Object {
    * @brief Create a Switch with a parent.
    * @param parent The parent object.
    */
-  explicit Switch(Object* parent);
+  explicit Switch(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Switch(lv_obj_t* obj);
+  explicit Switch(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_orientation(lv_switch_orientation_t orientation);
   lv_switch_orientation_t get_orientation() const;

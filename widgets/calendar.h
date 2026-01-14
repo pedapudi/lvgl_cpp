@@ -31,12 +31,12 @@ class Calendar : public Object {
    * @brief Create a Calendar with a parent.
    * @param parent The parent object.
    */
-  explicit Calendar(Object* parent);
+  explicit Calendar(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Calendar(lv_obj_t* obj);
+  explicit Calendar(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_today_date(uint32_t year, uint32_t month, uint32_t day);
   void set_shown_date(uint32_t year, uint32_t month);

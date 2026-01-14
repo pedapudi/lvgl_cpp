@@ -29,12 +29,12 @@ class Chart : public Object {
    * @brief Create a Chart with a parent.
    * @param parent The parent object.
    */
-  explicit Chart(Object* parent);
+  explicit Chart(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Chart(lv_obj_t* obj);
+  explicit Chart(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_type(lv_chart_type_t type);
   void set_point_count(uint32_t cnt);

@@ -9,10 +9,10 @@ namespace lvgl {
 
 MsgBox::MsgBox() : MsgBox((Object*)nullptr) {}
 
-MsgBox::MsgBox(Object* parent)
-    : Object(lv_msgbox_create(parent ? parent->raw() : nullptr)) {}
+MsgBox::MsgBox(Object* parent, Ownership ownership)
+    : Object(lv_msgbox_create(parent ? parent->raw() : nullptr), ownership) {}
 
-MsgBox::MsgBox(lv_obj_t* obj) : Object(obj) {}
+MsgBox::MsgBox(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 Label MsgBox::add_title(const char* title) {
   return Label(obj_ ? lv_msgbox_add_title(obj_, title) : nullptr);

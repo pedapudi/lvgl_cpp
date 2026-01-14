@@ -8,10 +8,10 @@ namespace lvgl {
 
 Calendar::Calendar() : Calendar((Object*)nullptr) {}
 
-Calendar::Calendar(Object* parent)
-    : Object(lv_calendar_create(parent ? parent->raw() : nullptr)) {}
+Calendar::Calendar(Object* parent, Ownership ownership)
+    : Object(lv_calendar_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Calendar::Calendar(lv_obj_t* obj) : Object(obj) {}
+Calendar::Calendar(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Calendar::set_today_date(uint32_t year, uint32_t month, uint32_t day) {
   if (obj_) lv_calendar_set_today_date(obj_, year, month, day);

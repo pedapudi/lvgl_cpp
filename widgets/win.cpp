@@ -9,10 +9,10 @@ namespace lvgl {
 
 Win::Win() : Win((Object*)nullptr) {}
 
-Win::Win(Object* parent)
-    : Object(lv_win_create(parent ? parent->raw() : nullptr)) {}
+Win::Win(Object* parent, Ownership ownership)
+    : Object(lv_win_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Win::Win(lv_obj_t* obj) : Object(obj) {}
+Win::Win(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 Label Win::add_title(const char* txt) {
   return Label(obj_ ? lv_win_add_title(obj_, txt) : nullptr);

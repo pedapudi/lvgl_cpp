@@ -6,10 +6,10 @@ namespace lvgl {
 
 Switch::Switch() : Switch((Object*)nullptr) {}
 
-Switch::Switch(Object* parent)
-    : Object(lv_switch_create(parent ? parent->raw() : nullptr)) {}
+Switch::Switch(Object* parent, Ownership ownership)
+    : Object(lv_switch_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Switch::Switch(lv_obj_t* obj) : Object(obj) {}
+Switch::Switch(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Switch::set_orientation(lv_switch_orientation_t orientation) {
   if (obj_) lv_switch_set_orientation(obj_, orientation);

@@ -8,10 +8,10 @@ namespace lvgl {
 
 Textarea::Textarea() : Textarea((Object*)nullptr) {}
 
-Textarea::Textarea(Object* parent)
-    : Object(lv_textarea_create(parent ? parent->raw() : nullptr)) {}
+Textarea::Textarea(Object* parent, Ownership ownership)
+    : Object(lv_textarea_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Textarea::Textarea(lv_obj_t* obj) : Object(obj) {}
+Textarea::Textarea(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Textarea::add_char(uint32_t c) {
   if (obj_) lv_textarea_add_char(obj_, c);

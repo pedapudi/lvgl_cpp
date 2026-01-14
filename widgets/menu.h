@@ -51,12 +51,12 @@ class Menu : public Object {
    * @brief Create a Menu with a parent.
    * @param parent The parent object.
    */
-  explicit Menu(Object* parent);
+  explicit Menu(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Menu(lv_obj_t* obj);
+  explicit Menu(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   MenuPage page_create(const char* title);
   MenuCont cont_create(MenuPage& parent_page);

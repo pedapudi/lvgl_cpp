@@ -95,3 +95,5 @@ target_link_libraries(test_visual_widgets PRIVATE lvgl_cpp)
 
 add_executable(observer_test tests/observer_test.cpp)
 target_link_libraries(observer_test PRIVATE lvgl_cpp)
+add_executable(test_ownership tests/test_ownership.cpp)
+target_link_libraries(test_ownership PRIVATE lvgl_cpp)

@@ -29,12 +29,12 @@ class Scale : public Object {
    * @brief Create a Scale with a parent.
    * @param parent The parent object.
    */
-  explicit Scale(Object* parent);
+  explicit Scale(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Scale(lv_obj_t* obj);
+  explicit Scale(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_mode(lv_scale_mode_t mode);
   void set_total_tick_count(uint32_t total_tick_count);

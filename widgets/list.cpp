@@ -9,10 +9,10 @@ namespace lvgl {
 
 List::List() : List((Object*)nullptr) {}
 
-List::List(Object* parent)
-    : Object(lv_list_create(parent ? parent->raw() : nullptr)) {}
+List::List(Object* parent, Ownership ownership)
+    : Object(lv_list_create(parent ? parent->raw() : nullptr), ownership) {}
 
-List::List(lv_obj_t* obj) : Object(obj) {}
+List::List(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 Label List::add_text(const char* txt) {
   return Label(obj_ ? lv_list_add_text(obj_, txt) : nullptr);

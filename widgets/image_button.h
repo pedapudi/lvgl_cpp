@@ -29,12 +29,12 @@ class ImageButton : public Object {
    * @brief Create a ImageButton with a parent.
    * @param parent The parent object.
    */
-  explicit ImageButton(Object* parent);
+  explicit ImageButton(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit ImageButton(lv_obj_t* obj);
+  explicit ImageButton(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_src(lv_imagebutton_state_t state, const void* src_left,
                const void* src_mid, const void* src_right);

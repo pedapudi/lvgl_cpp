@@ -33,12 +33,12 @@ class List : public Object {
    * @brief Create a List with a parent.
    * @param parent The parent object.
    */
-  explicit List(Object* parent);
+  explicit List(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit List(lv_obj_t* obj);
+  explicit List(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Label add_text(const char* txt);
   Button add_button(const void* icon, const char* txt);

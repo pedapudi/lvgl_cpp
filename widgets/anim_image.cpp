@@ -6,10 +6,10 @@ namespace lvgl {
 
 AnimImage::AnimImage() : AnimImage((Object*)nullptr) {}
 
-AnimImage::AnimImage(Object* parent)
+AnimImage::AnimImage(Object* parent, Ownership ownership)
     : Image(lv_animimg_create(parent ? parent->raw() : nullptr)) {}
 
-AnimImage::AnimImage(lv_obj_t* obj) : Image(obj) {}
+AnimImage::AnimImage(lv_obj_t* obj, Ownership ownership) : Image(obj) {}
 
 void AnimImage::set_src(const void* dsc[], size_t num) {
   if (obj_) lv_animimg_set_src(obj_, dsc, num);

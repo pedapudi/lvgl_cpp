@@ -59,15 +59,38 @@ class Style;  // Forward declaration
 class Object {
  public:
   /**
+   * @brief Ownership policy for LVGL objects.
+   * Defines how the C++ wrapper manages the lifetime of the underlying LVGL
+   * object.
+   */
+  enum class Ownership {
+    Default,    ///< Owned if parent is set, Unmanaged if wrapping pointer.
+    Managed,    ///< The C++ object owns the LVGL object and will delete it.
+    Unmanaged,  ///< The C++ object is a weak reference (view) and will NOT
+                ///< delete.
+  };
+
+  /**
    * @brief Create a wrapper around an existing LVGL object.
    * @param obj The LVGL object to wrap.
-   * @param owned If true, the C++ object takes ownership and will delete the
-   * LVGL object on destruction. Default is false (weak reference).
+   * @param ownership The ownership policy.
+   *        - `Ownership::Managed`: Wrapper deletes `obj` on destruction.
+   *        - `Ownership::Unmanaged`: Wrapper does NOT delete `obj`.
+   *        - `Ownership::Default`: Defaults to `Unmanaged`.
    *
    * @note Use this to wrap objects returned by LVGL C API or callback
    * parameters.
    */
-  explicit Object(lv_obj_t* obj, bool owned = false);
+  explicit Object(lv_obj_t* obj, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a wrapper around an existing LVGL object
+   * (Legacy/Convenience).
+   * @param obj The LVGL object to wrap.
+   * @param owned If true, equivalent to `Ownership::Managed`.
+   * @deprecated Use the `Ownership` enum constructor instead.
+   */
+  explicit Object(lv_obj_t* obj, bool owned);
 
   /**
    * @brief Create a new Object (Screen).
@@ -79,10 +102,13 @@ class Object {
   /**
    * @brief Create a new Object with a parent.
    * Creates a new `lv_obj` as a child of the given parent.
-   * Takes ownership.
+   *
    * @param parent The parent object. Must not be null for standard widgets.
+   * @param ownership The ownership policy.
+   *        - `Ownership::Managed`: Wrapper deletes the child (Default).
+   *        - `Ownership::Unmanaged`: Wrapper acts as a temporary handle.
    */
-  explicit Object(Object* parent);
+  explicit Object(Object* parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Destructor.

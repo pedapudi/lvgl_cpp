@@ -6,10 +6,10 @@ namespace lvgl {
 
 SpanGroup::SpanGroup() : SpanGroup((Object*)nullptr) {}
 
-SpanGroup::SpanGroup(Object* parent)
-    : Object(lv_spangroup_create(parent ? parent->raw() : nullptr)) {}
+SpanGroup::SpanGroup(Object* parent, Ownership ownership)
+    : Object(lv_spangroup_create(parent ? parent->raw() : nullptr), ownership) {}
 
-SpanGroup::SpanGroup(lv_obj_t* obj) : Object(obj) {}
+SpanGroup::SpanGroup(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 lv_span_t* SpanGroup::add_span() {
   return obj_ ? lv_spangroup_add_span(obj_) : nullptr;

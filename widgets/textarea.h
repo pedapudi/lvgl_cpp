@@ -31,12 +31,12 @@ class Textarea : public Object {
    * @brief Create a Textarea with a parent.
    * @param parent The parent object.
    */
-  explicit Textarea(Object* parent);
+  explicit Textarea(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Textarea(lv_obj_t* obj);
+  explicit Textarea(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void add_char(uint32_t c);
   void add_text(const char* txt);

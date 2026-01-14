@@ -6,10 +6,10 @@ namespace lvgl {
 
 Canvas::Canvas() : Canvas((Object*)nullptr) {}
 
-Canvas::Canvas(Object* parent)
+Canvas::Canvas(Object* parent, Ownership ownership)
     : Image(lv_canvas_create(parent ? parent->raw() : nullptr)) {}
 
-Canvas::Canvas(lv_obj_t* obj) : Image(obj) {}
+Canvas::Canvas(lv_obj_t* obj, Ownership ownership) : Image(obj) {}
 
 void Canvas::set_buffer(void* buf, int32_t w, int32_t h, lv_color_format_t cf) {
   if (obj_) lv_canvas_set_buffer(obj_, buf, w, h, cf);

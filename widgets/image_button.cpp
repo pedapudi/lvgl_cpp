@@ -6,10 +6,10 @@ namespace lvgl {
 
 ImageButton::ImageButton() : ImageButton((Object*)nullptr) {}
 
-ImageButton::ImageButton(Object* parent)
-    : Object(lv_imagebutton_create(parent ? parent->raw() : nullptr)) {}
+ImageButton::ImageButton(Object* parent, Ownership ownership)
+    : Object(lv_imagebutton_create(parent ? parent->raw() : nullptr), ownership) {}
 
-ImageButton::ImageButton(lv_obj_t* obj) : Object(obj) {}
+ImageButton::ImageButton(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void ImageButton::set_src(lv_imagebutton_state_t state, const void* src_left,
                           const void* src_mid, const void* src_right) {

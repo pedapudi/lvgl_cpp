@@ -29,12 +29,12 @@ class Spinbox : public Textarea {
    * @brief Create a Spinbox with a parent.
    * @param parent The parent object.
    */
-  explicit Spinbox(Object* parent);
+  explicit Spinbox(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Spinbox(lv_obj_t* obj);
+  explicit Spinbox(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_value(int32_t v);
   void set_rollover(bool rollover);

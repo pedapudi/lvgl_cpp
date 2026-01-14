@@ -6,10 +6,10 @@ namespace lvgl {
 
 ButtonMatrix::ButtonMatrix() : ButtonMatrix((Object*)nullptr) {}
 
-ButtonMatrix::ButtonMatrix(Object* parent)
-    : Object(lv_buttonmatrix_create(parent ? parent->raw() : nullptr)) {}
+ButtonMatrix::ButtonMatrix(Object* parent, Ownership ownership)
+    : Object(lv_buttonmatrix_create(parent ? parent->raw() : nullptr), ownership) {}
 
-ButtonMatrix::ButtonMatrix(lv_obj_t* obj) : Object(obj) {}
+ButtonMatrix::ButtonMatrix(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void ButtonMatrix::set_map(const char* const map[]) {
   if (obj_) lv_buttonmatrix_set_map(obj_, map);

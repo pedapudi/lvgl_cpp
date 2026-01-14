@@ -6,10 +6,10 @@ namespace lvgl {
 
 Table::Table() : Table((Object*)nullptr) {}
 
-Table::Table(Object* parent)
-    : Object(lv_table_create(parent ? parent->raw() : nullptr)) {}
+Table::Table(Object* parent, Ownership ownership)
+    : Object(lv_table_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Table::Table(lv_obj_t* obj) : Object(obj) {}
+Table::Table(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Table::set_cell_value(uint32_t row, uint32_t col, const char* txt) {
   if (obj_) lv_table_set_cell_value(obj_, row, col, txt);

@@ -6,10 +6,10 @@ namespace lvgl {
 
 Menu::Menu() : Menu((Object*)nullptr) {}
 
-Menu::Menu(Object* parent)
-    : Object(lv_menu_create(parent ? parent->raw() : nullptr)) {}
+Menu::Menu(Object* parent, Ownership ownership)
+    : Object(lv_menu_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Menu::Menu(lv_obj_t* obj) : Object(obj) {}
+Menu::Menu(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 MenuPage Menu::page_create(const char* title) {
   return MenuPage(obj_ ? lv_menu_page_create(obj_, title) : nullptr);

@@ -4,7 +4,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_BUTTON
 /**
  * @file button.h
@@ -40,18 +39,19 @@ class Button : public Object {
   /**
    * @brief Create a Button with a parent.
    * @param parent The parent object.
+   * @param ownership Ownership policy.
    */
-  explicit Button(Object* parent);
+  explicit Button(Object* parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Wrap an existing lv_button object.
    * @param obj The raw LVGL object to wrap.
+   * @param ownership Ownership policy.
    */
-  explicit Button(lv_obj_t* obj);
+  explicit Button(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 };
 
 }  // namespace lvgl
 
-
-#endif // LV_USE_BUTTON
+#endif  // LV_USE_BUTTON
 #endif  // LVGL_CPP_WIDGETS_BUTTON_H_

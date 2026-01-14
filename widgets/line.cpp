@@ -6,10 +6,10 @@ namespace lvgl {
 
 Line::Line() : Line((Object*)nullptr) {}
 
-Line::Line(Object* parent)
-    : Object(lv_line_create(parent ? parent->raw() : nullptr)) {}
+Line::Line(Object* parent, Ownership ownership)
+    : Object(lv_line_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Line::Line(lv_obj_t* obj) : Object(obj) {}
+Line::Line(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Line::set_points(const lv_point_precise_t points[], uint32_t point_num) {
   if (obj_) lv_line_set_points(obj_, points, point_num);

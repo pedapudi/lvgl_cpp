@@ -6,17 +6,30 @@
 
 namespace lvgl {
 
-Object::Object(lv_obj_t* obj, bool owned) : obj_(obj), owned_(owned) {
+Object::Object(lv_obj_t* obj, Ownership ownership) : obj_(obj) {
+  if (ownership == Ownership::Default) {
+    owned_ = false;  // Wrapping an existing pointer defaults to view/weak
+  } else {
+    owned_ = (ownership == Ownership::Managed);
+  }
   if (obj_) {
     install_delete_hook();
   }
 }
 
+Object::Object(lv_obj_t* obj, bool owned)
+    : Object(obj, owned ? Ownership::Managed : Ownership::Unmanaged) {}
+
 Object::Object() : Object((Object*)nullptr) {}
 
-Object::Object(Object* parent) : owned_(true) {
+Object::Object(Object* parent, Ownership ownership) {
   lv_obj_t* parent_obj = parent ? parent->raw() : nullptr;
   obj_ = lv_obj_create(parent_obj);
+  if (ownership == Ownership::Default) {
+    owned_ = true;  // Creating a new child defaults to owned
+  } else {
+    owned_ = (ownership == Ownership::Managed);
+  }
   install_delete_hook();
 }
 

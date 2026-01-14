@@ -8,10 +8,10 @@ namespace lvgl {
 
 Arc::Arc() : Arc((Object*)nullptr) {}
 
-Arc::Arc(Object* parent)
-    : Object(lv_arc_create(parent ? parent->raw() : nullptr)) {}
+Arc::Arc(Object* parent, Ownership ownership)
+    : Object(lv_arc_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Arc::Arc(lv_obj_t* obj) : Object(obj) {}
+Arc::Arc(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Arc::set_start_angle(lv_value_precise_t start) {
   if (obj_) lv_arc_set_start_angle(obj_, start);

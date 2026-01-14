@@ -8,10 +8,10 @@ namespace lvgl {
 
 Dropdown::Dropdown() : Dropdown((Object*)nullptr) {}
 
-Dropdown::Dropdown(Object* parent)
-    : Object(lv_dropdown_create(parent ? parent->raw() : nullptr)) {}
+Dropdown::Dropdown(Object* parent, Ownership ownership)
+    : Object(lv_dropdown_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Dropdown::Dropdown(lv_obj_t* obj) : Object(obj) {}
+Dropdown::Dropdown(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Dropdown::set_text(const char* txt) {
   if (obj_) lv_dropdown_set_text(obj_, txt);

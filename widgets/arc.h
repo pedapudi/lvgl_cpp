@@ -31,12 +31,12 @@ class Arc : public Object {
    * @brief Create a Arc with a parent.
    * @param parent The parent object.
    */
-  explicit Arc(Object* parent);
+  explicit Arc(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Arc(lv_obj_t* obj);
+  explicit Arc(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_start_angle(lv_value_precise_t start);
   void set_end_angle(lv_value_precise_t end);

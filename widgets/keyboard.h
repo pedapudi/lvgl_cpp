@@ -29,12 +29,12 @@ class Keyboard : public ButtonMatrix {
    * @brief Create a Keyboard with a parent.
    * @param parent The parent object.
    */
-  explicit Keyboard(Object* parent);
+  explicit Keyboard(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Keyboard(lv_obj_t* obj);
+  explicit Keyboard(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_textarea(lv_obj_t* ta);
   void set_textarea(Object* ta);

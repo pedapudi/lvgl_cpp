@@ -6,10 +6,10 @@ namespace lvgl {
 
 Led::Led() : Led((Object*)nullptr) {}
 
-Led::Led(Object* parent)
-    : Object(lv_led_create(parent ? parent->raw() : nullptr)) {}
+Led::Led(Object* parent, Ownership ownership)
+    : Object(lv_led_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Led::Led(lv_obj_t* obj) : Object(obj) {}
+Led::Led(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Led::set_color(lv_color_t color) {
   if (obj_) lv_led_set_color(obj_, color);

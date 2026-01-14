@@ -10,10 +10,10 @@ namespace lvgl {
 
 Label::Label() : Label((Object*)nullptr) {}
 
-Label::Label(Object* parent)
-    : Object(lv_label_create(parent ? parent->raw() : nullptr)) {}
+Label::Label(Object* parent, Ownership ownership)
+    : Object(lv_label_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Label::Label(lv_obj_t* obj) : Object(obj) {}
+Label::Label(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Label::set_text(const std::string& text) {
   if (obj_) lv_label_set_text(obj_, text.c_str());
@@ -77,4 +77,4 @@ Observer Label::bind_text(Subject& subject, const char* fmt) {
 
 }  // namespace lvgl
 
-#endif // LV_USE_LABEL
+#endif  // LV_USE_LABEL

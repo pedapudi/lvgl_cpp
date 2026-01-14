@@ -8,10 +8,10 @@ namespace lvgl {
 
 Roller::Roller() : Roller((Object*)nullptr) {}
 
-Roller::Roller(Object* parent)
-    : Object(lv_roller_create(parent ? parent->raw() : nullptr)) {}
+Roller::Roller(Object* parent, Ownership ownership)
+    : Object(lv_roller_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Roller::Roller(lv_obj_t* obj) : Object(obj) {}
+Roller::Roller(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Roller::set_options(const char* options, lv_roller_mode_t mode) {
   if (obj_) lv_roller_set_options(obj_, options, mode);

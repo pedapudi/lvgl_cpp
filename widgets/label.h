@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_LABEL
 /**
  * @file label.h
@@ -32,13 +31,20 @@ class Label : public Object {
    * @brief Create a new Label.
    * @param parent Parent object.
    */
+  /**
+   * @brief Create a new Label.
+   * @param parent Parent object.
+   * @param ownership Ownership policy.
+   */
   Label();
-  explicit Label(Object* parent);
+  explicit Label(Object* parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Wrap an existing lv_label object.
+   * @param obj The raw LVGL object to wrap.
+   * @param ownership Ownership policy.
    */
-  explicit Label(lv_obj_t* obj);
+  explicit Label(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Set the text of the label.
@@ -106,6 +112,5 @@ class Label : public Object {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_LABEL
+#endif  // LV_USE_LABEL
 #endif  // LVGL_CPP_WIDGETS_LABEL_H_

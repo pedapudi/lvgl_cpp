@@ -49,14 +49,14 @@ class MsgBox : public Object {
    * @brief Create a MsgBox with a parent.
    * @param parent The parent object.
    */
-  explicit MsgBox(Object* parent);  // Creates modal if parent is NULL?
+  explicit MsgBox(Object* parent, Ownership ownership = Ownership::Default);  // Creates modal if parent is NULL?
                                     // No, lv_msgbox_create creates
                                     // modal if parent is NULL.
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit MsgBox(lv_obj_t* obj);
+  explicit MsgBox(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Label add_title(const char* title);
   Button add_header_button(const void* icon);

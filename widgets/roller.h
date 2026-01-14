@@ -31,12 +31,12 @@ class Roller : public Object {
    * @brief Create a Roller with a parent.
    * @param parent The parent object.
    */
-  explicit Roller(Object* parent);
+  explicit Roller(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Roller(lv_obj_t* obj);
+  explicit Roller(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_options(const char* options, lv_roller_mode_t mode);
   void set_selected(uint32_t sel_opt, lv_anim_enable_t anim = LV_ANIM_ON);

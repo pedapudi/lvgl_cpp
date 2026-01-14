@@ -29,12 +29,12 @@ class Led : public Object {
    * @brief Create a Led with a parent.
    * @param parent The parent object.
    */
-  explicit Led(Object* parent);
+  explicit Led(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Led(lv_obj_t* obj);
+  explicit Led(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_color(lv_color_t color);
   void set_brightness(uint8_t bright);

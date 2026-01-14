@@ -31,12 +31,12 @@ class Slider : public Bar {
    * @param parent Parent object.
    */
   Slider();
-  explicit Slider(Object* parent);
+  explicit Slider(Object* parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Wrap an existing lv_slider object.
    */
-  explicit Slider(lv_obj_t* obj);
+  explicit Slider(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   // Inherits set_value, set_range, etc. from Bar
 

@@ -35,12 +35,12 @@ class TileView : public Object {
    * @brief Create a TileView with a parent.
    * @param parent The parent object.
    */
-  explicit TileView(Object* parent);
+  explicit TileView(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit TileView(lv_obj_t* obj);
+  explicit TileView(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Tile add_tile(uint8_t col_id, uint8_t row_id, lv_dir_t dir);
   void set_tile(lv_obj_t* tile_obj, lv_anim_enable_t anim_en);

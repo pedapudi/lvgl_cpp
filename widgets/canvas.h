@@ -29,12 +29,12 @@ class Canvas : public Image {
    * @brief Create a Canvas with a parent.
    * @param parent The parent object.
    */
-  explicit Canvas(Object* parent);
+  explicit Canvas(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Canvas(lv_obj_t* obj);
+  explicit Canvas(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_buffer(void* buf, int32_t w, int32_t h, lv_color_format_t cf);
   void set_draw_buf(lv_draw_buf_t* draw_buf);

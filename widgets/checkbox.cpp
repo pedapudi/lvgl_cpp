@@ -6,10 +6,10 @@ namespace lvgl {
 
 Checkbox::Checkbox() : Checkbox((Object*)nullptr) {}
 
-Checkbox::Checkbox(Object* parent)
-    : Object(lv_checkbox_create(parent ? parent->raw() : nullptr)) {}
+Checkbox::Checkbox(Object* parent, Ownership ownership)
+    : Object(lv_checkbox_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Checkbox::Checkbox(lv_obj_t* obj) : Object(obj) {}
+Checkbox::Checkbox(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Checkbox::set_text(const char* txt) {
   if (obj_) lv_checkbox_set_text(obj_, txt);

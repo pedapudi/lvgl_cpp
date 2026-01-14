@@ -29,12 +29,12 @@ class SpanGroup : public Object {
    * @brief Create a SpanGroup with a parent.
    * @param parent The parent object.
    */
-  explicit SpanGroup(Object* parent);
+  explicit SpanGroup(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit SpanGroup(lv_obj_t* obj);
+  explicit SpanGroup(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   lv_span_t* add_span();
   void delete_span(lv_span_t* span);

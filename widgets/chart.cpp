@@ -6,10 +6,10 @@ namespace lvgl {
 
 Chart::Chart() : Chart((Object*)nullptr) {}
 
-Chart::Chart(Object* parent)
-    : Object(lv_chart_create(parent ? parent->raw() : nullptr)) {}
+Chart::Chart(Object* parent, Ownership ownership)
+    : Object(lv_chart_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Chart::Chart(lv_obj_t* obj) : Object(obj) {}
+Chart::Chart(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Chart::set_type(lv_chart_type_t type) {
   if (obj_) lv_chart_set_type(obj_, type);

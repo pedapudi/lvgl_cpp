@@ -6,10 +6,10 @@ namespace lvgl {
 
 Scale::Scale() : Scale((Object*)nullptr) {}
 
-Scale::Scale(Object* parent)
-    : Object(lv_scale_create(parent ? parent->raw() : nullptr)) {}
+Scale::Scale(Object* parent, Ownership ownership)
+    : Object(lv_scale_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Scale::Scale(lv_obj_t* obj) : Object(obj) {}
+Scale::Scale(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Scale::set_mode(lv_scale_mode_t mode) {
   if (obj_) lv_scale_set_mode(obj_, mode);

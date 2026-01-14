@@ -6,10 +6,10 @@ namespace lvgl {
 
 Keyboard::Keyboard() : Keyboard((Object*)nullptr) {}
 
-Keyboard::Keyboard(Object* parent)
+Keyboard::Keyboard(Object* parent, Ownership ownership)
     : ButtonMatrix(lv_keyboard_create(parent ? parent->raw() : nullptr)) {}
 
-Keyboard::Keyboard(lv_obj_t* obj) : ButtonMatrix(obj) {}
+Keyboard::Keyboard(lv_obj_t* obj, Ownership ownership) : ButtonMatrix(obj) {}
 
 void Keyboard::set_textarea(lv_obj_t* ta) {
   if (obj_) lv_keyboard_set_textarea(obj_, ta);

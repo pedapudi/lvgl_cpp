@@ -6,10 +6,10 @@ namespace lvgl {
 
 Spinbox::Spinbox() : Spinbox((Object*)nullptr) {}
 
-Spinbox::Spinbox(Object* parent)
+Spinbox::Spinbox(Object* parent, Ownership ownership)
     : Textarea(lv_spinbox_create(parent ? parent->raw() : nullptr)) {}
 
-Spinbox::Spinbox(lv_obj_t* obj) : Textarea(obj) {}
+Spinbox::Spinbox(lv_obj_t* obj, Ownership ownership) : Textarea(obj) {}
 
 void Spinbox::set_value(int32_t v) {
   if (obj_) lv_spinbox_set_value(obj_, v);

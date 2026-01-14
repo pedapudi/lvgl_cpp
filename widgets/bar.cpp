@@ -8,10 +8,10 @@ namespace lvgl {
 
 Bar::Bar() : Bar((Object*)nullptr) {}
 
-Bar::Bar(Object* parent)
-    : Object(lv_bar_create(parent ? parent->raw() : nullptr)) {}
+Bar::Bar(Object* parent, Ownership ownership)
+    : Object(lv_bar_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Bar::Bar(lv_obj_t* obj) : Object(obj) {}
+Bar::Bar(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Bar::set_value(int32_t value, lv_anim_enable_t anim) {
   if (obj_) lv_bar_set_value(obj_, value, anim);

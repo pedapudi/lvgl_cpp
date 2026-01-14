@@ -31,12 +31,12 @@ class Bar : public Object {
    * @param parent Parent object.
    */
   Bar();
-  explicit Bar(Object* parent);
+  explicit Bar(Object* parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Wrap an existing lv_bar object.
    */
-  explicit Bar(lv_obj_t* obj);
+  explicit Bar(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
   void set_start_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);

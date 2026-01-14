@@ -29,12 +29,12 @@ class ButtonMatrix : public Object {
    * @brief Create a ButtonMatrix with a parent.
    * @param parent The parent object.
    */
-  explicit ButtonMatrix(Object* parent);
+  explicit ButtonMatrix(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit ButtonMatrix(lv_obj_t* obj);
+  explicit ButtonMatrix(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_map(const char* const map[]);
   void set_ctrl_map(const lv_buttonmatrix_ctrl_t ctrl_map[]);

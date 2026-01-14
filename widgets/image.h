@@ -29,12 +29,12 @@ class Image : public Object {
    * @brief Create a Image with a parent.
    * @param parent The parent object.
    */
-  explicit Image(Object* parent);
+  explicit Image(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Image(lv_obj_t* obj);
+  explicit Image(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_src(const void* src);
   void set_offset_x(int32_t x);

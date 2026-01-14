@@ -6,10 +6,10 @@ namespace lvgl {
 
 Image::Image() : Image((Object*)nullptr) {}
 
-Image::Image(Object* parent)
-    : Object(lv_image_create(parent ? parent->raw() : nullptr)) {}
+Image::Image(Object* parent, Ownership ownership)
+    : Object(lv_image_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Image::Image(lv_obj_t* obj) : Object(obj) {}
+Image::Image(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 void Image::set_src(const void* src) {
   if (obj_) lv_image_set_src(obj_, src);

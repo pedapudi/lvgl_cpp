@@ -31,12 +31,12 @@ class Dropdown : public Object {
    * @brief Create a Dropdown with a parent.
    * @param parent The parent object.
    */
-  explicit Dropdown(Object* parent);
+  explicit Dropdown(Object* parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
-  explicit Dropdown(lv_obj_t* obj);
+  explicit Dropdown(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   void set_text(const char* txt);
   void set_options(const char* options);
