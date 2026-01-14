@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_ARC
 /**
  * @file arc.h
@@ -46,13 +45,45 @@ class Arc : public Object {
   void set_bg_start_angle(lv_value_precise_t start);
   void set_bg_end_angle(lv_value_precise_t end);
   void set_bg_angles(lv_value_precise_t start, lv_value_precise_t end);
+
+  /**
+   * @brief Set rotation (offset to 0 degree).
+   * @param rotation Angle in degrees.
+   */
   void set_rotation(int32_t rotation);
+
+  /**
+   * @brief Set the arc mode.
+   * @param type Mode (e.g., `LV_ARC_MODE_NORMAL`).
+   */
   void set_mode(lv_arc_mode_t type);
+
+  /**
+   * @brief Set the current value.
+   * @param value The value.
+   */
   void set_value(int32_t value);
+
+  /**
+   * @brief Set the range.
+   * @param min Minimum value.
+   * @param max Maximum value.
+   */
   void set_range(int32_t min, int32_t max);
+
   void set_min_value(int32_t min);
   void set_max_value(int32_t max);
+
+  /**
+   * @brief Set the change rate (smoothing).
+   * @param rate Rate in degrees/step.
+   */
   void set_change_rate(uint32_t rate);
+
+  /**
+   * @brief Set the knob offset.
+   * @param offset Offset in pixels.
+   */
   void set_knob_offset(int32_t offset);
 
   lv_value_precise_t get_angle_start();
@@ -74,19 +105,7 @@ class Arc : public Object {
   [[nodiscard]] Observer bind_value(Subject& subject);
 };
 
-/**
- * @file arc.h
- * @brief C++ Wrapper for LVGL Arc Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Arc widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
-
-#endif // LV_USE_ARC
+#endif  // LV_USE_ARC
 #endif  // LVGL_CPP_WIDGETS_ARC_H_

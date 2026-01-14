@@ -24,8 +24,25 @@ class Color {
   // Static creators
   static Color white();
   static Color black();
+  /**
+   * @brief Create a color from RGB values.
+   * @param r Red component (0-255).
+   * @param g Green component (0-255).
+   * @param b Blue component (0-255).
+   */
   static Color make(uint8_t r, uint8_t g, uint8_t b);
+
+  /**
+   * @brief Create a color from a hex integer (0xRRGGBB).
+   */
   static Color from_hex(uint32_t hex);
+
+  /**
+   * @brief Create a color from HSV values.
+   * @param h Hue (0-360).
+   * @param s Saturation (0-100).
+   * @param v Value (0-100).
+   */
   static Color from_hsv(uint16_t h, uint8_t s, uint8_t v);
 
   // Operations
@@ -33,10 +50,32 @@ class Color {
   bool operator==(const Color& other) const;
   bool operator!=(const Color& other) const;
 
-  Color mix(const Color& other, uint8_t ratio) const;  // 0: other, 255: this
+  /**
+   * @brief Mix this color with another color.
+   * @param other The other color.
+   * @param ratio Ratio of the mix (0: fully other, 255: fully this).
+   * @return The mixed color.
+   */
+  Color mix(const Color& other, uint8_t ratio) const;
+
+  /**
+   * @brief Lighten the color.
+   * @param lvl Amount to lighten.
+   * @return Lightened color.
+   */
   Color lighten(lv_opa_t lvl) const;
+
+  /**
+   * @brief Darken the color.
+   * @param lvl Amount to darken.
+   * @return Darkened color.
+   */
   Color darken(lv_opa_t lvl) const;
 
+  /**
+   * @brief Get the luminance of the color.
+   * @return Luminance (0-255).
+   */
   uint8_t luminance() const;
 
   // Accessors (using struct access)

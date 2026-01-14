@@ -2,7 +2,6 @@
 #define LVGL_CPP_CORE_OBJECT_H_
 
 #include <cstdint>
-
 #include <functional>
 #include <memory>
 
@@ -279,6 +278,8 @@ class Object {
    * @brief Add a style to the object.
    * @param style The C++ style wrapper.
    * @param selector The part/state selector (default `LV_PART_MAIN`).
+   * @note The style object must remain valid as long as it is used by the
+   * object, unless it's a static/global style.
    */
   void add_style(Style& style, lv_style_selector_t selector = LV_PART_MAIN);
 
@@ -290,37 +291,141 @@ class Object {
   void remove_style(Style* style, lv_style_selector_t selector = LV_PART_MAIN);
 
   // Local style properties (common subset)
+
+  /**
+   * @brief Set the animation duration for state changes.
+   * @param value Duration in milliseconds.
+   * @param selector The part/state selector.
+   */
   void set_style_anim_duration(uint32_t value,
                                lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the text alignment.
+   * @param value The alignment (e.g. `LV_TEXT_ALIGN_CENTER`).
+   * @param selector The part/state selector.
+   */
   void set_style_text_align(lv_text_align_t value,
                             lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the background color.
+   * @param value The color.
+   * @param selector The part/state selector.
+   */
   void set_style_bg_color(lv_color_t value,
                           lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the background opacity.
+   * @param value The opacity (0..255 or `LV_OPA_...`).
+   * @param selector The part/state selector.
+   */
   void set_style_bg_opa(lv_opa_t value,
                         lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the opacity of image recoloring.
+   * @param value The opacity.
+   * @param selector The part/state selector.
+   */
   void set_style_image_recolor_opa(lv_opa_t value,
                                    lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the image recolor value.
+   * @param value The color to mix with the image.
+   * @param selector The part/state selector.
+   */
   void set_style_image_recolor(lv_color_t value,
                                lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the background image source.
+   * @param value Pointer to an `lv_image_dsc_t` or path string.
+   * @param selector The part/state selector.
+   */
   void set_style_bg_image_src(const void* value,
                               lv_style_selector_t selector = LV_PART_MAIN);
 
   // --- Layouts ---
 
+  /**
+   * @brief Set the layout of the object.
+   * @param layout The layout descriptor (e.g. `LV_LAYOUT_FLEX`,
+   * `LV_LAYOUT_GRID`).
+   */
   void set_layout(uint32_t layout);
+
+  /**
+   * @brief Check if the object is positioned by a layout.
+   * @return true if the object's position is set by a layout.
+   */
   bool is_layout_positioned() const;
+
+  /**
+   * @brief Mark the layout as dirty to trigger a refresh.
+   */
   void mark_layout_as_dirty();
+
+  /**
+   * @brief Update the layout immediately.
+   */
   void update_layout();
 
   // Flex Layout
+
+  /**
+   * @brief Set the flex flow direction.
+   * @param flow The flow direction (e.g. `LV_FLEX_FLOW_ROW`,
+   * `LV_FLEX_FLOW_COLUMN`).
+   */
   void set_flex_flow(lv_flex_flow_t flow);
+
+  /**
+   * @brief Set the flex alignment.
+   * @param main_place Alignment on the main axis.
+   * @param cross_place Alignment on the cross axis.
+   * @param track_cross_place Alignment of the tracks (if wrapped).
+   */
   void set_flex_align(lv_flex_align_t main_place, lv_flex_align_t cross_place,
                       lv_flex_align_t track_cross_place);
+
+  /**
+   * @brief Set the flex grow factor.
+   * @param grow The grow factor (0: none, 1+: share remaining space).
+   */
   void set_flex_grow(uint8_t grow);
 
   // Grid Layout
+
+  /**
+   * @brief Set the grid descriptor arrays.
+   * Arrays must be static or global as LVGL keeps a pointer to them (unless
+   * local style copy is used, but typically static).
+   * @param col_dsc Array of column descriptors (ending with
+   * `LV_GRID_TEMPLATE_LAST`).
+   * @param row_dsc Array of row descriptors (ending with
+   * `LV_GRID_TEMPLATE_LAST`).
+   */
   void set_grid_dsc_array(const int32_t col_dsc[], const int32_t row_dsc[]);
+
+  /**
+   * @brief Set the grid alignment.
+   * @param column_align Alignment of columns.
+   * @param row_align Alignment of rows.
+   */
   void set_grid_align(lv_grid_align_t column_align, lv_grid_align_t row_align);
+
+  /**
+   * @brief Set the grid cell placement for this object.
+   * @param column_align Alignment in the column.
+   * @param col_pos Column index.
+   * @param col_span Number of columns to span.
+   * @param row_align Alignment in the row.
+   * @param row_pos Row index.
+   * @param row_span Number of rows to span.
+   */
   void set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
                      int32_t col_span, lv_grid_align_t row_align,
                      int32_t row_pos, int32_t row_span);

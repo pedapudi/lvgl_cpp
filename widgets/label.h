@@ -2,7 +2,6 @@
 #define LVGL_CPP_WIDGETS_LABEL_H_
 
 #include <cstdint>
-
 #include <string>
 
 #include "../core/object.h"  // IWYU pragma: export
@@ -84,12 +83,40 @@ class Label : public Object {
    */
   lv_label_long_mode_t get_long_mode() const;
 
+  /**
+   * @brief Set the selection start index.
+   * @param index Character index.
+   */
   void set_selection_start(uint32_t index);
+
+  /**
+   * @brief Set the selection end index.
+   * @param index Character index.
+   */
   void set_selection_end(uint32_t index);
+
+  /**
+   * @brief Get the selection start index.
+   * @return Character index.
+   */
   uint32_t get_selection_start() const;
+
+  /**
+   * @brief Get the selection end index.
+   * @return Character index.
+   */
   uint32_t get_selection_end() const;
 
+  /**
+   * @brief Enable or disable text recoloring commands.
+   * @param en true to enable.
+   */
   void set_recolor(bool en);
+
+  /**
+   * @brief Check if text recoloring is enabled.
+   * @return true if enabled.
+   */
   bool get_recolor() const;
 
   /**
@@ -101,17 +128,6 @@ class Label : public Object {
   [[nodiscard]] Observer bind_text(Subject& subject, const char* fmt = nullptr);
 };
 
-/**
- * @file label.h
- * @brief C++ Wrapper for LVGL Label Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Label widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_LABEL

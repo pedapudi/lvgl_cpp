@@ -2,7 +2,6 @@
 #define LVGL_CPP_CORE_OBSERVER_H_
 
 #include <cstdint>
-
 #include <string>
 #include <vector>
 
@@ -34,23 +33,125 @@ class Subject {
 
   void notify();
 
-  // Flag Bindings
+  /**
+   * @brief Bind an object flag to an integer value equality condition.
+   * If (subject's int value == ref_value), the flag is ADDED. Otherwise
+   * REMOVED.
+   * @param obj The target object.
+   * @param flag The flag to toggle.
+   * @param ref_value The reference value to compare against.
+   */
   void bind_flag_if_eq(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+
+  /**
+   * @brief Bind an object flag to an integer value inequality condition.
+   * If (subject's int value != ref_value), the flag is ADDED. Otherwise
+   * REMOVED.
+   * @param obj The target object.
+   * @param flag The flag to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_flag_if_not_eq(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+
+  /**
+   * @brief Bind an object flag to a greater-than condition.
+   * If (subject's int value > ref_value), the flag is ADDED.
+   * @param obj The target object.
+   * @param flag The flag to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_flag_if_gt(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+
+  /**
+   * @brief Bind an object flag to a greater-or-equal condition.
+   * If (subject's int value >= ref_value), the flag is ADDED.
+   * @param obj The target object.
+   * @param flag The flag to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_flag_if_ge(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+
+  /**
+   * @brief Bind an object flag to a less-than condition.
+   * If (subject's int value < ref_value), the flag is ADDED.
+   * @param obj The target object.
+   * @param flag The flag to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_flag_if_lt(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+
+  /**
+   * @brief Bind an object flag to a less-or-equal condition.
+   * If (subject's int value <= ref_value), the flag is ADDED.
+   * @param obj The target object.
+   * @param flag The flag to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_flag_if_le(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
 
   // State Bindings
+
+  /**
+   * @brief Bind an object state to an integer value equality condition.
+   * If (subject's int value == ref_value), the state is ADDED.
+   * @param obj The target object.
+   * @param state The state to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_state_if_eq(Object& obj, lv_state_t state, int32_t ref_value);
+
+  /**
+   * @brief Bind an object state to an integer value inequality condition.
+   * If (subject's int value != ref_value), the state is ADDED.
+   * @param obj The target object.
+   * @param state The state to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_state_if_not_eq(Object& obj, lv_state_t state, int32_t ref_value);
+
+  /**
+   * @brief Bind an object state to a greater-than condition.
+   * If (subject's int value > ref_value), the state is ADDED.
+   * @param obj The target object.
+   * @param state The state to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_state_if_gt(Object& obj, lv_state_t state, int32_t ref_value);
+
+  /**
+   * @brief Bind an object state to a greater-or-equal condition.
+   * If (subject's int value >= ref_value), the state is ADDED.
+   * @param obj The target object.
+   * @param state The state to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_state_if_ge(Object& obj, lv_state_t state, int32_t ref_value);
+
+  /**
+   * @brief Bind an object state to a less-than condition.
+   * If (subject's int value < ref_value), the state is ADDED.
+   * @param obj The target object.
+   * @param state The state to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_state_if_lt(Object& obj, lv_state_t state, int32_t ref_value);
+
+  /**
+   * @brief Bind an object state to a less-or-equal condition.
+   * If (subject's int value <= ref_value), the state is ADDED.
+   * @param obj The target object.
+   * @param state The state to toggle.
+   * @param ref_value The reference value.
+   */
   void bind_state_if_le(Object& obj, lv_state_t state, int32_t ref_value);
 
   // Checked Binding
+
+  /**
+   * @brief Bind the LV_STATE_CHECKED state to the subject's boolean value.
+   * The subject acts as a boolean (0 or 1).
+   * @param obj The target object (often a Checkbox or Switch).
+   */
   void bind_checked(Object& obj);
 
   /**
@@ -80,6 +181,9 @@ class Subject {
   lv_subject_t subject_;
 };
 
+/**
+ * @brief Subject holding an integer value.
+ */
 class IntSubject : public Subject {
  public:
   explicit IntSubject(int32_t value);
@@ -88,6 +192,11 @@ class IntSubject : public Subject {
   int32_t get();
   int32_t get_previous();
 
+  /**
+   * @brief Set the valid range for the integer value.
+   * @param min Minimum value.
+   * @param max Maximum value.
+   */
   void set_range(int32_t min, int32_t max);
 };
 

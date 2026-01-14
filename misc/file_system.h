@@ -2,7 +2,6 @@
 #define LVGL_CPP_MISC_FILE_SYSTEM_H_
 
 #include <cstdint>
-
 #include <string>
 #include <vector>
 
@@ -25,16 +24,64 @@ class File {
   File(File&& other) noexcept;
   File& operator=(File&& other) noexcept;
 
+  /**
+   * @brief Open a file.
+   * @param path Path to the file.
+   * @param mode Access mode (e.g. `LV_FS_MODE_RD`).
+   * @return `LV_FS_RES_OK` on success, or an error code.
+   */
   lv_fs_res_t open(const std::string& path, lv_fs_mode_t mode);
+
+  /**
+   * @brief Close the file.
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t close();
 
+  /**
+   * @brief Read from the file.
+   * @param buf Buffer to read into.
+   * @param btr Bytes to read.
+   * @param br Pointer to store the number of bytes read.
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t read(void* buf, uint32_t btr, uint32_t* br = nullptr);
+
+  /**
+   * @brief Write to the file.
+   * @param buf Buffer to write from.
+   * @param btw Bytes to write.
+   * @param bw Pointer to store the number of bytes written.
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t write(const void* buf, uint32_t btw, uint32_t* bw = nullptr);
+
+  /**
+   * @brief Seek to a position in the file.
+   * @param pos Position offset.
+   * @param whence Reference position (`LV_FS_SEEK_SET`, `LV_FS_SEEK_CUR`,
+   * `LV_FS_SEEK_END`).
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t seek(uint32_t pos, lv_fs_whence_t whence);
+
+  /**
+   * @brief Get the current position.
+   * @param pos Pointer to store the position.
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t tell(uint32_t* pos);
 
+  /**
+   * @brief Get the file size.
+   * @return File size in bytes.
+   */
   uint32_t size();  // Convenience wrapper around lv_fs_get_size
 
+  /**
+   * @brief Check if the file is currently open.
+   * @return true if open.
+   */
   bool is_open() const;
 
  private:
@@ -56,7 +103,17 @@ class Directory {
   Directory(Directory&& other) noexcept;
   Directory& operator=(Directory&& other) noexcept;
 
+  /**
+   * @brief Open a directory.
+   * @param path Path to the directory.
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t open(const std::string& path);
+
+  /**
+   * @brief Close the directory.
+   * @return `LV_FS_RES_OK` on success.
+   */
   lv_fs_res_t close();
 
   /**

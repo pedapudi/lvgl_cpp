@@ -130,12 +130,38 @@ lvgl::Button btn = list.add_button(LV_SYMBOL_OK, "Apply");
 ```
 
 ### Events
-Use safe C++ lambdas.
+Use safe C++ lambdas. Closures are automatically managed.
 ```cpp
 btn.add_event_cb(LV_EVENT_CLICKED, [=](lv_event_t* e) {
     auto code = lv_event_get_code(e);
     // ... logic
 });
+```
+
+### Timers
+Use the `lvgl::Timer` class for periodic tasks.
+```cpp
+#include "lvgl_cpp/misc/timer.h"
+
+// Create a timer that runs every 500ms
+lvgl::Timer timer(500, [](lvgl::Timer* t) {
+    printf("Tick!\n");
+});
+```
+
+### Animation
+Use the `lvgl::Animation` builder for complex animations.
+```cpp
+#include "lvgl_cpp/misc/animation.h"
+
+lvgl::Animation anim;
+anim.set_var(btn.raw())
+    .set_values(0, 100)
+    .set_duration(1000)
+    .set_exec_cb([](void* var, int32_t v) {
+        lv_obj_set_x((lv_obj_t*)var, v);
+    })
+    .start();
 ```
 
 ### Styles
@@ -186,9 +212,20 @@ auto obs = speed.add_observer([](lv_observer_t*, lv_subject_t* s) {
 - **Subjects**: Must outlive their Observers.
 - **Observers**: When an `Observer` C++ object goes out of scope, it automatically unsubscribes from the subject (if it owns the subscription).
 
+### Helper Utilities
+- **FileSystem**: `lvgl_cpp/misc/file_system.h` provides `File` and `Directory` classes.
+- **Color**: `lvgl_cpp/misc/color.h` provides a `Color` class with mixing/darkening/lightening support.
+
+## API Reference
+The API is fully documented in the header files.
+- **Core**: `lvgl_cpp/core/` (Object, Group, Style, Observer)
+- **Widgets**: `lvgl_cpp/widgets/` (All widgets)
+- **Misc**: `lvgl_cpp/misc/` (Timer, Animation, FS, Color)
+
 ## Contributing
 The library is structured into `core` (Object, Style, Observer) and `widgets`.
 To add a new widget:
 1.  Create `widgets/my_widget.h` inheriting `Object`.
 2.  Implement constructors: `MyWidget()`, `MyWidget(Object*)`, `MyWidget(lv_obj_t*)`.
 3.  Wrap specific API methods.
+
