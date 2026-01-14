@@ -23,52 +23,52 @@ if(NOT TARGET lvgl)
 endif()
 
 add_library(lvgl_cpp STATIC
-    core/object.cc
-    core/style.cc
-    misc/color.cc
-    font/font.cc
-    misc/file_system.cc
-    core/observer.cc
-    draw/image_decoder.cc
-    draw/draw.cc
+    core/object.cpp
+    core/style.cpp
+    misc/color.cpp
+    font/font.cpp
+    misc/file_system.cpp
+    core/observer.cpp
+    draw/image_decoder.cpp
+    draw/draw.cpp
     
-    widgets/button.cc
-    widgets/label.cc
-    widgets/bar.cc
-    widgets/slider.cc
-    widgets/checkbox.cc
-    widgets/switch.cc
-    widgets/line.cc
-    widgets/arc.cc
-    widgets/image.cc
-    widgets/textarea.cc
-    widgets/spinbox.cc
-    widgets/dropdown.cc
-    widgets/roller.cc
-    widgets/button_matrix.cc
-    widgets/keyboard.cc
-    widgets/table.cc
-    widgets/canvas.cc
-    widgets/chart.cc
-    widgets/calendar.cc
-    widgets/msgbox.cc
-    widgets/menu.cc
-    widgets/tileview.cc
-    widgets/tabview.cc
-    widgets/win.cc
-    widgets/scale.cc
-    widgets/anim_image.cc
-    widgets/span.cc
-    widgets/list.cc
-    widgets/led.cc
-    widgets/image_button.cc
-    widgets/spinner.cc
+    widgets/button.cpp
+    widgets/label.cpp
+    widgets/bar.cpp
+    widgets/slider.cpp
+    widgets/checkbox.cpp
+    widgets/switch.cpp
+    widgets/line.cpp
+    widgets/arc.cpp
+    widgets/image.cpp
+    widgets/textarea.cpp
+    widgets/spinbox.cpp
+    widgets/dropdown.cpp
+    widgets/roller.cpp
+    widgets/button_matrix.cpp
+    widgets/keyboard.cpp
+    widgets/table.cpp
+    widgets/canvas.cpp
+    widgets/chart.cpp
+    widgets/calendar.cpp
+    widgets/msgbox.cpp
+    widgets/menu.cpp
+    widgets/tileview.cpp
+    widgets/tabview.cpp
+    widgets/win.cpp
+    widgets/scale.cpp
+    widgets/anim_image.cpp
+    widgets/span.cpp
+    widgets/list.cpp
+    widgets/led.cpp
+    widgets/image_button.cpp
+    widgets/spinner.cpp
     
-    core/group.cc
-    display/display.cc
-    indev/input_device.cc
-    misc/timer.cc
-    misc/animation.cc
+    core/group.cpp
+    display/display.cpp
+    indev/input_device.cpp
+    misc/timer.cpp
+    misc/animation.cpp
 )
 
 target_include_directories(lvgl_cpp PUBLIC 
@@ -81,17 +81,17 @@ target_include_directories(lvgl_cpp PUBLIC
 # If not, the user will need to link it manually.
 target_link_libraries(lvgl_cpp PUBLIC lvgl)
 
-add_executable(test_core_widgets tests/test_core_widgets.cc)
+add_executable(test_core_widgets tests/test_core_widgets.cpp)
 target_link_libraries(test_core_widgets PRIVATE lvgl_cpp)
 
-add_executable(test_input_widgets tests/test_input_widgets.cc)
+add_executable(test_input_widgets tests/test_input_widgets.cpp)
 target_link_libraries(test_input_widgets PRIVATE lvgl_cpp)
 
-add_executable(test_complex_widgets tests/test_complex_widgets.cc)
+add_executable(test_complex_widgets tests/test_complex_widgets.cpp)
 target_link_libraries(test_complex_widgets PRIVATE lvgl_cpp)
 
-add_executable(test_visual_widgets tests/test_visual_widgets.cc)
+add_executable(test_visual_widgets tests/test_visual_widgets.cpp)
 target_link_libraries(test_visual_widgets PRIVATE lvgl_cpp)
 
-add_executable(observer_test tests/observer_test.cc)
+add_executable(observer_test tests/observer_test.cpp)
 target_link_libraries(observer_test PRIVATE lvgl_cpp)

@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_ARC
 /**
  * @file arc.h
  * @brief C++ Wrapper for LVGL Arc Widget.
@@ -83,4 +85,6 @@ class Arc : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_ARC
 #endif  // LVGL_CPP_WIDGETS_ARC_H_

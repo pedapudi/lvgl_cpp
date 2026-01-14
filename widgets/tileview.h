@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_TILEVIEW
 /**
  * @file tileview.h
  * @brief C++ Wrapper for LVGL TileView Widget.
@@ -49,4 +51,6 @@ class TileView : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_TILEVIEW
 #endif  // LVGL_CPP_WIDGETS_TILEVIEW_H_

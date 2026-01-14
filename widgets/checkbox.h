@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_CHECKBOX
 /**
  * @file checkbox.h
  * @brief C++ Wrapper for LVGL Checkbox Widget.
@@ -52,4 +54,6 @@ class Checkbox : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_CHECKBOX
 #endif  // LVGL_CPP_WIDGETS_CHECKBOX_H_

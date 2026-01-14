@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_SPAN
 /**
  * @file span.h
  * @brief C++ Wrapper for LVGL SpanGroup Widget.
@@ -67,4 +69,6 @@ class SpanGroup : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_SPAN
 #endif  // LVGL_CPP_WIDGETS_SPAN_H_

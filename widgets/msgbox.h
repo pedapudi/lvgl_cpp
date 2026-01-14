@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_MSGBOX
 /**
  * @file msgbox.h
  * @brief C++ Wrapper for LVGL MsgBox Widget.
@@ -73,4 +75,6 @@ class MsgBox : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_MSGBOX
 #endif  // LVGL_CPP_WIDGETS_MSGBOX_H_

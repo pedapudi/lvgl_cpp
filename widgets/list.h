@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_LIST
 /**
  * @file list.h
  * @brief C++ Wrapper for LVGL List Widget.
@@ -46,4 +48,6 @@ class List : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_LIST
 #endif  // LVGL_CPP_WIDGETS_LIST_H_

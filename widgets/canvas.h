@@ -4,6 +4,8 @@
 #include "image.h"  // IWYU pragma: export
 #include "lvgl.h"   // IWYU pragma: export
 
+
+#if LV_USE_CANVAS
 /**
  * @file canvas.h
  * @brief C++ Wrapper for LVGL Canvas Widget.
@@ -64,4 +66,6 @@ class Canvas : public Image {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_CANVAS
 #endif  // LVGL_CPP_WIDGETS_CANVAS_H_

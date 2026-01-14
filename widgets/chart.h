@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_CHART
 /**
  * @file chart.h
  * @brief C++ Wrapper for LVGL Chart Widget.
@@ -66,4 +68,6 @@ class Chart : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_CHART
 #endif  // LVGL_CPP_WIDGETS_CHART_H_

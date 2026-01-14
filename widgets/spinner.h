@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_SPINNER
 /**
  * @file spinner.h
  * @brief C++ Wrapper for LVGL Spinner Widget.
@@ -50,4 +52,6 @@ class Spinner : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_SPINNER
 #endif  // LVGL_CPP_WIDGETS_SPINNER_H_

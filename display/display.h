@@ -18,10 +18,8 @@ class Display {
   explicit Display(lv_display_t* disp);
   virtual ~Display() = default;
 
-  // Creation/Deletion (wrappers for lv_display_create not typically needed here
-  // as we wrap existing) But we can expose delete logic if this wrapper owns
-  // it? Use with caution. static Display create(int32_t hor_res, int32_t
-  // ver_res); // Not implementing for now as we wrap mainly.
+  // Creation/Deletion
+  static Display create(int32_t hor_res, int32_t ver_res);
   void delete_display();
 
   static Display* get_default();

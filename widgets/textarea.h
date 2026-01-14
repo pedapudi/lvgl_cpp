@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_TEXTAREA
 /**
  * @file textarea.h
  * @brief C++ Wrapper for LVGL Textarea Widget.
@@ -78,4 +80,6 @@ class Textarea : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_TEXTAREA
 #endif  // LVGL_CPP_WIDGETS_TEXTAREA_H_

@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_BUTTONMATRIX
 /**
  * @file button_matrix.h
  * @brief C++ Wrapper for LVGL ButtonMatrix Widget.
@@ -64,4 +66,6 @@ class ButtonMatrix : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_BUTTONMATRIX
 #endif  // LVGL_CPP_WIDGETS_BUTTON_MATRIX_H_

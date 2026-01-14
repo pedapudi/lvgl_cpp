@@ -4,6 +4,8 @@
 #include "lvgl.h"      // IWYU pragma: export
 #include "textarea.h"  // IWYU pragma: export
 
+
+#if LV_USE_SPINBOX
 /**
  * @file spinbox.h
  * @brief C++ Wrapper for LVGL Spinbox Widget.
@@ -70,4 +72,6 @@ class Spinbox : public Textarea {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_SPINBOX
 #endif  // LVGL_CPP_WIDGETS_SPINBOX_H_

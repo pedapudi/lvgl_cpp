@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_WIN
 /**
  * @file win.h
  * @brief C++ Wrapper for LVGL Win Widget.
@@ -57,4 +59,6 @@ class Win : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_WIN
 #endif  // LVGL_CPP_WIDGETS_WIN_H_

@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_MENU
 /**
  * @file menu.h
  * @brief C++ Wrapper for LVGL Menu Widget.
@@ -81,4 +83,6 @@ class Menu : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_MENU
 #endif  // LVGL_CPP_WIDGETS_MENU_H_

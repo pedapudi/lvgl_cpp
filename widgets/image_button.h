@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_IMAGEBUTTON
 /**
  * @file image_button.h
  * @brief C++ Wrapper for LVGL ImageButton Widget.
@@ -56,4 +58,6 @@ class ImageButton : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_IMAGEBUTTON
 #endif  // LVGL_CPP_WIDGETS_IMAGE_BUTTON_H_

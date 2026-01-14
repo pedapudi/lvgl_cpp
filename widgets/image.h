@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_IMAGE
 /**
  * @file image.h
  * @brief C++ Wrapper for LVGL Image Widget.
@@ -74,4 +76,6 @@ class Image : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_IMAGE
 #endif  // LVGL_CPP_WIDGETS_IMAGE_H_

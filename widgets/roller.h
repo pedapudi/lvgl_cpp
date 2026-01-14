@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_ROLLER
 /**
  * @file roller.h
  * @brief C++ Wrapper for LVGL Roller Widget.
@@ -69,4 +71,6 @@ class Roller : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_ROLLER
 #endif  // LVGL_CPP_WIDGETS_ROLLER_H_

@@ -9,6 +9,8 @@
 
 namespace lvgl {
 
+#if LV_USE_OBSERVER
+
 /**
  * @brief Base Subject class wrapping lv_subject_t.
  * Subjects are observable values.
@@ -87,6 +89,7 @@ class IntSubject : public Subject {
   void set_range(int32_t min, int32_t max);
 };
 
+#if LV_USE_FLOAT
 class FloatSubject : public Subject {
  public:
   explicit FloatSubject(float value);
@@ -97,6 +100,7 @@ class FloatSubject : public Subject {
 
   void set_range(float min, float max);
 };
+#endif  // LV_USE_FLOAT
 
 class StringSubject : public Subject {
  public:
@@ -192,6 +196,8 @@ class Observer {
   lv_observer_t* obs_;
   bool owned_;  // If true, we call lv_observer_remove in destructor.
 };
+
+#endif  // LV_USE_OBSERVER
 
 }  // namespace lvgl
 

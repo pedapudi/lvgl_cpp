@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_BAR
 /**
  * @file bar.h
  * @brief C++ Wrapper for LVGL Bar Widget.
@@ -73,4 +75,6 @@ class Bar : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_BAR
 #endif  // LVGL_CPP_WIDGETS_BAR_H_

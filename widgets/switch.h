@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_SWITCH
 /**
  * @file switch.h
  * @brief C++ Wrapper for LVGL Switch Widget.
@@ -51,4 +53,6 @@ class Switch : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_SWITCH
 #endif  // LVGL_CPP_WIDGETS_SWITCH_H_

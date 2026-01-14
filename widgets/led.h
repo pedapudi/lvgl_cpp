@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_LED
 /**
  * @file led.h
  * @brief C++ Wrapper for LVGL Led Widget.
@@ -56,4 +58,6 @@ class Led : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_LED
 #endif  // LVGL_CPP_WIDGETS_LED_H_

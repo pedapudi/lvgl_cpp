@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_TABVIEW
 /**
  * @file tabview.h
  * @brief C++ Wrapper for LVGL TabView Widget.
@@ -62,4 +64,6 @@ class TabView : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_TABVIEW
 #endif  // LVGL_CPP_WIDGETS_TABVIEW_H_

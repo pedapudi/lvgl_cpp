@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_LINE
 /**
  * @file line.h
  * @brief C++ Wrapper for LVGL Line Widget.
@@ -58,4 +60,6 @@ class Line : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_LINE
 #endif  // LVGL_CPP_WIDGETS_LINE_H_

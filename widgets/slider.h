@@ -4,6 +4,8 @@
 #include "bar.h"   // IWYU pragma: export
 #include "lvgl.h"  // IWYU pragma: export
 
+
+#if LV_USE_SLIDER
 /**
  * @file slider.h
  * @brief C++ Wrapper for LVGL Slider Widget.
@@ -64,4 +66,6 @@ class Slider : public Bar {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_SLIDER
 #endif  // LVGL_CPP_WIDGETS_SLIDER_H_

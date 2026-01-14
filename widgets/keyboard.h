@@ -4,6 +4,8 @@
 #include "button_matrix.h"  // IWYU pragma: export
 #include "lvgl.h"           // IWYU pragma: export
 
+
+#if LV_USE_KEYBOARD
 /**
  * @file keyboard.h
  * @brief C++ Wrapper for LVGL Keyboard Widget.
@@ -62,4 +64,6 @@ class Keyboard : public ButtonMatrix {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_KEYBOARD
 #endif  // LVGL_CPP_WIDGETS_KEYBOARD_H_

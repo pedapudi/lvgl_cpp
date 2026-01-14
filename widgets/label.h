@@ -6,6 +6,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_LABEL
 /**
  * @file label.h
  * @brief C++ Wrapper for LVGL Label Widget.
@@ -104,4 +106,6 @@ class Label : public Object {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_LABEL
 #endif  // LVGL_CPP_WIDGETS_LABEL_H_

@@ -4,6 +4,8 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
+
+#if LV_USE_BUTTON
 /**
  * @file button.h
  * @brief C++ Wrapper for LVGL Button Widget.
@@ -50,4 +52,6 @@ class Button : public Object {
 
 }  // namespace lvgl
 
+
+#endif // LV_USE_BUTTON
 #endif  // LVGL_CPP_WIDGETS_BUTTON_H_

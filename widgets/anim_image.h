@@ -4,6 +4,8 @@
 #include "image.h"  // IWYU pragma: export
 #include "lvgl.h"   // IWYU pragma: export
 
+
+#if LV_USE_ANIMIMG
 /**
  * @file anim_image.h
  * @brief C++ Wrapper for LVGL AnimImage Widget.
@@ -53,4 +55,6 @@ class AnimImage : public Image {
  */
 }  // namespace lvgl
 
+
+#endif // LV_USE_ANIMIMG
 #endif  // LVGL_CPP_WIDGETS_ANIM_IMAGE_H_
