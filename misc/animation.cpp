@@ -1,5 +1,8 @@
 #include "animation.h"
 
+#include "anim_exec_callback.h"
+#include "anim_path_callback.h"
+
 namespace lvgl {
 
 Animation::Animation() { lv_anim_init(&anim_); }
@@ -17,8 +20,15 @@ Animation::Animation(void* var, int32_t start_val, int32_t end_val,
   set_duration(duration);
 }
 
+Animation::Animation(const Object& object) : Animation() { set_var(object); }
+
 Animation& Animation::set_var(void* var) {
   lv_anim_set_var(&anim_, var);
+  return *this;
+}
+
+Animation& Animation::set_var(const Object& object) {
+  set_var(object.raw());
   return *this;
 }
 
@@ -74,6 +84,14 @@ void Animation::exec_cb_proxy(lv_anim_t* a, int32_t v) {
   }
 }
 
+int32_t Animation::path_cb_proxy(const lv_anim_t* a) {
+  CallbackData* data = static_cast<CallbackData*>(a->user_data);
+  if (data && data->path_cb) {
+    return data->path_cb(a);
+  }
+  return lv_anim_path_linear(a);  // Fallback
+}
+
 void Animation::completed_cb_proxy(lv_anim_t* a) {
   CallbackData* data = static_cast<CallbackData*>(a->user_data);
   if (data && data->completed_cb) {
@@ -93,11 +111,63 @@ void Animation::deleted_cb_proxy(lv_anim_t* a) {
 
 Animation& Animation::set_exec_cb(ExecCallback cb) {
   if (!user_data_) user_data_ = std::make_unique<CallbackData>();
-  user_data_->exec_cb = cb;
+  user_data_->exec_cb = std::move(cb);
   // We don't set user_data on anim_ yet, we do it at start() to allow multiple
   // instances
   return *this;
 }
+
+Animation& Animation::set_path_cb(PathCallback cb) {
+  if (!user_data_) user_data_ = std::make_unique<CallbackData>();
+  user_data_->path_cb = std::move(cb);
+  return *this;
+}
+
+Animation::Exec::Callback Animation::Exec::X() {
+  return (lv_anim_exec_xcb_t)lv_obj_set_x;
+}
+
+Animation::Exec::Callback Animation::Exec::Y() {
+  return (lv_anim_exec_xcb_t)lv_obj_set_y;
+}
+
+Animation::Exec::Callback Animation::Exec::Width() {
+  return (lv_anim_exec_xcb_t)lv_obj_set_width;
+}
+
+Animation::Exec::Callback Animation::Exec::Height() {
+  return (lv_anim_exec_xcb_t)lv_obj_set_height;
+}
+
+Animation::Exec::Callback Animation::Exec::Opacity() {
+  return (lv_anim_exec_xcb_t)lv_obj_set_style_opa;
+}
+
+Animation::Path::Callback Animation::Path::Linear() {
+  return lv_anim_path_linear;
+}
+
+Animation::Path::Callback Animation::Path::EaseIn() {
+  return lv_anim_path_ease_in;
+}
+
+Animation::Path::Callback Animation::Path::EaseOut() {
+  return lv_anim_path_ease_out;
+}
+
+Animation::Path::Callback Animation::Path::EaseInOut() {
+  return lv_anim_path_ease_in_out;
+}
+
+Animation::Path::Callback Animation::Path::Overshoot() {
+  return lv_anim_path_overshoot;
+}
+
+Animation::Path::Callback Animation::Path::Bounce() {
+  return lv_anim_path_bounce;
+}
+
+Animation::Path::Callback Animation::Path::Step() { return lv_anim_path_step; }
 
 Animation& Animation::set_completed_cb(CompletedCallback cb) {
   if (!user_data_) user_data_ = std::make_unique<CallbackData>();
@@ -122,6 +192,9 @@ void Animation::start() {
 
     if (user_data_->exec_cb) {
       lv_anim_set_custom_exec_cb(&anim_, exec_cb_proxy);
+    }
+    if (user_data_->path_cb) {
+      lv_anim_set_path_cb(&anim_, path_cb_proxy);
     }
     if (user_data_->completed_cb) {
       lv_anim_set_completed_cb(&anim_, completed_cb_proxy);

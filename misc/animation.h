@@ -6,13 +6,16 @@
 #include <memory>
 
 #include "../core/object.h"  // IWYU pragma: export
-#include "lvgl.h"            // IWYU pragma: export
+#include "anim_exec_callback.h"
+#include "anim_path_callback.h"
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
 class Animation {
  public:
   using ExecCallback = std::function<void(void*, int32_t)>;
+  using PathCallback = std::function<int32_t(const lv_anim_t*)>;
   using CompletedCallback = std::function<void()>;
 
   Animation();
@@ -26,6 +29,12 @@ class Animation {
    */
   Animation(void* var, int32_t start_val, int32_t end_val, uint32_t duration);
 
+  /**
+   * @brief Construct an animation for a specific Object.
+   * @param object The object to animate.
+   */
+  explicit Animation(const Object& object);
+
   ~Animation();
 
   // Builder pattern
@@ -37,17 +46,85 @@ class Animation {
   Animation& set_var(void* var);
 
   /**
+   * @brief Set the object to animate (overload for C++ wrapper).
+   * @param object The object wrapper.
+   */
+  Animation& set_var(const Object& object);
+
+  /**
    * @brief Set a C-style execution callback.
-   * @param exec_cb The callback function.
+   *
+   * @example
+   * // 1. Use built-in optimized callbacks (Recommended)
+   * anim.set_exec_cb(lvgl::Animation::Exec::X());
+   *
+   * // 2. Use raw LVGL C functions
+   * anim.set_exec_cb((lv_anim_exec_xcb_t)lv_obj_set_width);
+   *
+   * @param exec_cb The callback function pointer.
    */
   Animation& set_exec_cb(lv_anim_exec_xcb_t exec_cb);
 
   /**
-   * @brief Set a C++ execution callback.
-   * The callback is stored internally and managed by the Animation wrapper.
+   * @brief Set a C++ execution callback (lambda/std::function).
+   *
+   * @example
+   * anim.set_exec_cb([](void* var, int32_t val) {
+   *     // Custom logic
+   * });
+   *
    * @param cb The `std::function` callback.
    */
   Animation& set_exec_cb(ExecCallback cb);
+
+  // ... (Exec struct omitted for brevity)
+
+  struct Exec {
+    using Callback = ExecCallback;
+
+    /** @brief Callback to animate X coordinate (lv_obj_set_x) */
+    static Callback X();
+
+    /** @brief Callback to animate Y coordinate (lv_obj_set_y) */
+    static Callback Y();
+
+    /** @brief Callback to animate Width (lv_obj_set_width) */
+    static Callback Width();
+
+    /** @brief Callback to animate Height (lv_obj_set_height) */
+    static Callback Height();
+
+    /** @brief Callback to animate Opacity (lv_obj_set_style_opa) */
+    static Callback Opacity();
+  };
+
+  /**
+   * @brief Helper struct for common path (easing) callbacks.
+   */
+  struct Path {
+    using Callback = PathCallback;
+
+    /** @brief Linear animation (no easing) */
+    static Callback Linear();
+
+    /** @brief Ease in (slow start) */
+    static Callback EaseIn();
+
+    /** @brief Ease out (slow end) */
+    static Callback EaseOut();
+
+    /** @brief Ease in and out (slow start and end) */
+    static Callback EaseInOut();
+
+    /** @brief Overshoot the end value */
+    static Callback Overshoot();
+
+    /** @brief Bounce back from the end value */
+    static Callback Bounce();
+
+    /** @brief Instant step to end value */
+    static Callback Step();
+  };
 
   /**
    * @brief Set a completion callback.
@@ -87,6 +164,12 @@ class Animation {
   Animation& set_path_cb(lv_anim_path_cb_t path_cb);
 
   /**
+   * @brief Set a C++ path (easing) callback.
+   * @param cb The `std::function` path callback.
+   */
+  Animation& set_path_cb(PathCallback cb);
+
+  /**
    * @brief Set the repeat count.
    * @param cnt Number of repetitions (`LV_ANIM_REPEAT_INFINITE` for infinite).
    */
@@ -118,6 +201,7 @@ class Animation {
   // Internal closure data to bridge C callbacks to C++ std::function
   struct CallbackData {
     ExecCallback exec_cb;
+    PathCallback path_cb;
     CompletedCallback completed_cb;
     std::function<void()> deleted_cb;
   };
@@ -125,6 +209,7 @@ class Animation {
   std::unique_ptr<CallbackData> user_data_;
 
   static void exec_cb_proxy(lv_anim_t* a, int32_t v);
+  static int32_t path_cb_proxy(const lv_anim_t* a);
   static void completed_cb_proxy(lv_anim_t* a);
   static void deleted_cb_proxy(lv_anim_t* a);
 };

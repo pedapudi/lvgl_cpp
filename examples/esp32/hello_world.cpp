@@ -73,20 +73,20 @@ static _lock_t lvgl_api_lock;
 
 void example_lvgl_demo_ui(lvgl::Display& display) {
   lvgl::Object scr(display.get_screen_active());
-  lvgl::Label label(&scr);
-  label.set_long_mode(LV_LABEL_LONG_SCROLL_CIRCULAR);
-  label.set_text("Hello, world!");
-  label.set_width(display.get_horizontal_resolution());
-  label.align(LV_ALIGN_BOTTOM_MID, 0, 0);
+  lvgl::Label label(&scr, "Hello, world!");
+  label.set_long_mode(LV_LABEL_LONG_SCROLL_CIRCULAR)
+      .set_width(display.get_horizontal_resolution())
+      .align(LV_ALIGN_BOTTOM_MID, 0, 0);
   // Create an animation to ease the label in from top
   // storage on stack is fine because start() copies the config to LVGL internal
   // memory
-  lvgl::Animation()
-      .set_var(label.raw())
+  lvgl::Animation(label)
+      //.set_var(label.raw()) // Implicitly set by constructor
       .set_values(-50, 0)
       .set_duration(2000)
-      .set_exec_cb((lv_anim_exec_xcb_t)lv_obj_set_y)
-      .set_path_cb(lv_anim_path_ease_out)
+      .set_exec_cb(lvgl::Animation::Exec::Y())
+      .set_path_cb(lvgl::Animation::Path::EaseOut())
+      .set_completed_cb([]() { ESP_LOGI("Anim", "Animation completed!"); })
       .start();
 
   label.release();  // Release ownership to LVGL so it persists after function
