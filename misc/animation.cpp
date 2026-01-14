@@ -2,24 +2,19 @@
 
 namespace lvgl {
 
-void Animation::exec_cb_proxy(void* var, int32_t v) {
-  // This is tricky. lv_anim_t struct is copied by lv_anim_start.
-  // The 'var' is the object being animated.
-  // We can't easily access the std::function from here unless we store it in
-  // user_data of the animation. But lv_anim_start copies the struct, so
-  // user_data is copied. If we store pointer to Animation object in user_data,
-  // we can access it. BUT Animation object might be temporary (builder
-  // pattern). So, for C++ callbacks, we probably need a persistent object or a
-  // dynamic allocation that is managed. For now, let's only support C style
-  // exec_cb (like lv_obj_set_x) or very specific wrappers. Implementing generic
-  // C++ lambdas for animation exec_cb is hard without lifetime management. We
-  // will implement what we can.
-}
-
 Animation::Animation() { lv_anim_init(&anim_); }
 
 Animation::~Animation() {
   // nothing to clean up for stack-based anim struct
+  // user_data_ unique_ptr will handle itself
+}
+
+Animation::Animation(void* var, int32_t start_val, int32_t end_val,
+                     uint32_t duration)
+    : Animation() {
+  set_var(var);
+  set_values(start_val, end_val);
+  set_duration(duration);
 }
 
 Animation& Animation::set_var(void* var) {
@@ -72,6 +67,67 @@ Animation& Animation::set_playback_delay(uint32_t delay) {
   return *this;
 }
 
-void Animation::start() { lv_anim_start(&anim_); }
+void Animation::exec_cb_proxy(lv_anim_t* a, int32_t v) {
+  CallbackData* data = static_cast<CallbackData*>(a->user_data);
+  if (data && data->exec_cb) {
+    data->exec_cb(a->var, v);
+  }
+}
+
+void Animation::completed_cb_proxy(lv_anim_t* a) {
+  CallbackData* data = static_cast<CallbackData*>(a->user_data);
+  if (data && data->completed_cb) {
+    data->completed_cb();
+  }
+}
+
+void Animation::deleted_cb_proxy(lv_anim_t* a) {
+  CallbackData* data = static_cast<CallbackData*>(a->user_data);
+  if (data) {
+    if (data->deleted_cb) {
+      data->deleted_cb();
+    }
+    delete data;
+  }
+}
+
+Animation& Animation::set_exec_cb(ExecCallback cb) {
+  if (!user_data_) user_data_ = std::make_unique<CallbackData>();
+  user_data_->exec_cb = cb;
+  // We don't set user_data on anim_ yet, we do it at start() to allow multiple
+  // instances
+  return *this;
+}
+
+Animation& Animation::set_completed_cb(CompletedCallback cb) {
+  if (!user_data_) user_data_ = std::make_unique<CallbackData>();
+  user_data_->completed_cb = cb;
+  return *this;
+}
+
+Animation& Animation::set_deleted_cb(std::function<void()> cb) {
+  if (!user_data_) user_data_ = std::make_unique<CallbackData>();
+  user_data_->deleted_cb = cb;
+  return *this;
+}
+
+void Animation::start() {
+  if (user_data_) {
+    // Clone the callback data for this specific animation instance
+    // detailed ownership management requires heap alloc that will be freed by
+    // deleted_cb
+    CallbackData* runtime_data = new CallbackData(*user_data_);
+    lv_anim_set_user_data(&anim_, runtime_data);
+    lv_anim_set_deleted_cb(&anim_, deleted_cb_proxy);
+
+    if (user_data_->exec_cb) {
+      lv_anim_set_custom_exec_cb(&anim_, exec_cb_proxy);
+    }
+    if (user_data_->completed_cb) {
+      lv_anim_set_completed_cb(&anim_, completed_cb_proxy);
+    }
+  }
+  lv_anim_start(&anim_);
+}
 
 }  // namespace lvgl
