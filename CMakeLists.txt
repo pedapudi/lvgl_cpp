@@ -97,3 +97,6 @@ add_executable(observer_test tests/observer_test.cpp)
 target_link_libraries(observer_test PRIVATE lvgl_cpp)
 add_executable(test_ownership tests/test_ownership.cpp)
 target_link_libraries(test_ownership PRIVATE lvgl_cpp)
+
+add_executable(test_animation tests/test_animation.cpp)
+target_link_libraries(test_animation PRIVATE lvgl_cpp)
