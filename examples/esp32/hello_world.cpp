@@ -2,6 +2,10 @@
  * SPDX-FileCopyrightText: 2021-2025 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: CC0-1.0
+ *
+ * Example Description:
+ * This example is implemented for the Seeed Studio XIAO ESP32C3 development
+ * board with an attached SSD1306 OLED display.
  */
 
 #include <stdio.h>
