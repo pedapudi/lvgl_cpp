@@ -87,10 +87,38 @@ void test_explicit_managed() {
   std::cout << "PASS: Explicit managed assumed deleted." << std::endl;
 }
 
+void test_move_semantics() {
+  std::cout << "Testing Move Semantics..." << std::endl;
+  lv_obj_t* raw_obj = nullptr;
+  {
+    lvgl::Object temp((lvgl::Object*)nullptr);
+    raw_obj = temp.release();
+  }
+
+  {
+    // 1. Create Owned wrapper
+    lvgl::Object wrapper1(raw_obj, lvgl::Object::Ownership::Managed);
+
+    // 2. Move to wrapper2
+    lvgl::Object wrapper2 = std::move(wrapper1);
+
+    // wrapper1 should now be invalid/null
+    assert(wrapper1.raw() == nullptr);
+
+    // wrapper2 should own the object
+    assert(wrapper2.raw() == raw_obj);
+
+  }  // wrapper2 destoryed here, should delete object
+
+  // Verify it's gone? Hard in LVGL without crash, but logic holds.
+  std::cout << "PASS: Move semantics transferred ownership." << std::endl;
+}
+
 int main() {
   lv_init();
   test_default_ownership();
   test_child_ownership();
   test_explicit_managed();
+  test_move_semantics();
   return 0;
 }
