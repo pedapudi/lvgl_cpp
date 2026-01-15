@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_DROPDOWN
 /**
  * @file dropdown.h
@@ -40,15 +39,25 @@ class Dropdown : public Object {
    */
   explicit Dropdown(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_text(const char* txt);
-  void set_options(const char* options);
-  void set_options_static(const char* options);
-  void add_option(const char* option, uint32_t pos);
-  void clear_options();
-  void set_selected(uint32_t sel_opt);
-  void set_dir(lv_dir_t dir);
-  void set_symbol(const void* symbol);
-  void set_selected_highlight(bool en);
+  Dropdown& set_text(const char* txt);
+  Dropdown& set_options(const char* options);
+  Dropdown& set_options_static(const char* options);
+  Dropdown& add_option(const char* option, uint32_t pos);
+  Dropdown& clear_options();
+  Dropdown& set_selected(uint32_t sel_opt);
+  Dropdown& set_dir(lv_dir_t dir);
+  Dropdown& set_symbol(const void* symbol);
+  Dropdown& set_selected_highlight(bool en);
+
+  // Fluent API shadows
+  Dropdown& set_width(int32_t width);
+  Dropdown& set_height(int32_t height);
+  Dropdown& set_size(int32_t width, int32_t height);
+  Dropdown& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Dropdown& add_state(lv_state_t state);
+  Dropdown& remove_state(lv_state_t state);
+  Dropdown& add_flag(lv_obj_flag_t flag);
+  Dropdown& remove_flag(lv_obj_flag_t flag);
 
   lv_obj_t* get_list();
   const char* get_text();
@@ -86,6 +95,5 @@ class Dropdown : public Object {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_DROPDOWN
+#endif  // LV_USE_DROPDOWN
 #endif  // LVGL_CPP_WIDGETS_DROPDOWN_H_

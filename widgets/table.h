@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_TABLE
 /**
  * @file table.h
@@ -38,14 +37,24 @@ class Table : public Object {
    */
   explicit Table(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_cell_value(uint32_t row, uint32_t col, const char* txt);
-  void set_row_count(uint32_t row_cnt);
-  void set_column_count(uint32_t col_cnt);
-  void set_column_width(uint32_t col_id, int32_t w);
-  void set_cell_ctrl(uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
-  void clear_cell_ctrl(uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
-  void set_cell_user_data(uint16_t row, uint16_t col, void* user_data);
-  void set_selected_cell(uint16_t row, uint16_t col);
+  Table& set_cell_value(uint32_t row, uint32_t col, const char* txt);
+  Table& set_row_count(uint32_t row_cnt);
+  Table& set_column_count(uint32_t col_cnt);
+  Table& set_column_width(uint32_t col_id, int32_t w);
+  Table& set_cell_ctrl(uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
+  Table& clear_cell_ctrl(uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
+  Table& set_cell_user_data(uint16_t row, uint16_t col, void* user_data);
+  Table& set_selected_cell(uint16_t row, uint16_t col);
+
+  // Fluent API shadows
+  Table& set_width(int32_t width);
+  Table& set_height(int32_t height);
+  Table& set_size(int32_t width, int32_t height);
+  Table& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Table& add_state(lv_state_t state);
+  Table& remove_state(lv_state_t state);
+  Table& add_flag(lv_obj_flag_t flag);
+  Table& remove_flag(lv_obj_flag_t flag);
 
   const char* get_cell_value(uint32_t row, uint32_t col);
   uint32_t get_row_count();
@@ -69,6 +78,5 @@ class Table : public Object {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_TABLE
+#endif  // LV_USE_TABLE
 #endif  // LVGL_CPP_WIDGETS_TABLE_H_

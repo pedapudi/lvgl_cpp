@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_LINE
 /**
  * @file line.h
@@ -38,9 +37,19 @@ class Line : public Object {
    */
   explicit Line(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_points(const lv_point_precise_t points[], uint32_t point_num);
-  void set_points_mutable(lv_point_precise_t points[], uint32_t point_num);
-  void set_y_invert(bool en);
+  Line& set_points(const lv_point_precise_t points[], uint32_t point_num);
+  Line& set_points_mutable(lv_point_precise_t points[], uint32_t point_num);
+  Line& set_y_invert(bool en);
+
+  // Fluent API shadows
+  Line& set_width(int32_t width);
+  Line& set_height(int32_t height);
+  Line& set_size(int32_t width, int32_t height);
+  Line& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Line& add_state(lv_state_t state);
+  Line& remove_state(lv_state_t state);
+  Line& add_flag(lv_obj_flag_t flag);
+  Line& remove_flag(lv_obj_flag_t flag);
 
   const lv_point_precise_t* get_points() const;
   uint32_t get_point_count() const;
@@ -62,6 +71,5 @@ class Line : public Object {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_LINE
+#endif  // LV_USE_LINE
 #endif  // LVGL_CPP_WIDGETS_LINE_H_

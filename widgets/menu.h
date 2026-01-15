@@ -4,7 +4,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_MENU
 /**
  * @file menu.h
@@ -63,13 +62,23 @@ class Menu : public Object {
   MenuSection section_create(MenuPage& parent_page);
   MenuSeparator separator_create(MenuPage& parent_page);
 
-  void set_page(MenuPage& page);
-  void set_page_title(lv_obj_t* page, const char* title);
-  void set_page_title_static(lv_obj_t* page, const char* title);
-  void set_sidebar_page(MenuPage& page);
-  void set_mode_header(lv_menu_mode_header_t mode);
-  void set_mode_root_back_button(lv_menu_mode_root_back_button_t mode);
-  void set_load_page_event(lv_obj_t* obj, MenuPage& page);
+  Menu& set_page(MenuPage& page);
+  Menu& set_page_title(lv_obj_t* page, const char* title);
+  Menu& set_page_title_static(lv_obj_t* page, const char* title);
+  Menu& set_sidebar_page(MenuPage& page);
+  Menu& set_mode_header(lv_menu_mode_header_t mode);
+  Menu& set_mode_root_back_button(lv_menu_mode_root_back_button_t mode);
+  Menu& set_load_page_event(lv_obj_t* obj, MenuPage& page);
+
+  // Fluent API shadows
+  Menu& set_width(int32_t width);
+  Menu& set_height(int32_t height);
+  Menu& set_size(int32_t width, int32_t height);
+  Menu& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Menu& add_state(lv_state_t state);
+  Menu& remove_state(lv_state_t state);
+  Menu& add_flag(lv_obj_flag_t flag);
+  Menu& remove_flag(lv_obj_flag_t flag);
 
   MenuPage get_cur_main_page();
   MenuPage get_cur_sidebar_page();
@@ -83,6 +92,5 @@ class Menu : public Object {
 
 }  // namespace lvgl
 
-
-#endif // LV_USE_MENU
+#endif  // LV_USE_MENU
 #endif  // LVGL_CPP_WIDGETS_MENU_H_

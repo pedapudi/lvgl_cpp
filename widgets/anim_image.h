@@ -6,7 +6,6 @@
 #include "image.h"  // IWYU pragma: export
 #include "lvgl.h"   // IWYU pragma: export
 
-
 #if LV_USE_ANIMIMG
 /**
  * @file anim_image.h
@@ -38,10 +37,20 @@ class AnimImage : public Image {
    */
   explicit AnimImage(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_src(const void* dsc[], size_t num);
-  void start();
-  void set_duration(uint32_t duration);
-  void set_repeat_count(uint32_t count);
+  AnimImage& set_src(const void* dsc[], size_t num);
+  AnimImage& start();
+  AnimImage& set_duration(uint32_t duration);
+  AnimImage& set_repeat_count(uint32_t count);
+
+  // Fluent API shadows
+  AnimImage& set_width(int32_t width);
+  AnimImage& set_height(int32_t height);
+  AnimImage& set_size(int32_t width, int32_t height);
+  AnimImage& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  AnimImage& add_state(lv_state_t state);
+  AnimImage& remove_state(lv_state_t state);
+  AnimImage& add_flag(lv_obj_flag_t flag);
+  AnimImage& remove_flag(lv_obj_flag_t flag);
 };
 
 /**
@@ -57,6 +66,5 @@ class AnimImage : public Image {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_ANIMIMG
+#endif  // LV_USE_ANIMIMG
 #endif  // LVGL_CPP_WIDGETS_ANIM_IMAGE_H_

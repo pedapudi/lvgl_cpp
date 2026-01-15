@@ -4,7 +4,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_LIST
 /**
  * @file list.h
@@ -44,10 +43,19 @@ class List : public Object {
   Button add_button(const void* icon, const char* txt);
   const char* get_button_text(lv_obj_t* btn);
   void set_button_text(lv_obj_t* btn, const char* txt);
+
+  // Fluent API shadows
+  List& set_width(int32_t width);
+  List& set_height(int32_t height);
+  List& set_size(int32_t width, int32_t height);
+  List& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  List& add_state(lv_state_t state);
+  List& remove_state(lv_state_t state);
+  List& add_flag(lv_obj_flag_t flag);
+  List& remove_flag(lv_obj_flag_t flag);
 };
 
 }  // namespace lvgl
 
-
-#endif // LV_USE_LIST
+#endif  // LV_USE_LIST
 #endif  // LVGL_CPP_WIDGETS_LIST_H_

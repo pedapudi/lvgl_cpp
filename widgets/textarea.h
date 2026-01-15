@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_TEXTAREA
 /**
  * @file textarea.h
@@ -34,29 +33,54 @@ class Textarea : public Object {
    * @param parent The parent object.
    */
   explicit Textarea(Object* parent, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a Textarea with a parent and text.
+   * @param parent The parent object.
+   * @param text The initial text.
+   */
+  Textarea(Object* parent, const char* text);
+
+  /**
+   * @brief Create a Textarea with a parent and text.
+   * @param parent The parent object.
+   * @param text The initial text.
+   */
+  Textarea(Object* parent, const std::string& text);
+
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
   explicit Textarea(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void add_char(uint32_t c);
-  void add_text(const char* txt);
-  void delete_char();
-  void delete_char_forward();
-  void set_text(const char* txt);
-  void set_placeholder_text(const char* txt);
-  void set_cursor_pos(int32_t pos);
-  void set_cursor_click_pos(bool en);
-  void set_password_mode(bool en);
-  void set_password_bullet(const char* bullet);
-  void set_one_line(bool en);
-  void set_accepted_chars(const char* list);
-  void set_max_length(uint32_t num);
-  void set_insert_replace(const char* txt);
-  void set_text_selection(bool en);
-  void set_password_show_time(uint32_t time);
-  void set_align(lv_text_align_t align);
+  Textarea& add_char(uint32_t c);
+  Textarea& add_text(const char* txt);
+  Textarea& delete_char();
+  Textarea& delete_char_forward();
+  Textarea& set_text(const char* txt);
+  Textarea& set_placeholder_text(const char* txt);
+  Textarea& set_cursor_pos(int32_t pos);
+  Textarea& set_cursor_click_pos(bool en);
+  Textarea& set_password_mode(bool en);
+  Textarea& set_password_bullet(const char* bullet);
+  Textarea& set_one_line(bool en);
+  Textarea& set_accepted_chars(const char* list);
+  Textarea& set_max_length(uint32_t num);
+  Textarea& set_insert_replace(const char* txt);
+  Textarea& set_text_selection(bool en);
+  Textarea& set_password_show_time(uint32_t time);
+  Textarea& set_align(lv_text_align_t align);
+
+  // Fluent API shadows
+  Textarea& set_width(int32_t width);
+  Textarea& set_height(int32_t height);
+  Textarea& set_size(int32_t width, int32_t height);
+  Textarea& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Textarea& add_state(lv_state_t state);
+  Textarea& remove_state(lv_state_t state);
+  Textarea& add_flag(lv_obj_flag_t flag);
+  Textarea& remove_flag(lv_obj_flag_t flag);
 
   const char* get_text() const;
   const char* get_placeholder_text();
@@ -82,6 +106,5 @@ class Textarea : public Object {
 
 }  // namespace lvgl
 
-
-#endif // LV_USE_TEXTAREA
+#endif  // LV_USE_TEXTAREA
 #endif  // LVGL_CPP_WIDGETS_TEXTAREA_H_

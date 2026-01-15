@@ -35,18 +35,41 @@ class Slider : public Bar {
   explicit Slider(Object* parent, Ownership ownership = Ownership::Default);
 
   /**
+   * @brief Create a Slider with min and max values.
+   * @param parent Parent object.
+   * @param min Minimum value.
+   * @param max Maximum value.
+   */
+  Slider(Object* parent, int32_t min, int32_t max);
+
+  /**
    * @brief Wrap an existing lv_slider object.
    */
   explicit Slider(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  // Inherits set_value, set_range, etc. from Bar
+  // Inherits set_value, set_range, etc. from Bar, but we shadow them for fluent
+  // API
+  Slider& set_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Slider& set_start_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Slider& set_range(int32_t min, int32_t max);
+  Slider& set_mode(lv_bar_mode_t mode);
 
   /**
    * @brief Set the value of the left knob (for range slider).
    * @param value The value to set.
    * @param anim Enable animation (`LV_ANIM_ON`/`LV_ANIM_OFF`).
    */
-  void set_left_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Slider& set_left_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+
+  // Fluent API shadows for Object
+  Slider& set_width(int32_t width);
+  Slider& set_height(int32_t height);
+  Slider& set_size(int32_t width, int32_t height);
+  Slider& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Slider& add_state(lv_state_t state);
+  Slider& remove_state(lv_state_t state);
+  Slider& add_flag(lv_obj_flag_t flag);
+  Slider& remove_flag(lv_obj_flag_t flag);
 
   /**
    * @brief Get the value of the left knob.

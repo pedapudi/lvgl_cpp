@@ -13,22 +13,33 @@ Label::Label() : Label((Object*)nullptr) {}
 Label::Label(Object* parent, Ownership ownership)
     : Object(lv_label_create(parent ? parent->raw() : nullptr), ownership) {}
 
+Label::Label(Object* parent, const std::string& text) : Label(parent) {
+  set_text(text);
+}
+
+Label::Label(Object* parent, const char* text) : Label(parent) {
+  set_text(text);
+}
+
 Label::Label(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
-void Label::set_text(const std::string& text) {
+Label& Label::set_text(const std::string& text) {
   if (obj_) lv_label_set_text(obj_, text.c_str());
+  return *this;
 }
 
-void Label::set_text(const char* text) {
+Label& Label::set_text(const char* text) {
   if (obj_) lv_label_set_text(obj_, text);
+  return *this;
 }
 
-void Label::set_text_fmt(const char* fmt, ...) {
-  if (!obj_) return;
+Label& Label::set_text_fmt(const char* fmt, ...) {
+  if (!obj_) return *this;
   va_list args;
   va_start(args, fmt);
   lv_label_set_text_vfmt(obj_, fmt, args);
   va_end(args);
+  return *this;
 }
 
 std::string Label::get_text() const {
@@ -37,20 +48,23 @@ std::string Label::get_text() const {
   return txt ? std::string(txt) : "";
 }
 
-void Label::set_long_mode(lv_label_long_mode_t mode) {
+Label& Label::set_long_mode(lv_label_long_mode_t mode) {
   if (obj_) lv_label_set_long_mode(obj_, mode);
+  return *this;
 }
 
 lv_label_long_mode_t Label::get_long_mode() const {
   return obj_ ? lv_label_get_long_mode(obj_) : LV_LABEL_LONG_MODE_WRAP;
 }
 
-void Label::set_selection_start(uint32_t index) {
+Label& Label::set_selection_start(uint32_t index) {
   if (obj_) lv_label_set_text_selection_start(obj_, index);
+  return *this;
 }
 
-void Label::set_selection_end(uint32_t index) {
+Label& Label::set_selection_end(uint32_t index) {
   if (obj_) lv_label_set_text_selection_end(obj_, index);
+  return *this;
 }
 
 uint32_t Label::get_selection_start() const {
@@ -63,8 +77,29 @@ uint32_t Label::get_selection_end() const {
               : LV_LABEL_TEXT_SELECTION_OFF;
 }
 
-void Label::set_recolor(bool en) {
+Label& Label::set_recolor(bool en) {
   if (obj_) lv_label_set_recolor(obj_, en);
+  return *this;
+}
+
+Label& Label::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+
+Label& Label::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+
+Label& Label::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+
+Label& Label::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
 }
 
 bool Label::get_recolor() const {

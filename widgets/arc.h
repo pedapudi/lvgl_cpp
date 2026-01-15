@@ -39,52 +39,62 @@ class Arc : public Object {
    */
   explicit Arc(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_start_angle(lv_value_precise_t start);
-  void set_end_angle(lv_value_precise_t end);
-  void set_angles(lv_value_precise_t start, lv_value_precise_t end);
-  void set_bg_start_angle(lv_value_precise_t start);
-  void set_bg_end_angle(lv_value_precise_t end);
-  void set_bg_angles(lv_value_precise_t start, lv_value_precise_t end);
+  Arc& set_start_angle(lv_value_precise_t start);
+  Arc& set_end_angle(lv_value_precise_t end);
+  Arc& set_angles(lv_value_precise_t start, lv_value_precise_t end);
+  Arc& set_bg_start_angle(lv_value_precise_t start);
+  Arc& set_bg_end_angle(lv_value_precise_t end);
+  Arc& set_bg_angles(lv_value_precise_t start, lv_value_precise_t end);
 
   /**
    * @brief Set rotation (offset to 0 degree).
    * @param rotation Angle in degrees.
    */
-  void set_rotation(int32_t rotation);
+  Arc& set_rotation(int32_t rotation);
 
   /**
    * @brief Set the arc mode.
    * @param type Mode (e.g., `LV_ARC_MODE_NORMAL`).
    */
-  void set_mode(lv_arc_mode_t type);
+  Arc& set_mode(lv_arc_mode_t type);
 
   /**
    * @brief Set the current value.
    * @param value The value.
    */
-  void set_value(int32_t value);
+  Arc& set_value(int32_t value);
 
   /**
    * @brief Set the range.
    * @param min Minimum value.
    * @param max Maximum value.
    */
-  void set_range(int32_t min, int32_t max);
+  Arc& set_range(int32_t min, int32_t max);
 
-  void set_min_value(int32_t min);
-  void set_max_value(int32_t max);
+  Arc& set_min_value(int32_t min);
+  Arc& set_max_value(int32_t max);
 
   /**
    * @brief Set the change rate (smoothing).
    * @param rate Rate in degrees/step.
    */
-  void set_change_rate(uint32_t rate);
+  Arc& set_change_rate(uint32_t rate);
 
   /**
    * @brief Set the knob offset.
    * @param offset Offset in pixels.
    */
-  void set_knob_offset(int32_t offset);
+  Arc& set_knob_offset(int32_t offset);
+
+  // Fluent API shadows
+  Arc& set_width(int32_t width);
+  Arc& set_height(int32_t height);
+  Arc& set_size(int32_t width, int32_t height);
+  Arc& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Arc& add_state(lv_state_t state);
+  Arc& remove_state(lv_state_t state);
+  Arc& add_flag(lv_obj_flag_t flag);
+  Arc& remove_flag(lv_obj_flag_t flag);
 
   lv_value_precise_t get_angle_start();
   lv_value_precise_t get_angle_end();

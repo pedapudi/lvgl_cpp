@@ -13,20 +13,56 @@ Roller::Roller(Object* parent, Ownership ownership)
 
 Roller::Roller(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
-void Roller::set_options(const char* options, lv_roller_mode_t mode) {
+Roller& Roller::set_options(const char* options, lv_roller_mode_t mode) {
   if (obj_) lv_roller_set_options(obj_, options, mode);
+  return *this;
 }
 
-void Roller::set_selected(uint32_t sel_opt, lv_anim_enable_t anim) {
+Roller& Roller::set_selected(uint32_t sel_opt, lv_anim_enable_t anim) {
   if (obj_) lv_roller_set_selected(obj_, sel_opt, anim);
+  return *this;
 }
 
 bool Roller::set_selected_str(const char* sel_opt, lv_anim_enable_t anim) {
   return obj_ ? lv_roller_set_selected_str(obj_, sel_opt, anim) : false;
 }
 
-void Roller::set_visible_row_count(uint32_t row_cnt) {
+Roller& Roller::set_visible_row_count(uint32_t row_cnt) {
   if (obj_) lv_roller_set_visible_row_count(obj_, row_cnt);
+  return *this;
+}
+
+Roller& Roller::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+Roller& Roller::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+Roller& Roller::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+Roller& Roller::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+Roller& Roller::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+Roller& Roller::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+Roller& Roller::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+Roller& Roller::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
 }
 
 uint32_t Roller::get_selected() {
@@ -57,4 +93,4 @@ Observer Roller::bind_value(Subject& subject) {
 
 }  // namespace lvgl
 
-#endif // LV_USE_ROLLER
+#endif  // LV_USE_ROLLER

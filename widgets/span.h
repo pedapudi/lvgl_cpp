@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_SPAN
 /**
  * @file span.h
@@ -40,13 +39,23 @@ class SpanGroup : public Object {
 
   lv_span_t* add_span();
   void delete_span(lv_span_t* span);
-  void set_span_text(lv_span_t* span, const char* text);
-  void set_span_style(lv_span_t* span, const lv_style_t* style);
-  void set_align(lv_text_align_t align);
-  void set_overflow(lv_span_overflow_t overflow);
-  void set_indent(int32_t indent);
-  void set_mode(lv_span_mode_t mode);
-  void set_max_lines(int32_t lines);
+  SpanGroup& set_span_text(lv_span_t* span, const char* text);
+  SpanGroup& set_span_style(lv_span_t* span, const lv_style_t* style);
+  SpanGroup& set_align(lv_text_align_t align);
+  SpanGroup& set_overflow(lv_span_overflow_t overflow);
+  SpanGroup& set_indent(int32_t indent);
+  SpanGroup& set_mode(lv_span_mode_t mode);
+  SpanGroup& set_max_lines(int32_t lines);
+
+  // Fluent API shadows
+  SpanGroup& set_width(int32_t width);
+  SpanGroup& set_height(int32_t height);
+  SpanGroup& set_size(int32_t width, int32_t height);
+  SpanGroup& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  SpanGroup& add_state(lv_state_t state);
+  SpanGroup& remove_state(lv_state_t state);
+  SpanGroup& add_flag(lv_obj_flag_t flag);
+  SpanGroup& remove_flag(lv_obj_flag_t flag);
 
   lv_span_t* get_child(int32_t id);
   uint32_t get_span_count();
@@ -71,6 +80,5 @@ class SpanGroup : public Object {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_SPAN
+#endif  // LV_USE_SPAN
 #endif  // LVGL_CPP_WIDGETS_SPAN_H_

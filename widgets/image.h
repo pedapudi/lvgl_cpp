@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_IMAGE
 /**
  * @file image.h
@@ -32,23 +31,41 @@ class Image : public Object {
    * @param parent The parent object.
    */
   explicit Image(Object* parent, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a Image on the active screen with source.
+   * @param parent The parent object.
+   * @param src The image source (path or pointer).
+   */
+  Image(Object* parent, const void* src);
+
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
    */
   explicit Image(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_src(const void* src);
-  void set_offset_x(int32_t x);
-  void set_offset_y(int32_t y);
-  void set_rotation(int32_t angle);
-  void set_pivot(int32_t x, int32_t y);
-  void set_scale(uint32_t zoom);
-  void set_scale_x(uint32_t zoom);
-  void set_scale_y(uint32_t zoom);
-  void set_blend_mode(lv_blend_mode_t blend_mode);
-  void set_antialias(bool antialias);
-  void set_inner_align(lv_image_align_t align);
+  Image& set_src(const void* src);
+  Image& set_offset_x(int32_t x);
+  Image& set_offset_y(int32_t y);
+  Image& set_rotation(int32_t angle);
+  Image& set_pivot(int32_t x, int32_t y);
+  Image& set_scale(uint32_t zoom);
+  Image& set_scale_x(uint32_t zoom);
+  Image& set_scale_y(uint32_t zoom);
+  Image& set_blend_mode(lv_blend_mode_t blend_mode);
+  Image& set_antialias(bool antialias);
+  Image& set_inner_align(lv_image_align_t align);
+
+  // Fluent API shadows
+  Image& set_width(int32_t width);
+  Image& set_height(int32_t height);
+  Image& set_size(int32_t width, int32_t height);
+  Image& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Image& add_state(lv_state_t state);
+  Image& remove_state(lv_state_t state);
+  Image& add_flag(lv_obj_flag_t flag);
+  Image& remove_flag(lv_obj_flag_t flag);
 
   const void* get_src() const;
   int32_t get_offset_x();
@@ -78,6 +95,5 @@ class Image : public Object {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_IMAGE
+#endif  // LV_USE_IMAGE
 #endif  // LVGL_CPP_WIDGETS_IMAGE_H_

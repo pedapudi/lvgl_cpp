@@ -6,7 +6,6 @@
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
-
 #if LV_USE_CALENDAR
 /**
  * @file calendar.h
@@ -40,10 +39,21 @@ class Calendar : public Object {
    */
   explicit Calendar(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_today_date(uint32_t year, uint32_t month, uint32_t day);
-  void set_shown_date(uint32_t year, uint32_t month);
-  void set_highlighted_dates(lv_calendar_date_t highlighted[], size_t date_num);
-  void set_day_names(const char** day_names);
+  Calendar& set_today_date(uint32_t year, uint32_t month, uint32_t day);
+  Calendar& set_shown_date(uint32_t year, uint32_t month);
+  Calendar& set_highlighted_dates(lv_calendar_date_t highlighted[],
+                                  size_t date_num);
+  Calendar& set_day_names(const char** day_names);
+
+  // Fluent API shadows
+  Calendar& set_width(int32_t width);
+  Calendar& set_height(int32_t height);
+  Calendar& set_size(int32_t width, int32_t height);
+  Calendar& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Calendar& add_state(lv_state_t state);
+  Calendar& remove_state(lv_state_t state);
+  Calendar& add_flag(lv_obj_flag_t flag);
+  Calendar& remove_flag(lv_obj_flag_t flag);
 
   ButtonMatrix get_btnmatrix();
   const lv_calendar_date_t* get_today_date();
@@ -60,6 +70,5 @@ class Calendar : public Object {
 
 }  // namespace lvgl
 
-
-#endif // LV_USE_CALENDAR
+#endif  // LV_USE_CALENDAR
 #endif  // LVGL_CPP_WIDGETS_CALENDAR_H_

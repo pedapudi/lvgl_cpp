@@ -11,42 +11,85 @@ Dropdown::Dropdown() : Dropdown((Object*)nullptr) {}
 Dropdown::Dropdown(Object* parent, Ownership ownership)
     : Object(lv_dropdown_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Dropdown::Dropdown(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Dropdown::Dropdown(lv_obj_t* obj, Ownership ownership)
+    : Object(obj, ownership) {}
 
-void Dropdown::set_text(const char* txt) {
+Dropdown& Dropdown::set_text(const char* txt) {
   if (obj_) lv_dropdown_set_text(obj_, txt);
+  return *this;
 }
 
-void Dropdown::set_options(const char* options) {
+Dropdown& Dropdown::set_options(const char* options) {
   if (obj_) lv_dropdown_set_options(obj_, options);
+  return *this;
 }
 
-void Dropdown::set_options_static(const char* options) {
+Dropdown& Dropdown::set_options_static(const char* options) {
   if (obj_) lv_dropdown_set_options_static(obj_, options);
+  return *this;
 }
 
-void Dropdown::add_option(const char* option, uint32_t pos) {
+Dropdown& Dropdown::add_option(const char* option, uint32_t pos) {
   if (obj_) lv_dropdown_add_option(obj_, option, pos);
+  return *this;
 }
 
-void Dropdown::clear_options() {
+Dropdown& Dropdown::clear_options() {
   if (obj_) lv_dropdown_clear_options(obj_);
+  return *this;
 }
 
-void Dropdown::set_selected(uint32_t sel_opt) {
+Dropdown& Dropdown::set_selected(uint32_t sel_opt) {
   if (obj_) lv_dropdown_set_selected(obj_, sel_opt);
+  return *this;
 }
 
-void Dropdown::set_dir(lv_dir_t dir) {
+Dropdown& Dropdown::set_dir(lv_dir_t dir) {
   if (obj_) lv_dropdown_set_dir(obj_, dir);
+  return *this;
 }
 
-void Dropdown::set_symbol(const void* symbol) {
+Dropdown& Dropdown::set_symbol(const void* symbol) {
   if (obj_) lv_dropdown_set_symbol(obj_, symbol);
+  return *this;
 }
 
-void Dropdown::set_selected_highlight(bool en) {
+Dropdown& Dropdown::set_selected_highlight(bool en) {
   if (obj_) lv_dropdown_set_selected_highlight(obj_, en);
+  return *this;
+}
+
+Dropdown& Dropdown::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+Dropdown& Dropdown::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+Dropdown& Dropdown::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+Dropdown& Dropdown::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+Dropdown& Dropdown::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+Dropdown& Dropdown::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+Dropdown& Dropdown::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+Dropdown& Dropdown::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
 }
 
 lv_obj_t* Dropdown::get_list() {
@@ -105,4 +148,4 @@ Observer Dropdown::bind_value(Subject& subject) {
 
 }  // namespace lvgl
 
-#endif // LV_USE_DROPDOWN
+#endif  // LV_USE_DROPDOWN

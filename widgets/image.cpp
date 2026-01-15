@@ -9,50 +9,96 @@ Image::Image() : Image((Object*)nullptr) {}
 Image::Image(Object* parent, Ownership ownership)
     : Object(lv_image_create(parent ? parent->raw() : nullptr), ownership) {}
 
+Image::Image(Object* parent, const void* src) : Image(parent) { set_src(src); }
+
 Image::Image(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
-void Image::set_src(const void* src) {
+Image& Image::set_src(const void* src) {
   if (obj_) lv_image_set_src(obj_, src);
+  return *this;
 }
 
-void Image::set_offset_x(int32_t x) {
+Image& Image::set_offset_x(int32_t x) {
   if (obj_) lv_image_set_offset_x(obj_, x);
+  return *this;
 }
 
-void Image::set_offset_y(int32_t y) {
+Image& Image::set_offset_y(int32_t y) {
   if (obj_) lv_image_set_offset_y(obj_, y);
+  return *this;
 }
 
-void Image::set_rotation(int32_t angle) {
+Image& Image::set_rotation(int32_t angle) {
   if (obj_) lv_image_set_rotation(obj_, angle);
+  return *this;
 }
 
-void Image::set_pivot(int32_t x, int32_t y) {
+Image& Image::set_pivot(int32_t x, int32_t y) {
   if (obj_) lv_image_set_pivot(obj_, x, y);
+  return *this;
 }
 
-void Image::set_scale(uint32_t zoom) {
+Image& Image::set_scale(uint32_t zoom) {
   if (obj_) lv_image_set_scale(obj_, zoom);
+  return *this;
 }
 
-void Image::set_scale_x(uint32_t zoom) {
+Image& Image::set_scale_x(uint32_t zoom) {
   if (obj_) lv_image_set_scale_x(obj_, zoom);
+  return *this;
 }
 
-void Image::set_scale_y(uint32_t zoom) {
+Image& Image::set_scale_y(uint32_t zoom) {
   if (obj_) lv_image_set_scale_y(obj_, zoom);
+  return *this;
 }
 
-void Image::set_blend_mode(lv_blend_mode_t blend_mode) {
+Image& Image::set_blend_mode(lv_blend_mode_t blend_mode) {
   if (obj_) lv_image_set_blend_mode(obj_, blend_mode);
+  return *this;
 }
 
-void Image::set_antialias(bool antialias) {
+Image& Image::set_antialias(bool antialias) {
   if (obj_) lv_image_set_antialias(obj_, antialias);
+  return *this;
 }
 
-void Image::set_inner_align(lv_image_align_t align) {
+Image& Image::set_inner_align(lv_image_align_t align) {
   if (obj_) lv_image_set_inner_align(obj_, align);
+  return *this;
+}
+
+Image& Image::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+Image& Image::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+Image& Image::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+Image& Image::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+Image& Image::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+Image& Image::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+Image& Image::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+Image& Image::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
 }
 
 const void* Image::get_src() const {
@@ -97,4 +143,4 @@ lv_image_align_t Image::get_inner_align() {
 
 }  // namespace lvgl
 
-#endif // LV_USE_IMAGE
+#endif  // LV_USE_IMAGE

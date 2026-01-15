@@ -101,6 +101,14 @@ void Object::set_pos(int32_t x, int32_t y) {
   if (obj_) lv_obj_set_pos(obj_, x, y);
 }
 
+void Object::set_x(int32_t x) {
+  if (obj_) lv_obj_set_x(obj_, x);
+}
+
+void Object::set_y(int32_t y) {
+  if (obj_) lv_obj_set_y(obj_, y);
+}
+
 void Object::set_size(int32_t w, int32_t h) {
   if (obj_) lv_obj_set_size(obj_, w, h);
 }

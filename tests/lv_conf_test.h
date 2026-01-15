@@ -2,7 +2,7 @@
 #define LV_CONF_H
 
 #define LV_COLOR_DEPTH 32
-#define LV_MEMORY_SIZE (64 * 1024)
+#define LV_MEMORY_SIZE (4096 * 1024)
 
 #define LV_USE_BUTTON 1
 #define LV_USE_LABEL 1

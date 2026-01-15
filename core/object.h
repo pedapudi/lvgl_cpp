@@ -157,6 +157,18 @@ class Object {
   void set_pos(int32_t x, int32_t y);
 
   /**
+   * @brief Set the x coordinate.
+   * @param x X coordinate.
+   */
+  void set_x(int32_t x);
+
+  /**
+   * @brief Set the y coordinate.
+   * @param y Y coordinate.
+   */
+  void set_y(int32_t y);
+
+  /**
    * @brief Set the size of the object.
    * @param w Width in pixels.
    * @param h Height in pixels.

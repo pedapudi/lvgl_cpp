@@ -27,32 +27,72 @@ MenuSeparator Menu::separator_create(MenuPage& parent_page) {
   return MenuSeparator(lv_menu_separator_create(parent_page.raw()));
 }
 
-void Menu::set_page(MenuPage& page) {
+Menu& Menu::set_page(MenuPage& page) {
   if (obj_) lv_menu_set_page(obj_, page.raw());
+  return *this;
 }
 
-void Menu::set_page_title(lv_obj_t* page, const char* title) {
+Menu& Menu::set_page_title(lv_obj_t* page, const char* title) {
   lv_menu_set_page_title(page, title);
+  return *this;
 }
 
-void Menu::set_page_title_static(lv_obj_t* page, const char* title) {
+Menu& Menu::set_page_title_static(lv_obj_t* page, const char* title) {
   lv_menu_set_page_title_static(page, title);
+  return *this;
 }
 
-void Menu::set_sidebar_page(MenuPage& page) {
+Menu& Menu::set_sidebar_page(MenuPage& page) {
   if (obj_) lv_menu_set_sidebar_page(obj_, page.raw());
+  return *this;
 }
 
-void Menu::set_mode_header(lv_menu_mode_header_t mode) {
+Menu& Menu::set_mode_header(lv_menu_mode_header_t mode) {
   if (obj_) lv_menu_set_mode_header(obj_, mode);
+  return *this;
 }
 
-void Menu::set_mode_root_back_button(lv_menu_mode_root_back_button_t mode) {
+Menu& Menu::set_mode_root_back_button(lv_menu_mode_root_back_button_t mode) {
   if (obj_) lv_menu_set_mode_root_back_button(obj_, mode);
+  return *this;
 }
 
-void Menu::set_load_page_event(lv_obj_t* obj, MenuPage& page) {
+Menu& Menu::set_load_page_event(lv_obj_t* obj, MenuPage& page) {
   if (obj_) lv_menu_set_load_page_event(obj_, obj, page.raw());
+  return *this;
+}
+
+Menu& Menu::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+Menu& Menu::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+Menu& Menu::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+Menu& Menu::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+Menu& Menu::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+Menu& Menu::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+Menu& Menu::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+Menu& Menu::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
 }
 
 MenuPage Menu::get_cur_main_page() {
@@ -89,4 +129,4 @@ void Menu::clear_history() {
 
 }  // namespace lvgl
 
-#endif // LV_USE_MENU
+#endif  // LV_USE_MENU

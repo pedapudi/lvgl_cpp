@@ -34,6 +34,39 @@ Button MsgBox::add_close_button() {
   return Button(obj_ ? lv_msgbox_add_close_button(obj_) : nullptr);
 }
 
+MsgBox& MsgBox::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+MsgBox& MsgBox::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+MsgBox& MsgBox::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+MsgBox& MsgBox::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+MsgBox& MsgBox::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+MsgBox& MsgBox::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+MsgBox& MsgBox::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+MsgBox& MsgBox::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
+}
+
 MsgBoxHeader MsgBox::get_header() {
   return MsgBoxHeader(obj_ ? lv_msgbox_get_header(obj_) : nullptr);
 }
@@ -60,4 +93,4 @@ void MsgBox::close_async() {
 
 }  // namespace lvgl
 
-#endif // LV_USE_MSGBOX
+#endif  // LV_USE_MSGBOX

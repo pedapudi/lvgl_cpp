@@ -6,7 +6,6 @@
 #include "button_matrix.h"  // IWYU pragma: export
 #include "lvgl.h"           // IWYU pragma: export
 
-
 #if LV_USE_KEYBOARD
 /**
  * @file keyboard.h
@@ -38,12 +37,22 @@ class Keyboard : public ButtonMatrix {
    */
   explicit Keyboard(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  void set_textarea(lv_obj_t* ta);
-  void set_textarea(Object* ta);
-  void set_mode(lv_keyboard_mode_t mode);
-  void set_popovers(bool en);
-  void set_map(lv_keyboard_mode_t mode, const char* const map[],
-               const lv_buttonmatrix_ctrl_t ctrl_map[]);
+  Keyboard& set_textarea(lv_obj_t* ta);
+  Keyboard& set_textarea(Object* ta);
+  Keyboard& set_mode(lv_keyboard_mode_t mode);
+  Keyboard& set_popovers(bool en);
+  Keyboard& set_map(lv_keyboard_mode_t mode, const char* const map[],
+                    const lv_buttonmatrix_ctrl_t ctrl_map[]);
+
+  // Fluent API shadows
+  Keyboard& set_width(int32_t width);
+  Keyboard& set_height(int32_t height);
+  Keyboard& set_size(int32_t width, int32_t height);
+  Keyboard& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Keyboard& add_state(lv_state_t state);
+  Keyboard& remove_state(lv_state_t state);
+  Keyboard& add_flag(lv_obj_flag_t flag);
+  Keyboard& remove_flag(lv_obj_flag_t flag);
 
   lv_obj_t* get_textarea();
   lv_keyboard_mode_t get_mode();
@@ -66,6 +75,5 @@ class Keyboard : public ButtonMatrix {
  */
 }  // namespace lvgl
 
-
-#endif // LV_USE_KEYBOARD
+#endif  // LV_USE_KEYBOARD
 #endif  // LVGL_CPP_WIDGETS_KEYBOARD_H_

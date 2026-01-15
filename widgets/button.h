@@ -49,6 +49,12 @@ class Button : public Object {
    * @param ownership Ownership policy.
    */
   explicit Button(lv_obj_t* obj, Ownership ownership = Ownership::Default);
+
+  // Fluent API shadows
+  Button& set_width(int32_t width);
+  Button& set_height(int32_t height);
+  Button& set_size(int32_t width, int32_t height);
+  Button& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 };
 
 }  // namespace lvgl

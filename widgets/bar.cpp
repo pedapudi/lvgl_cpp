@@ -13,32 +13,72 @@ Bar::Bar(Object* parent, Ownership ownership)
 
 Bar::Bar(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
-void Bar::set_value(int32_t value, lv_anim_enable_t anim) {
+Bar& Bar::set_value(int32_t value, lv_anim_enable_t anim) {
   if (obj_) lv_bar_set_value(obj_, value, anim);
+  return *this;
 }
 
-void Bar::set_start_value(int32_t value, lv_anim_enable_t anim) {
+Bar& Bar::set_start_value(int32_t value, lv_anim_enable_t anim) {
   if (obj_) lv_bar_set_start_value(obj_, value, anim);
+  return *this;
 }
 
-void Bar::set_range(int32_t min, int32_t max) {
+Bar& Bar::set_range(int32_t min, int32_t max) {
   if (obj_) lv_bar_set_range(obj_, min, max);
+  return *this;
 }
 
-void Bar::set_min_value(int32_t min) {
+Bar& Bar::set_min_value(int32_t min) {
   if (obj_) lv_bar_set_min_value(obj_, min);
+  return *this;
 }
 
-void Bar::set_max_value(int32_t max) {
+Bar& Bar::set_max_value(int32_t max) {
   if (obj_) lv_bar_set_max_value(obj_, max);
+  return *this;
 }
 
-void Bar::set_mode(lv_bar_mode_t mode) {
+Bar& Bar::set_mode(lv_bar_mode_t mode) {
   if (obj_) lv_bar_set_mode(obj_, mode);
+  return *this;
 }
 
-void Bar::set_orientation(lv_bar_orientation_t orientation) {
+Bar& Bar::set_orientation(lv_bar_orientation_t orientation) {
   if (obj_) lv_bar_set_orientation(obj_, orientation);
+  return *this;
+}
+
+Bar& Bar::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+Bar& Bar::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+Bar& Bar::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+Bar& Bar::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+Bar& Bar::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+Bar& Bar::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+Bar& Bar::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+Bar& Bar::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
 }
 
 int32_t Bar::get_value() const { return obj_ ? lv_bar_get_value(obj_) : 0; }
@@ -73,4 +113,4 @@ Observer Bar::bind_value(Subject& subject) {
 
 }  // namespace lvgl
 
-#endif // LV_USE_BAR
+#endif  // LV_USE_BAR

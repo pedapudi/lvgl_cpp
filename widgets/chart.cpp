@@ -11,24 +11,62 @@ Chart::Chart(Object* parent, Ownership ownership)
 
 Chart::Chart(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
-void Chart::set_type(lv_chart_type_t type) {
+Chart& Chart::set_type(lv_chart_type_t type) {
   if (obj_) lv_chart_set_type(obj_, type);
+  return *this;
 }
 
-void Chart::set_point_count(uint32_t cnt) {
+Chart& Chart::set_point_count(uint32_t cnt) {
   if (obj_) lv_chart_set_point_count(obj_, cnt);
+  return *this;
 }
 
-void Chart::set_axis_range(lv_chart_axis_t axis, int32_t min, int32_t max) {
+Chart& Chart::set_axis_range(lv_chart_axis_t axis, int32_t min, int32_t max) {
   if (obj_) lv_chart_set_axis_range(obj_, axis, min, max);
+  return *this;
 }
 
-void Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
+Chart& Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
   if (obj_) lv_chart_set_div_line_count(obj_, hdiv, vdiv);
+  return *this;
 }
 
-void Chart::set_update_mode(lv_chart_update_mode_t update_mode) {
+Chart& Chart::set_update_mode(lv_chart_update_mode_t update_mode) {
   if (obj_) lv_chart_set_update_mode(obj_, update_mode);
+  return *this;
+}
+
+Chart& Chart::set_width(int32_t width) {
+  Object::set_width(width);
+  return *this;
+}
+Chart& Chart::set_height(int32_t height) {
+  Object::set_height(height);
+  return *this;
+}
+Chart& Chart::set_size(int32_t width, int32_t height) {
+  Object::set_size(width, height);
+  return *this;
+}
+Chart& Chart::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  Object::align(align, x_ofs, y_ofs);
+  return *this;
+}
+Chart& Chart::add_state(lv_state_t state) {
+  Object::add_state(state);
+  return *this;
+}
+Chart& Chart::remove_state(lv_state_t state) {
+  Object::remove_state(state);
+  return *this;
+}
+Chart& Chart::add_flag(lv_obj_flag_t flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+Chart& Chart::remove_flag(lv_obj_flag_t flag) {
+  Object::remove_flag(flag);
+  return *this;
 }
 
 lv_chart_type_t Chart::get_type() {
@@ -70,4 +108,4 @@ void Chart::refresh() {
 
 }  // namespace lvgl
 
-#endif // LV_USE_CHART
+#endif  // LV_USE_CHART
