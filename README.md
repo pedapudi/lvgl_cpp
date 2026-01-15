@@ -59,12 +59,10 @@ int main() {
     
     // Create a button on the screen
     lvgl::Button btn(&screen);
-    btn.set_size(100, 50);
-    btn.center();
+    btn.set_size(100, 50).center();
     
     // Create a label on the button
-    lvgl::Label label(&btn);
-    label.set_text("Click Me");
+    lvgl::Label label(&btn, "Click Me");
     label.center();
 
     // Event handling
@@ -112,6 +110,24 @@ All core widgets are supported in `lvgl_cpp/widgets/`.
     *   `Button()`: Create with default parent (active screen).
     *   `Button(Object* parent)`: Create as child of parent.
     *   `Button(lv_obj_t* obj)`: Wrap existing object.
+*   **Convenience Constructors**:
+    *   `Label(parent, "Text")`
+    *   `Checkbox(parent, "Label")`
+    *   `Slider(parent, min, max)`
+
+### Fluent API
+Setters return a reference to the object, enabling method chaining. Common `Object` methods like `set_width` and `align` are shadowed to return the specific widget type.
+
+```cpp
+lvgl::Button btn(&screen);
+btn.set_size(100, 50)
+   .align(LV_ALIGN_CENTER)
+   .add_state(LV_STATE_CHECKED);
+
+lvgl::Label label(&btn, "Click Me");
+label.set_long_mode(LV_LABEL_LONG_SCROLL_CIRCULAR)
+     .center();
+```
 
 ### Return Types
 Methods that create children return specific C++ wrappers by value (move semantics) rather than generic `Object`s.
