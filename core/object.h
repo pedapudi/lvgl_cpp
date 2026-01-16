@@ -2,6 +2,13 @@
 #define LVGL_CPP_CORE_OBJECT_H_
 
 #include <cstdint>
+
+// Fix for 'noreturn' macro collision from C headers (e.g. stdnoreturn.h
+// included by LVGL)
+#if defined(noreturn)
+#undef noreturn
+#endif
+
 #include <functional>
 #include <memory>
 
