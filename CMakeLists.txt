@@ -1,28 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-project(lvgl_cpp)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Find LVGL (Assuming it's in the parent directory)
-# In a real scenario, this might need more robust finding logic
-# or be added as a subdirectory.
-
-if(NOT TARGET lvgl)
-    # If LVGL is not already a target (e.g. from parent project), we include it here.
-    # This is primarily for building the tests or standalone development of lvgl_cpp.
-    
-    # Use the test configuration for internal builds/tests
-    set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
-    
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
-        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
-    else()
-        message(WARNING "LVGL not found at ../lvgl. Tests might fail to build.")
-    endif()
-endif()
-
-add_library(lvgl_cpp STATIC
+set(SOURCES
     core/object.cpp
     core/style.cpp
     misc/color.cpp
@@ -71,35 +49,56 @@ add_library(lvgl_cpp STATIC
     misc/animation.cpp
 )
 
-target_include_directories(lvgl_cpp PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/.. # Allow including via lvgl_cpp/...
-)
+if(IDF_TARGET)
+    idf_component_register(SRCS ${SOURCES}
+                        INCLUDE_DIRS "." ".."
+                        REQUIRES lvgl)
+else()
+    project(lvgl_cpp)
 
-# Link against LVGL
-# We assume the target 'lvgl' exists (e.g. from the main LVGL CMakeLists.txt)
-# If not, the user will need to link it manually.
-target_link_libraries(lvgl_cpp PUBLIC lvgl)
+    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(test_core_widgets tests/test_core_widgets.cpp)
-target_link_libraries(test_core_widgets PRIVATE lvgl_cpp)
+    # Find LVGL (Assuming it's in the parent directory)
+    if(NOT TARGET lvgl)
+        set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
+        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
+            add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
+        else()
+            message(WARNING "LVGL not found at ../lvgl. Tests might fail to build.")
+        endif()
+    endif()
 
-add_executable(test_input_widgets tests/test_input_widgets.cpp)
-target_link_libraries(test_input_widgets PRIVATE lvgl_cpp)
+    add_library(lvgl_cpp STATIC ${SOURCES})
 
-add_executable(test_complex_widgets tests/test_complex_widgets.cpp)
-target_link_libraries(test_complex_widgets PRIVATE lvgl_cpp)
+    target_include_directories(lvgl_cpp PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/.. 
+    )
 
-add_executable(test_visual_widgets tests/test_visual_widgets.cpp)
-target_link_libraries(test_visual_widgets PRIVATE lvgl_cpp)
+    target_link_libraries(lvgl_cpp PUBLIC lvgl)
 
-add_executable(observer_test tests/observer_test.cpp)
-target_link_libraries(observer_test PRIVATE lvgl_cpp)
-add_executable(test_ownership tests/test_ownership.cpp)
-target_link_libraries(test_ownership PRIVATE lvgl_cpp)
+    add_executable(test_core_widgets tests/test_core_widgets.cpp)
+    target_link_libraries(test_core_widgets PRIVATE lvgl_cpp)
 
-add_executable(test_animation tests/test_animation.cpp)
-target_link_libraries(test_animation PRIVATE lvgl_cpp)
+    add_executable(test_input_widgets tests/test_input_widgets.cpp)
+    target_link_libraries(test_input_widgets PRIVATE lvgl_cpp)
 
-add_executable(test_fluent_api tests/test_fluent_api.cpp)
-target_link_libraries(test_fluent_api PRIVATE lvgl_cpp)
+    add_executable(test_complex_widgets tests/test_complex_widgets.cpp)
+    target_link_libraries(test_complex_widgets PRIVATE lvgl_cpp)
+
+    add_executable(test_visual_widgets tests/test_visual_widgets.cpp)
+    target_link_libraries(test_visual_widgets PRIVATE lvgl_cpp)
+
+    add_executable(observer_test tests/observer_test.cpp)
+    target_link_libraries(observer_test PRIVATE lvgl_cpp)
+
+    add_executable(test_ownership tests/test_ownership.cpp)
+    target_link_libraries(test_ownership PRIVATE lvgl_cpp)
+
+    add_executable(test_animation tests/test_animation.cpp)
+    target_link_libraries(test_animation PRIVATE lvgl_cpp)
+
+    add_executable(test_fluent_api tests/test_fluent_api.cpp)
+    target_link_libraries(test_fluent_api PRIVATE lvgl_cpp)
+endif()
