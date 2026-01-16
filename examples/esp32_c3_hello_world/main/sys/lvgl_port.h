@@ -46,6 +46,7 @@ private:
   Config config_;
   std::unique_ptr<lvgl::Display> display_;
   std::vector<uint8_t> draw_buffer_;
+  std::vector<uint8_t> oled_buffer_;
   esp_lcd_panel_handle_t panel_handle_ = nullptr;
 
   SemaphoreHandle_t api_lock_ = nullptr;

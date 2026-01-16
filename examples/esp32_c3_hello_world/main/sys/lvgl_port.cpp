@@ -24,6 +24,7 @@ void LvglPort::init(esp_lcd_panel_handle_t panel_handle,
   size_t draw_buffer_sz =
       config_.h_res * config_.v_res / 8 + 8; // +8 for palette
   draw_buffer_.resize(draw_buffer_sz);
+  oled_buffer_.resize(config_.h_res * config_.v_res / 8);
 
   display_->set_color_format(LV_COLOR_FORMAT_I1);
   display_->set_buffers(draw_buffer_.data(), nullptr, draw_buffer_sz,
@@ -76,14 +77,14 @@ void LvglPort::flush_cb(lvgl::Display *disp, const lv_area_t *area,
   int y1 = area->y1;
   int y2 = area->y2;
 
-  static std::vector<uint8_t> s_oled_buffer(config_.h_res * config_.v_res / 8);
+  // static std::vector<uint8_t> s_oled_buffer(config_.h_res * config_.v_res / 8);
 
   for (int y = y1; y <= y2; y++) {
     for (int x = x1; x <= x2; x++) {
       // Logic from main.cpp
       bool chroma_color =
           (px_map[(hor_res >> 3) * y + (x >> 3)] & 1 << (7 - x % 8));
-      uint8_t *buf = s_oled_buffer.data() + hor_res * (y >> 3) + (x);
+      uint8_t *buf = oled_buffer_.data() + hor_res * (y >> 3) + (x);
       if (chroma_color) {
         (*buf) &= ~(1 << (y % 8));
       } else {
@@ -93,7 +94,7 @@ void LvglPort::flush_cb(lvgl::Display *disp, const lv_area_t *area,
   }
 
   esp_lcd_panel_draw_bitmap(panel_handle_, x1, y1, x2 + 1, y2 + 1,
-                            s_oled_buffer.data());
+                            oled_buffer_.data());
 }
 
 bool LvglPort::notify_flush_ready_trampoline(
@@ -124,6 +125,6 @@ void LvglPort::task_loop() {
     time_till_next_ms = std::max(time_till_next_ms, (uint32_t)1);
     time_till_next_ms = std::min(time_till_next_ms, (uint32_t)500);
 
-    usleep(1000 * time_till_next_ms);
+    vTaskDelay(pdMS_TO_TICKS(time_till_next_ms));
   }
 }
