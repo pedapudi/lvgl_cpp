@@ -2,7 +2,6 @@
 #define LVGL_CPP_DISPLAY_DISPLAY_H_
 
 #include <cstdint>
-
 #include <functional>
 
 #include "../core/object.h"  // IWYU pragma: export
@@ -42,8 +41,15 @@ class Display {
   int32_t get_original_vertical_resolution() const;
 
   // Rotation
-  void set_rotation(lv_display_rotation_t rotation);
-  lv_display_rotation_t get_rotation() const;
+  enum class Rotation {
+    ROT_0 = LV_DISPLAY_ROTATION_0,
+    ROT_90 = LV_DISPLAY_ROTATION_90,
+    ROT_180 = LV_DISPLAY_ROTATION_180,
+    ROT_270 = LV_DISPLAY_ROTATION_270
+  };
+
+  void set_rotation(Rotation rotation);
+  Rotation get_rotation() const;
   void set_matrix_rotation(bool enable);
   bool get_matrix_rotation() const;
 

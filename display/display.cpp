@@ -118,12 +118,15 @@ int32_t Display::get_original_vertical_resolution() const {
   return disp_ ? lv_display_get_original_vertical_resolution(disp_) : 0;
 }
 
-void Display::set_rotation(lv_display_rotation_t rotation) {
-  if (disp_) lv_display_set_rotation(disp_, rotation);
+void Display::set_rotation(Rotation rotation) {
+  if (disp_)
+    lv_display_set_rotation(disp_,
+                            static_cast<lv_display_rotation_t>(rotation));
 }
 
-lv_display_rotation_t Display::get_rotation() const {
-  return disp_ ? lv_display_get_rotation(disp_) : LV_DISPLAY_ROTATION_0;
+Display::Rotation Display::get_rotation() const {
+  return disp_ ? static_cast<Rotation>(lv_display_get_rotation(disp_))
+               : Rotation::ROT_0;
 }
 
 void Display::set_matrix_rotation(bool enable) {
