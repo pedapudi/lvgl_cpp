@@ -16,7 +16,7 @@ A modern, robust C++ wrapper for [LVGL (Light and Versatile Graphics Library)](h
 ### Prerequisites
 *   LVGL v9.x
 *   CMake 3.10+
-*   C++17 compliant compiler
+*   C++20 compliant compiler
 
 ### Integration
 1.  Add `lvgl_cpp` to your project structure (alongside `lvgl`).
@@ -82,17 +82,22 @@ int main() {
 The wrapper tracks ownership to prevent memory leaks and double-frees.
 
 ### Ownership Model
-1.  **Owned Objects** (`owning = true`):
-    *   Created when you construct a widget with a parent: `Button btn(&screen);`
+The wrapper uses an `Ownership` enum to define lifecycle management:
+
+1.  **Managed** (`Ownership::Managed`):
     *   The C++ wrapper *owns* the underlying `lv_obj_t`.
     *   When the C++ object goes out of scope, it **deletes** the LVGL object.
-    *   *Usage*: Valid for local/stack objects or `std::unique_ptr` member variables.
-    
-2.  **Non-Owned Objects** (Wrappers/Proxies):
-    *   Created when you wrap an existing `lv_obj_t*`: `Object obj(ptr);`
-    *   Also created when methods return objects: `Object tab = tabview.add_tab("Tab");`
-    *   The C++ wrapper acts as a **reference**.
+    *   *Usage*: Standard for local objects: `lvgl::Button btn(screen, lvgl::Ownership::Managed);` (or implicit via parent constructor).
+
+2.  **Unmanaged** (`Ownership::Unmanaged`):
+    *   The C++ wrapper acts as a weak reference or "view".
     *   Destruction of the C++ wrapper **does NOT** delete the LVGL object.
+    *   *Usage*: Wrappers around existing objects: `lvgl::Button btn(raw_ptr, lvgl::Ownership::Unmanaged);`
+
+3.  **Default** (`Ownership::Default`):
+    *   Intelligently selects the policy based on the constructor:
+        *   **New Child** (`Button(parent)`): Defaults to **Managed**.
+        *   **Wrapper** (`Button(ptr)`): Defaults to **Unmanaged**.
 
 ### The Problem of "Parent Deletion" vs "RAII"
 LVGL deletes children when a parent is deleted. The C++ wrapper handles this gracefully.
