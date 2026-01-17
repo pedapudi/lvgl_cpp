@@ -55,7 +55,7 @@ class Scale : public Object {
   Scale& set_width(int32_t width);
   Scale& set_height(int32_t height);
   Scale& set_size(int32_t width, int32_t height);
-  Scale& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Scale& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Scale& add_state(lv_state_t state);
   Scale& remove_state(lv_state_t state);
   Scale& add_flag(lv_obj_flag_t flag);

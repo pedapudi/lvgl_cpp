@@ -132,14 +132,15 @@ int32_t Object::get_height() const {
   return obj_ ? lv_obj_get_height(obj_) : 0;
 }
 
-void Object::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
-  if (obj_) lv_obj_align(obj_, align, x_ofs, y_ofs);
+void Object::align(Align align, int32_t x_ofs, int32_t y_ofs) {
+  if (obj_) lv_obj_align(obj_, static_cast<lv_align_t>(align), x_ofs, y_ofs);
 }
 
-void Object::align_to(const Object& base, lv_align_t align, int32_t x_ofs,
+void Object::align_to(const Object& base, Align align, int32_t x_ofs,
                       int32_t y_ofs) {
   if (obj_ && base.raw())
-    lv_obj_align_to(obj_, base.raw(), align, x_ofs, y_ofs);
+    lv_obj_align_to(obj_, base.raw(), static_cast<lv_align_t>(align), x_ofs,
+                    y_ofs);
 }
 
 void Object::center() {

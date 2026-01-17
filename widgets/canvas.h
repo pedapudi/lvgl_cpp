@@ -46,7 +46,7 @@ class Canvas : public Image {
   Canvas& set_width(int32_t width);
   Canvas& set_height(int32_t height);
   Canvas& set_size(int32_t width, int32_t height);
-  Canvas& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Canvas& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Canvas& add_state(lv_state_t state);
   Canvas& remove_state(lv_state_t state);
   Canvas& add_flag(lv_obj_flag_t flag);

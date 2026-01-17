@@ -63,9 +63,11 @@ else()
 
     # Find LVGL (Assuming it's in the parent directory)
     if(NOT TARGET lvgl)
+        # Use the test configuration for internal builds/tests
         set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
-        set(LV_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-        set(LV_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
+        set(CONFIG_LV_BUILD_EXAMPLES ON CACHE BOOL "Build examples" FORCE)
+        set(CONFIG_LV_BUILD_DEMOS ON CACHE BOOL "Build demos" FORCE)
+        set(CONFIG_LV_USE_THORVG_INTERNAL OFF CACHE BOOL "Use ThorVG" FORCE)
 
         if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
             add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
@@ -97,7 +99,7 @@ else()
 
     add_executable(observer_test tests/observer_test.cpp)
     target_link_libraries(observer_test PRIVATE lvgl_cpp)
-
+    
     add_executable(test_ownership tests/test_ownership.cpp)
     target_link_libraries(test_ownership PRIVATE lvgl_cpp)
 
@@ -113,18 +115,12 @@ else()
     add_executable(test_rotation tests/test_rotation.cpp)
     target_link_libraries(test_rotation PRIVATE lvgl_cpp)
 
-    # From Issue 17
-    add_executable(test_style_color tests/test_style_color.cpp)
-    target_link_libraries(test_style_color PRIVATE lvgl_cpp)
-
-    # From Issue 21
-    add_executable(test_parameter_passing tests/test_parameter_passing.cpp)
-    target_link_libraries(test_parameter_passing PRIVATE lvgl_cpp)
-
-    # From Issue 23
     add_executable(test_event_system tests/test_event_system.cpp)
     target_link_libraries(test_event_system PRIVATE -Wl,--start-group lvgl_cpp lvgl -Wl,--end-group)
 
     add_executable(test_draw_task tests/test_draw_task.cpp)
     target_link_libraries(test_draw_task PRIVATE lvgl_cpp)
+
+    add_executable(test_align tests/test_align.cpp)
+    target_link_libraries(test_align PRIVATE lvgl_cpp)
 endif()

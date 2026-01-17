@@ -60,7 +60,7 @@ class TabView : public Object {
   TabView& set_width(int32_t width);
   TabView& set_height(int32_t height);
   TabView& set_size(int32_t width, int32_t height);
-  TabView& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  TabView& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   TabView& add_state(lv_state_t state);
   TabView& remove_state(lv_state_t state);
   TabView& add_flag(lv_obj_flag_t flag);

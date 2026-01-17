@@ -90,7 +90,7 @@ class Arc : public Object {
   Arc& set_width(int32_t width);
   Arc& set_height(int32_t height);
   Arc& set_size(int32_t width, int32_t height);
-  Arc& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Arc& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Arc& add_state(lv_state_t state);
   Arc& remove_state(lv_state_t state);
   Arc& add_flag(lv_obj_flag_t flag);

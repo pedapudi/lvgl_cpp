@@ -42,7 +42,7 @@ class Switch : public Object {
   Switch& set_width(int32_t width);
   Switch& set_height(int32_t height);
   Switch& set_size(int32_t width, int32_t height);
-  Switch& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Switch& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Switch& add_state(lv_state_t state);
   Switch& remove_state(lv_state_t state);
   Switch& add_flag(lv_obj_flag_t flag);

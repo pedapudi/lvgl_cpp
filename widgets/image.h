@@ -61,7 +61,7 @@ class Image : public Object {
   Image& set_width(int32_t width);
   Image& set_height(int32_t height);
   Image& set_size(int32_t width, int32_t height);
-  Image& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Image& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Image& add_state(lv_state_t state);
   Image& remove_state(lv_state_t state);
   Image& add_flag(lv_obj_flag_t flag);

@@ -46,7 +46,7 @@ class AnimImage : public Image {
   AnimImage& set_width(int32_t width);
   AnimImage& set_height(int32_t height);
   AnimImage& set_size(int32_t width, int32_t height);
-  AnimImage& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  AnimImage& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   AnimImage& add_state(lv_state_t state);
   AnimImage& remove_state(lv_state_t state);
   AnimImage& add_flag(lv_obj_flag_t flag);

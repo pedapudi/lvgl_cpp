@@ -131,7 +131,7 @@ class Label : public Object {
   Label& set_width(int32_t width);
   Label& set_height(int32_t height);
   Label& set_size(int32_t width, int32_t height);
-  Label& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Label& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 
   /**
    * @brief Check if text recoloring is enabled.

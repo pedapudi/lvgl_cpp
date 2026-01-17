@@ -47,7 +47,7 @@ class Chart : public Object {
   Chart& set_width(int32_t width);
   Chart& set_height(int32_t height);
   Chart& set_size(int32_t width, int32_t height);
-  Chart& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Chart& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Chart& add_state(lv_state_t state);
   Chart& remove_state(lv_state_t state);
   Chart& add_flag(lv_obj_flag_t flag);

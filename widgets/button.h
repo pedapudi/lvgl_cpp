@@ -54,7 +54,7 @@ class Button : public Object {
   Button& set_width(int32_t width);
   Button& set_height(int32_t height);
   Button& set_size(int32_t width, int32_t height);
-  Button& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Button& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 };
 
 }  // namespace lvgl

@@ -44,7 +44,7 @@ class ImageButton : public Object {
   ImageButton& set_width(int32_t width);
   ImageButton& set_height(int32_t height);
   ImageButton& set_size(int32_t width, int32_t height);
-  ImageButton& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  ImageButton& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   ImageButton& add_state(lv_state_t state);
   ImageButton& remove_state(lv_state_t state);
   ImageButton& add_flag(lv_obj_flag_t flag);

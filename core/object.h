@@ -217,21 +217,49 @@ class Object {
   int32_t get_height() const;
 
   /**
+   * @brief Alignment options (wrapper for lv_align_t).
+   */
+  enum class Align {
+    Default = LV_ALIGN_DEFAULT,
+    TopLeft = LV_ALIGN_TOP_LEFT,
+    TopMid = LV_ALIGN_TOP_MID,
+    TopRight = LV_ALIGN_TOP_RIGHT,
+    BottomLeft = LV_ALIGN_BOTTOM_LEFT,
+    BottomMid = LV_ALIGN_BOTTOM_MID,
+    BottomRight = LV_ALIGN_BOTTOM_RIGHT,
+    LeftMid = LV_ALIGN_LEFT_MID,
+    RightMid = LV_ALIGN_RIGHT_MID,
+    Center = LV_ALIGN_CENTER,
+    OutTopLeft = LV_ALIGN_OUT_TOP_LEFT,
+    OutTopMid = LV_ALIGN_OUT_TOP_MID,
+    OutTopRight = LV_ALIGN_OUT_TOP_RIGHT,
+    OutBottomLeft = LV_ALIGN_OUT_BOTTOM_LEFT,
+    OutBottomMid = LV_ALIGN_OUT_BOTTOM_MID,
+    OutBottomRight = LV_ALIGN_OUT_BOTTOM_RIGHT,
+    OutLeftTop = LV_ALIGN_OUT_LEFT_TOP,
+    OutLeftMid = LV_ALIGN_OUT_LEFT_MID,
+    OutLeftBottom = LV_ALIGN_OUT_LEFT_BOTTOM,
+    OutRightTop = LV_ALIGN_OUT_RIGHT_TOP,
+    OutRightMid = LV_ALIGN_OUT_RIGHT_MID,
+    OutRightBottom = LV_ALIGN_OUT_RIGHT_BOTTOM,
+  };
+
+  /**
    * @brief Align the object within its parent.
-   * @param align One of `LV_ALIGN_...` constants.
+   * @param align One of `Align` constants.
    * @param x_ofs X offset from the alignment point.
    * @param y_ofs Y offset from the alignment point.
    */
-  void align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  void align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 
   /**
    * @brief Align the object to another object (base).
    * @param base The reference object to align to.
-   * @param align One of `LV_ALIGN_...` constants.
+   * @param align One of `Align` constants.
    * @param x_ofs X offset.
    * @param y_ofs Y offset.
    */
-  void align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
+  void align_to(const Object& base, Align align, int32_t x_ofs = 0,
                 int32_t y_ofs = 0);
 
   /**

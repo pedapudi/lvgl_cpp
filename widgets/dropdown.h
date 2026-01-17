@@ -53,7 +53,7 @@ class Dropdown : public Object {
   Dropdown& set_width(int32_t width);
   Dropdown& set_height(int32_t height);
   Dropdown& set_size(int32_t width, int32_t height);
-  Dropdown& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Dropdown& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Dropdown& add_state(lv_state_t state);
   Dropdown& remove_state(lv_state_t state);
   Dropdown& add_flag(lv_obj_flag_t flag);

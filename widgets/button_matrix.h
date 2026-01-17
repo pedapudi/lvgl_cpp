@@ -60,7 +60,7 @@ class ButtonMatrix : public Object {
   ButtonMatrix& set_width(int32_t width);
   ButtonMatrix& set_height(int32_t height);
   ButtonMatrix& set_size(int32_t width, int32_t height);
-  ButtonMatrix& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  ButtonMatrix& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   ButtonMatrix& add_state(lv_state_t state);
   ButtonMatrix& remove_state(lv_state_t state);
   ButtonMatrix& add_flag(lv_obj_flag_t flag);

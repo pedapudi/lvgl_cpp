@@ -52,7 +52,7 @@ class Spinner : public Object {
   Spinner& set_width(int32_t width);
   Spinner& set_height(int32_t height);
   Spinner& set_size(int32_t width, int32_t height);
-  Spinner& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Spinner& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Spinner& add_state(lv_state_t state);
   Spinner& remove_state(lv_state_t state);
   Spinner& add_flag(lv_obj_flag_t flag);

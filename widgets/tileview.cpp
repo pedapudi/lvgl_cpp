@@ -40,7 +40,7 @@ TileView& TileView::set_size(int32_t width, int32_t height) {
   Object::set_size(width, height);
   return *this;
 }
-TileView& TileView::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+TileView& TileView::align(Align align, int32_t x_ofs, int32_t y_ofs) {
   Object::align(align, x_ofs, y_ofs);
   return *this;
 }

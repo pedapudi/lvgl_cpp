@@ -48,7 +48,7 @@ class Keyboard : public ButtonMatrix {
   Keyboard& set_width(int32_t width);
   Keyboard& set_height(int32_t height);
   Keyboard& set_size(int32_t width, int32_t height);
-  Keyboard& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  Keyboard& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Keyboard& add_state(lv_state_t state);
   Keyboard& remove_state(lv_state_t state);
   Keyboard& add_flag(lv_obj_flag_t flag);

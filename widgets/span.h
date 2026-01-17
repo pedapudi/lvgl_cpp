@@ -51,7 +51,7 @@ class SpanGroup : public Object {
   SpanGroup& set_width(int32_t width);
   SpanGroup& set_height(int32_t height);
   SpanGroup& set_size(int32_t width, int32_t height);
-  SpanGroup& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  SpanGroup& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   SpanGroup& add_state(lv_state_t state);
   SpanGroup& remove_state(lv_state_t state);
   SpanGroup& add_flag(lv_obj_flag_t flag);

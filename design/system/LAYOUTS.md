@@ -1,32 +1,9 @@
-# Style System Design
+# Layout System Design
 
 ## 1. Overview
-The Layouts & System design focuses on replacing raw enums and untyped arrays with strongly typed, readable builders.
+The Layouts design focuses on declaration helpers for Flex and Grid layouts.
 
-## 2. Style Builder
-A fluent builder for `lv_style_t`.
-
-```cpp
-class Style {
-public:
-    Style(); // inits lv_style_t
-    
-    Style& bg_color(Color c);
-    Style& bg_opa(Opacity o);
-    Style& border_width(int32_t w);
-    Style& border_color(Color c);
-    Style& radius(int32_t r);
-    
-    // ... all 100+ properties
-    
-    const lv_style_t* raw() const;
-};
-```
-
-## 3. Layouts
-LVGL uses `lv_flex_flow_t` and `lv_grid_dsc_t` arrays.
-
-### 3.1. Flex Layout
+## 2. Flex Layout
 ```cpp
 struct Flex {
     static const Flex Row() { return Flex(LV_FLEX_FLOW_ROW); }
@@ -40,7 +17,7 @@ struct Flex {
 obj.layout(Flex::Row().gap(10).center());
 ```
 
-### 3.2. Grid Layout
+## 3. Grid Layout
 Grids require static arrays for track descriptions. This is tricky in C++.
 
 **Proposal**: A helper that manages `static` storage for simple grids or wraps `std::vector` for dynamic ones (aware of lifetime issues).
@@ -52,13 +29,3 @@ struct Grid {
     static void apply(Object& obj, const int32_t (&cols)[C], const int32_t (&rows)[R]);
 };
 ```
-
-## 4. Drivers (Display & InDev)
-Wrappers for `lv_display_t` and `lv_indev_t`.
-
-### 4.1. Display
-*   `Display::create(w, h)`
-*   `Display::set_buffers(...)`
-*   `Display::set_flush_cb(...)`
-
-This is critical for the ESP32 setup code.

@@ -34,7 +34,7 @@ Spinner& Spinner::set_size(int32_t width, int32_t height) {
   Object::set_size(width, height);
   return *this;
 }
-Spinner& Spinner::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+Spinner& Spinner::align(Align align, int32_t x_ofs, int32_t y_ofs) {
   Object::align(align, x_ofs, y_ofs);
   return *this;
 }

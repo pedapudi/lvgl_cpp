@@ -52,7 +52,7 @@ class TileView : public Object {
   TileView& set_width(int32_t width);
   TileView& set_height(int32_t height);
   TileView& set_size(int32_t width, int32_t height);
-  TileView& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+  TileView& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   TileView& add_state(lv_state_t state);
   TileView& remove_state(lv_state_t state);
   TileView& add_flag(lv_obj_flag_t flag);
