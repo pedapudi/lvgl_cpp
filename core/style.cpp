@@ -6,13 +6,11 @@ Style::Style() { lv_style_init(&style_); }
 
 Style::~Style() { lv_style_reset(&style_); }
 
-void Style::set_bg_color(lv_color_t color) {
-  lv_style_set_bg_color(&style_, color);
-}
+void Style::set_bg_color(Color color) { lv_style_set_bg_color(&style_, color); }
 
 void Style::set_bg_opa(lv_opa_t opa) { lv_style_set_bg_opa(&style_, opa); }
 
-void Style::set_text_color(lv_color_t color) {
+void Style::set_text_color(Color color) {
   lv_style_set_text_color(&style_, color);
 }
 
