@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "lvgl.h"  // IWYU pragma: export
+#include "misc/color.h"  // IWYU pragma: export
 
 namespace lvgl {
 
@@ -26,7 +26,7 @@ class Style {
    * @brief Set the background color.
    * @param color The color.
    */
-  void set_bg_color(lv_color_t color);
+  void set_bg_color(Color color);
 
   /**
    * @brief Set the background opacity.
@@ -38,7 +38,7 @@ class Style {
    * @brief Set the text color.
    * @param color The color.
    */
-  void set_text_color(lv_color_t color);
+  void set_text_color(Color color);
 
   /**
    * @brief Set padding on all sides.
