@@ -103,3 +103,6 @@ target_link_libraries(test_animation PRIVATE lvgl_cpp)
 
 add_executable(test_fluent_api tests/test_fluent_api.cpp)
 target_link_libraries(test_fluent_api PRIVATE lvgl_cpp)
+
+add_executable(test_rotation tests/test_rotation.cpp)
+target_link_libraries(test_rotation PRIVATE lvgl_cpp)

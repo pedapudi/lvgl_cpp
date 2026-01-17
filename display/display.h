@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <vector>
 
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
@@ -41,8 +42,15 @@ class Display {
   int32_t get_original_vertical_resolution() const;
 
   // Rotation
-  void set_rotation(lv_display_rotation_t rotation);
-  lv_display_rotation_t get_rotation() const;
+  enum class Rotation {
+    ROT_0 = LV_DISPLAY_ROTATION_0,
+    ROT_90 = LV_DISPLAY_ROTATION_90,
+    ROT_180 = LV_DISPLAY_ROTATION_180,
+    ROT_270 = LV_DISPLAY_ROTATION_270
+  };
+
+  void set_rotation(Rotation rotation);
+  Rotation get_rotation() const;
   void set_matrix_rotation(bool enable);
   bool get_matrix_rotation() const;
 
@@ -105,8 +113,16 @@ class Display {
 
   lv_display_t* raw() const { return disp_; }
 
+  // Utilities
+  void clear_active_screen();
+  void auto_configure_buffers(
+      lv_display_render_mode_t mode = LV_DISPLAY_RENDER_MODE_PARTIAL,
+      bool double_buffer = false);
+
  private:
   lv_display_t* disp_;
+  std::vector<uint8_t> buf1_;
+  std::vector<uint8_t> buf2_;
 };
 
 }  // namespace lvgl
