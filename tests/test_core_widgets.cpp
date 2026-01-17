@@ -4,6 +4,7 @@
 
 #include "../core/object.h"
 #include "../core/style.h"
+#include "../display/display.h"
 #include "../misc/color.h"
 #include "../widgets/arc.h"
 #include "../widgets/bar.h"
@@ -18,8 +19,8 @@
 #include "lvgl.h"
 
 // Mock event handler
-static void event_handler(lv_event_t* e) {
-  lv_event_code_t code = lv_event_get_code(e);
+static void event_handler(lvgl::Event& e) {
+  lv_event_code_t code = e.get_code();
   if (code == LV_EVENT_CLICKED) {
     std::cout << "Clicked" << std::endl;
   } else if (code == LV_EVENT_VALUE_CHANGED) {
@@ -92,15 +93,17 @@ void test_bar_1() {
 // Slider Example 1: Simple Slider
 void test_slider_1() {
   std::cout << "Testing Slider Example 1..." << std::endl;
-  lvgl::Slider slider;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Slider slider(&screen);
   slider.center();
-  // Event callback registration logic would be here
+
   // slider.add_event_cb(slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
   slider.set_style_anim_duration(2000, 0);
 
-  lvgl::Label label;
+  lvgl::Label label(&screen);
+
   label.set_text("0%");
-  label.align_to(&slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+  label.align_to(slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
   std::cout << "Slider Example 1 Passed" << std::endl;
 }
 
@@ -186,15 +189,16 @@ void test_arc_1() {
 // Image Example 1: Basic Usage
 void test_image_1() {
   std::cout << "Testing Image Example 1..." << std::endl;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
   // We don't have the asset img_cogwheel_argb easily available, using Symbol
   // for API test
-  lvgl::Image img1;
+  lvgl::Image img1(&screen);
   img1.set_src(LV_SYMBOL_OK " Accept");
   img1.align(LV_ALIGN_CENTER, 0, 0);
 
-  lvgl::Image img2;
+  lvgl::Image img2(&screen);
   img2.set_src(LV_SYMBOL_CLOSE);
-  img2.align_to(&img1, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
+  img2.align_to(img1, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
 
   // Test API for opacity/recolor from Example 2
   img2.set_style_image_recolor_opa(LV_OPA_50, 0);
@@ -230,6 +234,7 @@ int main() {
   // However, wrappers assert valid objects usually.
   // Assuming linked against a headless or dummy display driver setup or just
   // object creation works.
+  lvgl::Display display = lvgl::Display::create(800, 600);
 
   test_button_1();
   test_label_1();

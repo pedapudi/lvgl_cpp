@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 
+#include "event.h"
 #include "lvgl.h"  // IWYU pragma: export
 
 /**
@@ -59,6 +60,7 @@
 namespace lvgl {
 
 class Style;  // Forward declaration
+class Event;  // Forward declaration
 
 /**
  * @brief Base class for all LVGL objects.
@@ -281,7 +283,7 @@ class Object {
   /**
    * @brief Functional event callback type.
    */
-  using EventCallback = std::function<void(lv_event_t*)>;
+  using EventCallback = std::function<void(Event&)>;
 
   /**
    * @brief Add a functional event callback.

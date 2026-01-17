@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../core/object.h"
+#include "../display/display.h"
 #include "../widgets/button.h"
 #include "../widgets/button_matrix.h"
 #include "../widgets/label.h"
@@ -175,6 +176,8 @@ void test_btnmatrix_1() {
 
 int main() {
   lv_init();
+  lvgl::Display display = lvgl::Display::create(800, 480);
+
   test_list_1();
   test_table_1();
   test_tabview_1();

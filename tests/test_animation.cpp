@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+#include "../display/display.h"
 #include "../misc/animation.h"
 #include "../widgets/button.h"
 #include "lvgl.h"
@@ -134,7 +135,8 @@ void test_manual_stop() {
 void test_object_oriented_api() {
   std::cout << "Testing Object Oriented API..." << std::endl;
   // Create a dummy object (Button)
-  lvgl::Button obj;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Button obj(&screen);
   bool callback_called = false;
 
   {
@@ -195,9 +197,11 @@ void test_object_oriented_api() {
 
 void test_convenience_methods() {
   std::cout << "Testing Convenience Methods (set_exec_cb_y)..." << std::endl;
-  lvgl::Button obj;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Button obj(&screen);
   // Position it at 0 initially
   obj.set_y(0);
+  obj.update_layout();  // Ensure initial state
 
   // Animate Y to 100
   lvgl::Animation(obj)
@@ -208,10 +212,12 @@ void test_convenience_methods() {
       .start();
 
   // Simulate
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < 20; ++i) {  // Increased loop count
     lv_tick_inc(10);
     lv_timer_handler();
   }
+
+  obj.update_layout();  // Update layout to reflect changes
 
   // Check if Y changed
   if (obj.get_y() > 0) {
@@ -224,6 +230,7 @@ void test_convenience_methods() {
 
   // Checking Object::set_x/set_y directly
   obj.set_x(55);
+  obj.update_layout();
   if (obj.get_x() == 55) {
     std::cout << "PASS: Object::set_x works." << std::endl;
   } else {
@@ -234,7 +241,8 @@ void test_convenience_methods() {
 
 void test_path_callback_lambda() {
   std::cout << "Testing Lambda Path Callback..." << std::endl;
-  lvgl::Button obj;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Button obj(&screen);
   obj.set_y(0);
 
   bool path_called = false;
@@ -254,7 +262,7 @@ void test_path_callback_lambda() {
       .start();
 
   // Simulate
-  for (int i = 0; i < 5; ++i) {
+  for (int i = 0; i < 10; ++i) {
     lv_tick_inc(25);
     lv_timer_handler();
   }
@@ -291,20 +299,25 @@ void test_abstract_callbacks() {
     }
   };
 
-  lvgl::Button obj;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Button obj(&screen);
   MyExec exec_cb;
   MyPath path_cb;
+
+  lvgl::Animation::ExecCallback lambda_exec =
+      [&exec_cb](void* var, int32_t val) { exec_cb(var, val); };
+  lvgl::Animation::PathCallback lambda_path =
+      [&path_cb](const lv_anim_t* a) -> int32_t { return path_cb(a); };
 
   lvgl::Animation(obj)
       .set_values(0, 255)
       .set_duration(50)
-      .set_exec_cb([&exec_cb](void* var, int32_t val) { exec_cb(var, val); })
-      .set_path_cb(
-          [&path_cb](const lv_anim_t* a) -> int32_t { return path_cb(a); })
+      .set_exec_cb(lambda_exec)
+      .set_path_cb(lambda_path)
       .start();
 
   // Simulate
-  for (int i = 0; i < 5; ++i) {
+  for (int i = 0; i < 10; ++i) {
     lv_tick_inc(10);
     lv_timer_handler();
   }
@@ -320,6 +333,7 @@ void test_abstract_callbacks() {
 
 int main() {
   lv_init();
+  lvgl::Display display = lvgl::Display::create(800, 480);
   test_object_oriented_api();
   test_lambda_callbacks();
   test_manual_stop();

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 set(SOURCES
     core/object.cpp
+    core/event.cpp
     core/style.cpp
     misc/color.cpp
     font/font.cpp
@@ -9,6 +10,7 @@ set(SOURCES
     core/observer.cpp
     draw/image_decoder.cpp
     draw/draw.cpp
+    draw/draw_task.cpp
     
     widgets/button.cpp
     widgets/label.cpp
@@ -115,7 +117,14 @@ else()
     add_executable(test_style_color tests/test_style_color.cpp)
     target_link_libraries(test_style_color PRIVATE lvgl_cpp)
 
-    # From Issue 21 (via unknown merge path but present in conflict)
+    # From Issue 21
     add_executable(test_parameter_passing tests/test_parameter_passing.cpp)
     target_link_libraries(test_parameter_passing PRIVATE lvgl_cpp)
+
+    # From Issue 23
+    add_executable(test_event_system tests/test_event_system.cpp)
+    target_link_libraries(test_event_system PRIVATE -Wl,--start-group lvgl_cpp lvgl -Wl,--end-group)
+
+    add_executable(test_draw_task tests/test_draw_task.cpp)
+    target_link_libraries(test_draw_task PRIVATE lvgl_cpp)
 endif()
