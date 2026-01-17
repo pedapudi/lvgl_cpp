@@ -8,6 +8,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # In a real scenario, this might need more robust finding logic
 # or be added as a subdirectory.
 
+if(NOT TARGET lvgl)
+    # If LVGL is not already a target (e.g. from parent project), we include it here.
+    # This is primarily for building the tests or standalone development of lvgl_cpp.
+    
+    # Use the test configuration for internal builds/tests
+    # Use the test configuration for internal builds/tests
+    set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
+    set(CONFIG_LV_BUILD_EXAMPLES ON CACHE BOOL "Build examples" FORCE)
+    set(CONFIG_LV_BUILD_DEMOS ON CACHE BOOL "Build demos" FORCE)
+    set(CONFIG_LV_USE_THORVG_INTERNAL OFF CACHE BOOL "Use ThorVG" FORCE)
     
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
         add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
@@ -22,6 +32,7 @@ target_link_libraries(test_group PRIVATE lvgl_cpp)
 
 add_library(lvgl_cpp STATIC
     core/object.cpp
+    core/event.cpp
     core/style.cpp
     misc/color.cpp
     font/font.cpp
@@ -29,6 +40,7 @@ add_library(lvgl_cpp STATIC
     core/observer.cpp
     draw/image_decoder.cpp
     draw/draw.cpp
+    draw/draw_task.cpp
     
     widgets/button.cpp
     widgets/label.cpp
@@ -104,3 +116,10 @@ target_link_libraries(test_fluent_api PRIVATE lvgl_cpp)
 
 add_executable(test_rotation tests/test_rotation.cpp)
 target_link_libraries(test_rotation PRIVATE lvgl_cpp)
+
+add_executable(test_event_system tests/test_event_system.cpp)
+target_link_libraries(test_event_system PRIVATE -Wl,--start-group lvgl_cpp lvgl -Wl,--end-group)
+
+add_executable(test_draw_task tests/test_draw_task.cpp)
+target_link_libraries(test_draw_task PRIVATE lvgl_cpp)
+

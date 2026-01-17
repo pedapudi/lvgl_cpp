@@ -1,0 +1,53 @@
+#include <cassert>
+#include <iostream>
+
+#include "../core/event.h"
+#include "../core/object.h"
+#include "../widgets/button.h"
+#include "lvgl.h"
+
+using namespace lvgl;
+
+static void test_event_basic() {
+  std::cout << "Testing basic event..." << std::endl;
+  Object obj;
+  bool called = false;
+
+  obj.add_event_cb(LV_EVENT_CLICKED, [&](Event& e) {
+    called = true;
+    assert(e.get_code() == LV_EVENT_CLICKED);
+    assert(e.get_target().raw() == obj.raw());
+    // Current target should also be obj in this simple case
+    assert(e.get_current_target().raw() == obj.raw());
+  });
+
+  lv_obj_send_event(obj.raw(), LV_EVENT_CLICKED, nullptr);
+  assert(called);
+  std::cout << "Basic event passed." << std::endl;
+}
+
+static void test_event_param() {
+  std::cout << "Testing event param..." << std::endl;
+  Object obj;
+  int value = 42;
+  bool called = false;
+
+  obj.add_event_cb(LV_EVENT_VALUE_CHANGED, [&](Event& e) {
+    called = true;
+    int* p = e.get_param<int>();
+    assert(p != nullptr);
+    assert(*p == 42);
+  });
+
+  lv_obj_send_event(obj.raw(), LV_EVENT_VALUE_CHANGED, &value);
+  assert(called);
+  std::cout << "Event param passed." << std::endl;
+}
+
+int main() {
+  lv_init();
+  test_event_basic();
+  test_event_param();
+  std::cout << "All Event System tests passed." << std::endl;
+  return 0;
+}
