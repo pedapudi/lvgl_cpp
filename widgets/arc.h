@@ -32,7 +32,7 @@ class Arc : public Object {
    * @brief Create a Arc with a parent.
    * @param parent The parent object.
    */
-  explicit Arc(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Arc(Object& parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.

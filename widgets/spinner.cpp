@@ -4,13 +4,13 @@
 
 namespace lvgl {
 
-Spinner::Spinner() : Spinner((Object*)nullptr) {}
+Spinner::Spinner() : Object(lv_spinner_create(nullptr), Ownership::Managed) {}
 
-Spinner::Spinner(Object* parent, Ownership ownership)
-    : Object(lv_spinner_create(parent ? parent->raw() : nullptr), ownership) {}
+Spinner::Spinner(Object& parent, Ownership ownership)
+    : Object(lv_spinner_create(parent.raw()), ownership) {}
 
 // Correction: implementing correct logic.
-Spinner::Spinner(Object* parent, uint32_t time, uint32_t arc_length)
+Spinner::Spinner(Object& parent, uint32_t time, uint32_t arc_length)
     : Spinner(parent) {
   set_anim_params(time, arc_length);
 }

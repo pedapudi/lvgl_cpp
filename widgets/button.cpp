@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Button::Button() : Button((Object*)nullptr) {}
+Button::Button() : Object(lv_button_create(nullptr), Ownership::Managed) {}
 
-Button::Button(Object* parent, Ownership ownership)
-    : Object(lv_button_create(parent ? parent->raw() : nullptr), ownership) {}
+Button::Button(Object& parent, Ownership ownership)
+    : Object(lv_button_create(parent.raw()), ownership) {}
 
 Button::Button(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

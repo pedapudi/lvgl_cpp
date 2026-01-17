@@ -114,4 +114,8 @@ else()
     # From Issue 17
     add_executable(test_style_color tests/test_style_color.cpp)
     target_link_libraries(test_style_color PRIVATE lvgl_cpp)
+
+    # From Issue 21 (via unknown merge path but present in conflict)
+    add_executable(test_parameter_passing tests/test_parameter_passing.cpp)
+    target_link_libraries(test_parameter_passing PRIVATE lvgl_cpp)
 endif()

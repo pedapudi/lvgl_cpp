@@ -4,12 +4,12 @@
 
 namespace lvgl {
 
-Image::Image() : Image((Object*)nullptr) {}
+Image::Image() : Object(lv_image_create(nullptr), Ownership::Managed) {}
 
-Image::Image(Object* parent, Ownership ownership)
-    : Object(lv_image_create(parent ? parent->raw() : nullptr), ownership) {}
+Image::Image(Object& parent, Ownership ownership)
+    : Object(lv_image_create(parent.raw()), ownership) {}
 
-Image::Image(Object* parent, const void* src) : Image(parent) { set_src(src); }
+Image::Image(Object& parent, const void* src) : Image(parent) { set_src(src); }
 
 Image::Image(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

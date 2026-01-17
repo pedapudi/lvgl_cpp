@@ -6,10 +6,10 @@
 
 namespace lvgl {
 
-Bar::Bar() : Bar((Object*)nullptr) {}
+Bar::Bar() : Object(lv_bar_create(nullptr), Ownership::Managed) {}
 
-Bar::Bar(Object* parent, Ownership ownership)
-    : Object(lv_bar_create(parent ? parent->raw() : nullptr), ownership) {}
+Bar::Bar(Object& parent, Ownership ownership)
+    : Object(lv_bar_create(parent.raw()), ownership) {}
 
 Bar::Bar(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

@@ -30,14 +30,14 @@ class Image : public Object {
    * @brief Create a Image with a parent.
    * @param parent The parent object.
    */
-  explicit Image(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Image(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a Image on the active screen with source.
    * @param parent The parent object.
    * @param src The image source (path or pointer).
    */
-  Image(Object* parent, const void* src);
+  Image(Object& parent, const void* src);
 
   /**
    * @brief Wrap an existing lv_obj object.

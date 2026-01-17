@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Chart::Chart() : Chart((Object*)nullptr) {}
+Chart::Chart() : Object(lv_chart_create(nullptr), Ownership::Managed) {}
 
-Chart::Chart(Object* parent, Ownership ownership)
-    : Object(lv_chart_create(parent ? parent->raw() : nullptr), ownership) {}
+Chart::Chart(Object& parent, Ownership ownership)
+    : Object(lv_chart_create(parent.raw()), ownership) {}
 
 Chart::Chart(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

@@ -41,7 +41,7 @@ class Button : public Object {
    * @param parent The parent object.
    * @param ownership Ownership policy.
    */
-  explicit Button(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Button(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Wrap an existing lv_button object.

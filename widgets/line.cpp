@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Line::Line() : Line((Object*)nullptr) {}
+Line::Line() : Object(lv_line_create(nullptr), Ownership::Managed) {}
 
-Line::Line(Object* parent, Ownership ownership)
-    : Object(lv_line_create(parent ? parent->raw() : nullptr), ownership) {}
+Line::Line(Object& parent, Ownership ownership)
+    : Object(lv_line_create(parent.raw()), ownership) {}
 
 Line::Line(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

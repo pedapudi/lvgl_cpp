@@ -30,7 +30,7 @@ class Spinner : public Object {
    * @brief Create a Spinner with a parent.
    * @param parent The parent object.
    */
-  explicit Spinner(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Spinner(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a Spinner with specified animation parameters.
@@ -38,7 +38,7 @@ class Spinner : public Object {
    * @param time Spin time in milliseconds.
    * @param arc_length Length of the arc in degrees.
    */
-  Spinner(Object* parent, uint32_t time, uint32_t arc_length);
+  Spinner(Object& parent, uint32_t time, uint32_t arc_length);
 
   /**
    * @brief Wrap an existing lv_obj object.

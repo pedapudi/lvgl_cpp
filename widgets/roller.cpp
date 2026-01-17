@@ -6,10 +6,10 @@
 
 namespace lvgl {
 
-Roller::Roller() : Roller((Object*)nullptr) {}
+Roller::Roller() : Object(lv_roller_create(nullptr), Ownership::Managed) {}
 
-Roller::Roller(Object* parent, Ownership ownership)
-    : Object(lv_roller_create(parent ? parent->raw() : nullptr), ownership) {}
+Roller::Roller(Object& parent, Ownership ownership)
+    : Object(lv_roller_create(parent.raw()), ownership) {}
 
 Roller::Roller(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

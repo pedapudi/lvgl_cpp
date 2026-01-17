@@ -28,21 +28,21 @@ class Checkbox : public Object {
    * @brief Create a Checkbox with a parent.
    * @param parent The parent object.
    */
-  explicit Checkbox(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Checkbox(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a Checkbox with a parent and text.
    * @param parent The parent object.
    * @param text The initial text.
    */
-  Checkbox(Object* parent, const char* text);
+  Checkbox(Object& parent, const char* text);
 
   /**
    * @brief Create a Checkbox with a parent and text.
    * @param parent The parent object.
    * @param text The initial text.
    */
-  Checkbox(Object* parent, const std::string& text);
+  Checkbox(Object& parent, const std::string& text);
 
   /**
    * @brief Wrap an existing lv_obj object.

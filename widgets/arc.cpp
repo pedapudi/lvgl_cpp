@@ -6,10 +6,10 @@
 
 namespace lvgl {
 
-Arc::Arc() : Arc((Object*)nullptr) {}
+Arc::Arc() : Object(lv_arc_create(nullptr), Ownership::Managed) {}
 
-Arc::Arc(Object* parent, Ownership ownership)
-    : Object(lv_arc_create(parent ? parent->raw() : nullptr), ownership) {}
+Arc::Arc(Object& parent, Ownership ownership)
+    : Object(lv_arc_create(parent.raw()), ownership) {}
 
 Arc::Arc(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

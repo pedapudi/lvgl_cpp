@@ -32,21 +32,21 @@ class Textarea : public Object {
    * @brief Create a Textarea with a parent.
    * @param parent The parent object.
    */
-  explicit Textarea(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Textarea(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a Textarea with a parent and text.
    * @param parent The parent object.
    * @param text The initial text.
    */
-  Textarea(Object* parent, const char* text);
+  Textarea(Object& parent, const char* text);
 
   /**
    * @brief Create a Textarea with a parent and text.
    * @param parent The parent object.
    * @param text The initial text.
    */
-  Textarea(Object* parent, const std::string& text);
+  Textarea(Object& parent, const std::string& text);
 
   /**
    * @brief Wrap an existing lv_obj object.

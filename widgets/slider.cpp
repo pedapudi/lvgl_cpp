@@ -6,12 +6,12 @@
 
 namespace lvgl {
 
-Slider::Slider() : Slider((Object*)nullptr) {}
+Slider::Slider() : Bar(lv_slider_create(nullptr), Ownership::Managed) {}
 
-Slider::Slider(Object* parent, Ownership ownership)
-    : Bar(lv_slider_create(parent ? parent->raw() : nullptr)) {}
+Slider::Slider(Object& parent, Ownership ownership)
+    : Bar(lv_slider_create(parent.raw())) {}
 
-Slider::Slider(Object* parent, int32_t min, int32_t max) : Slider(parent) {
+Slider::Slider(Object& parent, int32_t min, int32_t max) : Slider(parent) {
   set_range(min, max);
 }
 

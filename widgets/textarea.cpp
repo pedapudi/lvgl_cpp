@@ -6,16 +6,17 @@
 
 namespace lvgl {
 
-Textarea::Textarea() : Textarea((Object*)nullptr) {}
+Textarea::Textarea()
+    : Object(lv_textarea_create(nullptr), Ownership::Managed) {}
 
-Textarea::Textarea(Object* parent, Ownership ownership)
-    : Object(lv_textarea_create(parent ? parent->raw() : nullptr), ownership) {}
+Textarea::Textarea(Object& parent, Ownership ownership)
+    : Object(lv_textarea_create(parent.raw()), ownership) {}
 
-Textarea::Textarea(Object* parent, const char* text) : Textarea(parent) {
+Textarea::Textarea(Object& parent, const char* text) : Textarea(parent) {
   set_text(text);
 }
 
-Textarea::Textarea(Object* parent, const std::string& text) : Textarea(parent) {
+Textarea::Textarea(Object& parent, const std::string& text) : Textarea(parent) {
   set_text(text.c_str());
 }
 

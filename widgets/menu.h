@@ -50,7 +50,7 @@ class Menu : public Object {
    * @brief Create a Menu with a parent.
    * @param parent The parent object.
    */
-  explicit Menu(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Menu(Object& parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.

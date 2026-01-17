@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Menu::Menu() : Menu((Object*)nullptr) {}
+Menu::Menu() : Object(lv_menu_create(nullptr), Ownership::Managed) {}
 
-Menu::Menu(Object* parent, Ownership ownership)
-    : Object(lv_menu_create(parent ? parent->raw() : nullptr), ownership) {}
+Menu::Menu(Object& parent, Ownership ownership)
+    : Object(lv_menu_create(parent.raw()), ownership) {}
 
 Menu::Menu(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

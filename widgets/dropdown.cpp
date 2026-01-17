@@ -6,10 +6,11 @@
 
 namespace lvgl {
 
-Dropdown::Dropdown() : Dropdown((Object*)nullptr) {}
+Dropdown::Dropdown()
+    : Object(lv_dropdown_create(nullptr), Ownership::Managed) {}
 
-Dropdown::Dropdown(Object* parent, Ownership ownership)
-    : Object(lv_dropdown_create(parent ? parent->raw() : nullptr), ownership) {}
+Dropdown::Dropdown(Object& parent, Ownership ownership)
+    : Object(lv_dropdown_create(parent.raw()), ownership) {}
 
 Dropdown::Dropdown(lv_obj_t* obj, Ownership ownership)
     : Object(obj, ownership) {}

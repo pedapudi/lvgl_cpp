@@ -30,7 +30,7 @@ class Spinbox : public Textarea {
    * @brief Create a Spinbox with a parent.
    * @param parent The parent object.
    */
-  explicit Spinbox(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Spinbox(Object& parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
