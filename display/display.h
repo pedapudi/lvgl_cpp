@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <vector>
 
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
@@ -112,8 +113,16 @@ class Display {
 
   lv_display_t* raw() const { return disp_; }
 
+  // Utilities
+  void clear_active_screen();
+  void auto_configure_buffers(
+      lv_display_render_mode_t mode = LV_DISPLAY_RENDER_MODE_PARTIAL,
+      bool double_buffer = false);
+
  private:
   lv_display_t* disp_;
+  std::vector<uint8_t> buf1_;
+  std::vector<uint8_t> buf2_;
 };
 
 }  // namespace lvgl

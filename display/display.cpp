@@ -305,4 +305,42 @@ void Display::delete_refr_timer() {
   if (disp_) lv_display_delete_refr_timer(disp_);
 }
 
+void Display::clear_active_screen() {
+  if (disp_) lv_obj_clean(lv_display_get_screen_active(disp_));
+}
+
+void Display::auto_configure_buffers(lv_display_render_mode_t mode,
+                                     bool double_buffer) {
+  if (!disp_) return;
+
+  uint32_t hor_res = get_horizontal_resolution();
+  uint32_t ver_res = get_vertical_resolution();
+  lv_color_format_t cf = get_color_format();
+
+  if (hor_res == 0 || ver_res == 0) return;
+
+  uint32_t stride = lv_draw_buf_width_to_stride(hor_res, cf);
+  uint32_t buf_size = 0;
+
+  if (mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
+    // Standard recommendation: 1/10 screen size
+    buf_size = stride * (ver_res / 10);
+  } else {
+    // FULL or DIRECT usually requires full screen buffer
+    buf_size = stride * ver_res;
+  }
+
+  // Allocate buffers using std::vector to manage memory
+  buf1_.resize(buf_size);
+  if (double_buffer) {
+    buf2_.resize(buf_size);
+  } else {
+    buf2_.clear();
+  }
+
+  lv_display_set_buffers(disp_, buf1_.data(),
+                         double_buffer ? buf2_.data() : nullptr, buf_size,
+                         mode);
+}
+
 }  // namespace lvgl
