@@ -15,21 +15,17 @@ Group::~Group() {
   }
 }
 
-void Group::add_obj(Object* obj) {
-  if (group_ && obj) lv_group_add_obj(group_, obj->raw());
+void Group::add_obj(Object& obj) {
+  if (group_) lv_group_add_obj(group_, obj.raw());
 }
 
-void Group::remove_obj(Object* obj) {
-  if (obj) lv_group_remove_obj(obj->raw());
-}
+void Group::remove_obj(Object& obj) { lv_group_remove_obj(obj.raw()); }
 
 void Group::remove_all_objs() {
   if (group_) lv_group_remove_all_objs(group_);
 }
 
-void Group::focus_obj(Object* obj) {
-  if (obj) lv_group_focus_obj(obj->raw());
-}
+void Group::focus_obj(Object& obj) { lv_group_focus_obj(obj.raw()); }
 
 void Group::focus_next() {
   if (group_) lv_group_focus_next(group_);

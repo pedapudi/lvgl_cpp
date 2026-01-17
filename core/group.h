@@ -20,14 +20,16 @@ class Group {
   /**
    * @brief Add an object to the group.
    * @param obj The object to add.
+   * @note Ownership of the object is NOT transferred to the group.
+   *       The caller is responsible for the object's lifecycle.
    */
-  void add_obj(Object* obj);
+  void add_obj(Object& obj);
 
   /**
    * @brief Remove an object from the group.
    * @param obj The object to remove.
    */
-  void remove_obj(Object* obj);
+  void remove_obj(Object& obj);
 
   /**
    * @brief Remove all objects from the group.
@@ -37,8 +39,9 @@ class Group {
   /**
    * @brief Focus on a specific object.
    * @param obj The object to focus.
+   * @note Ownership is not transferred.
    */
-  void focus_obj(Object* obj);
+  void focus_obj(Object& obj);
 
   /**
    * @brief Focus the next object in the group.
