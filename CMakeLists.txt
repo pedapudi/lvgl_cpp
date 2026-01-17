@@ -110,4 +110,8 @@ else()
 
     add_executable(test_rotation tests/test_rotation.cpp)
     target_link_libraries(test_rotation PRIVATE lvgl_cpp)
+
+    # From Issue 17
+    add_executable(test_style_color tests/test_style_color.cpp)
+    target_link_libraries(test_style_color PRIVATE lvgl_cpp)
 endif()
