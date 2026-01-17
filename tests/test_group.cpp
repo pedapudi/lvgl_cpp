@@ -2,17 +2,19 @@
 #include <iostream>
 
 #include "core/group.h"
+#include "display/display.h"
 #include "lvgl.h"
 #include "widgets/button.h"
 
 int main() {
   lv_init();
+  lvgl::Display display = lvgl::Display::create(800, 600);
 
   // Create a group
   lvgl::Group group;
   // By default, group wraps a new lv_group instance.
 
-  lvgl::Object screen;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
   lvgl::Button btn1(&screen);
   lvgl::Button btn2(&screen);
 

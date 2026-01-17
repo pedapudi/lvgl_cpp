@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../core/object.h"
+#include "../display/display.h"
 #include "lvgl.h"
 
 void test_default_ownership() {
@@ -116,6 +117,7 @@ void test_move_semantics() {
 
 int main() {
   lv_init();
+  lvgl::Display display = lvgl::Display::create(800, 480);
   test_default_ownership();
   test_child_ownership();
   test_explicit_managed();

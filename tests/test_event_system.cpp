@@ -3,6 +3,7 @@
 
 #include "../core/event.h"
 #include "../core/object.h"
+#include "../display/display.h"
 #include "../widgets/button.h"
 #include "lvgl.h"
 
@@ -10,10 +11,19 @@ using namespace lvgl;
 
 static void test_event_basic() {
   std::cout << "Testing basic event..." << std::endl;
+
+  // Create a display to ensure lv_obj_create works
+  std::cout << "Creating display..." << std::endl;
+  Display display = Display::create(800, 600);
+
+  std::cout << "Creating object..." << std::endl;
   Object obj;
+  std::cout << "Object created." << std::endl;
   bool called = false;
 
+  std::cout << "Adding callback..." << std::endl;
   obj.add_event_cb(LV_EVENT_CLICKED, [&](Event& e) {
+    std::cout << "Callback invoked!" << std::endl;
     called = true;
     assert(e.get_code() == LV_EVENT_CLICKED);
     assert(e.get_target().raw() == obj.raw());
@@ -21,7 +31,9 @@ static void test_event_basic() {
     assert(e.get_current_target().raw() == obj.raw());
   });
 
+  std::cout << "Sending event..." << std::endl;
   lv_obj_send_event(obj.raw(), LV_EVENT_CLICKED, nullptr);
+  std::cout << "Event sent." << std::endl;
   assert(called);
   std::cout << "Basic event passed." << std::endl;
 }

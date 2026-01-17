@@ -4,6 +4,10 @@
 #define LV_COLOR_DEPTH 32
 #define LV_MEMORY_SIZE (4096 * 1024)
 
+#define LV_USE_LOG 1
+#define LV_LOG_LEVEL LV_LOG_LEVEL_INFO
+#define LV_LOG_PRINTF 1
+
 #define LV_USE_DEMO 0
 #define LV_BUILD_EXAMPLES 0
 

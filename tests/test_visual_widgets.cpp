@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "../core/object.h"
+#include "../display/display.h"
 #include "../widgets/anim_image.h"
 #include "../widgets/canvas.h"
 #include "../widgets/chart.h"
@@ -164,10 +165,7 @@ void test_spinner_1() {
 
 int main() {
   lv_init();
-
-  if (!lv_screen_active()) {
-    lv_display_create(800, 480);
-  }
+  lvgl::Display display = lvgl::Display::create(800, 480);
 
   test_chart_1();
   test_canvas_1();
