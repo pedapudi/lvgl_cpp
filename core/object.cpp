@@ -135,10 +135,10 @@ void Object::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
   if (obj_) lv_obj_align(obj_, align, x_ofs, y_ofs);
 }
 
-void Object::align_to(const Object* base, lv_align_t align, int32_t x_ofs,
+void Object::align_to(const Object& base, lv_align_t align, int32_t x_ofs,
                       int32_t y_ofs) {
-  if (obj_ && base && base->raw())
-    lv_obj_align_to(obj_, base->raw(), align, x_ofs, y_ofs);
+  if (obj_ && base.raw())
+    lv_obj_align_to(obj_, base.raw(), align, x_ofs, y_ofs);
 }
 
 void Object::center() {

@@ -118,12 +118,15 @@ int32_t Display::get_original_vertical_resolution() const {
   return disp_ ? lv_display_get_original_vertical_resolution(disp_) : 0;
 }
 
-void Display::set_rotation(lv_display_rotation_t rotation) {
-  if (disp_) lv_display_set_rotation(disp_, rotation);
+void Display::set_rotation(Rotation rotation) {
+  if (disp_)
+    lv_display_set_rotation(disp_,
+                            static_cast<lv_display_rotation_t>(rotation));
 }
 
-lv_display_rotation_t Display::get_rotation() const {
-  return disp_ ? lv_display_get_rotation(disp_) : LV_DISPLAY_ROTATION_0;
+Display::Rotation Display::get_rotation() const {
+  return disp_ ? static_cast<Rotation>(lv_display_get_rotation(disp_))
+               : Rotation::ROT_0;
 }
 
 void Display::set_matrix_rotation(bool enable) {
@@ -265,13 +268,11 @@ lv_obj_t* Display::get_layer_bottom() {
   return disp_ ? lv_display_get_layer_bottom(disp_) : nullptr;
 }
 
-void Display::load_screen(Object* scr) {
-  if (scr) lv_screen_load(scr->raw());
-}
+void Display::load_screen(Object& scr) { lv_screen_load(scr.raw()); }
 
-void Display::load_screen_anim(Object* scr, lv_screen_load_anim_t anim_type,
+void Display::load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
                                uint32_t time, uint32_t delay, bool auto_del) {
-  if (scr) lv_screen_load_anim(scr->raw(), anim_type, time, delay, auto_del);
+  lv_screen_load_anim(scr.raw(), anim_type, time, delay, auto_del);
 }
 
 void Display::set_theme(lv_theme_t* th) {
@@ -300,6 +301,44 @@ bool Display::is_invalidation_enabled() const {
 
 void Display::delete_refr_timer() {
   if (disp_) lv_display_delete_refr_timer(disp_);
+}
+
+void Display::clear_active_screen() {
+  if (disp_) lv_obj_clean(lv_display_get_screen_active(disp_));
+}
+
+void Display::auto_configure_buffers(lv_display_render_mode_t mode,
+                                     bool double_buffer) {
+  if (!disp_) return;
+
+  uint32_t hor_res = get_horizontal_resolution();
+  uint32_t ver_res = get_vertical_resolution();
+  lv_color_format_t cf = get_color_format();
+
+  if (hor_res == 0 || ver_res == 0) return;
+
+  uint32_t stride = lv_draw_buf_width_to_stride(hor_res, cf);
+  uint32_t buf_size = 0;
+
+  if (mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
+    // Standard recommendation: 1/10 screen size
+    buf_size = stride * (ver_res / 10);
+  } else {
+    // FULL or DIRECT usually requires full screen buffer
+    buf_size = stride * ver_res;
+  }
+
+  // Allocate buffers using std::vector to manage memory
+  buf1_.resize(buf_size);
+  if (double_buffer) {
+    buf2_.resize(buf_size);
+  } else {
+    buf2_.clear();
+  }
+
+  lv_display_set_buffers(disp_, buf1_.data(),
+                         double_buffer ? buf2_.data() : nullptr, buf_size,
+                         mode);
 }
 
 }  // namespace lvgl

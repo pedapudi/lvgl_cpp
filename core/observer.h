@@ -2,6 +2,7 @@
 #define LVGL_CPP_CORE_OBSERVER_H_
 
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,15 @@ namespace lvgl {
  * Note: Subject owns the lv_subject_t storage. It must not be moved/copied
  * trivially because C pointers in the observer list might reference it.
  */
+class Observer;
+class Subject;
+
+/**
+ * @brief Idiomatic C++ callback for observers.
+ * @param observer The observer instance that triggered the callback.
+ */
+using ObserverCallback = std::function<void(Observer*)>;
+
 class Subject {
  public:
   virtual ~Subject();
@@ -167,6 +177,13 @@ class Subject {
 
   /**
    * @brief Add a C++ observer callback.
+   * @param cb The callback function (lambda, std::function, etc.).
+   * @return A pointer to the newly created Observer.
+   */
+  [[nodiscard]] class Observer* add_observer(ObserverCallback cb);
+
+  /**
+   * @brief Add a C++ observer callback.
    * @param cb The callback function.
    * @return A pointer to the newly created Observer.
    */
@@ -277,8 +294,16 @@ class GroupSubject : public Subject {
  * Keep the returned Observer object alive as long as you want the subscription
  * to be active.
  */
+
 class Observer {
  public:
+  /**
+   * @brief Create an observer for a specific subject with a C++ callback.
+   * @param subject The subject to observe.
+   * @param cb The callback function to invoke.
+   */
+  Observer(Subject& subject, ObserverCallback cb);
+
   explicit Observer(lv_observer_t* obs, bool owned = false);
   ~Observer();
 
@@ -303,9 +328,13 @@ class Observer {
    */
   lv_obj_t* get_target_obj() const;
 
+  // Internal use for static shim
+  const ObserverCallback& get_callback() const { return callback_; }
+
  private:
   lv_observer_t* obs_;
   bool owned_;  // If true, we call lv_observer_remove in destructor.
+  ObserverCallback callback_;
 };
 
 #endif  // LV_USE_OBSERVER
