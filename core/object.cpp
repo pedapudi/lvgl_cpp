@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "event.h"
 #include "style.h"
 
 namespace lvgl {
@@ -222,7 +223,8 @@ void Object::set_style_bg_image_src(const void* value,
 void Object::event_proxy(lv_event_t* e) {
   CallbackNode* node = static_cast<CallbackNode*>(lv_event_get_user_data(e));
   if (node && node->callback) {
-    node->callback(e);
+    Event evt(e);
+    node->callback(evt);
   }
 }
 
