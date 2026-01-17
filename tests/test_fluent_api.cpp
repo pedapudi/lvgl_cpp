@@ -34,6 +34,7 @@
 #include "widgets/win.h"
 
 void test_button() {
+  std::cerr << "Testing Button..." << std::endl;  // Keep this print
   lvgl::Button btn;  // Use default constructor (active screen)
   btn.set_width(100).set_height(50).set_size(100, 50).align(LV_ALIGN_CENTER);
 }
@@ -300,8 +301,17 @@ void test_image_button() {
   std::cout << "ImageButton fluent API passed." << std::endl;
 }
 
+#include "display/display.h"
+
 int main() {
   lv_init();
+
+  // Create a dummy display for tests
+  static std::vector<uint8_t> buf(128 * 128 * 4);
+  lvgl::Display disp = lvgl::Display::create(128, 128);
+  disp.set_buffers(buf.data(), nullptr, buf.size(),
+                   LV_DISPLAY_RENDER_MODE_PARTIAL);
+
   test_button();
   test_checkbox();
   test_switch();
@@ -327,7 +337,7 @@ int main() {
   test_canvas();
   test_chart();
   test_keyboard();
-  // test_list(); // Segfaults/Hangs
+  test_list();
   test_menu();
   test_msgbox();
   test_span();
