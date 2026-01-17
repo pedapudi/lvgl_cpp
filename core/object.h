@@ -229,7 +229,7 @@ class Object {
    * @param x_ofs X offset.
    * @param y_ofs Y offset.
    */
-  void align_to(const Object* base, lv_align_t align, int32_t x_ofs = 0,
+  void align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
                 int32_t y_ofs = 0);
 
   /**
