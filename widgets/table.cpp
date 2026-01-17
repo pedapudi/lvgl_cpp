@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Table::Table() : Table((Object*)nullptr) {}
+Table::Table() : Object(lv_table_create(nullptr), Ownership::Managed) {}
 
-Table::Table(Object* parent, Ownership ownership)
-    : Object(lv_table_create(parent ? parent->raw() : nullptr), ownership) {}
+Table::Table(Object& parent, Ownership ownership)
+    : Object(lv_table_create(parent.raw()), ownership) {}
 
 Table::Table(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

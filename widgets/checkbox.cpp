@@ -4,16 +4,17 @@
 
 namespace lvgl {
 
-Checkbox::Checkbox() : Checkbox((Object*)nullptr) {}
+Checkbox::Checkbox()
+    : Object(lv_checkbox_create(nullptr), Ownership::Managed) {}
 
-Checkbox::Checkbox(Object* parent, Ownership ownership)
-    : Object(lv_checkbox_create(parent ? parent->raw() : nullptr), ownership) {}
+Checkbox::Checkbox(Object& parent, Ownership ownership)
+    : Object(lv_checkbox_create(parent.raw()), ownership) {}
 
-Checkbox::Checkbox(Object* parent, const char* text) : Checkbox(parent) {
+Checkbox::Checkbox(Object& parent, const char* text) : Checkbox(parent) {
   set_text(text);
 }
 
-Checkbox::Checkbox(Object* parent, const std::string& text) : Checkbox(parent) {
+Checkbox::Checkbox(Object& parent, const std::string& text) : Checkbox(parent) {
   set_text(text.c_str());
 }
 

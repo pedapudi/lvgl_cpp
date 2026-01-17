@@ -6,10 +6,11 @@
 
 namespace lvgl {
 
-Calendar::Calendar() : Calendar((Object*)nullptr) {}
+Calendar::Calendar()
+    : Object(lv_calendar_create(nullptr), Ownership::Managed) {}
 
-Calendar::Calendar(Object* parent, Ownership ownership)
-    : Object(lv_calendar_create(parent ? parent->raw() : nullptr), ownership) {}
+Calendar::Calendar(Object& parent, Ownership ownership)
+    : Object(lv_calendar_create(parent.raw()), ownership) {}
 
 Calendar::Calendar(lv_obj_t* obj, Ownership ownership)
     : Object(obj, ownership) {}

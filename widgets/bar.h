@@ -32,7 +32,7 @@ class Bar : public Object {
    * @param parent Parent object.
    */
   Bar();
-  explicit Bar(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Bar(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Wrap an existing lv_bar object.

@@ -30,7 +30,7 @@ class Chart : public Object {
    * @brief Create a Chart with a parent.
    * @param parent The parent object.
    */
-  explicit Chart(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Chart(Object& parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.

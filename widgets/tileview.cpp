@@ -4,10 +4,11 @@
 
 namespace lvgl {
 
-TileView::TileView() : TileView((Object*)nullptr) {}
+TileView::TileView()
+    : Object(lv_tileview_create(nullptr), Ownership::Managed) {}
 
-TileView::TileView(Object* parent, Ownership ownership)
-    : Object(lv_tileview_create(parent ? parent->raw() : nullptr), ownership) {}
+TileView::TileView(Object& parent, Ownership ownership)
+    : Object(lv_tileview_create(parent.raw()), ownership) {}
 
 TileView::TileView(lv_obj_t* obj, Ownership ownership)
     : Object(obj, ownership) {}

@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Canvas::Canvas() : Canvas((Object*)nullptr) {}
+Canvas::Canvas() : Image(lv_canvas_create(nullptr), Ownership::Managed) {}
 
-Canvas::Canvas(Object* parent, Ownership ownership)
-    : Image(lv_canvas_create(parent ? parent->raw() : nullptr)) {}
+Canvas::Canvas(Object& parent, Ownership ownership)
+    : Image(lv_canvas_create(parent.raw()), ownership) {}
 
 Canvas::Canvas(lv_obj_t* obj, Ownership ownership) : Image(obj) {}
 

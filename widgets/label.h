@@ -38,21 +38,21 @@ class Label : public Object {
    * @param ownership Ownership policy.
    */
   Label();
-  explicit Label(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Label(Object& parent, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a new Label with text.
    * @param parent Parent object.
    * @param text The initial text.
    */
-  Label(Object* parent, const std::string& text);
+  Label(Object& parent, const std::string& text);
 
   /**
    * @brief Create a new Label with text.
    * @param parent Parent object.
    * @param text The initial text.
    */
-  Label(Object* parent, const char* text);
+  Label(Object& parent, const char* text);
 
   /**
    * @brief Wrap an existing lv_label object.

@@ -30,7 +30,7 @@ class Canvas : public Image {
    * @brief Create a Canvas with a parent.
    * @param parent The parent object.
    */
-  explicit Canvas(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Canvas(Object& parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.

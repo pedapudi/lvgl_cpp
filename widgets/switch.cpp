@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-Switch::Switch() : Switch((Object*)nullptr) {}
+Switch::Switch() : Object(lv_switch_create(nullptr), Ownership::Managed) {}
 
-Switch::Switch(Object* parent, Ownership ownership)
-    : Object(lv_switch_create(parent ? parent->raw() : nullptr), ownership) {}
+Switch::Switch(Object& parent, Ownership ownership)
+    : Object(lv_switch_create(parent.raw()), ownership) {}
 
 Switch::Switch(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

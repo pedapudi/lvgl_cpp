@@ -106,3 +106,6 @@ target_link_libraries(test_fluent_api PRIVATE lvgl_cpp)
 
 add_executable(test_rotation tests/test_rotation.cpp)
 target_link_libraries(test_rotation PRIVATE lvgl_cpp)
+
+add_executable(test_parameter_passing tests/test_parameter_passing.cpp)
+target_link_libraries(test_parameter_passing PRIVATE lvgl_cpp)

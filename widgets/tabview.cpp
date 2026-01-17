@@ -4,10 +4,10 @@
 
 namespace lvgl {
 
-TabView::TabView() : TabView((Object*)nullptr) {}
+TabView::TabView() : Object(lv_tabview_create(nullptr), Ownership::Managed) {}
 
-TabView::TabView(Object* parent, Ownership ownership)
-    : Object(lv_tabview_create(parent ? parent->raw() : nullptr), ownership) {}
+TabView::TabView(Object& parent, Ownership ownership)
+    : Object(lv_tabview_create(parent.raw()), ownership) {}
 
 TabView::TabView(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

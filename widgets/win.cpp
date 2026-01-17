@@ -7,10 +7,10 @@
 
 namespace lvgl {
 
-Win::Win() : Win((Object*)nullptr) {}
+Win::Win() : Object(lv_win_create(nullptr), Ownership::Managed) {}
 
-Win::Win(Object* parent, Ownership ownership)
-    : Object(lv_win_create(parent ? parent->raw() : nullptr), ownership) {}
+Win::Win(Object& parent, Ownership ownership)
+    : Object(lv_win_create(parent.raw()), ownership) {}
 
 Win::Win(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

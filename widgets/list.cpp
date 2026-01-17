@@ -7,10 +7,10 @@
 
 namespace lvgl {
 
-List::List() : List((Object*)nullptr) {}
+List::List() : Object(lv_list_create(nullptr), Ownership::Managed) {}
 
-List::List(Object* parent, Ownership ownership)
-    : Object(lv_list_create(parent ? parent->raw() : nullptr), ownership) {}
+List::List(Object& parent, Ownership ownership)
+    : Object(lv_list_create(parent.raw()), ownership) {}
 
 List::List(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 

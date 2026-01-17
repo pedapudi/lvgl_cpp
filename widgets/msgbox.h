@@ -48,7 +48,7 @@ class MsgBox : public Object {
    * @brief Create a MsgBox with a parent.
    * @param parent The parent object.
    */
-  explicit MsgBox(Object* parent,
+  explicit MsgBox(Object& parent,
                   Ownership ownership =
                       Ownership::Default);  // Creates modal if parent is NULL?
                                             // No, lv_msgbox_create creates
