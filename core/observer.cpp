@@ -3,6 +3,17 @@
 namespace lvgl {
 
 #if LV_USE_OBSERVER
+
+static void observer_cb_shim(lv_observer_t* observer, lv_subject_t* subject) {
+  auto* obs = static_cast<Observer*>(lv_observer_get_user_data(observer));
+  if (obs) {
+    const auto& cb = obs->get_callback();
+    if (cb) {
+      cb(obs);
+    }
+  }
+}
+
 // Subject
 
 Subject::Subject() {
@@ -83,6 +94,10 @@ Observer* Subject::add_observer(lv_observer_cb_t cb, void* user_data) {
   lv_observer_t* obs =
       lv_subject_add_observer_with_target(&subject_, cb, user_data, nullptr);
   return new Observer(obs, true);
+}
+
+Observer* Subject::add_observer(ObserverCallback cb) {
+  return new Observer(*this, cb);
 }
 
 // IntSubject
@@ -196,6 +211,11 @@ Subject* GroupSubject::get_element(int32_t index) {
 
 // Observer
 
+Observer::Observer(Subject& subject, ObserverCallback cb)
+    : owned_(true), callback_(cb) {
+  obs_ = lv_subject_add_observer(subject.raw(), observer_cb_shim, this);
+}
+
 Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {
   if (owned)
     printf("Observer created (owned) %p\n", (void*)obs);
@@ -204,7 +224,9 @@ Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {
 }
 
 Observer::Observer(Observer&& other) noexcept
-    : obs_(other.obs_), owned_(other.owned_) {
+    : obs_(other.obs_),
+      owned_(other.owned_),
+      callback_(std::move(other.callback_)) {
   other.obs_ = nullptr;
   other.owned_ = false;
   printf("Observer moved %p\n", (void*)obs_);
@@ -215,6 +237,7 @@ Observer& Observer::operator=(Observer&& other) noexcept {
     remove();
     obs_ = other.obs_;
     owned_ = other.owned_;
+    callback_ = std::move(other.callback_);
     other.obs_ = nullptr;
     other.owned_ = false;
     printf("Observer move-assigned %p\n", (void*)obs_);

@@ -332,7 +332,7 @@ class Observer {
   const ObserverCallback& get_callback() const { return callback_; }
 
  private:
-  lv_observer_t* obs_;
+  lv_observer_t* obs_ = nullptr;
   bool owned_;  // If true, we call lv_observer_remove in destructor.
   ObserverCallback callback_;
 };
