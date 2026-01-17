@@ -8,6 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # In a real scenario, this might need more robust finding logic
 # or be added as a subdirectory.
 
+if(NOT TARGET lvgl)
+    # If LVGL is not already a target (e.g. from parent project), we include it here.
+    # This is primarily for building the tests or standalone development of lvgl_cpp.
+    
+    # Use the test configuration for internal builds/tests
+    set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
     
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
         add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lvgl lvgl_build)
