@@ -268,13 +268,11 @@ lv_obj_t* Display::get_layer_bottom() {
   return disp_ ? lv_display_get_layer_bottom(disp_) : nullptr;
 }
 
-void Display::load_screen(Object* scr) {
-  if (scr) lv_screen_load(scr->raw());
-}
+void Display::load_screen(Object& scr) { lv_screen_load(scr.raw()); }
 
-void Display::load_screen_anim(Object* scr, lv_screen_load_anim_t anim_type,
+void Display::load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
                                uint32_t time, uint32_t delay, bool auto_del) {
-  if (scr) lv_screen_load_anim(scr->raw(), anim_type, time, delay, auto_del);
+  lv_screen_load_anim(scr.raw(), anim_type, time, delay, auto_del);
 }
 
 void Display::set_theme(lv_theme_t* th) {

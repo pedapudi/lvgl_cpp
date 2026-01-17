@@ -94,8 +94,8 @@ class Display {
   lv_obj_t* get_layer_sys();
   lv_obj_t* get_layer_bottom();
 
-  void load_screen(Object* scr);
-  void load_screen_anim(Object* scr, lv_screen_load_anim_t anim_type,
+  void load_screen(Object& scr);
+  void load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
                         uint32_t time, uint32_t delay, bool auto_del);
 
   // Theme
