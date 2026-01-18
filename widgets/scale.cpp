@@ -4,11 +4,12 @@
 
 namespace lvgl {
 
-Scale::Scale()
-    : Widget(lv_scale_create(lv_screen_active()), Ownership::Managed) {}
+Scale::Scale() : Scale(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Scale::Scale(Object& parent, Ownership ownership)
-    : Widget(lv_scale_create(parent.raw()), ownership) {}
+Scale::Scale(Object* parent, Ownership ownership)
+    : Widget(lv_scale_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Scale::Scale(Object& parent) : Scale(&parent) {}
 
 Scale::Scale(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

@@ -22,21 +22,9 @@ namespace lvgl {
 
 class Canvas : public Widget<Canvas> {
  public:
-  using Widget::Widget;
-
-  /**
-   * @brief Create a Canvas on the active screen.
-   */
   Canvas();
-  /**
-   * @brief Create a Canvas with a parent.
-   * @param parent The parent object.
-   */
+  explicit Canvas(Object* parent, Ownership ownership = Ownership::Default);
   explicit Canvas(Object& parent);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
   explicit Canvas(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Canvas& set_buffer(void* buf, int32_t w, int32_t h, lv_color_format_t cf);
@@ -84,17 +72,6 @@ class Canvas : public Widget<Canvas> {
   void finish_layer(lv_layer_t* layer);
 };
 
-/**
- * @file canvas.h
- * @brief C++ Wrapper for LVGL Canvas Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Canvas widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_CANVAS

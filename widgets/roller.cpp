@@ -6,15 +6,14 @@
 
 namespace lvgl {
 
-Roller::Roller()
-    : Widget(lv_roller_create(lv_screen_active()), Ownership::Managed) {}
-
-Roller::Roller(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
+Roller::Roller() : Roller(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
 Roller::Roller(Object* parent, Ownership ownership)
     : Widget(lv_roller_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Roller::Roller(Object& parent) : Roller(&parent, Ownership::Managed) {}
+Roller::Roller(Object& parent) : Roller(&parent) {}
+
+Roller::Roller(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Roller& Roller::set_options(const char* options, lv_roller_mode_t mode) {
   if (obj_) lv_roller_set_options(obj_, options, mode);

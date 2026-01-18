@@ -4,11 +4,12 @@
 
 namespace lvgl {
 
-Canvas::Canvas()
-    : Widget(lv_canvas_create(lv_screen_active()), Ownership::Managed) {}
+Canvas::Canvas() : Canvas(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Canvas::Canvas(Object& parent)
-    : Widget(lv_canvas_create(parent.raw()), Ownership::Managed) {}
+Canvas::Canvas(Object* parent, Ownership ownership)
+    : Widget(lv_canvas_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Canvas::Canvas(Object& parent) : Canvas(&parent) {}
 
 Canvas::Canvas(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

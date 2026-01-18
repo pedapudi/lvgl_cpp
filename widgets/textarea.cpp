@@ -7,7 +7,7 @@
 namespace lvgl {
 
 Textarea::Textarea()
-    : Widget(lv_textarea_create(lv_screen_active()), Ownership::Managed) {}
+    : Textarea(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
 Textarea::Textarea(Object* parent, Ownership ownership)
     : Widget(lv_textarea_create(parent ? parent->raw() : nullptr), ownership) {}

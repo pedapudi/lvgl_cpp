@@ -5,10 +5,12 @@
 namespace lvgl {
 
 TabView::TabView()
-    : Widget(lv_tabview_create(lv_screen_active()), Ownership::Managed) {}
+    : TabView(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-TabView::TabView(Object& parent, Ownership ownership)
-    : Widget(lv_tabview_create(parent.raw()), ownership) {}
+TabView::TabView(Object* parent, Ownership ownership)
+    : Widget(lv_tabview_create(parent ? parent->raw() : nullptr), ownership) {}
+
+TabView::TabView(Object& parent) : TabView(&parent) {}
 
 TabView::TabView(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

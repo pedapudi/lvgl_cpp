@@ -22,19 +22,9 @@ namespace lvgl {
 
 class Scale : public Widget<Scale> {
  public:
-  /**
-   * @brief Create a Scale on the active screen.
-   */
   Scale();
-  /**
-   * @brief Create a Scale with a parent.
-   * @param parent The parent object.
-   */
-  explicit Scale(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit Scale(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Scale(Object& parent);
   explicit Scale(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Scale& set_mode(lv_scale_mode_t mode);
@@ -60,17 +50,6 @@ class Scale : public Widget<Scale> {
   int32_t get_range_max_value();
 };
 
-/**
- * @file scale.h
- * @brief C++ Wrapper for LVGL Scale Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Scale widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_SCALE

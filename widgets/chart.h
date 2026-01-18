@@ -22,19 +22,9 @@ namespace lvgl {
 
 class Chart : public Widget<Chart> {
  public:
-  /**
-   * @brief Create a Chart on the active screen.
-   */
   Chart();
-  /**
-   * @brief Create a Chart with a parent.
-   * @param parent The parent object.
-   */
+  explicit Chart(Object* parent, Ownership ownership = Ownership::Default);
   explicit Chart(Object& parent);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
   explicit Chart(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Chart& set_type(lv_chart_type_t type);
@@ -56,17 +46,6 @@ class Chart : public Widget<Chart> {
   void refresh();
 };
 
-/**
- * @file chart.h
- * @brief C++ Wrapper for LVGL Chart Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Chart widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_CHART

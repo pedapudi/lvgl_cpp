@@ -5,10 +5,13 @@
 namespace lvgl {
 
 SpanGroup::SpanGroup()
-    : Widget(lv_spangroup_create(lv_screen_active()), Ownership::Managed) {}
+    : SpanGroup(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-SpanGroup::SpanGroup(Object& parent)
-    : Widget(lv_spangroup_create(parent.raw()), Ownership::Managed) {}
+SpanGroup::SpanGroup(Object* parent, Ownership ownership)
+    : Widget(lv_spangroup_create(parent ? parent->raw() : nullptr), ownership) {
+}
+
+SpanGroup::SpanGroup(Object& parent) : SpanGroup(&parent) {}
 
 SpanGroup::SpanGroup(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}

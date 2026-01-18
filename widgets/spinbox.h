@@ -22,19 +22,9 @@ namespace lvgl {
 
 class Spinbox : public Textarea {
  public:
-  /**
-   * @brief Create a Spinbox on the active screen.
-   */
   Spinbox();
-  /**
-   * @brief Create a Spinbox with a parent.
-   * @param parent The parent object.
-   */
-  explicit Spinbox(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit Spinbox(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Spinbox(Object& parent);
   explicit Spinbox(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Spinbox& set_value(int32_t v);

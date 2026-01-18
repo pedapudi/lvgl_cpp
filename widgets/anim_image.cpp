@@ -5,10 +5,12 @@
 namespace lvgl {
 
 AnimImage::AnimImage()
-    : Widget(lv_animimg_create(lv_screen_active()), Ownership::Managed) {}
+    : AnimImage(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-AnimImage::AnimImage(Object& parent)
-    : Widget(lv_animimg_create(parent.raw()), Ownership::Managed) {}
+AnimImage::AnimImage(Object* parent, Ownership ownership)
+    : Widget(lv_animimg_create(parent ? parent->raw() : nullptr), ownership) {}
+
+AnimImage::AnimImage(Object& parent) : AnimImage(&parent) {}
 
 AnimImage::AnimImage(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}

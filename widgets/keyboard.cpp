@@ -5,10 +5,12 @@
 namespace lvgl {
 
 Keyboard::Keyboard()
-    : Widget(lv_keyboard_create(nullptr), Ownership::Managed) {}
+    : Keyboard(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Keyboard::Keyboard(Object& parent, Ownership ownership)
-    : Widget(lv_keyboard_create(parent.raw()), ownership) {}
+Keyboard::Keyboard(Object* parent, Ownership ownership)
+    : Widget(lv_keyboard_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Keyboard::Keyboard(Object& parent) : Keyboard(&parent) {}
 
 Keyboard::Keyboard(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}

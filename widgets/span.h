@@ -22,19 +22,9 @@ namespace lvgl {
 
 class SpanGroup : public Widget<SpanGroup> {
  public:
-  /**
-   * @brief Create a SpanGroup on the active screen.
-   */
   SpanGroup();
-  /**
-   * @brief Create a SpanGroup with a parent.
-   * @param parent The parent object.
-   */
+  explicit SpanGroup(Object* parent, Ownership ownership = Ownership::Default);
   explicit SpanGroup(Object& parent);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
   explicit SpanGroup(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   lv_span_t* add_span();
@@ -57,17 +47,6 @@ class SpanGroup : public Widget<SpanGroup> {
   void refresh();
 };
 
-/**
- * @file span.h
- * @brief C++ Wrapper for LVGL SpanGroup Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::SpanGroup widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_SPAN

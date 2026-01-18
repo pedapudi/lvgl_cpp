@@ -6,7 +6,7 @@
 
 namespace lvgl {
 
-Slider::Slider() : Bar(lv_slider_create(nullptr), Ownership::Managed) {}
+Slider::Slider() : Slider(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
 Slider::Slider(Object* parent, Ownership ownership)
     : Bar(lv_slider_create(parent ? parent->raw() : nullptr), ownership) {}
@@ -40,7 +40,47 @@ Slider& Slider::set_mode(lv_bar_mode_t mode) {
 }
 
 Slider& Slider::set_left_value(int32_t value, lv_anim_enable_t anim) {
-  if (obj_) lv_slider_set_start_value(obj_, value, anim);
+  if (obj_) lv_slider_set_left_value(obj_, value, anim);
+  return *this;
+}
+
+Slider& Slider::set_width(int32_t width) {
+  Bar::set_width(width);
+  return *this;
+}
+
+Slider& Slider::set_height(int32_t height) {
+  Bar::set_height(height);
+  return *this;
+}
+
+Slider& Slider::set_size(int32_t width, int32_t height) {
+  Bar::set_size(width, height);
+  return *this;
+}
+
+Slider& Slider::align(Align align, int32_t x_ofs, int32_t y_ofs) {
+  Bar::align(align, x_ofs, y_ofs);
+  return *this;
+}
+
+Slider& Slider::add_state(lv_state_t state) {
+  Bar::add_state(state);
+  return *this;
+}
+
+Slider& Slider::remove_state(lv_state_t state) {
+  Bar::remove_state(state);
+  return *this;
+}
+
+Slider& Slider::add_flag(lv_obj_flag_t flag) {
+  Bar::add_flag(flag);
+  return *this;
+}
+
+Slider& Slider::remove_flag(lv_obj_flag_t flag) {
+  Bar::remove_flag(flag);
   return *this;
 }
 
@@ -52,41 +92,8 @@ bool Slider::is_dragged() const {
   return obj_ ? lv_slider_is_dragged(obj_) : false;
 }
 
-Slider& Slider::set_width(int32_t width) {
-  if (obj_) lv_obj_set_width(obj_, width);
-  return *this;
-}
-Slider& Slider::set_height(int32_t height) {
-  if (obj_) lv_obj_set_height(obj_, height);
-  return *this;
-}
-Slider& Slider::set_size(int32_t width, int32_t height) {
-  if (obj_) lv_obj_set_size(obj_, width, height);
-  return *this;
-}
-Slider& Slider::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  if (obj_) lv_obj_align(obj_, static_cast<lv_align_t>(align), x_ofs, y_ofs);
-  return *this;
-}
-Slider& Slider::add_state(lv_state_t state) {
-  if (obj_) lv_obj_add_state(obj_, state);
-  return *this;
-}
-Slider& Slider::remove_state(lv_state_t state) {
-  if (obj_) lv_obj_remove_state(obj_, state);
-  return *this;
-}
-Slider& Slider::add_flag(lv_obj_flag_t flag) {
-  if (obj_) lv_obj_add_flag(obj_, flag);
-  return *this;
-}
-Slider& Slider::remove_flag(lv_obj_flag_t flag) {
-  if (obj_) lv_obj_remove_flag(obj_, flag);
-  return *this;
-}
-
 Observer Slider::bind_value(Subject& subject) {
-  return Observer(lv_slider_bind_value(raw(), subject.raw()));
+  return Bar::bind_value(subject);
 }
 
 }  // namespace lvgl

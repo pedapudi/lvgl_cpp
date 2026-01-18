@@ -4,10 +4,14 @@
 
 namespace lvgl {
 
-Spinbox::Spinbox() : Textarea(lv_spinbox_create(nullptr), Ownership::Managed) {}
+Spinbox::Spinbox()
+    : Spinbox(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Spinbox::Spinbox(Object& parent, Ownership ownership)
-    : Textarea(lv_spinbox_create(parent.raw()), ownership) {}
+Spinbox::Spinbox(Object* parent, Ownership ownership)
+    : Textarea(lv_spinbox_create(parent ? parent->raw() : nullptr), ownership) {
+}
+
+Spinbox::Spinbox(Object& parent) : Spinbox(&parent) {}
 
 Spinbox::Spinbox(lv_obj_t* obj, Ownership ownership)
     : Textarea(obj, ownership) {}

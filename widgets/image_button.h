@@ -20,19 +20,10 @@ namespace lvgl {
 
 class ImageButton : public Widget<ImageButton> {
  public:
-  /**
-   * @brief Create a ImageButton on the active screen.
-   */
   ImageButton();
-  /**
-   * @brief Create a ImageButton with a parent.
-   * @param parent The parent object.
-   */
+  explicit ImageButton(Object* parent,
+                       Ownership ownership = Ownership::Default);
   explicit ImageButton(Object& parent);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
   explicit ImageButton(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   ImageButton& set_src(lv_imagebutton_state_t state, const void* src_left,
@@ -44,17 +35,6 @@ class ImageButton : public Widget<ImageButton> {
   const void* get_src_right(lv_imagebutton_state_t state);
 };
 
-/**
- * @file image_button.h
- * @brief C++ Wrapper for LVGL ImageButton Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::ImageButton widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_IMAGEBUTTON

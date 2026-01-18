@@ -22,20 +22,10 @@ namespace lvgl {
 
 class ButtonMatrix : public Widget<ButtonMatrix> {
  public:
-  /**
-   * @brief Create a ButtonMatrix on the active screen.
-   */
   ButtonMatrix();
-  /**
-   * @brief Create a ButtonMatrix with a parent.
-   * @param parent The parent object.
-   */
-  explicit ButtonMatrix(Object& parent,
+  explicit ButtonMatrix(Object* parent,
                         Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit ButtonMatrix(Object& parent);
   explicit ButtonMatrix(lv_obj_t* obj,
                         Ownership ownership = Ownership::Default);
 
@@ -63,17 +53,6 @@ class ButtonMatrix : public Widget<ButtonMatrix> {
   bool get_one_checked();
 };
 
-/**
- * @file button_matrix.h
- * @brief C++ Wrapper for LVGL ButtonMatrix Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::ButtonMatrix widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_BUTTONMATRIX

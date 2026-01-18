@@ -5,10 +5,13 @@
 namespace lvgl {
 
 ButtonMatrix::ButtonMatrix()
-    : Widget(lv_buttonmatrix_create(lv_screen_active()), Ownership::Managed) {}
+    : ButtonMatrix(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-ButtonMatrix::ButtonMatrix(Object& parent, Ownership ownership)
-    : Widget(lv_buttonmatrix_create(parent.raw()), ownership) {}
+ButtonMatrix::ButtonMatrix(Object* parent, Ownership ownership)
+    : Widget(lv_buttonmatrix_create(parent ? parent->raw() : nullptr),
+             ownership) {}
+
+ButtonMatrix::ButtonMatrix(Object& parent) : ButtonMatrix(&parent) {}
 
 ButtonMatrix::ButtonMatrix(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}

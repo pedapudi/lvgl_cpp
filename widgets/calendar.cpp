@@ -7,10 +7,12 @@
 namespace lvgl {
 
 Calendar::Calendar()
-    : Widget(lv_calendar_create(nullptr), Ownership::Managed) {}
+    : Calendar(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Calendar::Calendar(Object& parent, Ownership ownership)
-    : Widget(lv_calendar_create(parent.raw()), ownership) {}
+Calendar::Calendar(Object* parent, Ownership ownership)
+    : Widget(lv_calendar_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Calendar::Calendar(Object& parent) : Calendar(&parent) {}
 
 Calendar::Calendar(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
