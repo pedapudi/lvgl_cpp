@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_BUTTONMATRIX
@@ -20,7 +20,7 @@
  */
 namespace lvgl {
 
-class ButtonMatrix : public Object {
+class ButtonMatrix : public Widget<ButtonMatrix> {
  public:
   /**
    * @brief Create a ButtonMatrix on the active screen.
@@ -30,7 +30,7 @@ class ButtonMatrix : public Object {
    * @brief Create a ButtonMatrix with a parent.
    * @param parent The parent object.
    */
-  explicit ButtonMatrix(Object* parent,
+  explicit ButtonMatrix(Object& parent,
                         Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
@@ -44,7 +44,7 @@ class ButtonMatrix : public Object {
    * @param parent The parent object.
    * @param map The map of buttons.
    */
-  ButtonMatrix(Object* parent, const char* const map[]);
+  ButtonMatrix(Object& parent, const char* const map[]);
 
   ButtonMatrix& set_map(const char* const map[]);
   ButtonMatrix& set_ctrl_map(const lv_buttonmatrix_ctrl_t ctrl_map[]);
@@ -55,16 +55,6 @@ class ButtonMatrix : public Object {
   ButtonMatrix& clear_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl);
   ButtonMatrix& set_button_width(uint32_t btn_id, uint32_t width);
   ButtonMatrix& set_one_checked(bool en);
-
-  // Fluent API shadows
-  ButtonMatrix& set_width(int32_t width);
-  ButtonMatrix& set_height(int32_t height);
-  ButtonMatrix& set_size(int32_t width, int32_t height);
-  ButtonMatrix& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  ButtonMatrix& add_state(lv_state_t state);
-  ButtonMatrix& remove_state(lv_state_t state);
-  ButtonMatrix& add_flag(lv_obj_flag_t flag);
-  ButtonMatrix& remove_flag(lv_obj_flag_t flag);
 
   const char* const* get_map();
   uint32_t get_selected_button();

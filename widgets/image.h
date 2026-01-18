@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_IMAGE
@@ -20,7 +20,7 @@
  */
 namespace lvgl {
 
-class Image : public Object {
+class Image : public Widget<Image> {
  public:
   /**
    * @brief Create a Image on the active screen.
@@ -30,7 +30,7 @@ class Image : public Object {
    * @brief Create a Image with a parent.
    * @param parent The parent object.
    */
-  explicit Image(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Image(Object& parent);
 
   /**
    * @brief Create a Image on the active screen with source.
@@ -56,16 +56,6 @@ class Image : public Object {
   Image& set_blend_mode(lv_blend_mode_t blend_mode);
   Image& set_antialias(bool antialias);
   Image& set_inner_align(lv_image_align_t align);
-
-  // Fluent API shadows
-  Image& set_width(int32_t width);
-  Image& set_height(int32_t height);
-  Image& set_size(int32_t width, int32_t height);
-  Image& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Image& add_state(lv_state_t state);
-  Image& remove_state(lv_state_t state);
-  Image& add_flag(lv_obj_flag_t flag);
-  Image& remove_flag(lv_obj_flag_t flag);
 
   const void* get_src() const;
   int32_t get_offset_x();

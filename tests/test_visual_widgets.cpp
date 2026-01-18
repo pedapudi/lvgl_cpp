@@ -21,7 +21,7 @@ Object get_screen() { return Object(lv_screen_active()); }
 void test_chart_1() {
   std::cout << "Testing Chart Example 1..." << std::endl;
   Object screen = get_screen();
-  Chart chart(&screen);
+  Chart chart(screen);
   chart.set_size(200, 150);
   chart.center();
   chart.set_type(LV_CHART_TYPE_LINE);
@@ -46,7 +46,7 @@ void test_canvas_1() {
 
   // Canvas requires a buffer.
   static uint8_t buffer[50 * 50 * 4];
-  Canvas canvas(&screen);
+  Canvas canvas(screen);
   canvas.set_buffer(buffer, 50, 50, LV_COLOR_FORMAT_ARGB8888);
   canvas.fill_bg(lv_color_hex3(0xccc), LV_OPA_COVER);
   canvas.center();
@@ -70,7 +70,7 @@ void test_canvas_1() {
 void test_animimg_1() {
   std::cout << "Testing AnimImage Example 1..." << std::endl;
   Object screen = get_screen();
-  AnimImage animimg(&screen);
+  AnimImage animimg(screen);
 
   // Mock images
   static lv_image_dsc_t img1 = {
@@ -90,7 +90,7 @@ void test_animimg_1() {
 void test_scale_1() {
   std::cout << "Testing Scale Example 1..." << std::endl;
   Object screen = get_screen();
-  Scale scale(&screen);
+  Scale scale(screen);
   scale.set_size(LV_PCT(80), 100);
   scale.set_mode(LV_SCALE_MODE_HORIZONTAL_BOTTOM);
   scale.center();
@@ -104,7 +104,7 @@ void test_scale_1() {
 void test_imagebutton_1() {
   std::cout << "Testing ImageButton Example 1..." << std::endl;
   Object screen = get_screen();
-  ImageButton imgbtn(&screen);
+  ImageButton imgbtn(screen);
 
   // Mock images
   static lv_image_dsc_t img_left = {
@@ -117,15 +117,15 @@ void test_imagebutton_1() {
   imgbtn.set_src(LV_IMAGEBUTTON_STATE_RELEASED, &img_left, &img_mid,
                  &img_right);
   imgbtn.set_width(100);
-  imgbtn.align(LV_ALIGN_CENTER, 0, 0);
+  imgbtn.align(lvgl::Object::Align::Center, 0, 0);
 
   // Create label on imgbtn
   // Note: imgbtn is an object, so we can wrap it if needed or use as parent if
   // wrapper conversion works? ImageButton inherits Object, so it converts to
   // Object via valid copy/move or just &imgbtn.
-  Label label(&imgbtn);
+  Label label(imgbtn);
   label.set_text("Button");
-  label.align(LV_ALIGN_CENTER, 0, -4);
+  label.align(lvgl::Object::Align::Center, 0, -4);
 
   std::cout << "ImageButton Example 1 Passed" << std::endl;
 }
@@ -133,7 +133,7 @@ void test_imagebutton_1() {
 void test_spangroup_1() {
   std::cout << "Testing SpanGroup Example 1..." << std::endl;
   Object screen = get_screen();
-  SpanGroup spans(&screen);
+  SpanGroup spans(screen);
   spans.set_width(300);
   spans.set_height(LV_SIZE_CONTENT);
   spans.center();
@@ -152,7 +152,7 @@ void test_spangroup_1() {
 void test_spinner_1() {
   std::cout << "Testing Spinner Example 1..." << std::endl;
   Object screen = get_screen();
-  Spinner spinner(&screen);
+  Spinner spinner(screen);
   spinner.set_size(100, 100);
   spinner.center();
 

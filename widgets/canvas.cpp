@@ -4,12 +4,13 @@
 
 namespace lvgl {
 
-Canvas::Canvas() : Image(lv_canvas_create(nullptr), Ownership::Managed) {}
+Canvas::Canvas()
+    : Widget(lv_canvas_create(lv_screen_active()), Ownership::Managed) {}
 
-Canvas::Canvas(Object& parent, Ownership ownership)
-    : Image(lv_canvas_create(parent.raw()), ownership) {}
+Canvas::Canvas(Object& parent)
+    : Widget(lv_canvas_create(parent.raw()), Ownership::Managed) {}
 
-Canvas::Canvas(lv_obj_t* obj, Ownership ownership) : Image(obj) {}
+Canvas::Canvas(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Canvas& Canvas::set_buffer(void* buf, int32_t w, int32_t h,
                            lv_color_format_t cf) {
@@ -32,36 +33,59 @@ Canvas& Canvas::set_palette(uint8_t index, lv_color32_t color) {
   return *this;
 }
 
-Canvas& Canvas::set_width(int32_t width) {
-  Object::set_width(width);
+// Copied from Image to maintain API compatibility
+Canvas& Canvas::set_src(const void* src) {
+  if (obj_) lv_image_set_src(obj_, src);
   return *this;
 }
-Canvas& Canvas::set_height(int32_t height) {
-  Object::set_height(height);
+
+Canvas& Canvas::set_offset_x(int32_t x) {
+  if (obj_) lv_image_set_offset_x(obj_, x);
   return *this;
 }
-Canvas& Canvas::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
+
+Canvas& Canvas::set_offset_y(int32_t y) {
+  if (obj_) lv_image_set_offset_y(obj_, y);
   return *this;
 }
-Canvas& Canvas::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
+
+Canvas& Canvas::set_rotation(int32_t angle) {
+  if (obj_) lv_image_set_rotation(obj_, angle);
   return *this;
 }
-Canvas& Canvas::add_state(lv_state_t state) {
-  Object::add_state(state);
+
+Canvas& Canvas::set_pivot(int32_t x, int32_t y) {
+  if (obj_) lv_image_set_pivot(obj_, x, y);
   return *this;
 }
-Canvas& Canvas::remove_state(lv_state_t state) {
-  Object::remove_state(state);
+
+Canvas& Canvas::set_scale(uint32_t zoom) {
+  if (obj_) lv_image_set_scale(obj_, zoom);
   return *this;
 }
-Canvas& Canvas::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
+
+Canvas& Canvas::set_scale_x(uint32_t zoom) {
+  if (obj_) lv_image_set_scale_x(obj_, zoom);
   return *this;
 }
-Canvas& Canvas::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
+
+Canvas& Canvas::set_scale_y(uint32_t zoom) {
+  if (obj_) lv_image_set_scale_y(obj_, zoom);
+  return *this;
+}
+
+Canvas& Canvas::set_blend_mode(lv_blend_mode_t blend_mode) {
+  if (obj_) lv_image_set_blend_mode(obj_, blend_mode);
+  return *this;
+}
+
+Canvas& Canvas::set_antialias(bool antialias) {
+  if (obj_) lv_image_set_antialias(obj_, antialias);
+  return *this;
+}
+
+Canvas& Canvas::set_inner_align(lv_image_align_t align) {
+  if (obj_) lv_image_set_inner_align(obj_, align);
   return *this;
 }
 
@@ -96,6 +120,57 @@ void Canvas::init_layer(lv_layer_t* layer) {
 
 void Canvas::finish_layer(lv_layer_t* layer) {
   if (obj_) lv_canvas_finish_layer(obj_, layer);
+}
+
+// Copied from Image to maintain API compatibility
+const void* Canvas::get_src() const {
+  return obj_ ? lv_image_get_src(obj_) : nullptr;
+}
+
+int32_t Canvas::get_offset_x() {
+  return obj_ ? lv_image_get_offset_x(obj_) : 0;
+}
+
+int32_t Canvas::get_offset_y() {
+  return obj_ ? lv_image_get_offset_y(obj_) : 0;
+}
+
+int32_t Canvas::get_rotation() {
+  return obj_ ? lv_image_get_rotation(obj_) : 0;
+}
+
+void Canvas::get_pivot(lv_point_t* pivot) {
+  if (obj_) lv_image_get_pivot(obj_, pivot);
+}
+
+int32_t Canvas::get_scale() { return obj_ ? lv_image_get_scale(obj_) : 256; }
+
+int32_t Canvas::get_scale_x() {
+  return obj_ ? lv_image_get_scale_x(obj_) : 256;
+}
+
+int32_t Canvas::get_scale_y() {
+  return obj_ ? lv_image_get_scale_y(obj_) : 256;
+}
+
+int32_t Canvas::get_src_width() {
+  return obj_ ? lv_image_get_src_width(obj_) : 0;
+}
+
+int32_t Canvas::get_src_height() {
+  return obj_ ? lv_image_get_src_height(obj_) : 0;
+}
+
+lv_blend_mode_t Canvas::get_blend_mode() {
+  return obj_ ? lv_image_get_blend_mode(obj_) : LV_BLEND_MODE_NORMAL;
+}
+
+bool Canvas::get_antialias() {
+  return obj_ ? lv_image_get_antialias(obj_) : false;
+}
+
+lv_image_align_t Canvas::get_inner_align() {
+  return obj_ ? lv_image_get_inner_align(obj_) : LV_IMAGE_ALIGN_DEFAULT;
 }
 
 }  // namespace lvgl

@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_WIDGETS_MSGBOX_H_
 #define LVGL_CPP_WIDGETS_MSGBOX_H_
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_MSGBOX
@@ -38,7 +38,7 @@ class MsgBoxContent : public Object {
   using Object::Object;
 };
 
-class MsgBox : public Object {
+class MsgBox : public Widget<MsgBox> {
  public:
   /**
    * @brief Create a MsgBox on the active screen.
@@ -64,16 +64,6 @@ class MsgBox : public Object {
   Label add_text(const char* text);
   Button add_footer_button(const char* text);
   Button add_close_button();
-
-  // Fluent API shadows
-  MsgBox& set_width(int32_t width);
-  MsgBox& set_height(int32_t height);
-  MsgBox& set_size(int32_t width, int32_t height);
-  MsgBox& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  MsgBox& add_state(lv_state_t state);
-  MsgBox& remove_state(lv_state_t state);
-  MsgBox& add_flag(lv_obj_flag_t flag);
-  MsgBox& remove_flag(lv_obj_flag_t flag);
 
   MsgBoxHeader get_header();
   MsgBoxFooter get_footer();

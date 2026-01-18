@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_WIDGETS_IMAGE_BUTTON_H_
 #define LVGL_CPP_WIDGETS_IMAGE_BUTTON_H_
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_IMAGEBUTTON
@@ -18,7 +18,7 @@
  */
 namespace lvgl {
 
-class ImageButton : public Object {
+class ImageButton : public Widget<ImageButton> {
  public:
   /**
    * @brief Create a ImageButton on the active screen.
@@ -28,8 +28,7 @@ class ImageButton : public Object {
    * @brief Create a ImageButton with a parent.
    * @param parent The parent object.
    */
-  explicit ImageButton(Object* parent,
-                       Ownership ownership = Ownership::Default);
+  explicit ImageButton(Object& parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
@@ -39,16 +38,6 @@ class ImageButton : public Object {
   ImageButton& set_src(lv_imagebutton_state_t state, const void* src_left,
                        const void* src_mid, const void* src_right);
   ImageButton& set_state(lv_imagebutton_state_t state);
-
-  // Fluent API shadows
-  ImageButton& set_width(int32_t width);
-  ImageButton& set_height(int32_t height);
-  ImageButton& set_size(int32_t width, int32_t height);
-  ImageButton& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  ImageButton& add_state(lv_state_t state);
-  ImageButton& remove_state(lv_state_t state);
-  ImageButton& add_flag(lv_obj_flag_t flag);
-  ImageButton& remove_flag(lv_obj_flag_t flag);
 
   const void* get_src_left(lv_imagebutton_state_t state);
   const void* get_src_middle(lv_imagebutton_state_t state);

@@ -7,13 +7,13 @@
 namespace lvgl {
 
 Calendar::Calendar()
-    : Object(lv_calendar_create(nullptr), Ownership::Managed) {}
+    : Widget(lv_calendar_create(nullptr), Ownership::Managed) {}
 
 Calendar::Calendar(Object& parent, Ownership ownership)
-    : Object(lv_calendar_create(parent.raw()), ownership) {}
+    : Widget(lv_calendar_create(parent.raw()), ownership) {}
 
 Calendar::Calendar(lv_obj_t* obj, Ownership ownership)
-    : Object(obj, ownership) {}
+    : Widget(obj, ownership) {}
 
 Calendar& Calendar::set_today_date(uint32_t year, uint32_t month,
                                    uint32_t day) {
@@ -34,39 +34,6 @@ Calendar& Calendar::set_highlighted_dates(lv_calendar_date_t highlighted[],
 
 Calendar& Calendar::set_day_names(const char** day_names) {
   if (obj_) lv_calendar_set_day_names(obj_, day_names);
-  return *this;
-}
-
-Calendar& Calendar::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Calendar& Calendar::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Calendar& Calendar::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Calendar& Calendar::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Calendar& Calendar::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Calendar& Calendar::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Calendar& Calendar::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Calendar& Calendar::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

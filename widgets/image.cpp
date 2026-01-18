@@ -4,14 +4,18 @@
 
 namespace lvgl {
 
-Image::Image() : Object(lv_image_create(nullptr), Ownership::Managed) {}
+Image::Image()
+    : Widget(lv_image_create(lv_screen_active()), Ownership::Managed) {}
 
-Image::Image(Object& parent, Ownership ownership)
-    : Object(lv_image_create(parent.raw()), ownership) {}
+Image::Image(Object& parent)
+    : Widget(lv_image_create(parent.raw()), Ownership::Managed) {}
 
-Image::Image(Object& parent, const void* src) : Image(parent) { set_src(src); }
+Image::Image(Object& parent, const void* src)
+    : Widget(lv_image_create(parent.raw()), Ownership::Managed) {
+  set_src(src);
+}
 
-Image::Image(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Image::Image(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Image& Image::set_src(const void* src) {
   if (obj_) lv_image_set_src(obj_, src);
@@ -65,39 +69,6 @@ Image& Image::set_antialias(bool antialias) {
 
 Image& Image::set_inner_align(lv_image_align_t align) {
   if (obj_) lv_image_set_inner_align(obj_, align);
-  return *this;
-}
-
-Image& Image::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Image& Image::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Image& Image::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Image& Image::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Image& Image::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Image& Image::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Image& Image::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Image& Image::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

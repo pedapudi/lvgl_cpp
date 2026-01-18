@@ -15,8 +15,8 @@ int main() {
   // By default, group wraps a new lv_group instance.
 
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Button btn1(&screen);
-  lvgl::Button btn2(&screen);
+  lvgl::Button btn1(screen);
+  lvgl::Button btn2(screen);
 
   // Test add_obj with reference
   group.add_obj(btn1);

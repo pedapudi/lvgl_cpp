@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_ARC
@@ -22,7 +22,7 @@ namespace lvgl {
 class Subject;
 class Observer;
 
-class Arc : public Object {
+class Arc : public Widget<Arc> {
  public:
   /**
    * @brief Create a Arc on the active screen.
@@ -85,16 +85,6 @@ class Arc : public Object {
    * @param offset Offset in pixels.
    */
   Arc& set_knob_offset(int32_t offset);
-
-  // Fluent API shadows
-  Arc& set_width(int32_t width);
-  Arc& set_height(int32_t height);
-  Arc& set_size(int32_t width, int32_t height);
-  Arc& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Arc& add_state(lv_state_t state);
-  Arc& remove_state(lv_state_t state);
-  Arc& add_flag(lv_obj_flag_t flag);
-  Arc& remove_flag(lv_obj_flag_t flag);
 
   lv_value_precise_t get_angle_start();
   lv_value_precise_t get_angle_end();

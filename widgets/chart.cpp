@@ -4,12 +4,13 @@
 
 namespace lvgl {
 
-Chart::Chart() : Object(lv_chart_create(nullptr), Ownership::Managed) {}
+Chart::Chart()
+    : Widget(lv_chart_create(lv_screen_active()), Ownership::Managed) {}
 
-Chart::Chart(Object& parent, Ownership ownership)
-    : Object(lv_chart_create(parent.raw()), ownership) {}
+Chart::Chart(Object& parent)
+    : Widget(lv_chart_create(parent.raw()), Ownership::Managed) {}
 
-Chart::Chart(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Chart::Chart(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Chart& Chart::set_type(lv_chart_type_t type) {
   if (obj_) lv_chart_set_type(obj_, type);
@@ -33,39 +34,6 @@ Chart& Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
 
 Chart& Chart::set_update_mode(lv_chart_update_mode_t update_mode) {
   if (obj_) lv_chart_set_update_mode(obj_, update_mode);
-  return *this;
-}
-
-Chart& Chart::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Chart& Chart::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Chart& Chart::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Chart& Chart::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Chart& Chart::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Chart& Chart::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Chart& Chart::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Chart& Chart::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

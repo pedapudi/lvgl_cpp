@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_SPINNER
@@ -20,7 +20,7 @@
  */
 namespace lvgl {
 
-class Spinner : public Object {
+class Spinner : public Widget<Spinner> {
  public:
   /**
    * @brief Create a Spinner on the active screen.
@@ -30,7 +30,7 @@ class Spinner : public Object {
    * @brief Create a Spinner with a parent.
    * @param parent The parent object.
    */
-  explicit Spinner(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Spinner(Object& parent);
 
   /**
    * @brief Create a Spinner with specified animation parameters.
@@ -47,16 +47,6 @@ class Spinner : public Object {
   explicit Spinner(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Spinner& set_anim_params(uint32_t t, uint32_t angle);
-
-  // Fluent API shadows
-  Spinner& set_width(int32_t width);
-  Spinner& set_height(int32_t height);
-  Spinner& set_size(int32_t width, int32_t height);
-  Spinner& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Spinner& add_state(lv_state_t state);
-  Spinner& remove_state(lv_state_t state);
-  Spinner& add_flag(lv_obj_flag_t flag);
-  Spinner& remove_flag(lv_obj_flag_t flag);
 };
 
 /**

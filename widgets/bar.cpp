@@ -6,12 +6,12 @@
 
 namespace lvgl {
 
-Bar::Bar() : Object(lv_bar_create(nullptr), Ownership::Managed) {}
+Bar::Bar() : Widget(lv_bar_create(lv_screen_active()), Ownership::Managed) {}
 
 Bar::Bar(Object& parent, Ownership ownership)
-    : Object(lv_bar_create(parent.raw()), ownership) {}
+    : Widget(lv_bar_create(parent.raw()), ownership) {}
 
-Bar::Bar(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Bar::Bar(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Bar& Bar::set_value(int32_t value, lv_anim_enable_t anim) {
   if (obj_) lv_bar_set_value(obj_, value, anim);
@@ -45,39 +45,6 @@ Bar& Bar::set_mode(lv_bar_mode_t mode) {
 
 Bar& Bar::set_orientation(lv_bar_orientation_t orientation) {
   if (obj_) lv_bar_set_orientation(obj_, orientation);
-  return *this;
-}
-
-Bar& Bar::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Bar& Bar::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Bar& Bar::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Bar& Bar::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Bar& Bar::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Bar& Bar::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Bar& Bar::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Bar& Bar::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

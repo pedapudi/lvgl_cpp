@@ -4,12 +4,13 @@
 
 namespace lvgl {
 
-Scale::Scale() : Scale((Object*)nullptr) {}
+Scale::Scale()
+    : Widget(lv_scale_create(lv_screen_active()), Ownership::Managed) {}
 
-Scale::Scale(Object* parent, Ownership ownership)
-    : Object(lv_scale_create(parent ? parent->raw() : nullptr), ownership) {}
+Scale::Scale(Object& parent, Ownership ownership)
+    : Widget(lv_scale_create(parent.raw()), ownership) {}
 
-Scale::Scale(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Scale::Scale(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Scale& Scale::set_mode(lv_scale_mode_t mode) {
   if (obj_) lv_scale_set_mode(obj_, mode);
@@ -70,39 +71,6 @@ Scale& Scale::set_post_draw(bool en) {
 
 Scale& Scale::set_draw_ticks_on_top(bool en) {
   if (obj_) lv_scale_set_draw_ticks_on_top(obj_, en);
-  return *this;
-}
-
-Scale& Scale::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Scale& Scale::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Scale& Scale::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Scale& Scale::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Scale& Scale::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Scale& Scale::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Scale& Scale::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Scale& Scale::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

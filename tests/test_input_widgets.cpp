@@ -18,7 +18,7 @@ void test_textarea_1() {
   std::cout << "Testing Textarea Example 1..." << std::endl;
   lvgl::Textarea ta;
   ta.set_one_line(true);
-  ta.align(LV_ALIGN_TOP_MID, 0, 10);
+  ta.align(lvgl::Object::Align::TopMid, 0, 10);
   ta.add_state(LV_STATE_FOCUSED);
   // ButtonMatrix usage skipped or simplified for now to focus on TA
   std::cout << "Textarea Example 1 Passed" << std::endl;
@@ -28,29 +28,29 @@ void test_textarea_1() {
 void test_textarea_2() {
   std::cout << "Testing Textarea Example 2..." << std::endl;
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Textarea pwd_ta(&screen);
+  lvgl::Textarea pwd_ta(screen);
   pwd_ta.set_text("");
   pwd_ta.set_password_mode(true);
   pwd_ta.set_one_line(true);
   pwd_ta.set_width(lv_pct(40));
   pwd_ta.set_pos(5, 20);
 
-  lvgl::Label pwd_label(&screen);
+  lvgl::Label pwd_label(screen);
   pwd_label.set_text("Password:");
-  pwd_label.align_to(pwd_ta, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+  pwd_label.align_to(pwd_ta, lvgl::Object::Align::OutTopLeft, 0, 0);
 
-  lvgl::Textarea text_ta(&screen);
+  lvgl::Textarea text_ta(screen);
   text_ta.set_one_line(true);
   text_ta.set_password_mode(false);
   text_ta.set_width(lv_pct(40));
-  text_ta.align(LV_ALIGN_TOP_RIGHT, -5, 20);
+  text_ta.align(lvgl::Object::Align::TopRight, -5, 20);
 
-  lvgl::Label oneline_label(&screen);
+  lvgl::Label oneline_label(screen);
   oneline_label.set_text("Text:");
-  oneline_label.align_to(text_ta, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+  oneline_label.align_to(text_ta, lvgl::Object::Align::OutTopLeft, 0, 0);
 
   lvgl::Keyboard kb;
-  kb.set_textarea(&pwd_ta);
+  kb.set_textarea(pwd_ta);
 
   std::cout << "Textarea Example 2 Passed" << std::endl;
 }
@@ -61,15 +61,15 @@ void test_keyboard_1() {
   lvgl::Keyboard kb;
 
   lvgl::Textarea ta1;
-  ta1.align(LV_ALIGN_TOP_LEFT, 10, 10);
+  ta1.align(lvgl::Object::Align::TopLeft, 10, 10);
   ta1.set_placeholder_text("Hello");
   ta1.set_size(140, 80);
 
   lvgl::Textarea ta2;
-  ta2.align(LV_ALIGN_TOP_RIGHT, -10, 10);
+  ta2.align(lvgl::Object::Align::TopRight, -10, 10);
   ta2.set_size(140, 80);
 
-  kb.set_textarea(&ta1);
+  kb.set_textarea(ta1);
   std::cout << "Keyboard Example 1 Passed" << std::endl;
 }
 
@@ -77,7 +77,7 @@ void test_keyboard_1() {
 void test_spinbox_1() {
   std::cout << "Testing Spinbox Example 1..." << std::endl;
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Spinbox spinbox(&screen);
+  lvgl::Spinbox spinbox(screen);
   spinbox.set_range(-1000, 25000);
   spinbox.set_digit_count(5);
   spinbox.set_dec_point_pos(2);
@@ -87,14 +87,14 @@ void test_spinbox_1() {
 
   int32_t h = spinbox.get_height();
 
-  lvgl::Button btn_plus(&screen);
+  lvgl::Button btn_plus(screen);
   btn_plus.set_size(h, h);
-  btn_plus.align_to(spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+  btn_plus.align_to(spinbox, lvgl::Object::Align::OutRightMid, 5, 0);
   btn_plus.set_style_bg_image_src(LV_SYMBOL_PLUS, 0);
 
-  lvgl::Button btn_minus(&screen);
+  lvgl::Button btn_minus(screen);
   btn_minus.set_size(h, h);
-  btn_minus.align_to(spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+  btn_minus.align_to(spinbox, lvgl::Object::Align::OutLeftMid, -5, 0);
   btn_minus.set_style_bg_image_src(LV_SYMBOL_MINUS, 0);
 
   std::cout << "Spinbox Example 1 Passed" << std::endl;
@@ -107,7 +107,7 @@ void test_dropdown_1() {
   dd.set_options(
       "Apple\nBanana\nOrange\nCherry\nGrape\nRaspberry\nMelon\nOrang"
       "e\nLemon\nNuts");
-  dd.align(LV_ALIGN_TOP_MID, 0, 20);
+  dd.align(lvgl::Object::Align::TopMid, 0, 20);
 
   // Example 2 bits
   lvgl::Dropdown dd2;
@@ -138,7 +138,7 @@ void test_roller_1() {
   // roller2.add_style... (skipping style def for brevity, focusing on API)
   roller2.set_style_text_align(LV_TEXT_ALIGN_LEFT, 0);
   roller2.set_selected(2, LV_ANIM_OFF);
-  roller2.align(LV_ALIGN_LEFT_MID, 10, 0);
+  roller2.align(lvgl::Object::Align::LeftMid, 10, 0);
 
   std::cout << "Roller Example 1 Passed" << std::endl;
 }
@@ -148,7 +148,7 @@ void test_calendar_1() {
   std::cout << "Testing Calendar Example 1..." << std::endl;
   lvgl::Calendar calendar;
   calendar.set_size(185, 230);
-  calendar.align(LV_ALIGN_CENTER, 0, 27);
+  calendar.align(lvgl::Object::Align::Center, 0, 27);
   calendar.set_today_date(2021, 02, 23);
   calendar.set_shown_date(2021, 02);
 

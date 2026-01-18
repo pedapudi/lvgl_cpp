@@ -7,12 +7,12 @@
 
 namespace lvgl {
 
-MsgBox::MsgBox() : Object(lv_msgbox_create(nullptr), Ownership::Managed) {}
+MsgBox::MsgBox() : Widget(lv_msgbox_create(nullptr), Ownership::Managed) {}
 
 MsgBox::MsgBox(Object& parent, Ownership ownership)
-    : Object(lv_msgbox_create(parent.raw()), ownership) {}
+    : Widget(lv_msgbox_create(parent.raw()), ownership) {}
 
-MsgBox::MsgBox(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+MsgBox::MsgBox(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Label MsgBox::add_title(const char* title) {
   return Label(obj_ ? lv_msgbox_add_title(obj_, title) : nullptr);
@@ -32,39 +32,6 @@ Button MsgBox::add_footer_button(const char* text) {
 
 Button MsgBox::add_close_button() {
   return Button(obj_ ? lv_msgbox_add_close_button(obj_) : nullptr);
-}
-
-MsgBox& MsgBox::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-MsgBox& MsgBox::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-MsgBox& MsgBox::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-MsgBox& MsgBox::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-MsgBox& MsgBox::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-MsgBox& MsgBox::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-MsgBox& MsgBox::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-MsgBox& MsgBox::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
-  return *this;
 }
 
 MsgBoxHeader MsgBox::get_header() {

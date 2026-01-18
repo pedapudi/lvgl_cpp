@@ -4,16 +4,16 @@
 
 namespace lvgl {
 
-ButtonMatrix::ButtonMatrix() : ButtonMatrix((Object*)nullptr) {}
+ButtonMatrix::ButtonMatrix()
+    : Widget(lv_buttonmatrix_create(lv_screen_active()), Ownership::Managed) {}
 
-ButtonMatrix::ButtonMatrix(Object* parent, Ownership ownership)
-    : Object(lv_buttonmatrix_create(parent ? parent->raw() : nullptr),
-             ownership) {}
+ButtonMatrix::ButtonMatrix(Object& parent, Ownership ownership)
+    : Widget(lv_buttonmatrix_create(parent.raw()), ownership) {}
 
 ButtonMatrix::ButtonMatrix(lv_obj_t* obj, Ownership ownership)
-    : Object(obj, ownership) {}
+    : Widget(obj, ownership) {}
 
-ButtonMatrix::ButtonMatrix(Object* parent, const char* const map[])
+ButtonMatrix::ButtonMatrix(Object& parent, const char* const map[])
     : ButtonMatrix(parent) {
   set_map(map);
 }
@@ -63,40 +63,6 @@ ButtonMatrix& ButtonMatrix::set_button_width(uint32_t btn_id, uint32_t width) {
 
 ButtonMatrix& ButtonMatrix::set_one_checked(bool en) {
   if (obj_) lv_buttonmatrix_set_one_checked(obj_, en);
-  return *this;
-}
-
-ButtonMatrix& ButtonMatrix::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::align(Align align, int32_t x_ofs,
-                                  int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-ButtonMatrix& ButtonMatrix::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

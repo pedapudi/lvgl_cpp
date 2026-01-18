@@ -6,12 +6,12 @@
 
 namespace lvgl {
 
-Arc::Arc() : Object(lv_arc_create(nullptr), Ownership::Managed) {}
+Arc::Arc() : Widget(lv_arc_create(lv_screen_active()), Ownership::Managed) {}
 
 Arc::Arc(Object& parent, Ownership ownership)
-    : Object(lv_arc_create(parent.raw()), ownership) {}
+    : Widget(lv_arc_create(parent.raw()), ownership) {}
 
-Arc::Arc(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Arc::Arc(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Arc& Arc::set_start_angle(lv_value_precise_t start) {
   if (obj_) lv_arc_set_start_angle(obj_, start);
@@ -80,39 +80,6 @@ Arc& Arc::set_change_rate(uint32_t rate) {
 
 Arc& Arc::set_knob_offset(int32_t offset) {
   if (obj_) lv_arc_set_knob_offset(obj_, offset);
-  return *this;
-}
-
-Arc& Arc::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Arc& Arc::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Arc& Arc::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Arc& Arc::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Arc& Arc::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Arc& Arc::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Arc& Arc::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Arc& Arc::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 
