@@ -1,9 +1,9 @@
-# Drivers Design
+# Drivers design
 
 ## 1. Overview
 This module covers wrappers for `lv_display_t` and `lv_indev_t`, critical for platform integration (like ESP32).
 
-## 2. Display Driver (`Display`)
+## 2. Display driver (`Display`)
 *   **Encapsulates**: `lv_display_t*`
 *   **Methods**:
     *   `Display::create(int32_t w, int32_t h)`
@@ -11,7 +11,7 @@ This module covers wrappers for `lv_display_t` and `lv_indev_t`, critical for pl
     *   `Display& flush_cb(lv_display_flush_cb_t cb)`
     *   `Display& resolution(int32_t w, int32_t h)`
 
-## 3. Input Device Driver (`InputDevice`)
+## 3. Input device driver (`InputDevice`)
 *   **Encapsulates**: `lv_indev_t*`
 *   **Methods**:
     *   `InputDevice::create(lv_indev_type_t type)`

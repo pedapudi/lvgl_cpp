@@ -1,4 +1,4 @@
-# Core Architecture Design
+# Core architecture design
 
 ## 1. Overview
 The Core module is the foundation of `lvgl_cpp`. It handles:
@@ -7,7 +7,7 @@ The Core module is the foundation of `lvgl_cpp`. It handles:
 *   The `Widget<T>` template (the new CRTP base).
 *   Event Handling (`Event` class, Callbacks).
 
-## 2. The `Object` Class (Refactored)
+## 2. The `Object` class (refactored)
 We will strip `Object` down to its essence: managing the `lv_obj_t*` handle.
 
 ### Responsibilities
@@ -39,7 +39,7 @@ protected:
 };
 ```
 
-## 3. The `Widget<T>` Template (New)
+## 3. The `Widget<T>` template (new)
 The new base for all concrete widgets. It uses CRTP to allow fluent chaining to return the derived type.
 
 ### Architecture
@@ -73,16 +73,16 @@ Located in `core/mixins/`.
 *   `T& height(int32_t)` / `int32_t height()`
 *   `T& size(int32_t w, int32_t h)`
 
-## 5. Event System
+## 5. Event system
 Refactoring `Event` to be purely a safe wrapper.
 
-### `Event` Class
+### `Event` class
 Reference type (does not own event).
 *   `lv_event_code_t code()`
 *   `Object target()` (returns unmanaged wrapper)
 *   `T target<T>()` (safe cast)
 
-### Callback Registration
+### Callback registration
 ```cpp
 template <typename Derived>
 struct EventSource {
@@ -98,7 +98,7 @@ struct EventSource {
 };
 ```
 
-## 6. Memory Management Policy
+## 6. Memory management policy
 *   **Stack Allocation**: `Button btn(screen);` -> Widget is deleted when `btn` goes out of scope.
 *   **Smart Pointers**: `auto btn = std::make_unique<Button>(screen);` -> Lifecycle tied to pointer.
 *   **Leak (Manual)**: `new Button(screen); btn->release();` -> User must manually manage C pointer or let LVGL parent cleanup. (Not recommended but supported via "Escape Hatch").

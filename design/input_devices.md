@@ -27,7 +27,7 @@ LVGL 9.4 introduces a simplified yet powerful API for Input Devices (`lv_indev`)
     *   **Data**: ID of the pressed button.
     *   **Logic**: Maps physical button IDs to on-screen coordinates, simulating a touch press at that location.
 
-### 1.2. The Integration Workflow
+### 1.2. The integration workflow
 The standard lifecycle in C involves:
 1.  **Creation**: `lv_indev_t* indev = lv_indev_create()`.
 2.  **Configuration**:
@@ -38,9 +38,9 @@ The standard lifecycle in C involves:
     *   **Polling**: Default. LVGL calls `read_cb` every 30ms (configurable).
     *   **Event-Driven**: Hardware ISR calls `lv_indev_read(indev)` to force an immediate read.
 
-## 2. Current State of `lvgl_cpp` and Gap Analysis
+## 2. Current state of `lvgl_cpp` and gap analysis
 
-### 2.1. Current Implementation
+### 2.1. Current implementation
 *   **Wrappers**: `InputDevice` exists but is a *passive* wrapper around an existing `lv_indev_t*`.
 *   **Gap 1: No Creation**: Users cannot create a new driver (e.g., "I have a button connected to GPIO 5") using C++. They must write C boilerplate.
 *   **Gap 2: No Type Safety**: `lv_indev_t` is opaque. There is no distinction in the C++ type system between a Keypad (requires Group) and a Pointer (requires Cursor).
@@ -54,7 +54,7 @@ The standard lifecycle in C involves:
 3.  **RAII Ownership**: The C++ object should manage the `lv_indev_delete()` lifecycle if it created the device.
 4.  **Type Safety**: Distinct classes (`PointerInput`, `KeypadInput`) enforcing requirements like Groups.
 
-### 3.2. Class Hierarchy
+### 3.2. Class hierarchy
 
 ```mermaid
 classDiagram
@@ -79,9 +79,9 @@ classDiagram
     InputDevice <|-- EncoderInput
 ```
 
-### 3.3. Technical Implementation Details
+### 3.3. Technical implementation details
 
-#### The Callback Dispatcher
+#### The callback dispatcher
 To support C++ lambdas, we use `lv_indev_set_user_data`.
 
 ```cpp
@@ -94,14 +94,14 @@ static void cpp_read_cb_trampoline(lv_indev_t* indev, lv_indev_data_t* data) {
 }
 ```
 
-#### Ownership Strategy
+#### Ownership strategy
 We support two modes:
 1.  **Managed (Owner)**: Created via `InputDevice::create()`. Destructor calls `lv_indev_delete()`.
 2.  **Unmanaged (Observer)**: Wrapped via `InputDevice::wrap()`. Destructor does nothing.
 
-### 3.4. Usage Recipes
+### 3.4. Usage recipes
 
-#### Recipe 1: Touchscreen Driver (Pointer)
+#### Recipe 1: Touchscreen driver (pointer)
 ```cpp
 // Create a managed pointer device
 auto touch = PointerInput::create();
@@ -123,7 +123,7 @@ cursor_img.set_src("S:/mouse_icon.png");
 touch.set_cursor(cursor_img);
 ```
 
-#### Recipe 2: Encoder Navigation
+#### Recipe 2: Encoder navigation
 ```cpp
 // 1. Create the Group for navigation
 Group menu_group;
@@ -142,7 +142,7 @@ enc.on_read([](InputData& data) {
 });
 ```
 
-#### Recipe 3: Keyboard (Desktop/SDL style)
+#### Recipe 3: Keyboard (desktop/SDL style)
 ```cpp
 auto kb = KeypadInput::create();
 kb.set_group(active_group);

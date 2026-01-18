@@ -1,4 +1,4 @@
-# LVGL C++ Wrapper (lvgl_cpp)
+# LVGL C++ wrapper (lvgl_cpp)
 
 A modern, robust C++ wrapper for [LVGL (Light and Versatile Graphics Library)](https://lvgl.io/). This library provides a native C++ interface with RAII-style memory management, type-safe widgets, and functional event callbacks.
 
@@ -39,7 +39,7 @@ project/
 └── lvgl_cpp/       # This library
 ```
 
-## Getting Started
+## Getting started
 
 ### Initialization
 Initialize LVGL and create a display driver as usual (C API is still useful for system init).
@@ -77,11 +77,11 @@ int main() {
 }
 ```
 
-## Architecture & Memory Management
+## Architecture and memory management
 
 The wrapper tracks ownership to prevent memory leaks and double-frees.
 
-### Ownership Model
+### Ownership model
 The wrapper uses an `Ownership` enum to define lifecycle management:
 
 1.  **Managed** (`Ownership::Managed`):
@@ -99,14 +99,14 @@ The wrapper uses an `Ownership` enum to define lifecycle management:
         *   **New Child** (`Button(parent)`): Defaults to **Managed**.
         *   **Wrapper** (`Button(ptr)`): Defaults to **Unmanaged**.
 
-### The Problem of "Parent Deletion" vs "RAII"
+### The problem of "Parent Deletion" vs "RAII"
 LVGL deletes children when a parent is deleted. The C++ wrapper handles this gracefully.
 *   If a parent `screen` is deleted, it deletes its children in LVGL logic.
 *   If you hold a C++ `Button btn(&screen)` wrapper, and `screen` is deleted first, `btn`'s underlying object is destroyed.
 *   The `Object` class installs an `LV_EVENT_DELETE` hook. When the underlying object is deleted (by parent), the C++ wrapper marks its internal pointer as `nullptr`.
 *   When the `btn` wrapper destructor runs later, it sees `nullptr` and does nothing. **Safe.**
 
-## Usage Guide
+## Usage guide
 
 ### Widgets
 All core widgets are supported in `lvgl_cpp/widgets/`.
@@ -134,7 +134,7 @@ label.set_long_mode(LV_LABEL_LONG_SCROLL_CIRCULAR)
      .center();
 ```
 
-### Return Types
+### Return types
 Methods that create children return specific C++ wrappers by value (move semantics) rather than generic `Object`s.
 ```cpp
 // TabView::add_tab returns a TabPage wrapper
@@ -197,7 +197,7 @@ style.set_radius(10);
 btn.add_style(style, LV_PART_MAIN);
 ```
 
-## Observer Pattern
+## Observer pattern
 
 LVGL C++ provides a robust wrapper around the Observer pattern.
 
@@ -208,7 +208,7 @@ lvgl::IntSubject speed(0);
 speed.set(100);
 ```
 
-### Widget Binding
+### Widget binding
 Widgets can bind their properties to a Subject. The binding returns an `Observer` object that enforces RAII (Resource Acquisition Is Initialization). **You must keep the Observer object alive** to maintain the binding.
 
 ```cpp
@@ -221,7 +221,7 @@ lvgl::Observer obs = slider.bind_value(speed);
 // slider.bind_value(speed); // WARNING: Binding immediately removed
 ```
 
-### Manual Observers
+### Manual observers
 You can add custom observers to any subject.
 ```cpp
 auto obs = speed.add_observer([](lv_observer_t*, lv_subject_t* s) {
@@ -229,15 +229,15 @@ auto obs = speed.add_observer([](lv_observer_t*, lv_subject_t* s) {
 }, nullptr);
 ```
 
-### Memory Management
+### Memory management
 - **Subjects**: Must outlive their Observers.
 - **Observers**: When an `Observer` C++ object goes out of scope, it automatically unsubscribes from the subject (if it owns the subscription).
 
-### Helper Utilities
+### Helper utilities
 - **FileSystem**: `lvgl_cpp/misc/file_system.h` provides `File` and `Directory` classes.
 - **Color**: `lvgl_cpp/misc/color.h` provides a `Color` class with mixing/darkening/lightening support.
 
-## API Reference
+## API reference
 The API is fully documented in the header files.
 - **Core**: `lvgl_cpp/core/` (Object, Group, Style, Observer)
 - **Widgets**: `lvgl_cpp/widgets/` (All widgets)

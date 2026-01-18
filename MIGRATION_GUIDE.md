@@ -1,0 +1,69 @@
+# Migration Guide: Moving to lvgl_cpp v0.2.0
+
+## Overview
+As part of the modernization of the C++ wrapper for LVGL 9, we have introduced a new architecture based on Mixins and the `Widget<T>` pattern. This change improves type safety, reduces code duplication, and enables a more fluent API.
+
+## Key changes
+
+### 1. `Object` is no longer a "God Object"
+In previous versions, the base `Object` class contained methods for positioning, sizing, and alignment (`set_x`, `set_width`, `align`, etc.). These have been removed to enforce usage of concrete Widget types.
+
+**Old Code:**
+```cpp
+lvgl::Object obj(parent);
+obj.set_x(10); // Compilation Error
+obj.set_size(100, 100); // Compilation Error
+```
+
+**New Code:**
+```cpp
+// Use a concrete widget, or cast if necessary (though rare for generic objects)
+lvgl::Label label(parent);
+label.set_x(10);
+label.set_size(100, 100);
+
+// For a generic container, use lvgl::Widget<lvgl::Object> isn't standard, 
+// usually you want a specific widget like lvgl::Button or lvgl::Container (if it existed)
+// or simply keep using specific widgets.
+```
+
+### 2. Constructors
+Constructors now prefer generic `Object& parent` referencing or `lv_screen_active()` for defaults.
+
+**Old Code:**
+```cpp
+lvgl::Button btn(nullptr); // Unsafe if unchecked
+```
+
+**New Code:**
+```cpp
+lvgl::Button btn; // Automatically uses lv_screen_active()
+// OR
+lvgl::Button btn(parent_obj);
+```
+
+### 3. Fluency
+Most setters now return `*this` typed to the specific class, allowing chaining.
+
+```cpp
+lvgl::Button btn;
+btn.set_size(100, 50)
+   .center()
+   .add_flag(LV_OBJ_FLAG_CHECKABLE);
+```
+
+## Creating custom widgets
+Inherit from `lvgl::Widget<MyWidget>` to get all mixins for free.
+
+```cpp
+class MyWidget : public lvgl::Widget<MyWidget> {
+public:
+    MyWidget() : Widget(lv_my_widget_create(lv_screen_active()), Ownership::Managed) {}
+    
+    // Add custom fluent methods
+    MyWidget& set_custom_prop(int val) {
+        // ...
+        return *this;
+    }
+};
+```

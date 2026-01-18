@@ -1,4 +1,4 @@
-# Complex and Menu Widgets Design
+# Complex and menu widgets design
 
 ## 1. Scope
 This document covers complex widgets that don't fit into simple Input/Output categories:
@@ -8,7 +8,7 @@ This document covers complex widgets that don't fit into simple Input/Output cat
 *   `Roller` (`lv_roller`)
 *   `Dropdown` (`lv_dropdown`)
 
-## 2. Widget Specifications
+## 2. Widget specifications
 
 ### 2.1. Menu (`Menu`)
 *   **Base**: `Widget<Menu>`

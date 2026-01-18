@@ -1,4 +1,4 @@
-# Research Report: LVGL Animations and Timelines in C++
+# Research report: LVGL animations and timelines in C++
 
 ## Executive Summary
 
@@ -6,29 +6,29 @@ LVGL's animation system (`lv_anim_t`) and timeline system (`lv_anim_timeline_t`)
 
 This report analyzes the underlying mechanisms of LVGL animations, identifies critical resource management challenges when using Timelines with C++ callbacks, and proposes a design for an idiomatic `AnimationTimeline` C++ wrapper that safely manages lifecycle and memory.
 
-## 1. LVGL Animation Mechanics
+## 1. LVGL animation mechanics
 
-### 1.1 Single Animations (`lv_anim_t`)
+### 1.1 Single animations (`lv_anim_t`)
 Core animations are struct-based. Users initialize an `lv_anim_t` on the stack, configure it, and start it. The global animation timer handles execution.
 - **Callbacks**: Relies on function pointers.
 - **User Data**: `user_data` pointer allows attaching context.
 - **Lifecycle**: `deleted_cb` allows cleanup of `user_data`. This is the hook `lvgl_cpp::Animation` uses to destruct C++ closures.
 
-### 1.2 Animation Timelines (`lv_anim_timeline_t`)
+### 1.2 Animation timelines (`lv_anim_timeline_t`)
 Timelines orchestrate multiple animations.
 - **Adding Animations**: `lv_anim_timeline_add` copies the animation descriptor.
 - **Critical Limitation**: When `lv_anim_timeline_del()` is called, it frees the timeline memory but **does NOT call `deleted_cb`** on the contained animation descriptors.
     - **Implication**: Any C++ `CallbackData` attached to animations in a timeline will **leak** if relying solely on the standard `deleted_cb` mechanism.
 
-## 2. Existing `lvgl_cpp::Animation` Wrapper
+## 2. Existing `lvgl_cpp::Animation` wrapper
 
 The existing `Animation` class uses a builder pattern and handles C++ `std::function` callbacks by allocating a `CallbackData` struct on the heap. It relies on `deleted_cb` for cleanup, which works for single animations but fails for Timelines.
 
-## 3. Proposed Design: `AnimationTimeline` Wrapper
+## 3. Proposed design: `AnimationTimeline` wrapper
 
 To support Timelines with safe C++ callbacks, the `AnimationTimeline` wrapper must assume ownership of all callback resources.
 
-### 3.1 Class Structure
+### 3.1 Class structure
 
 ```cpp
 class AnimationTimeline {
@@ -68,12 +68,12 @@ class AnimationTimeline {
 };
 ```
 
-### 3.2 Implementation Constraints and Safety Noted
+### 3.2 Implementation constraints and safety noted
 1.  **Append-Only**: The `lv_anim_timeline` API allows adding animations but supports **neither removal nor modification** of existing items. The C++ wrapper reflects this immutable-history nature.
 2.  **No Merge Support**: `lv_anim_timeline_merge` performs a bitwise copy of animation descriptors. This is unsafe for C++ closures (causing double-free or use-after-free on `user_data`). Thus, `merge` will not be exposed.
 3.  **Ownership**: The `AnimationTimeline` instance exclusively owns the `CallbackData` for its children.
 
-## 4. Usage Example
+## 4. Usage example
 
 ```cpp
 void CreateIntroAnimation(lv_obj_t* label, lv_obj_t* button) {
@@ -87,17 +87,17 @@ void CreateIntroAnimation(lv_obj_t* label, lv_obj_t* button) {
 }
 ```
 
-## 5. Recommendations for Existing `Animation` Class
+## 5. Recommendations for existing `Animation` class
 
 While researching `lv_anim.h`, several useful features were identified that are currently missing from the C++ `Animation` wrapper. These should be added to provide full API coverage.
 
-### 5.1 Missing Features
+### 5.1 Missing features
 -   **Early Apply**: `lv_anim_set_early_apply(lv_anim_t*, bool)`. Critical for animations with delays where the start value should be visible immediately.
 -   **Start Callback**: `lv_anim_set_start_cb`. useful for triggering logic exactly when the animation begins (post-delay).
 -   **Relative Values**: `lv_anim_set_get_value_cb`. Allows animations to properly handle "relative" moves (e.g. `current + 10`).
 -   **Speed-based Duration**: `lv_anim_speed_to_time` helpers. Allow defining animation by speed (pixels/sec) rather than fixed duration.
 
-### 5.2 Proposed Additions
+### 5.2 Proposed additions
 ```cpp
 class Animation {
   // ... existing ...

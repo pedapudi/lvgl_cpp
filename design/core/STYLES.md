@@ -1,9 +1,9 @@
-# Style System Design
+# Style system design
 
 ## 1. Overview
 The Style System focuses on replacing raw enums and untyped arrays with strongly typed, readable builders.
 
-## 2. Style Builder
+## 2. Style builder
 A fluent builder for `lv_style_t`.
 
 ```cpp
@@ -23,7 +23,7 @@ public:
 };
 ```
 
-## 3. Local Styles
+## 3. Local styles
 Helpers for setting local styles on objects without creating a separate `lv_style_t`.
 
 ```cpp

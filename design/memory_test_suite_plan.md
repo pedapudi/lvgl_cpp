@@ -1,18 +1,18 @@
-# Memory Test Suite Design Plan
+# Memory test suite design plan
 
 ## Objective
 Empirically measure heap usage, detect memory leaks, and generate detailed comparative profiles between `lvgl_cpp` and pure C `lvgl`.
 
 ## Methodology
 
-### 1. Profiling Tools Integration (`pprof`)
+### 1. Profiling tools integration (`pprof`)
 We will use Google's `gperftools` (specifically `tcmalloc`) to capture high-fidelity heap profiles.
 
 **Why `pprof`?**
 - **Call Graph Attribution**: Accurately blames allocations to specific functions (e.g., distinguishing `std::vector` resize from `std::function` allocation).
 - **Differential Profiling**: `pprof --base` allows subtracting the C baseline profile from the C++ profile to isolate the wrapper overhead.
 
-### 2. Test Scenarios
+### 2. Test scenarios
 
 Each scenario will be compiled as a separate executable to ensure clean heap state.
 
@@ -28,17 +28,17 @@ Each scenario will be compiled as a separate executable to ensure clean heap sta
 - **Task**: Create a nested Flex/Grid layout with mixed C++ and raw C objects.
 - **Metric**: Validation of "Zero Overhead" claims for mixins.
 
-### 3. Implementation Plan
+### 3. Implementation plan
 
-#### 3.1 Build System Updates
+#### 3.1 Build system updates
 - Add `GPerfTools` dependency to CMake (optional, enabled via `-DENABLE_PROFILING=ON`).
 - Link tests with `-lprofiler` and `-ltcmalloc`.
 
-#### 3.2 Test Runner Script (`profile_runner.py`)
+#### 3.2 Test runner script (`profile_runner.py`)
 A wrapper script to execute tests and capture profiles.
 
 ```python
-# Pseudo-Code for Runner Logic
+# Pseudo-code for runner logic
 def run_comparison(test_name):
     # 1. Run C Implementation
     env = {"HEAPPROFILE": f"/tmp/{test_name}_c"}
@@ -53,7 +53,7 @@ def run_comparison(test_name):
     subprocess.run(f"pprof --text --base=/tmp/{test_name}_c.0001.heap /tmp/{test_name}_cpp.0001.heap")
 ```
 
-#### 3.3 Comparative Report Format
+#### 3.3 Comparative report format
 
 The final output will be a Markdown report generated automatically.
 
@@ -70,7 +70,7 @@ The final output will be a Markdown report generated automatically.
     0.5MB   1.1%  99.2%    0.5MB   1.1% std::vector::push_back
 ```
 
-### 4. Leak Detection Strategy (Embedded/ESP32)
+### 4. Leak detection strategy (Embedded/ESP32)
 
 For targets where `pprof` is unavailable (ESP32), we fall back to the "Net Allocation Check":
 
@@ -85,7 +85,7 @@ void test_leak_cycle() {
 }
 ```
 
-## Infrastructure Requirements
+## Infrastructure requirements
 - Linux Host for `pprof` analysis (CI environment).
 - `libgoogle-perftools-dev` package.
 - Python 3 for the runner script.

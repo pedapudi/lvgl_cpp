@@ -55,7 +55,7 @@ This document covers widgets used primarily for displaying information:
     *   `Image& angle(int16_t)`
     *   `Image& zoom(uint16_t)`
 
-## 3. Style Integration
+## 3. Style integration
 Visual widgets heavily rely on Styles for look-and-feel. The new API must ensure `style()` helper works seamlessly.
 
 ```cpp

@@ -1,4 +1,4 @@
-# Input Widgets Design
+# Input widgets design
 
 ## 1. Scope
 This document covers widgets primarily used for user input:
@@ -10,13 +10,13 @@ This document covers widgets primarily used for user input:
 *   `Dropdown` (`lv_dropdown`)
 *   `Textarea` (`lv_textarea`)
 
-## 2. Common Patterns
+## 2. Common patterns
 All input widgets inherit from `Widget<T>`. Most inputs share "Value" semantics.
 
-### `Valued<T, ValueType>` Mixin?
+### `Valued<T, ValueType>` mixin?
 We might consider a `Valued` mixin for `set_value` / `get_value`, but LVGL behavior varies (int32 for slider, bool for switch, string for text area). It is better to implement specific methods.
 
-## 3. Widget Specifications
+## 3. Widget specifications
 
 ### 3.1. Button (`Button`)
 *   **Base**: `Widget<Button>`
@@ -64,5 +64,5 @@ We might consider a `Valued` mixin for `set_value` / `get_value`, but LVGL behav
     *   `TextArea& max_length(uint32_t)`
     *   `TextArea& add_text(const char*)` (Append)
 
-## 4. Implementation Strategy
+## 4. Implementation strategy
 These widgets will be the first wave of migration after Core. `Button` is the simplest verification target for `Widget<T>`.

@@ -1,4 +1,4 @@
-# Container and Layout Widgets Design
+# Container and layout widgets design
 
 ## 1. Scope
 This document covers widgets that primarily host other widgets:
@@ -8,7 +8,7 @@ This document covers widgets that primarily host other widgets:
 *   `Table` (`lv_table`)
 *   `List` (`lv_list`)
 
-## 2. Widget Specifications
+## 2. Widget specifications
 
 ### 2.1. TabView (`TabView`)
 *   **Base**: `Widget<TabView>`
@@ -46,7 +46,7 @@ This document covers widgets that primarily host other widgets:
     *   `Object add_text(const char* txt)`
     *   `Button add_button(const void* icon, const char* txt)`
 
-## 3. Container Logic
+## 3. Container logic
 Containers often effectively shadow the "Screen" behavior.
 The `Widget<T>` base must ensure `get_content()` helpers are easy to use for layouts.
 

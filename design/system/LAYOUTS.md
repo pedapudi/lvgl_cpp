@@ -1,9 +1,9 @@
-# Layout System Design
+# Layout system design
 
 ## 1. Overview
 The Layouts design focuses on declaration helpers for Flex and Grid layouts.
 
-## 2. Flex Layout
+## 2. Flex layout
 ```cpp
 struct Flex {
     static const Flex Row() { return Flex(LV_FLEX_FLOW_ROW); }
@@ -17,7 +17,7 @@ struct Flex {
 obj.layout(Flex::Row().gap(10).center());
 ```
 
-## 3. Grid Layout
+## 3. Grid layout
 Grids require static arrays for track descriptions. This is tricky in C++.
 
 **Proposal**: A helper that manages `static` storage for simple grids or wraps `std::vector` for dynamic ones (aware of lifetime issues).
