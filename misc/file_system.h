@@ -48,6 +48,13 @@ class File {
   lv_fs_res_t read(void* buf, uint32_t btr, uint32_t* br = nullptr);
 
   /**
+   * @brief Load the entire file into a buffer.
+   * @param path The path of the file.
+   * @return Vector containing file contents. Empty on error.
+   */
+  static std::vector<uint8_t> load_to_buffer(const std::string& path);
+
+  /**
    * @brief Write to the file.
    * @param buf Buffer to write from.
    * @param btw Bytes to write.
@@ -128,6 +135,55 @@ class Directory {
  private:
   lv_fs_dir_t dir_;
   bool is_opened_ = false;
+};
+
+/**
+ * @brief Global filesystem utilities
+ */
+class FileSystem {
+ public:
+  /**
+   * @brief Get available driver letters.
+   * @return String containing all registered driver letters (e.g. "PS").
+   */
+  static std::string get_letters();
+
+  /**
+   * @brief Get the extension of a filename.
+   * @param path The filename or path.
+   * @return Extension (e.g. "txt") or empty string.
+   */
+  static std::string get_extension(const std::string& path);
+
+  /**
+   * @brief Get the filename from a path (e.g. "S:/foo/bar.txt" -> "bar.txt").
+   * @param path The full path.
+   * @return The filename component.
+   */
+  static std::string get_filename(const std::string& path);
+
+  /**
+   * @brief Step up one level in the path (get parent directory).
+   * @param path The path to truncate.
+   * @return Parent directory path.
+   */
+  static std::string up(const std::string& path);
+
+  /**
+   * @brief Join two path components with appropriate separators.
+   * @param base The base path.
+   * @param part The component to append.
+   * @return Joined path.
+   */
+  static std::string join_path(const std::string& base,
+                               const std::string& part);
+
+  /**
+   * @brief Check if a driver is ready.
+   * @param letter The driver letter.
+   * @return true if ready.
+   */
+  static bool is_ready(char letter);
 };
 
 }  // namespace lvgl

@@ -121,11 +121,13 @@ else()
     add_executable(test_draw_task tests/test_draw_task.cpp)
     target_link_libraries(test_draw_task PRIVATE lvgl_cpp)
 
-    add_executable(test_align tests/test_align.cpp)
-    target_link_libraries(test_align PRIVATE lvgl_cpp)
+
 
     add_executable(test_input_device tests/test_input_device.cpp)
     target_link_libraries(test_input_device PRIVATE lvgl_cpp)
+
+    add_executable(test_file_system tests/test_file_system.cpp)
+    target_link_libraries(test_file_system PRIVATE lvgl_cpp)
 
     enable_testing()
     add_test(NAME test_core_widgets COMMAND test_core_widgets)
@@ -140,6 +142,6 @@ else()
     add_test(NAME test_rotation COMMAND test_rotation)
     add_test(NAME test_event_system COMMAND test_event_system)
     add_test(NAME test_draw_task COMMAND test_draw_task)
-    add_test(NAME test_align COMMAND test_align)
+    add_test(NAME test_file_system COMMAND test_file_system)
     add_test(NAME test_input_device COMMAND test_input_device)
 endif()

@@ -137,4 +137,61 @@ lv_fs_res_t Directory::read(std::string& fn) {
 
 bool Directory::is_open() const { return is_opened_; }
 
+// --- FileSystem Utilities ---
+
+std::string FileSystem::get_letters() {
+  char buf[32];  // Enough for 26 letters + terminator
+  lv_fs_get_letters(buf);
+  return std::string(buf);
+}
+
+std::string FileSystem::get_extension(const std::string& path) {
+  const char* ext = lv_fs_get_ext(path.c_str());
+  if (!ext) return "";
+  return std::string(ext);
+}
+
+std::string FileSystem::get_filename(const std::string& path) {
+  const char* fn = lv_fs_get_last(path.c_str());
+  if (!fn) return "";
+  return std::string(fn);
+}
+
+std::string FileSystem::up(const std::string& path) {
+  // lv_fs_up modifies the buffer in place.
+  // We need a mutable buffer.
+  std::vector<char> buf(path.begin(), path.end());
+  buf.push_back('\0');  // Ensure null-terminated
+
+  lv_fs_up(buf.data());
+
+  return std::string(buf.data());
+}
+
+std::string FileSystem::join_path(const std::string& base,
+                                  const std::string& part) {
+  char buf[LV_FS_MAX_PATH_LENGTH];
+  lv_fs_path_join(buf, sizeof(buf), base.c_str(), part.c_str());
+  return std::string(buf);
+}
+
+bool FileSystem::is_ready(char letter) { return lv_fs_is_ready(letter); }
+
+std::vector<uint8_t> File::load_to_buffer(const std::string& path) {
+  uint32_t size = 0;
+  if (lv_fs_path_get_size(path.c_str(), &size) != LV_FS_RES_OK) {
+    return {};
+  }
+
+  std::vector<uint8_t> buf(size);
+  // Using lv_fs_load_to_buf if available, or manual read
+  // lv_fs_load_to_buf signature: lv_fs_res_t lv_fs_load_to_buf(void * buf,
+  // uint32_t buf_size, const char * path)
+  if (lv_fs_load_to_buf(buf.data(), size, path.c_str()) != LV_FS_RES_OK) {
+    return {};
+  }
+
+  return buf;
+}
+
 }  // namespace lvgl
