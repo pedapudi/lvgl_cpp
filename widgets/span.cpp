@@ -4,14 +4,14 @@
 
 namespace lvgl {
 
-SpanGroup::SpanGroup() : SpanGroup((Object*)nullptr) {}
+SpanGroup::SpanGroup()
+    : Widget(lv_spangroup_create(lv_screen_active()), Ownership::Managed) {}
 
-SpanGroup::SpanGroup(Object* parent, Ownership ownership)
-    : Object(lv_spangroup_create(parent ? parent->raw() : nullptr), ownership) {
-}
+SpanGroup::SpanGroup(Object& parent)
+    : Widget(lv_spangroup_create(parent.raw()), Ownership::Managed) {}
 
 SpanGroup::SpanGroup(lv_obj_t* obj, Ownership ownership)
-    : Object(obj, ownership) {}
+    : Widget(obj, ownership) {}
 
 lv_span_t* SpanGroup::add_span() {
   return obj_ ? lv_spangroup_add_span(obj_) : nullptr;
@@ -53,39 +53,6 @@ SpanGroup& SpanGroup::set_mode(lv_span_mode_t mode) {
 
 SpanGroup& SpanGroup::set_max_lines(int32_t lines) {
   if (obj_) lv_spangroup_set_max_lines(obj_, lines);
-  return *this;
-}
-
-SpanGroup& SpanGroup::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-SpanGroup& SpanGroup::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-SpanGroup& SpanGroup::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-SpanGroup& SpanGroup::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-SpanGroup& SpanGroup::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-SpanGroup& SpanGroup::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-SpanGroup& SpanGroup::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-SpanGroup& SpanGroup::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

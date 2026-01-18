@@ -70,7 +70,7 @@ void test_canvas_1() {
 void test_animimg_1() {
   std::cout << "Testing AnimImage Example 1..." << std::endl;
   Object screen = get_screen();
-  AnimImage animimg(&screen);
+  AnimImage animimg(screen);
 
   // Mock images
   static lv_image_dsc_t img1 = {
@@ -104,7 +104,7 @@ void test_scale_1() {
 void test_imagebutton_1() {
   std::cout << "Testing ImageButton Example 1..." << std::endl;
   Object screen = get_screen();
-  ImageButton imgbtn(&screen);
+  ImageButton imgbtn(screen);
 
   // Mock images
   static lv_image_dsc_t img_left = {
@@ -133,7 +133,7 @@ void test_imagebutton_1() {
 void test_spangroup_1() {
   std::cout << "Testing SpanGroup Example 1..." << std::endl;
   Object screen = get_screen();
-  SpanGroup spans(&screen);
+  SpanGroup spans(screen);
   spans.set_width(300);
   spans.set_height(LV_SIZE_CONTENT);
   spans.center();
