@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_LED
@@ -20,7 +20,7 @@
  */
 namespace lvgl {
 
-class Led : public Object {
+class Led : public Widget<Led> {
  public:
   /**
    * @brief Create a Led on the active screen.
@@ -30,7 +30,7 @@ class Led : public Object {
    * @brief Create a Led with a parent.
    * @param parent The parent object.
    */
-  explicit Led(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Led(Object& parent, Ownership ownership = Ownership::Default);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
@@ -42,16 +42,6 @@ class Led : public Object {
   Led& on();
   Led& off();
   Led& toggle();
-
-  // Fluent API shadows
-  Led& set_width(int32_t width);
-  Led& set_height(int32_t height);
-  Led& set_size(int32_t width, int32_t height);
-  Led& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Led& add_state(lv_state_t state);
-  Led& remove_state(lv_state_t state);
-  Led& add_flag(lv_obj_flag_t flag);
-  Led& remove_flag(lv_obj_flag_t flag);
 
   uint8_t get_brightness();
 };

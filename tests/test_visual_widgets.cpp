@@ -90,7 +90,7 @@ void test_animimg_1() {
 void test_scale_1() {
   std::cout << "Testing Scale Example 1..." << std::endl;
   Object screen = get_screen();
-  Scale scale(&screen);
+  Scale scale(screen);
   scale.set_size(LV_PCT(80), 100);
   scale.set_mode(LV_SCALE_MODE_HORIZONTAL_BOTTOM);
   scale.center();

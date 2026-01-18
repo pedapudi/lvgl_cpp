@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_TABLE
@@ -20,7 +20,7 @@
  */
 namespace lvgl {
 
-class Table : public Object {
+class Table : public Widget<Table> {
  public:
   /**
    * @brief Create a Table on the active screen.
@@ -45,16 +45,6 @@ class Table : public Object {
   Table& clear_cell_ctrl(uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
   Table& set_cell_user_data(uint16_t row, uint16_t col, void* user_data);
   Table& set_selected_cell(uint16_t row, uint16_t col);
-
-  // Fluent API shadows
-  Table& set_width(int32_t width);
-  Table& set_height(int32_t height);
-  Table& set_size(int32_t width, int32_t height);
-  Table& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Table& add_state(lv_state_t state);
-  Table& remove_state(lv_state_t state);
-  Table& add_flag(lv_obj_flag_t flag);
-  Table& remove_flag(lv_obj_flag_t flag);
 
   const char* get_cell_value(uint32_t row, uint32_t col);
   uint32_t get_row_count();

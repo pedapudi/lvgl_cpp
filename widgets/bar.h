@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_BAR
@@ -25,7 +25,7 @@ class Observer;
 /**
  * @brief Wrapper for lv_bar.
  */
-class Bar : public Object {
+class Bar : public Widget<Bar> {
  public:
   /**
    * @brief Create a new Bar.
@@ -83,16 +83,6 @@ class Bar : public Object {
    * @param orientation Orientation (`LV_BAR_ORIENTATION_HORIZONTAL`, etc.).
    */
   Bar& set_orientation(lv_bar_orientation_t orientation);
-
-  // Fluent API shadows
-  Bar& set_width(int32_t width);
-  Bar& set_height(int32_t height);
-  Bar& set_size(int32_t width, int32_t height);
-  Bar& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Bar& add_state(lv_state_t state);
-  Bar& remove_state(lv_state_t state);
-  Bar& add_flag(lv_obj_flag_t flag);
-  Bar& remove_flag(lv_obj_flag_t flag);
 
   int32_t get_value() const;
   int32_t get_start_value() const;

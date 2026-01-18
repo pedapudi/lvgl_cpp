@@ -219,6 +219,8 @@ void test_canvas() {
   red.green = 0;
   red.blue = 0;
   red.alpha = 0xff;
+  static uint8_t buf[100 * 100 * 4];
+  canvas.set_buffer(buf, 100, 100, LV_COLOR_FORMAT_ARGB8888);
   canvas.set_width(100).set_height(100).set_palette(0, red);
   std::cout << "Canvas fluent API passed." << std::endl;
 }
