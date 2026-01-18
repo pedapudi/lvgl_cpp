@@ -6,7 +6,7 @@
 
 namespace lvgl {
 
-Arc::Arc() : Widget(lv_arc_create(nullptr), Ownership::Managed) {}
+Arc::Arc() : Widget(lv_arc_create(lv_screen_active()), Ownership::Managed) {}
 
 Arc::Arc(Object& parent, Ownership ownership)
     : Widget(lv_arc_create(parent.raw()), ownership) {}

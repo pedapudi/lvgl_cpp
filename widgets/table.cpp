@@ -4,7 +4,8 @@
 
 namespace lvgl {
 
-Table::Table() : Widget(lv_table_create(nullptr), Ownership::Managed) {}
+Table::Table()
+    : Widget(lv_table_create(lv_screen_active()), Ownership::Managed) {}
 
 Table::Table(Object& parent, Ownership ownership)
     : Widget(lv_table_create(parent.raw()), ownership) {}

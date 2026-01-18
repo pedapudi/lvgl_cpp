@@ -4,7 +4,7 @@
 
 namespace lvgl {
 
-Menu::Menu() : Widget(lv_menu_create(nullptr), Ownership::Managed) {}
+Menu::Menu() : Widget(lv_menu_create(lv_screen_active()), Ownership::Managed) {}
 
 Menu::Menu(Object& parent, Ownership ownership)
     : Widget(lv_menu_create(parent.raw()), ownership) {}

@@ -4,7 +4,7 @@
 
 namespace lvgl {
 
-Led::Led() : Widget(lv_led_create(nullptr), Ownership::Managed) {}
+Led::Led() : Widget(lv_led_create(lv_screen_active()), Ownership::Managed) {}
 
 Led::Led(Object& parent, Ownership ownership)
     : Widget(lv_led_create(parent.raw()), ownership) {}

@@ -4,7 +4,8 @@
 
 namespace lvgl {
 
-Scale::Scale() : Widget(lv_scale_create(nullptr), Ownership::Managed) {}
+Scale::Scale()
+    : Widget(lv_scale_create(lv_screen_active()), Ownership::Managed) {}
 
 Scale::Scale(Object& parent, Ownership ownership)
     : Widget(lv_scale_create(parent.raw()), ownership) {}

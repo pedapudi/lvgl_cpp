@@ -5,7 +5,7 @@
 namespace lvgl {
 
 TileView::TileView()
-    : Widget(lv_tileview_create(nullptr), Ownership::Managed) {}
+    : Widget(lv_tileview_create(lv_screen_active()), Ownership::Managed) {}
 
 TileView::TileView(Object& parent, Ownership ownership)
     : Widget(lv_tileview_create(parent.raw()), ownership) {}

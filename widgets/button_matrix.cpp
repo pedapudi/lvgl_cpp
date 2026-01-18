@@ -5,7 +5,7 @@
 namespace lvgl {
 
 ButtonMatrix::ButtonMatrix()
-    : Widget(lv_buttonmatrix_create(nullptr), Ownership::Managed) {}
+    : Widget(lv_buttonmatrix_create(lv_screen_active()), Ownership::Managed) {}
 
 ButtonMatrix::ButtonMatrix(Object& parent, Ownership ownership)
     : Widget(lv_buttonmatrix_create(parent.raw()), ownership) {}

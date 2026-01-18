@@ -4,7 +4,8 @@
 
 namespace lvgl {
 
-TabView::TabView() : Widget(lv_tabview_create(nullptr), Ownership::Managed) {}
+TabView::TabView()
+    : Widget(lv_tabview_create(lv_screen_active()), Ownership::Managed) {}
 
 TabView::TabView(Object& parent, Ownership ownership)
     : Widget(lv_tabview_create(parent.raw()), ownership) {}

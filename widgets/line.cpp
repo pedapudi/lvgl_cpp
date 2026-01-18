@@ -4,7 +4,7 @@
 
 namespace lvgl {
 
-Line::Line() : Widget(lv_line_create(nullptr), Ownership::Managed) {}
+Line::Line() : Widget(lv_line_create(lv_screen_active()), Ownership::Managed) {}
 
 Line::Line(Object& parent, Ownership ownership)
     : Widget(lv_line_create(parent.raw()), ownership) {}
