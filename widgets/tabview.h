@@ -25,9 +25,9 @@ namespace lvgl {
 /**
  * @brief Represents a single tab page container.
  */
-class TabPage : public Object {
+class TabPage : public Widget<TabPage> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
 /**

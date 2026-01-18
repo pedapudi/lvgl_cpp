@@ -8,20 +8,22 @@
 
 namespace lvgl {
 
-Label::Label() : Object(lv_label_create(nullptr), Ownership::Managed) {}
+Label::Label() : Widget(lv_label_create(nullptr), Ownership::Managed) {}
 
-Label::Label(Object& parent, Ownership ownership)
-    : Object(lv_label_create(parent.raw()), ownership) {}
+Label::Label(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
-Label::Label(Object& parent, const std::string& text) : Label(parent) {
+Label::Label(Object* parent, Ownership ownership)
+    : Widget(lv_label_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Label::Label(Object& parent) : Label(&parent) {}
+
+Label::Label(Object& parent, const std::string& text) : Label(&parent) {
   set_text(text);
 }
 
-Label::Label(Object& parent, const char* text) : Label(parent) {
+Label::Label(Object& parent, const char* text) : Label(&parent) {
   set_text(text);
 }
-
-Label::Label(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
 
 Label& Label::set_text(const std::string& text) {
   if (obj_) lv_label_set_text(obj_, text.c_str());
@@ -79,26 +81,6 @@ uint32_t Label::get_selection_end() const {
 
 Label& Label::set_recolor(bool en) {
   if (obj_) lv_label_set_recolor(obj_, en);
-  return *this;
-}
-
-Label& Label::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-
-Label& Label::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-
-Label& Label::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-
-Label& Label::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
   return *this;
 }
 

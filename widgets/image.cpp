@@ -4,16 +4,14 @@
 
 namespace lvgl {
 
-Image::Image()
-    : Widget(lv_image_create(lv_screen_active()), Ownership::Managed) {}
+Image::Image() : Image(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Image::Image(Object& parent)
-    : Widget(lv_image_create(parent.raw()), Ownership::Managed) {}
+Image::Image(Object* parent, Ownership ownership)
+    : Widget(lv_image_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Image::Image(Object& parent, const void* src)
-    : Widget(lv_image_create(parent.raw()), Ownership::Managed) {
-  set_src(src);
-}
+Image::Image(Object& parent) : Image(&parent) {}
+
+Image::Image(Object& parent, const void* src) : Image(parent) { set_src(src); }
 
 Image::Image(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

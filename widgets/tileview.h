@@ -21,9 +21,9 @@
  */
 namespace lvgl {
 
-class Tile : public Object {
+class Tile : public Widget<Tile> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
 class TileView : public Widget<TileView> {

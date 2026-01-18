@@ -25,14 +25,14 @@ namespace lvgl {
 class Button;
 class Label;
 
-class WinHeader : public Object {
+class WinHeader : public Widget<WinHeader> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
-class WinContent : public Object {
+class WinContent : public Widget<WinContent> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
 class Win : public Widget<Win> {

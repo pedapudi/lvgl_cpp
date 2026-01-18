@@ -6,10 +6,12 @@
 
 namespace lvgl {
 
-Arc::Arc() : Widget(lv_arc_create(lv_screen_active()), Ownership::Managed) {}
+Arc::Arc() : Arc(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Arc::Arc(Object& parent, Ownership ownership)
-    : Widget(lv_arc_create(parent.raw()), ownership) {}
+Arc::Arc(Object* parent, Ownership ownership)
+    : Widget(lv_arc_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Arc::Arc(Object& parent) : Arc(&parent) {}
 
 Arc::Arc(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

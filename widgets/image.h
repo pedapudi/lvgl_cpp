@@ -22,14 +22,8 @@ namespace lvgl {
 
 class Image : public Widget<Image> {
  public:
-  /**
-   * @brief Create a Image on the active screen.
-   */
   Image();
-  /**
-   * @brief Create a Image with a parent.
-   * @param parent The parent object.
-   */
+  explicit Image(Object* parent, Ownership ownership = Ownership::Default);
   explicit Image(Object& parent);
 
   /**

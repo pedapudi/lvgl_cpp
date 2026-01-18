@@ -4,10 +4,12 @@
 
 namespace lvgl {
 
-Line::Line() : Widget(lv_line_create(lv_screen_active()), Ownership::Managed) {}
+Line::Line() : Line(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Line::Line(Object& parent, Ownership ownership)
-    : Widget(lv_line_create(parent.raw()), ownership) {}
+Line::Line(Object* parent, Ownership ownership)
+    : Widget(lv_line_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Line::Line(Object& parent) : Line(&parent) {}
 
 Line::Line(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

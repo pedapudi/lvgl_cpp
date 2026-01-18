@@ -28,11 +28,8 @@ class Arc : public Widget<Arc> {
    * @brief Create a Arc on the active screen.
    */
   Arc();
-  /**
-   * @brief Create a Arc with a parent.
-   * @param parent The parent object.
-   */
-  explicit Arc(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Arc(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Arc(Object& parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.

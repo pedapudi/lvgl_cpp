@@ -6,10 +6,12 @@
 
 namespace lvgl {
 
-Bar::Bar() : Widget(lv_bar_create(lv_screen_active()), Ownership::Managed) {}
+Bar::Bar() : Bar(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Bar::Bar(Object& parent, Ownership ownership)
-    : Widget(lv_bar_create(parent.raw()), ownership) {}
+Bar::Bar(Object* parent, Ownership ownership)
+    : Widget(lv_bar_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Bar::Bar(Object& parent) : Bar(&parent) {}
 
 Bar::Bar(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

@@ -20,24 +20,24 @@
  */
 namespace lvgl {
 
-class MenuPage : public Object {
+class MenuPage : public Widget<MenuPage> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
-class MenuCont : public Object {
+class MenuCont : public Widget<MenuCont> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
-class MenuSection : public Object {
+class MenuSection : public Widget<MenuSection> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
-class MenuSeparator : public Object {
+class MenuSeparator : public Widget<MenuSeparator> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
 class Menu : public Widget<Menu> {

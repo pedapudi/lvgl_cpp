@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_WIDGETS_BUTTON_H_
 #define LVGL_CPP_WIDGETS_BUTTON_H_
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_BUTTON
@@ -28,33 +28,19 @@ namespace lvgl {
  * @brief Wrapper for lv_button.
  * A button is a simple container that can be clicked.
  */
-class Button : public Object {
+class Button : public Widget<Button> {
  public:
+  using Widget::Widget;
+
   /**
-   * @brief Create a Button on the active screen.
+   * @brief Create a new Button on the active screen.
    * Takes ownership.
    */
   Button();
 
-  /**
-   * @brief Create a Button with a parent.
-   * @param parent The parent object.
-   * @param ownership Ownership policy.
-   */
-  explicit Button(Object& parent, Ownership ownership = Ownership::Default);
-
-  /**
-   * @brief Wrap an existing lv_button object.
-   * @param obj The raw LVGL object to wrap.
-   * @param ownership Ownership policy.
-   */
+  explicit Button(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Button(Object& parent);
   explicit Button(lv_obj_t* obj, Ownership ownership = Ownership::Default);
-
-  // Fluent API shadows
-  Button& set_width(int32_t width);
-  Button& set_height(int32_t height);
-  Button& set_size(int32_t width, int32_t height);
-  Button& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 };
 
 }  // namespace lvgl

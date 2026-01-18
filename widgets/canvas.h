@@ -22,6 +22,8 @@ namespace lvgl {
 
 class Canvas : public Widget<Canvas> {
  public:
+  using Widget::Widget;
+
   /**
    * @brief Create a Canvas on the active screen.
    */

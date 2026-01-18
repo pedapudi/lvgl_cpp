@@ -26,11 +26,8 @@ class Led : public Widget<Led> {
    * @brief Create a Led on the active screen.
    */
   Led();
-  /**
-   * @brief Create a Led with a parent.
-   * @param parent The parent object.
-   */
-  explicit Led(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Led(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Led(Object& parent);
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.

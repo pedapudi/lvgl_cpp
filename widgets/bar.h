@@ -32,7 +32,8 @@ class Bar : public Widget<Bar> {
    * @param parent Parent object.
    */
   Bar();
-  explicit Bar(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Bar(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Bar(Object& parent);
 
   /**
    * @brief Wrap an existing lv_bar object.

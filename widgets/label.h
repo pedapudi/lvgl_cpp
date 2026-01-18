@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_LABEL
@@ -26,19 +26,32 @@ class Observer;
 /**
  * @brief Wrapper for lv_label.
  */
-class Label : public Object {
+class Label : public Widget<Label> {
  public:
+  using Widget::Widget;
+
   /**
    * @brief Create a new Label.
    * @param parent Parent object.
-   */
-  /**
-   * @brief Create a new Label.
-   * @param parent Parent object.
-   * @param ownership Ownership policy.
    */
   Label();
-  explicit Label(Object& parent, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Wrap an existing lv_obj object.
+   * @param obj The raw LVGL object to wrap.
+   */
+  explicit Label(lv_obj_t* obj, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a new Label with parent.
+   */
+  explicit Label(Object* parent, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a new Label with parent (Reference).
+   * @param parent Parent object.
+   */
+  explicit Label(Object& parent);
 
   /**
    * @brief Create a new Label with text.
@@ -53,13 +66,6 @@ class Label : public Object {
    * @param text The initial text.
    */
   Label(Object& parent, const char* text);
-
-  /**
-   * @brief Wrap an existing lv_label object.
-   * @param obj The raw LVGL object to wrap.
-   * @param ownership Ownership policy.
-   */
-  explicit Label(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Set the text of the label.
@@ -126,12 +132,6 @@ class Label : public Object {
    * @param en true to enable.
    */
   Label& set_recolor(bool en);
-
-  // Fluent API shadows for common Object methods
-  Label& set_width(int32_t width);
-  Label& set_height(int32_t height);
-  Label& set_size(int32_t width, int32_t height);
-  Label& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 
   /**
    * @brief Check if text recoloring is enabled.

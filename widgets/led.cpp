@@ -4,10 +4,12 @@
 
 namespace lvgl {
 
-Led::Led() : Widget(lv_led_create(lv_screen_active()), Ownership::Managed) {}
+Led::Led() : Led(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Led::Led(Object& parent, Ownership ownership)
-    : Widget(lv_led_create(parent.raw()), ownership) {}
+Led::Led(Object* parent, Ownership ownership)
+    : Widget(lv_led_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Led::Led(Object& parent) : Led(&parent) {}
 
 Led::Led(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

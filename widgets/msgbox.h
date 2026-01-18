@@ -23,19 +23,19 @@ namespace lvgl {
 class Button;
 class Label;
 
-class MsgBoxHeader : public Object {
+class MsgBoxHeader : public Widget<MsgBoxHeader> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
-class MsgBoxFooter : public Object {
+class MsgBoxFooter : public Widget<MsgBoxFooter> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
-class MsgBoxContent : public Object {
+class MsgBoxContent : public Widget<MsgBoxContent> {
  public:
-  using Object::Object;
+  using Widget::Widget;
 };
 
 class MsgBox : public Widget<MsgBox> {
