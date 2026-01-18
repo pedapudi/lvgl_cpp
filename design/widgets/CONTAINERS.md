@@ -1,4 +1,4 @@
-# Container & Layout Widgets Design
+# Container and Layout Widgets Design
 
 ## 1. Scope
 This document covers widgets that primarily host other widgets:

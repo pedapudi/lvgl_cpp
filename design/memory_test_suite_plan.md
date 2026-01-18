@@ -38,7 +38,7 @@ Each scenario will be compiled as a separate executable to ensure clean heap sta
 A wrapper script to execute tests and capture profiles.
 
 ```python
-# Pseudo-code for runner logic
+# Pseudo-Code for Runner Logic
 def run_comparison(test_name):
     # 1. Run C Implementation
     env = {"HEAPPROFILE": f"/tmp/{test_name}_c"}

@@ -1,4 +1,4 @@
-# Complex & Menu Widgets Design
+# Complex and Menu Widgets Design
 
 ## 1. Scope
 This document covers complex widgets that don't fit into simple Input/Output categories:

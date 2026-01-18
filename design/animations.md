@@ -1,4 +1,4 @@
-# Research Report: LVGL Animations & Timelines in C++
+# Research Report: LVGL Animations and Timelines in C++
 
 ## Executive Summary
 
@@ -68,7 +68,7 @@ class AnimationTimeline {
 };
 ```
 
-### 3.2 Implementation Constraints & Safety Noted
+### 3.2 Implementation Constraints and Safety Noted
 1.  **Append-Only**: The `lv_anim_timeline` API allows adding animations but supports **neither removal nor modification** of existing items. The C++ wrapper reflects this immutable-history nature.
 2.  **No Merge Support**: `lv_anim_timeline_merge` performs a bitwise copy of animation descriptors. This is unsafe for C++ closures (causing double-free or use-after-free on `user_data`). Thus, `merge` will not be exposed.
 3.  **Ownership**: The `AnimationTimeline` instance exclusively owns the `CallbackData` for its children.

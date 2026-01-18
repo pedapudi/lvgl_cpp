@@ -43,11 +43,11 @@ The design is split into specific modules. Please refer to the detailed design d
 *   **[Input Widgets](widgets/INPUTS.md)**: `Button`, `Checkbox`, `Slider`, `Switch`, `Textarea`, `Keyboard`, `Encoder`.
 *   **[Output/Visual Widgets](widgets/OUTPUTS.md)**: `Label`, `LED`, `Bar`, `Arc`, `Line`, `Image`, `Spinner`.
 *   **[Container Widgets](widgets/CONTAINERS.md)**: `Window`, `TabView`, `TileView`, `Table`, `List`.
-*   **[Menus & Complex](widgets/COMPLEX.md)**: `Menu`, `Calendar`, `Chart`, `Roller`, `Dropdown`.
+*   **[Menus and Complex](widgets/COMPLEX.md)**: `Menu`, `Calendar`, `Chart`, `Roller`, `Dropdown`.
 
 ### 3.3. System Modules
 *   **[Layouts](system/LAYOUTS.md)**: Declaration helpers for Flex and Grid.
-*   **[Display & Input](system/DRIVERS.md)**: `Display` and `InDev` wrappers.
+*   **[Display and Input](system/DRIVERS.md)**: `Display` and `InDev` wrappers.
 
 ---
 
