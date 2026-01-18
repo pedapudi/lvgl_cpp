@@ -1,11 +1,12 @@
 #pragma once
 
-#include "object.h"
+#include "lvgl.h"  // IWYU pragma: export
+#include "mixins/event_source.h"
+#include "mixins/layoutable.h"
 #include "mixins/positionable.h"
 #include "mixins/sizable.h"
 #include "mixins/stylable.h"
-#include "mixins/event_source.h"
-#include "mixins/layoutable.h"
+#include "object.h"
 
 namespace lvgl {
 
@@ -25,53 +26,108 @@ class Widget : public Object,
                public Layoutable<Derived> {
  public:
   // Inherit constructors from Object
-  using Object::Object;
+  // Explicitly forward constructors to ensure they are inherited by derived
+  // classes (Double 'using' inheritance is not standard compliant for
+  // constructors)
+  Widget() : Object() {}
+
+  explicit Widget(Object* parent, Ownership ownership = Ownership::Default)
+      : Object(parent, ownership) {}
+
+  explicit Widget(Object& parent, Ownership ownership = Ownership::Default)
+      : Object(&parent, ownership) {}
+
+  explicit Widget(lv_obj_t* obj, Ownership ownership = Ownership::Default)
+      : Object(obj, ownership) {}
 
   // --- Positionable Forwarding ---
   Derived& set_x(int32_t value) { return Positionable<Derived>::set_x(value); }
   Derived& set_y(int32_t value) { return Positionable<Derived>::set_y(value); }
-  Derived& set_pos(int32_t x, int32_t y) { return Positionable<Derived>::set_pos(x, y); }
-  Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) { return Positionable<Derived>::align(align, x_ofs, y_ofs); }
-  Derived& align(Object::Align align, int32_t x_ofs = 0, int32_t y_ofs = 0) { return Positionable<Derived>::align(align, x_ofs, y_ofs); }
+  Derived& set_pos(int32_t x, int32_t y) {
+    return Positionable<Derived>::set_pos(x, y);
+  }
+  Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
+    return Positionable<Derived>::align(align, x_ofs, y_ofs);
+  }
+
   Derived& center() { return Positionable<Derived>::center(); }
   int32_t get_x() const { return Positionable<Derived>::get_x(); }
   int32_t get_y() const { return Positionable<Derived>::get_y(); }
 
   // --- Sizable Forwarding ---
-  Derived& set_width(int32_t value) { return Sizable<Derived>::set_width(value); }
-  Derived& set_height(int32_t value) { return Sizable<Derived>::set_height(value); }
-  Derived& set_size(int32_t width, int32_t height) { return Sizable<Derived>::set_size(width, height); }
+  Derived& set_width(int32_t value) {
+    return Sizable<Derived>::set_width(value);
+  }
+  Derived& set_height(int32_t value) {
+    return Sizable<Derived>::set_height(value);
+  }
+  Derived& set_size(int32_t width, int32_t height) {
+    return Sizable<Derived>::set_size(width, height);
+  }
   int32_t get_width() const { return Sizable<Derived>::get_width(); }
   int32_t get_height() const { return Sizable<Derived>::get_height(); }
 
   // --- Stylable Forwarding ---
-  Derived& add_style(const lv_style_t* style, lv_style_selector_t selector = 0) { return Stylable<Derived>::add_style(style, selector); }
-  Derived& remove_style(const lv_style_t* style, lv_style_selector_t selector = 0) { return Stylable<Derived>::remove_style(style, selector); }
-  Derived& remove_all_styles() { return Stylable<Derived>::remove_all_styles(); }
-  
+  Derived& add_style(const lv_style_t* style,
+                     lv_style_selector_t selector = 0) {
+    return Stylable<Derived>::add_style(style, selector);
+  }
+  Derived& remove_style(const lv_style_t* style,
+                        lv_style_selector_t selector = 0) {
+    return Stylable<Derived>::remove_style(style, selector);
+  }
+  Derived& remove_all_styles() {
+    return Stylable<Derived>::remove_all_styles();
+  }
+
+  // --- Object Lifecycle Forwarding (Fluent) ---
+  Derived& add_flag(lv_obj_flag_t f) {
+    Object::add_flag(f);
+    return *static_cast<Derived*>(this);
+  }
+  Derived& remove_flag(lv_obj_flag_t f) {
+    Object::remove_flag(f);
+    return *static_cast<Derived*>(this);
+  }
+  Derived& add_state(lv_state_t state) {
+    Object::add_state(state);
+    return *static_cast<Derived*>(this);
+  }
+  Derived& remove_state(lv_state_t state) {
+    Object::remove_state(state);
+    return *static_cast<Derived*>(this);
+  }
+
   // --- EventSource Forwarding ---
-  Derived& add_event_cb(typename EventSource<Derived>::EventCallback cb, lv_event_code_t filter) { return EventSource<Derived>::add_event_cb(cb, filter); }
-  Derived& on_click(typename EventSource<Derived>::EventCallback cb) { return EventSource<Derived>::on_click(cb); }
-  Derived& on_event(typename EventSource<Derived>::EventCallback cb) { return EventSource<Derived>::on_event(cb); }
+  Derived& add_event_cb(typename EventSource<Derived>::EventCallback cb,
+                        lv_event_code_t filter) {
+    return EventSource<Derived>::add_event_cb(cb, filter);
+  }
+  Derived& on_click(typename EventSource<Derived>::EventCallback cb) {
+    return EventSource<Derived>::on_click(cb);
+  }
+  Derived& on_event(typename EventSource<Derived>::EventCallback cb) {
+    return EventSource<Derived>::on_event(cb);
+  }
 
   // --- Layoutable Forwarding ---
-  Derived& layout(const Flex& flex) { return Layoutable<Derived>::layout(flex); }
-  Derived& set_grid_cell(lv_grid_align_t x_align, uint8_t col_pos, uint8_t col_span,
-                         lv_grid_align_t y_align, uint8_t row_pos, uint8_t row_span) {
-      return Layoutable<Derived>::set_grid_cell(x_align, col_pos, col_span, y_align, row_pos, row_span);
+  Derived& layout(const Flex& flex) {
+    return Layoutable<Derived>::layout(flex);
+  }
+  Derived& set_grid_cell(lv_grid_align_t x_align, uint8_t col_pos,
+                         uint8_t col_span, lv_grid_align_t y_align,
+                         uint8_t row_pos, uint8_t row_span) {
+    return Layoutable<Derived>::set_grid_cell(x_align, col_pos, col_span,
+                                              y_align, row_pos, row_span);
   }
 
   /**
    * @brief Returns a reference to the derived type.
    * Useful if generic access to the concrete type is needed.
    */
-  Derived& self() {
-    return *static_cast<Derived*>(this);
-  }
+  Derived& self() { return *static_cast<Derived*>(this); }
 
-  const Derived& self() const {
-    return *static_cast<const Derived*>(this);
-  }
+  const Derived& self() const { return *static_cast<const Derived*>(this); }
 };
 
-} // namespace lvgl
+}  // namespace lvgl

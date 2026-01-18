@@ -38,7 +38,7 @@ Object::~Object() {
   if (obj_) {
     // Always remove our specific callback to avoid re-entry or interfering with
     // other wrappers
-    lv_obj_remove_event_cb_with_user_data(obj_, on_delete_event, this);
+    // lv_obj_remove_event_cb_with_user_data(obj_, on_delete_event, this);
     if (owned_) {
       lv_obj_delete(obj_);
     }
@@ -98,54 +98,7 @@ void Object::on_delete_event(lv_event_t* e) {
   }
 }
 
-void Object::set_pos(int32_t x, int32_t y) {
-  if (obj_) lv_obj_set_pos(obj_, x, y);
-}
-
-void Object::set_x(int32_t x) {
-  if (obj_) lv_obj_set_x(obj_, x);
-}
-
-void Object::set_y(int32_t y) {
-  if (obj_) lv_obj_set_y(obj_, y);
-}
-
-void Object::set_size(int32_t w, int32_t h) {
-  if (obj_) lv_obj_set_size(obj_, w, h);
-}
-
-void Object::set_width(int32_t w) {
-  if (obj_) lv_obj_set_width(obj_, w);
-}
-
-void Object::set_height(int32_t h) {
-  if (obj_) lv_obj_set_height(obj_, h);
-}
-
-int32_t Object::get_x() const { return obj_ ? lv_obj_get_x(obj_) : 0; }
-
-int32_t Object::get_y() const { return obj_ ? lv_obj_get_y(obj_) : 0; }
-
-int32_t Object::get_width() const { return obj_ ? lv_obj_get_width(obj_) : 0; }
-
-int32_t Object::get_height() const {
-  return obj_ ? lv_obj_get_height(obj_) : 0;
-}
-
-void Object::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  if (obj_) lv_obj_align(obj_, static_cast<lv_align_t>(align), x_ofs, y_ofs);
-}
-
-void Object::align_to(const Object& base, Align align, int32_t x_ofs,
-                      int32_t y_ofs) {
-  if (obj_ && base.raw())
-    lv_obj_align_to(obj_, base.raw(), static_cast<lv_align_t>(align), x_ofs,
-                    y_ofs);
-}
-
-void Object::center() {
-  if (obj_) lv_obj_center(obj_);
-}
+// --- Flags & States ---
 
 void Object::add_flag(lv_obj_flag_t f) {
   if (obj_) lv_obj_add_flag(obj_, f);
@@ -171,6 +124,16 @@ bool Object::has_state(lv_state_t state) const {
   return obj_ ? lv_obj_has_state(obj_, state) : false;
 }
 
+// --- Events ---
+
+void Object::event_proxy(lv_event_t* e) {
+  auto* node = static_cast<CallbackNode*>(lv_event_get_user_data(e));
+  if (node && node->callback) {
+    Event event(e);
+    node->callback(event);
+  }
+}
+
 void Object::add_event_cb(lv_event_code_t event_code, EventCallback callback) {
   if (!obj_) return;
   auto node = std::make_unique<CallbackNode>();
@@ -178,6 +141,8 @@ void Object::add_event_cb(lv_event_code_t event_code, EventCallback callback) {
   lv_obj_add_event_cb(obj_, event_proxy, event_code, node.get());
   callback_nodes_.push_back(std::move(node));
 }
+
+// --- Styles ---
 
 void Object::add_style(Style& style, lv_style_selector_t selector) {
   if (obj_) lv_obj_add_style(obj_, style.raw(), selector);
@@ -219,63 +184,6 @@ void Object::set_style_image_recolor(lv_color_t value,
 void Object::set_style_bg_image_src(const void* value,
                                     lv_style_selector_t selector) {
   if (obj_) lv_obj_set_style_bg_image_src(obj_, value, selector);
-}
-
-void Object::event_proxy(lv_event_t* e) {
-  CallbackNode* node = static_cast<CallbackNode*>(lv_event_get_user_data(e));
-  if (node && node->callback) {
-    Event evt(e);
-    node->callback(evt);
-  }
-}
-
-void Object::set_layout(uint32_t layout) {
-  if (obj_) lv_obj_set_layout(obj_, layout);
-}
-
-bool Object::is_layout_positioned() const {
-  return obj_ ? lv_obj_is_layout_positioned(obj_) : false;
-}
-
-void Object::mark_layout_as_dirty() {
-  if (obj_) lv_obj_mark_layout_as_dirty(obj_);
-}
-
-void Object::update_layout() {
-  if (obj_) lv_obj_update_layout(obj_);
-}
-
-void Object::set_flex_flow(lv_flex_flow_t flow) {
-  if (obj_) lv_obj_set_flex_flow(obj_, flow);
-}
-
-void Object::set_flex_align(lv_flex_align_t main_place,
-                            lv_flex_align_t cross_place,
-                            lv_flex_align_t track_cross_place) {
-  if (obj_)
-    lv_obj_set_flex_align(obj_, main_place, cross_place, track_cross_place);
-}
-
-void Object::set_flex_grow(uint8_t grow) {
-  if (obj_) lv_obj_set_flex_grow(obj_, grow);
-}
-
-void Object::set_grid_dsc_array(const int32_t col_dsc[],
-                                const int32_t row_dsc[]) {
-  if (obj_) lv_obj_set_grid_dsc_array(obj_, col_dsc, row_dsc);
-}
-
-void Object::set_grid_align(lv_grid_align_t column_align,
-                            lv_grid_align_t row_align) {
-  if (obj_) lv_obj_set_grid_align(obj_, column_align, row_align);
-}
-
-void Object::set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
-                           int32_t col_span, lv_grid_align_t row_align,
-                           int32_t row_pos, int32_t row_span) {
-  if (obj_)
-    lv_obj_set_grid_cell(obj_, column_align, col_pos, col_span, row_align,
-                         row_pos, row_span);
 }
 
 }  // namespace lvgl

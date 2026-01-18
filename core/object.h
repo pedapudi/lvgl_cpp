@@ -81,6 +81,11 @@ class Object {
   };
 
   /**
+   * @brief Alignment types.
+   */
+  using Align = lv_align_t;
+
+  /**
    * @brief Create a wrapper around an existing LVGL object.
    * @param obj The LVGL object to wrap.
    * @param ownership The ownership policy.
@@ -155,118 +160,6 @@ class Object {
    * deleted.
    */
   bool is_valid() const { return obj_ != nullptr; }
-
-  // --- Basic Properties ---
-
-  /**
-   * @brief Set the position relative to the parent.
-   * @param x X coordinate.
-   * @param y Y coordinate.
-   */
-  void set_pos(int32_t x, int32_t y);
-
-  /**
-   * @brief Set the x coordinate.
-   * @param x X coordinate.
-   */
-  void set_x(int32_t x);
-
-  /**
-   * @brief Set the y coordinate.
-   * @param y Y coordinate.
-   */
-  void set_y(int32_t y);
-
-  /**
-   * @brief Set the size of the object.
-   * @param w Width in pixels.
-   * @param h Height in pixels.
-   */
-  void set_size(int32_t w, int32_t h);
-
-  /**
-   * @brief Set the width of the object.
-   * @param w Width in pixels.
-   */
-  void set_width(int32_t w);
-
-  /**
-   * @brief Set the height of the object.
-   * @param h Height in pixels.
-   */
-  void set_height(int32_t h);
-
-  /**
-   * @brief Get the x position relative to the parent.
-   */
-  int32_t get_x() const;
-
-  /**
-   * @brief Get the y position relative to the parent.
-   */
-  int32_t get_y() const;
-
-  /**
-   * @brief Get the width of the object.
-   */
-  int32_t get_width() const;
-
-  /**
-   * @brief Get the height of the object.
-   */
-  int32_t get_height() const;
-
-  /**
-   * @brief Alignment options (wrapper for lv_align_t).
-   */
-  enum class Align {
-    Default = LV_ALIGN_DEFAULT,
-    TopLeft = LV_ALIGN_TOP_LEFT,
-    TopMid = LV_ALIGN_TOP_MID,
-    TopRight = LV_ALIGN_TOP_RIGHT,
-    BottomLeft = LV_ALIGN_BOTTOM_LEFT,
-    BottomMid = LV_ALIGN_BOTTOM_MID,
-    BottomRight = LV_ALIGN_BOTTOM_RIGHT,
-    LeftMid = LV_ALIGN_LEFT_MID,
-    RightMid = LV_ALIGN_RIGHT_MID,
-    Center = LV_ALIGN_CENTER,
-    OutTopLeft = LV_ALIGN_OUT_TOP_LEFT,
-    OutTopMid = LV_ALIGN_OUT_TOP_MID,
-    OutTopRight = LV_ALIGN_OUT_TOP_RIGHT,
-    OutBottomLeft = LV_ALIGN_OUT_BOTTOM_LEFT,
-    OutBottomMid = LV_ALIGN_OUT_BOTTOM_MID,
-    OutBottomRight = LV_ALIGN_OUT_BOTTOM_RIGHT,
-    OutLeftTop = LV_ALIGN_OUT_LEFT_TOP,
-    OutLeftMid = LV_ALIGN_OUT_LEFT_MID,
-    OutLeftBottom = LV_ALIGN_OUT_LEFT_BOTTOM,
-    OutRightTop = LV_ALIGN_OUT_RIGHT_TOP,
-    OutRightMid = LV_ALIGN_OUT_RIGHT_MID,
-    OutRightBottom = LV_ALIGN_OUT_RIGHT_BOTTOM,
-  };
-
-  /**
-   * @brief Align the object within its parent.
-   * @param align One of `Align` constants.
-   * @param x_ofs X offset from the alignment point.
-   * @param y_ofs Y offset from the alignment point.
-   */
-  void align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-
-  /**
-   * @brief Align the object to another object (base).
-   * @param base The reference object to align to.
-   * @param align One of `Align` constants.
-   * @param x_ofs X offset.
-   * @param y_ofs Y offset.
-   */
-  void align_to(const Object& base, Align align, int32_t x_ofs = 0,
-                int32_t y_ofs = 0);
-
-  /**
-   * @brief Center the object in its parent.
-   * Equivalent to `align(LV_ALIGN_CENTER, 0, 0)`.
-   */
-  void center();
 
   // --- Flags& States ---
 
@@ -396,88 +289,6 @@ class Object {
    */
   void set_style_bg_image_src(const void* value,
                               lv_style_selector_t selector = LV_PART_MAIN);
-
-  // --- Layouts ---
-
-  /**
-   * @brief Set the layout of the object.
-   * @param layout The layout descriptor (e.g. `LV_LAYOUT_FLEX`,
-   * `LV_LAYOUT_GRID`).
-   */
-  void set_layout(uint32_t layout);
-
-  /**
-   * @brief Check if the object is positioned by a layout.
-   * @return true if the object's position is set by a layout.
-   */
-  bool is_layout_positioned() const;
-
-  /**
-   * @brief Mark the layout as dirty to trigger a refresh.
-   */
-  void mark_layout_as_dirty();
-
-  /**
-   * @brief Update the layout immediately.
-   */
-  void update_layout();
-
-  // Flex Layout
-
-  /**
-   * @brief Set the flex flow direction.
-   * @param flow The flow direction (e.g. `LV_FLEX_FLOW_ROW`,
-   * `LV_FLEX_FLOW_COLUMN`).
-   */
-  void set_flex_flow(lv_flex_flow_t flow);
-
-  /**
-   * @brief Set the flex alignment.
-   * @param main_place Alignment on the main axis.
-   * @param cross_place Alignment on the cross axis.
-   * @param track_cross_place Alignment of the tracks (if wrapped).
-   */
-  void set_flex_align(lv_flex_align_t main_place, lv_flex_align_t cross_place,
-                      lv_flex_align_t track_cross_place);
-
-  /**
-   * @brief Set the flex grow factor.
-   * @param grow The grow factor (0: none, 1+: share remaining space).
-   */
-  void set_flex_grow(uint8_t grow);
-
-  // Grid Layout
-
-  /**
-   * @brief Set the grid descriptor arrays.
-   * Arrays must be static or global as LVGL keeps a pointer to them (unless
-   * local style copy is used, but typically static).
-   * @param col_dsc Array of column descriptors (ending with
-   * `LV_GRID_TEMPLATE_LAST`).
-   * @param row_dsc Array of row descriptors (ending with
-   * `LV_GRID_TEMPLATE_LAST`).
-   */
-  void set_grid_dsc_array(const int32_t col_dsc[], const int32_t row_dsc[]);
-
-  /**
-   * @brief Set the grid alignment.
-   * @param column_align Alignment of columns.
-   * @param row_align Alignment of rows.
-   */
-  void set_grid_align(lv_grid_align_t column_align, lv_grid_align_t row_align);
-
-  /**
-   * @brief Set the grid cell placement for this object.
-   * @param column_align Alignment in the column.
-   * @param col_pos Column index.
-   * @param col_span Number of columns to span.
-   * @param row_align Alignment in the row.
-   * @param row_pos Row index.
-   * @param row_span Number of rows to span.
-   */
-  void set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
-                     int32_t col_span, lv_grid_align_t row_align,
-                     int32_t row_pos, int32_t row_span);
 
  protected:
   lv_obj_t* obj_ = nullptr;
