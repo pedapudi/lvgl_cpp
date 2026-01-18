@@ -136,7 +136,7 @@ void test_object_oriented_api() {
   std::cout << "Testing Object Oriented API..." << std::endl;
   // Create a dummy object (Button)
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Button obj(&screen);
+  lvgl::Button obj(screen);
   bool callback_called = false;
 
   {
@@ -198,7 +198,7 @@ void test_object_oriented_api() {
 void test_convenience_methods() {
   std::cout << "Testing Convenience Methods (set_exec_cb_y)..." << std::endl;
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Button obj(&screen);
+  lvgl::Button obj(screen);
   // Position it at 0 initially
   obj.set_y(0);
   obj.update_layout();  // Ensure initial state
@@ -242,7 +242,7 @@ void test_convenience_methods() {
 void test_path_callback_lambda() {
   std::cout << "Testing Lambda Path Callback..." << std::endl;
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Button obj(&screen);
+  lvgl::Button obj(screen);
   obj.set_y(0);
 
   bool path_called = false;
@@ -300,7 +300,7 @@ void test_abstract_callbacks() {
   };
 
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
-  lvgl::Button obj(&screen);
+  lvgl::Button obj(screen);
   MyExec exec_cb;
   MyPath path_cb;
 

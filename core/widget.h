@@ -1,0 +1,77 @@
+#pragma once
+
+#include "object.h"
+#include "mixins/positionable.h"
+#include "mixins/sizable.h"
+#include "mixins/stylable.h"
+#include "mixins/event_source.h"
+#include "mixins/layoutable.h"
+
+namespace lvgl {
+
+/**
+ * @brief The base class for all concrete widgets.
+ * Combines the fundamental Object lifecycle with functional Mixins.
+ * Uses CRTP to allow fluent method chaining that returns the Derived type.
+ *
+ * @tparam Derived The concrete widget class (e.g., Button, Label).
+ */
+template <typename Derived>
+class Widget : public Object,
+               public Positionable<Derived>,
+               public Sizable<Derived>,
+               public Stylable<Derived>,
+               public EventSource<Derived>,
+               public Layoutable<Derived> {
+ public:
+  // Inherit constructors from Object
+  using Object::Object;
+
+  // --- Positionable Forwarding ---
+  Derived& set_x(int32_t value) { return Positionable<Derived>::set_x(value); }
+  Derived& set_y(int32_t value) { return Positionable<Derived>::set_y(value); }
+  Derived& set_pos(int32_t x, int32_t y) { return Positionable<Derived>::set_pos(x, y); }
+  Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) { return Positionable<Derived>::align(align, x_ofs, y_ofs); }
+  Derived& align(Object::Align align, int32_t x_ofs = 0, int32_t y_ofs = 0) { return Positionable<Derived>::align(align, x_ofs, y_ofs); }
+  Derived& center() { return Positionable<Derived>::center(); }
+  int32_t get_x() const { return Positionable<Derived>::get_x(); }
+  int32_t get_y() const { return Positionable<Derived>::get_y(); }
+
+  // --- Sizable Forwarding ---
+  Derived& set_width(int32_t value) { return Sizable<Derived>::set_width(value); }
+  Derived& set_height(int32_t value) { return Sizable<Derived>::set_height(value); }
+  Derived& set_size(int32_t width, int32_t height) { return Sizable<Derived>::set_size(width, height); }
+  int32_t get_width() const { return Sizable<Derived>::get_width(); }
+  int32_t get_height() const { return Sizable<Derived>::get_height(); }
+
+  // --- Stylable Forwarding ---
+  Derived& add_style(const lv_style_t* style, lv_style_selector_t selector = 0) { return Stylable<Derived>::add_style(style, selector); }
+  Derived& remove_style(const lv_style_t* style, lv_style_selector_t selector = 0) { return Stylable<Derived>::remove_style(style, selector); }
+  Derived& remove_all_styles() { return Stylable<Derived>::remove_all_styles(); }
+  
+  // --- EventSource Forwarding ---
+  Derived& add_event_cb(typename EventSource<Derived>::EventCallback cb, lv_event_code_t filter) { return EventSource<Derived>::add_event_cb(cb, filter); }
+  Derived& on_click(typename EventSource<Derived>::EventCallback cb) { return EventSource<Derived>::on_click(cb); }
+  Derived& on_event(typename EventSource<Derived>::EventCallback cb) { return EventSource<Derived>::on_event(cb); }
+
+  // --- Layoutable Forwarding ---
+  Derived& layout(const Flex& flex) { return Layoutable<Derived>::layout(flex); }
+  Derived& set_grid_cell(lv_grid_align_t x_align, uint8_t col_pos, uint8_t col_span,
+                         lv_grid_align_t y_align, uint8_t row_pos, uint8_t row_span) {
+      return Layoutable<Derived>::set_grid_cell(x_align, col_pos, col_span, y_align, row_pos, row_span);
+  }
+
+  /**
+   * @brief Returns a reference to the derived type.
+   * Useful if generic access to the concrete type is needed.
+   */
+  Derived& self() {
+    return *static_cast<Derived*>(this);
+  }
+
+  const Derived& self() const {
+    return *static_cast<const Derived*>(this);
+  }
+};
+
+} // namespace lvgl
