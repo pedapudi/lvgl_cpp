@@ -50,7 +50,7 @@ void test_textarea_2() {
   oneline_label.align_to(text_ta, lvgl::Object::Align::OutTopLeft, 0, 0);
 
   lvgl::Keyboard kb;
-  kb.set_textarea(&pwd_ta);
+  kb.set_textarea(pwd_ta);
 
   std::cout << "Textarea Example 2 Passed" << std::endl;
 }
@@ -69,7 +69,7 @@ void test_keyboard_1() {
   ta2.align(lvgl::Object::Align::TopRight, -10, 10);
   ta2.set_size(140, 80);
 
-  kb.set_textarea(&ta1);
+  kb.set_textarea(ta1);
   std::cout << "Keyboard Example 1 Passed" << std::endl;
 }
 

@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_CALENDAR
@@ -22,7 +22,7 @@
 namespace lvgl {
 
 class ButtonMatrix;
-class Calendar : public Object {
+class Calendar : public Widget<Calendar> {
  public:
   /**
    * @brief Create a Calendar on the active screen.
@@ -44,16 +44,6 @@ class Calendar : public Object {
   Calendar& set_highlighted_dates(lv_calendar_date_t highlighted[],
                                   size_t date_num);
   Calendar& set_day_names(const char** day_names);
-
-  // Fluent API shadows
-  Calendar& set_width(int32_t width);
-  Calendar& set_height(int32_t height);
-  Calendar& set_size(int32_t width, int32_t height);
-  Calendar& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Calendar& add_state(lv_state_t state);
-  Calendar& remove_state(lv_state_t state);
-  Calendar& add_flag(lv_obj_flag_t flag);
-  Calendar& remove_flag(lv_obj_flag_t flag);
 
   ButtonMatrix get_btnmatrix();
   const lv_calendar_date_t* get_today_date();

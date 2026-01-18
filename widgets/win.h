@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_WIN
@@ -35,7 +35,7 @@ class WinContent : public Object {
   using Object::Object;
 };
 
-class Win : public Object {
+class Win : public Widget<Win> {
  public:
   /**
    * @brief Create a Win on the active screen.
@@ -55,15 +55,6 @@ class Win : public Object {
   Label add_title(const char* txt);
   Button add_button(const void* icon, int32_t btn_w);
 
-  // Fluent API shadows
-  Win& set_width(int32_t width);
-  Win& set_height(int32_t height);
-  Win& set_size(int32_t width, int32_t height);
-  Win& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Win& add_state(lv_state_t state);
-  Win& remove_state(lv_state_t state);
-  Win& add_flag(lv_obj_flag_t flag);
-  Win& remove_flag(lv_obj_flag_t flag);
   WinHeader get_header();
   WinContent get_content();
 };

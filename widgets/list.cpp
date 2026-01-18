@@ -7,12 +7,12 @@
 
 namespace lvgl {
 
-List::List() : Object(lv_list_create(nullptr), Ownership::Managed) {}
+List::List() : Widget(lv_list_create(nullptr), Ownership::Managed) {}
 
 List::List(Object& parent, Ownership ownership)
-    : Object(lv_list_create(parent.raw()), ownership) {}
+    : Widget(lv_list_create(parent.raw()), ownership) {}
 
-List::List(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+List::List(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Label List::add_text(const char* txt) {
   return Label(obj_ ? lv_list_add_text(obj_, txt) : nullptr);
@@ -28,39 +28,6 @@ const char* List::get_button_text(lv_obj_t* btn) {
 
 void List::set_button_text(lv_obj_t* btn, const char* txt) {
   if (obj_) lv_list_set_button_text(obj_, btn, txt);
-}
-
-List& List::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-List& List::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-List& List::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-List& List::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-List& List::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-List& List::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-List& List::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-List& List::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
-  return *this;
 }
 
 }  // namespace lvgl

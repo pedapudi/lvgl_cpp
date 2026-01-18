@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_TABVIEW
@@ -33,7 +33,7 @@ class TabPage : public Object {
 /**
  * @brief Wrapper for lv_tabview.
  */
-class TabView : public Object {
+class TabView : public Widget<TabView> {
  public:
   /**
    * @brief Create a TabView on the active screen.
@@ -55,16 +55,6 @@ class TabView : public Object {
   TabView& set_active(uint32_t idx, lv_anim_enable_t anim_en);
   TabView& set_tab_bar_position(lv_dir_t dir);
   TabView& set_tab_bar_size(int32_t size);
-
-  // Fluent API shadows
-  TabView& set_width(int32_t width);
-  TabView& set_height(int32_t height);
-  TabView& set_size(int32_t width, int32_t height);
-  TabView& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  TabView& add_state(lv_state_t state);
-  TabView& remove_state(lv_state_t state);
-  TabView& add_flag(lv_obj_flag_t flag);
-  TabView& remove_flag(lv_obj_flag_t flag);
 
   uint32_t get_tab_count();
   uint32_t get_tab_active();

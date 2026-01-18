@@ -165,7 +165,7 @@ void test_menu_1() {
 void test_btnmatrix_1() {
   std::cout << "Testing ButtonMatrix Example 1..." << std::endl;
   Object screen = get_screen();
-  ButtonMatrix btnm(&screen);
+  ButtonMatrix btnm(screen);
 
   static const char* btnm_map[] = {"1", "2", "3", "\n", "4", "5", "6", ""};
   btnm.set_map(btnm_map);
