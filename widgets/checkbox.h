@@ -1,7 +1,7 @@
 #ifndef LVGL_CPP_WIDGETS_CHECKBOX_H_
 #define LVGL_CPP_WIDGETS_CHECKBOX_H_
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_CHECKBOX
@@ -18,17 +18,32 @@
  */
 namespace lvgl {
 
-class Checkbox : public Object {
+class Checkbox : public Widget<Checkbox> {
  public:
+  using Widget::Widget;
+
   /**
    * @brief Create a Checkbox on the active screen.
    */
   Checkbox();
+
+  /**
+   * @brief Wrap an existing lv_obj object.
+   * @param obj The raw LVGL object to wrap.
+   */
+  explicit Checkbox(lv_obj_t* obj, Ownership ownership = Ownership::Default);
+
   /**
    * @brief Create a Checkbox with a parent.
    * @param parent The parent object.
    */
-  explicit Checkbox(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Checkbox(Object* parent, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a new Checkbox with parent (Reference).
+   * @param parent Parent object.
+   */
+  explicit Checkbox(Object& parent);
 
   /**
    * @brief Create a Checkbox with a parent and text.
@@ -43,12 +58,6 @@ class Checkbox : public Object {
    * @param text The initial text.
    */
   Checkbox(Object& parent, const std::string& text);
-
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
-  explicit Checkbox(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Set the text of the checkbox.
@@ -67,16 +76,6 @@ class Checkbox : public Object {
    * @return The text.
    */
   const char* get_text() const;
-
-  // Fluent API shadows
-  Checkbox& set_width(int32_t width);
-  Checkbox& set_height(int32_t height);
-  Checkbox& set_size(int32_t width, int32_t height);
-  Checkbox& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Checkbox& add_state(lv_state_t state);
-  Checkbox& remove_state(lv_state_t state);
-  Checkbox& add_flag(lv_obj_flag_t flag);
-  Checkbox& remove_flag(lv_obj_flag_t flag);
 };
 
 }  // namespace lvgl

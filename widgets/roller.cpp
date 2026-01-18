@@ -6,12 +6,15 @@
 
 namespace lvgl {
 
-Roller::Roller() : Object(lv_roller_create(nullptr), Ownership::Managed) {}
+Roller::Roller()
+    : Widget(lv_roller_create(lv_screen_active()), Ownership::Managed) {}
 
-Roller::Roller(Object& parent, Ownership ownership)
-    : Object(lv_roller_create(parent.raw()), ownership) {}
+Roller::Roller(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
-Roller::Roller(lv_obj_t* obj, Ownership ownership) : Object(obj, ownership) {}
+Roller::Roller(Object* parent, Ownership ownership)
+    : Widget(lv_roller_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Roller::Roller(Object& parent) : Roller(&parent, Ownership::Managed) {}
 
 Roller& Roller::set_options(const char* options, lv_roller_mode_t mode) {
   if (obj_) lv_roller_set_options(obj_, options, mode);
@@ -29,39 +32,6 @@ bool Roller::set_selected_str(const char* sel_opt, lv_anim_enable_t anim) {
 
 Roller& Roller::set_visible_row_count(uint32_t row_cnt) {
   if (obj_) lv_roller_set_visible_row_count(obj_, row_cnt);
-  return *this;
-}
-
-Roller& Roller::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Roller& Roller::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Roller& Roller::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Roller& Roller::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Roller& Roller::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Roller& Roller::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Roller& Roller::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Roller& Roller::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

@@ -9,7 +9,8 @@ Spinbox::Spinbox() : Textarea(lv_spinbox_create(nullptr), Ownership::Managed) {}
 Spinbox::Spinbox(Object& parent, Ownership ownership)
     : Textarea(lv_spinbox_create(parent.raw()), ownership) {}
 
-Spinbox::Spinbox(lv_obj_t* obj, Ownership ownership) : Textarea(obj) {}
+Spinbox::Spinbox(lv_obj_t* obj, Ownership ownership)
+    : Textarea(obj, ownership) {}
 
 Spinbox& Spinbox::set_value(int32_t v) {
   if (obj_) lv_spinbox_set_value(obj_, v);
@@ -95,19 +96,19 @@ Spinbox& Spinbox::decrement() {
 }
 
 Spinbox& Spinbox::set_width(int32_t width) {
-  Object::set_width(width);
+  Widget::set_width(width);
   return *this;
 }
 Spinbox& Spinbox::set_height(int32_t height) {
-  Object::set_height(height);
+  Widget::set_height(height);
   return *this;
 }
 Spinbox& Spinbox::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
+  Widget::set_size(width, height);
   return *this;
 }
 Spinbox& Spinbox::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
+  Widget::align(align, x_ofs, y_ofs);
   return *this;
 }
 Spinbox& Spinbox::add_state(lv_state_t state) {

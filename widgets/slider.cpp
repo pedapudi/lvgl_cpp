@@ -8,8 +8,10 @@ namespace lvgl {
 
 Slider::Slider() : Bar(lv_slider_create(nullptr), Ownership::Managed) {}
 
-Slider::Slider(Object& parent, Ownership ownership)
-    : Bar(lv_slider_create(parent.raw())) {}
+Slider::Slider(Object* parent, Ownership ownership)
+    : Bar(lv_slider_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Slider::Slider(Object& parent) : Slider(&parent) {}
 
 Slider::Slider(Object& parent, int32_t min, int32_t max) : Slider(parent) {
   set_range(min, max);
@@ -51,35 +53,35 @@ bool Slider::is_dragged() const {
 }
 
 Slider& Slider::set_width(int32_t width) {
-  Object::set_width(width);
+  if (obj_) lv_obj_set_width(obj_, width);
   return *this;
 }
 Slider& Slider::set_height(int32_t height) {
-  Object::set_height(height);
+  if (obj_) lv_obj_set_height(obj_, height);
   return *this;
 }
 Slider& Slider::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
+  if (obj_) lv_obj_set_size(obj_, width, height);
   return *this;
 }
 Slider& Slider::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
+  if (obj_) lv_obj_align(obj_, static_cast<lv_align_t>(align), x_ofs, y_ofs);
   return *this;
 }
 Slider& Slider::add_state(lv_state_t state) {
-  Object::add_state(state);
+  if (obj_) lv_obj_add_state(obj_, state);
   return *this;
 }
 Slider& Slider::remove_state(lv_state_t state) {
-  Object::remove_state(state);
+  if (obj_) lv_obj_remove_state(obj_, state);
   return *this;
 }
 Slider& Slider::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
+  if (obj_) lv_obj_add_flag(obj_, flag);
   return *this;
 }
 Slider& Slider::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
+  if (obj_) lv_obj_remove_flag(obj_, flag);
   return *this;
 }
 

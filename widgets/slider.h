@@ -32,7 +32,8 @@ class Slider : public Bar {
    * @param parent Parent object.
    */
   Slider();
-  explicit Slider(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Slider(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Slider(Object& parent);
 
   /**
    * @brief Create a Slider with min and max values.

@@ -7,21 +7,24 @@
 namespace lvgl {
 
 Textarea::Textarea()
-    : Object(lv_textarea_create(nullptr), Ownership::Managed) {}
+    : Widget(lv_textarea_create(lv_screen_active()), Ownership::Managed) {}
 
-Textarea::Textarea(Object& parent, Ownership ownership)
-    : Object(lv_textarea_create(parent.raw()), ownership) {}
+Textarea::Textarea(Object* parent, Ownership ownership)
+    : Widget(lv_textarea_create(parent ? parent->raw() : nullptr), ownership) {}
 
-Textarea::Textarea(Object& parent, const char* text) : Textarea(parent) {
+Textarea::Textarea(Object& parent) : Textarea(&parent) {}
+
+Textarea::Textarea(Object& parent, const char* text) : Textarea(&parent) {
   set_text(text);
 }
 
-Textarea::Textarea(Object& parent, const std::string& text) : Textarea(parent) {
+Textarea::Textarea(Object& parent, const std::string& text)
+    : Textarea(&parent) {
   set_text(text.c_str());
 }
 
 Textarea::Textarea(lv_obj_t* obj, Ownership ownership)
-    : Object(obj, ownership) {}
+    : Widget(obj, ownership) {}
 
 Textarea& Textarea::add_char(uint32_t c) {
   if (obj_) lv_textarea_add_char(obj_, c);
@@ -105,39 +108,6 @@ Textarea& Textarea::set_password_show_time(uint32_t time) {
 
 Textarea& Textarea::set_align(lv_text_align_t align) {
   if (obj_) lv_textarea_set_align(obj_, align);
-  return *this;
-}
-
-Textarea& Textarea::set_width(int32_t width) {
-  Object::set_width(width);
-  return *this;
-}
-Textarea& Textarea::set_height(int32_t height) {
-  Object::set_height(height);
-  return *this;
-}
-Textarea& Textarea::set_size(int32_t width, int32_t height) {
-  Object::set_size(width, height);
-  return *this;
-}
-Textarea& Textarea::align(Align align, int32_t x_ofs, int32_t y_ofs) {
-  Object::align(align, x_ofs, y_ofs);
-  return *this;
-}
-Textarea& Textarea::add_state(lv_state_t state) {
-  Object::add_state(state);
-  return *this;
-}
-Textarea& Textarea::remove_state(lv_state_t state) {
-  Object::remove_state(state);
-  return *this;
-}
-Textarea& Textarea::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-Textarea& Textarea::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
   return *this;
 }
 

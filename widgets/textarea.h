@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../core/object.h"  // IWYU pragma: export
+#include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_TEXTAREA
@@ -22,17 +22,26 @@
 namespace lvgl {
 
 class Label;
-class Textarea : public Object {
+class Textarea : public Widget<Textarea> {
  public:
+  using Widget::Widget;
+
   /**
    * @brief Create a Textarea on the active screen.
    */
   Textarea();
+
   /**
-   * @brief Create a Textarea with a parent.
+   * @brief Create a Textarea alias with a parent.
    * @param parent The parent object.
    */
-  explicit Textarea(Object& parent, Ownership ownership = Ownership::Default);
+  explicit Textarea(Object* parent, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Create a new Textarea with parent (Reference).
+   * @param parent Parent object.
+   */
+  explicit Textarea(Object& parent);
 
   /**
    * @brief Create a Textarea with a parent and text.
@@ -48,6 +57,11 @@ class Textarea : public Object {
    */
   Textarea(Object& parent, const std::string& text);
 
+  /**
+   * @brief Create a Textarea with a parent and text.
+   * @param parent The parent object.
+   * @param text The initial text.
+   */
   /**
    * @brief Wrap an existing lv_obj object.
    * @param obj The raw LVGL object to wrap.
@@ -71,16 +85,6 @@ class Textarea : public Object {
   Textarea& set_text_selection(bool en);
   Textarea& set_password_show_time(uint32_t time);
   Textarea& set_align(lv_text_align_t align);
-
-  // Fluent API shadows
-  Textarea& set_width(int32_t width);
-  Textarea& set_height(int32_t height);
-  Textarea& set_size(int32_t width, int32_t height);
-  Textarea& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Textarea& add_state(lv_state_t state);
-  Textarea& remove_state(lv_state_t state);
-  Textarea& add_flag(lv_obj_flag_t flag);
-  Textarea& remove_flag(lv_obj_flag_t flag);
 
   const char* get_text() const;
   const char* get_placeholder_text();
