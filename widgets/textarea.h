@@ -24,24 +24,10 @@ namespace lvgl {
 class Label;
 class Textarea : public Widget<Textarea> {
  public:
-  using Widget::Widget;
-
-  /**
-   * @brief Create a Textarea on the active screen.
-   */
   Textarea();
-
-  /**
-   * @brief Create a Textarea alias with a parent.
-   * @param parent The parent object.
-   */
   explicit Textarea(Object* parent, Ownership ownership = Ownership::Default);
-
-  /**
-   * @brief Create a new Textarea with parent (Reference).
-   * @param parent Parent object.
-   */
   explicit Textarea(Object& parent);
+  explicit Textarea(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a Textarea with a parent and text.
@@ -56,17 +42,6 @@ class Textarea : public Widget<Textarea> {
    * @param text The initial text.
    */
   Textarea(Object& parent, const std::string& text);
-
-  /**
-   * @brief Create a Textarea with a parent and text.
-   * @param parent The parent object.
-   * @param text The initial text.
-   */
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
-  explicit Textarea(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Textarea& add_char(uint32_t c);
   Textarea& add_text(const char* txt);

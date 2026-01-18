@@ -24,19 +24,9 @@ class Button;
 class Label;
 class List : public Widget<List> {
  public:
-  /**
-   * @brief Create a List on the active screen.
-   */
   List();
-  /**
-   * @brief Create a List with a parent.
-   * @param parent The parent object.
-   */
-  explicit List(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit List(Object* parent, Ownership ownership = Ownership::Default);
+  explicit List(Object& parent);
   explicit List(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Label add_text(const char* txt);

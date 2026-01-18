@@ -7,18 +7,6 @@
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_TABVIEW
-/**
- * @file tabview.h
- * @brief C++ Wrapper for LVGL TabView Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::TabView widget(lv_screen_active());
- * widget.center();
- * lvgl::TabPage tab = widget.add_tab("Tab 1");
- * ```
- */
 
 namespace lvgl {
 
@@ -35,19 +23,9 @@ class TabPage : public Widget<TabPage> {
  */
 class TabView : public Widget<TabView> {
  public:
-  /**
-   * @brief Create a TabView on the active screen.
-   */
   TabView();
-  /**
-   * @brief Create a TabView with a parent.
-   * @param parent The parent object.
-   */
-  explicit TabView(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit TabView(Object* parent, Ownership ownership = Ownership::Default);
+  explicit TabView(Object& parent);
   explicit TabView(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   TabPage add_tab(const char* name);

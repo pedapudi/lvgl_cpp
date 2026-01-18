@@ -7,15 +7,15 @@
 namespace lvgl {
 
 Dropdown::Dropdown()
-    : Widget(lv_dropdown_create(nullptr), Ownership::Managed) {}
-
-Dropdown::Dropdown(lv_obj_t* obj, Ownership ownership)
-    : Widget(obj, ownership) {}
+    : Dropdown(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
 Dropdown::Dropdown(Object* parent, Ownership ownership)
     : Widget(lv_dropdown_create(parent ? parent->raw() : nullptr), ownership) {}
 
 Dropdown::Dropdown(Object& parent) : Dropdown(&parent) {}
+
+Dropdown::Dropdown(lv_obj_t* obj, Ownership ownership)
+    : Widget(obj, ownership) {}
 
 Dropdown& Dropdown::set_text(const char* txt) {
   if (obj_) lv_dropdown_set_text(obj_, txt);

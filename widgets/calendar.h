@@ -24,19 +24,9 @@ namespace lvgl {
 class ButtonMatrix;
 class Calendar : public Widget<Calendar> {
  public:
-  /**
-   * @brief Create a Calendar on the active screen.
-   */
   Calendar();
-  /**
-   * @brief Create a Calendar with a parent.
-   * @param parent The parent object.
-   */
-  explicit Calendar(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit Calendar(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Calendar(Object& parent);
   explicit Calendar(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Calendar& set_today_date(uint32_t year, uint32_t month, uint32_t day);

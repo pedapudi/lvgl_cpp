@@ -4,11 +4,12 @@
 
 namespace lvgl {
 
-Table::Table()
-    : Widget(lv_table_create(lv_screen_active()), Ownership::Managed) {}
+Table::Table() : Table(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Table::Table(Object& parent, Ownership ownership)
-    : Widget(lv_table_create(parent.raw()), ownership) {}
+Table::Table(Object* parent, Ownership ownership)
+    : Widget(lv_table_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Table::Table(Object& parent) : Table(&parent) {}
 
 Table::Table(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

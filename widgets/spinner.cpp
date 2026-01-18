@@ -5,12 +5,13 @@
 namespace lvgl {
 
 Spinner::Spinner()
-    : Widget(lv_spinner_create(lv_screen_active()), Ownership::Managed) {}
+    : Spinner(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Spinner::Spinner(Object& parent)
-    : Widget(lv_spinner_create(parent.raw()), Ownership::Managed) {}
+Spinner::Spinner(Object* parent, Ownership ownership)
+    : Widget(lv_spinner_create(parent ? parent->raw() : nullptr), ownership) {}
 
-// Correction: implementing correct logic.
+Spinner::Spinner(Object& parent) : Spinner(&parent) {}
+
 Spinner::Spinner(Object& parent, uint32_t time, uint32_t arc_length)
     : Spinner(parent) {
   set_anim_params(time, arc_length);

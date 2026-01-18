@@ -22,19 +22,9 @@ namespace lvgl {
 
 class Keyboard : public Widget<Keyboard> {
  public:
-  /**
-   * @brief Create a Keyboard on the active screen.
-   */
   Keyboard();
-  /**
-   * @brief Create a Keyboard with a parent.
-   * @param parent The parent object.
-   */
-  explicit Keyboard(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit Keyboard(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Keyboard(Object& parent);
   explicit Keyboard(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Keyboard& set_textarea(lv_obj_t* ta);
@@ -52,17 +42,6 @@ class Keyboard : public Widget<Keyboard> {
   const char* get_button_text(uint32_t btn_id);
 };
 
-/**
- * @file keyboard.h
- * @brief C++ Wrapper for LVGL Keyboard Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Keyboard widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_KEYBOARD

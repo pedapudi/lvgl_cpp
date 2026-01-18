@@ -7,10 +7,12 @@
 
 namespace lvgl {
 
-List::List() : Widget(lv_list_create(lv_screen_active()), Ownership::Managed) {}
+List::List() : List(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-List::List(Object& parent, Ownership ownership)
-    : Widget(lv_list_create(parent.raw()), ownership) {}
+List::List(Object* parent, Ownership ownership)
+    : Widget(lv_list_create(parent ? parent->raw() : nullptr), ownership) {}
+
+List::List(Object& parent) : List(&parent) {}
 
 List::List(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

@@ -22,19 +22,9 @@ namespace lvgl {
 
 class Table : public Widget<Table> {
  public:
-  /**
-   * @brief Create a Table on the active screen.
-   */
   Table();
-  /**
-   * @brief Create a Table with a parent.
-   * @param parent The parent object.
-   */
-  explicit Table(Object& parent, Ownership ownership = Ownership::Default);
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit Table(Object* parent, Ownership ownership = Ownership::Default);
+  explicit Table(Object& parent);
   explicit Table(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Table& set_cell_value(uint32_t row, uint32_t col, const char* txt);
@@ -55,17 +45,6 @@ class Table : public Widget<Table> {
   void* get_cell_user_data(uint16_t row, uint16_t col);
 };
 
-/**
- * @file table.h
- * @brief C++ Wrapper for LVGL Table Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Table widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_TABLE

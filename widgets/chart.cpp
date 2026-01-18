@@ -4,11 +4,12 @@
 
 namespace lvgl {
 
-Chart::Chart()
-    : Widget(lv_chart_create(lv_screen_active()), Ownership::Managed) {}
+Chart::Chart() : Chart(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Chart::Chart(Object& parent)
-    : Widget(lv_chart_create(parent.raw()), Ownership::Managed) {}
+Chart::Chart(Object* parent, Ownership ownership)
+    : Widget(lv_chart_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Chart::Chart(Object& parent) : Chart(&parent) {}
 
 Chart::Chart(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

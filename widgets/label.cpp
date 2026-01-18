@@ -8,14 +8,14 @@
 
 namespace lvgl {
 
-Label::Label() : Widget(lv_label_create(nullptr), Ownership::Managed) {}
-
-Label::Label(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
+Label::Label() : Label(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
 Label::Label(Object* parent, Ownership ownership)
     : Widget(lv_label_create(parent ? parent->raw() : nullptr), ownership) {}
 
 Label::Label(Object& parent) : Label(&parent) {}
+
+Label::Label(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Label::Label(Object& parent, const std::string& text) : Label(&parent) {
   set_text(text);

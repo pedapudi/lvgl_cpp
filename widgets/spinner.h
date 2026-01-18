@@ -22,15 +22,10 @@ namespace lvgl {
 
 class Spinner : public Widget<Spinner> {
  public:
-  /**
-   * @brief Create a Spinner on the active screen.
-   */
   Spinner();
-  /**
-   * @brief Create a Spinner with a parent.
-   * @param parent The parent object.
-   */
+  explicit Spinner(Object* parent, Ownership ownership = Ownership::Default);
   explicit Spinner(Object& parent);
+  explicit Spinner(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a Spinner with specified animation parameters.
@@ -40,26 +35,9 @@ class Spinner : public Widget<Spinner> {
    */
   Spinner(Object& parent, uint32_t time, uint32_t arc_length);
 
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
-  explicit Spinner(lv_obj_t* obj, Ownership ownership = Ownership::Default);
-
   Spinner& set_anim_params(uint32_t t, uint32_t angle);
 };
 
-/**
- * @file spinner.h
- * @brief C++ Wrapper for LVGL Spinner Widget.
- *
- * # Usage
- *
- * ```cpp
- * lvgl::Spinner widget(lv_screen_active());
- * widget.center();
- * ```
- */
 }  // namespace lvgl
 
 #endif  // LV_USE_SPINNER

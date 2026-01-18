@@ -5,10 +5,12 @@
 namespace lvgl {
 
 TileView::TileView()
-    : Widget(lv_tileview_create(lv_screen_active()), Ownership::Managed) {}
+    : TileView(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-TileView::TileView(Object& parent, Ownership ownership)
-    : Widget(lv_tileview_create(parent.raw()), ownership) {}
+TileView::TileView(Object* parent, Ownership ownership)
+    : Widget(lv_tileview_create(parent ? parent->raw() : nullptr), ownership) {}
+
+TileView::TileView(Object& parent) : TileView(&parent) {}
 
 TileView::TileView(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}

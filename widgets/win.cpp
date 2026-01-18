@@ -7,10 +7,12 @@
 
 namespace lvgl {
 
-Win::Win() : Widget(lv_win_create(lv_screen_active()), Ownership::Managed) {}
+Win::Win() : Win(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Win::Win(Object& parent, Ownership ownership)
-    : Widget(lv_win_create(parent.raw()), ownership) {}
+Win::Win(Object* parent, Ownership ownership)
+    : Widget(lv_win_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Win::Win(Object& parent) : Win(&parent) {}
 
 Win::Win(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

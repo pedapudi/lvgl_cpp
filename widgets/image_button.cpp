@@ -5,10 +5,13 @@
 namespace lvgl {
 
 ImageButton::ImageButton()
-    : Widget(lv_imagebutton_create(lv_screen_active()), Ownership::Managed) {}
+    : ImageButton(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-ImageButton::ImageButton(Object& parent)
-    : Widget(lv_imagebutton_create(parent.raw()), Ownership::Managed) {}
+ImageButton::ImageButton(Object* parent, Ownership ownership)
+    : Widget(lv_imagebutton_create(parent ? parent->raw() : nullptr),
+             ownership) {}
+
+ImageButton::ImageButton(Object& parent) : ImageButton(&parent) {}
 
 ImageButton::ImageButton(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}

@@ -27,10 +27,6 @@ class Observer;
  */
 class Slider : public Bar {
  public:
-  /**
-   * @brief Create a new Slider.
-   * @param parent Parent object.
-   */
   Slider();
   explicit Slider(Object* parent, Ownership ownership = Ownership::Default);
   explicit Slider(Object& parent);

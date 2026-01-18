@@ -28,30 +28,10 @@ class Observer;
  */
 class Label : public Widget<Label> {
  public:
-  using Widget::Widget;
-
-  /**
-   * @brief Create a new Label.
-   * @param parent Parent object.
-   */
   Label();
-
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
-  explicit Label(lv_obj_t* obj, Ownership ownership = Ownership::Default);
-
-  /**
-   * @brief Create a new Label with parent.
-   */
   explicit Label(Object* parent, Ownership ownership = Ownership::Default);
-
-  /**
-   * @brief Create a new Label with parent (Reference).
-   * @param parent Parent object.
-   */
   explicit Label(Object& parent);
+  explicit Label(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
    * @brief Create a new Label with text.

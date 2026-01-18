@@ -4,10 +4,12 @@
 
 namespace lvgl {
 
-Menu::Menu() : Widget(lv_menu_create(lv_screen_active()), Ownership::Managed) {}
+Menu::Menu() : Menu(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-Menu::Menu(Object& parent, Ownership ownership)
-    : Widget(lv_menu_create(parent.raw()), ownership) {}
+Menu::Menu(Object* parent, Ownership ownership)
+    : Widget(lv_menu_create(parent ? parent->raw() : nullptr), ownership) {}
+
+Menu::Menu(Object& parent) : Menu(&parent) {}
 
 Menu::Menu(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

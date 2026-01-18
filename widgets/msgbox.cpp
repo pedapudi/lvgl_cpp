@@ -7,10 +7,12 @@
 
 namespace lvgl {
 
-MsgBox::MsgBox() : Widget(lv_msgbox_create(nullptr), Ownership::Managed) {}
+MsgBox::MsgBox() : MsgBox(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
-MsgBox::MsgBox(Object& parent, Ownership ownership)
-    : Widget(lv_msgbox_create(parent.raw()), ownership) {}
+MsgBox::MsgBox(Object* parent, Ownership ownership)
+    : Widget(lv_msgbox_create(parent ? parent->raw() : nullptr), ownership) {}
+
+MsgBox::MsgBox(Object& parent) : MsgBox(&parent) {}
 
 MsgBox::MsgBox(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 

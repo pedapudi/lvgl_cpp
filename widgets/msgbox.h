@@ -40,23 +40,9 @@ class MsgBoxContent : public Widget<MsgBoxContent> {
 
 class MsgBox : public Widget<MsgBox> {
  public:
-  /**
-   * @brief Create a MsgBox on the active screen.
-   */
   MsgBox();
-  /**
-   * @brief Create a MsgBox with a parent.
-   * @param parent The parent object.
-   */
-  explicit MsgBox(Object& parent,
-                  Ownership ownership =
-                      Ownership::Default);  // Creates modal if parent is NULL?
-                                            // No, lv_msgbox_create creates
-                                            // modal if parent is NULL.
-  /**
-   * @brief Wrap an existing lv_obj object.
-   * @param obj The raw LVGL object to wrap.
-   */
+  explicit MsgBox(Object* parent, Ownership ownership = Ownership::Default);
+  explicit MsgBox(Object& parent);
   explicit MsgBox(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Label add_title(const char* title);
