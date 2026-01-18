@@ -1,116 +1,160 @@
-# Input Device Design for `lvgl_cpp`
+# design/input_devices.md
 
-## 1. Executive Summary
-This document analyzes the current state of Input Device (`indev`) support in `lvgl_cpp` and proposes a comprehensive design to bring idiomatic C++ capabilities to LVGL's input subsystem.
+## 1. Analysis of LVGL Input Device Architecture (v9)
 
-The goal is to move beyond simple wrappers for *existing* devices and enable the *creation* and *management* of input drivers (Touch, Mouse, Keypad, Encoder) directly from C++.
+LVGL 9.4 introduces a simplified yet powerful API for Input Devices (`lv_indev`), abstracting hardware inputs into four logical types. Unlike v8, where drivers were registered via structs, v9 uses a direct object-creation model.
 
-## 2. LVGL Input Device Concepts
-The `lv_indev` module abstracts hardware input differences into four logical types.
+### 1.1. The Four Input Types
+1.  **Pointer (`LV_INDEV_TYPE_POINTER`)**
+    *   **Hardware**: Touchpads, Mice, Touchscreens.
+    *   **Data**: X/Y coordinates and Pressed/Released state.
+    *   **Features**:
+        *   **Cursor**: Can associate a visual `lv_obj` (usually an image) to follow coordinates.
+        *   **Multi-touch**: Supported by creating *multiple* pointer instances (one per finger).
+        *   **Gestures**: Built-in detection for Scroll, Swipe, and basic directions.
+2.  **Keypad (`LV_INDEV_TYPE_KEYPAD`)**
+    *   **Hardware**: Physical Keyboards, dense Button arrays.
+    *   **Data**: Specific `uint32_t` key codes (ASCII or `LV_KEY_*` control keys) and state.
+    *   **Dependency**: **Must** be assigned to an `lv_group_t` to function. It sends keys to the *focused* object in that group.
+3.  **Encoder (`LV_INDEV_TYPE_ENCODER`)**
+    *   **Hardware**: Rotary Encoder with Push button.
+    *   **Data**: `enc_diff` (int16_t relative steps) and state.
+    *   **Logic**:
+        *   **Navigate Mode**: Turning moves focus between widgets in the assigned `Group`.
+        *   **Edit Mode**: Clicking enters the widget (if editable); turning then changes the widget's value (e.g., Slider volume).
+4.  **Button (`LV_INDEV_TYPE_BUTTON`)**
+    *   **Hardware**: External physical buttons around a screen.
+    *   **Data**: ID of the pressed button.
+    *   **Logic**: Maps physical button IDs to on-screen coordinates, simulating a touch press at that location.
 
-| Type | Description | Usage Pattern |
-| :--- | :--- | :--- |
-| **Pointer** | Mouse, Touchpad, Touchscreen | Clicks, drags, and absolute positioning. Uses a cursor object (optional). |
-| **Keypad** | Keyboard, Physical Keypad | Sends characters or control keys (Arrows, Enter). Requires a `Group` for focus. |
-| **Encoder** | Rotary Encoder | Turns left/right, click, long-press. Navigates `Group` or edits values. |
-| **Button** | External Hardware Buttons | Mapped to specific screen coordinates. "virtual press". |
+### 1.2. The Integration Workflow
+The standard lifecycle in C involves:
+1.  **Creation**: `lv_indev_t* indev = lv_indev_create()`.
+2.  **Configuration**:
+    *   `lv_indev_set_type(indev, LV_INDEV_TYPE_...)`
+    *   `lv_indev_set_read_cb(indev, my_read_cb)`
+    *   `lv_indev_set_user_data(indev, context)`
+3.  **Execution**:
+    *   **Polling**: Default. LVGL calls `read_cb` every 30ms (configurable).
+    *   **Event-Driven**: Hardware ISR calls `lv_indev_read(indev)` to force an immediate read.
 
-### 2.1. Critical Workflows
-1.  **Creation & Registration**: `lv_indev_create()` returns a handle.
-2.  **Configuration**: Set type (`lv_indev_set_type`) and `read_cb` (`lv_indev_set_read_cb`).
-3.  **Data Reading**:
-    *   **Polling (Default)**: LVGL calls `read_cb` periodically (30ms).
-    *   **Event-Driven**: Driver calls `lv_indev_read()` explicitly when data is ready.
-4.  **Groups & Navigation**: Keypad and Encoder devices **must** be associated with an `lv_group_t` to function effectively.
+## 2. Current State of `lvgl_cpp` and Gap Analysis
 
-## 3. Current State of `lvgl_cpp`
-*   **Existing Files**: `indev/input_device.h`, `indev/input_device.cpp`.
-*   **Functionality**:
-    *   Wraps an *existing* `lv_indev_t*`.
-    *   Provides accessors (`get_type`, `get_state`).
-    *   Provides associating helpers (`set_group`, `set_cursor`).
-*   **Gaps**:
-    *   **No Creation Support**: Cannot create a new input device from C++.
-    *   **No Callback Support**: Cannot define the `read_cb` using C++ lambdas or functions.
-    *   **No Driver Logic**: Requires the user to write C code for the driver and pass the handle to C++.
+### 2.1. Current Implementation
+*   **Wrappers**: `InputDevice` exists but is a *passive* wrapper around an existing `lv_indev_t*`.
+*   **Gap 1: No Creation**: Users cannot create a new driver (e.g., "I have a button connected to GPIO 5") using C++. They must write C boilerplate.
+*   **Gap 2: No Type Safety**: `lv_indev_t` is opaque. There is no distinction in the C++ type system between a Keypad (requires Group) and a Pointer (requires Cursor).
+*   **Gap 3: Callback Hell**: Implementing `read_cb` requires a static C function. Accessing C++ instance data from there requires unsafe `void*` casting.
 
-## 4. Design Proposal
-We propose extending `lvgl_cpp` to support the full lifecycle of input devices.
+## 3. Proposed C++ Design
 
-### 4.1. `InputDevice` Class Evolution
-The `InputDevice` class should support both wrapping existing devices and creating new ones.
+### 3.1. Goals
+1.  **Idiomatic Creation**: `auto touch = PointerInput::create();`
+2.  **Lambda Callbacks**: `touch.on_read([](auto& data){ ... });`
+3.  **RAII Ownership**: The C++ object should manage the `lv_indev_delete()` lifecycle if it created the device.
+4.  **Type Safety**: Distinct classes (`PointerInput`, `KeypadInput`) enforcing requirements like Groups.
+
+### 3.2. Class Hierarchy
+
+```mermaid
+classDiagram
+    class InputDevice {
+        +lv_indev_t* raw()
+        +set_read_cb(function)
+        +enable(bool)
+    }
+    class PointerInput {
+        +set_cursor(Object)
+        +set_range(w, h)
+    }
+    class KeypadInput {
+        +set_group(Group)
+    }
+    class EncoderInput {
+        +set_group(Group)
+    }
+    
+    InputDevice <|-- PointerInput
+    InputDevice <|-- KeypadInput
+    InputDevice <|-- EncoderInput
+```
+
+### 3.3. Technical Implementation Details
+
+#### The Callback Dispatcher
+To support C++ lambdas, we use `lv_indev_set_user_data`.
 
 ```cpp
-// Proposed usage
-auto mouse_drv = InputDevice::create(LV_INDEV_TYPE_POINTER);
-mouse_drv.set_read_callback([](lv_indev_data_t* data) {
-    // C++ logic to read hardware
-    data->point.x = ...;
-    data->state = LV_INDEV_STATE_PRESSED;
+// Static trampoline
+static void cpp_read_cb_trampoline(lv_indev_t* indev, lv_indev_data_t* data) {
+    auto* instance = static_cast<InputDevice*>(lv_indev_get_user_data(indev));
+    if (instance) {
+        instance->process_read(data); // Calls the user's std::function
+    }
+}
+```
+
+#### Ownership Strategy
+We support two modes:
+1.  **Managed (Owner)**: Created via `InputDevice::create()`. Destructor calls `lv_indev_delete()`.
+2.  **Unmanaged (Observer)**: Wrapped via `InputDevice::wrap()`. Destructor does nothing.
+
+### 3.4. Usage Recipes
+
+#### Recipe 1: Touchscreen Driver (Pointer)
+```cpp
+// Create a managed pointer device
+auto touch = PointerInput::create();
+
+// Define the hardware logic inline
+touch.on_read([](InputData& data) {
+    if (MyHardware::is_touched()) {
+        auto [x, y] = MyHardware::get_coords();
+        data.point = {x, y};
+        data.state = LV_INDEV_STATE_PRESSED;
+    } else {
+        data.state = LV_INDEV_STATE_RELEASED;
+    }
+});
+
+// Optional: Assign a customized cursor
+Image cursor_img;
+cursor_img.set_src("S:/mouse_icon.png");
+touch.set_cursor(cursor_img);
+```
+
+#### Recipe 2: Encoder Navigation
+```cpp
+// 1. Create the Group for navigation
+Group menu_group;
+menu_group.add(btn_ok);
+menu_group.add(slider_volume);
+menu_group.set_default();
+
+// 2. Create the Encoder Driver
+auto enc = EncoderInput::create();
+enc.set_group(menu_group); // Critical step enforced by API
+
+// 3. Hardware Logic
+enc.on_read([](InputData& data) {
+    data.enc_diff = MyHardware::get_encoder_delta(); // e.g., +1 or -1
+    data.state = MyHardware::is_btn_pressed() ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
 });
 ```
 
-### 4.2. Callback Dispatcher
-To bridge C function pointers to C++ std::function, we need a user_data dispatch mechanism.
-*   `lv_indev_set_user_data(indev, wrapper_instance)` (if supported) or a static registry map `std::map<lv_indev_t*, std::function>`.
-*   **Note**: `lv_indev_t` has `user_data`. We can store the pointer to the `InputDevice` C++ instance there.
-
-### 4.3. Specific Device Subclasses
-While a generic `InputDevice` is useful, subclasses can enforce type safety:
-*   `PointerDevice` (adds `set_cursor`)
-*   `KeypadDevice` (adds `set_group`)
-*   `EncoderDevice` (adds `set_group`)
-
-### 4.4. The `Group` Abstraction
-`lv_group_t` is critical. The C++ `Group` class (already present in `core/group.h`) needs to be robust.
-
+#### Recipe 3: Keyboard (Desktop/SDL style)
 ```cpp
-Group g;
-g.add(button1);
-g.add(slider1);
-// g.set_default(); // utility
-
-EncoderDevice encoder;
-encoder.set_group(g);
-```
-
-### 4.5. Usage Recipes
-
-#### Scenario A: Adding a Custom Touchscreen
-```cpp
-// 1. Create Device
-auto touch = InputDevice::create(LV_INDEV_TYPE_POINTER);
-
-// 2. Define Driver Logic
-touch.set_read_cb([&](lv_indev_data_t* data){
-    if (hardware.is_touched()) {
-        data->state = LV_INDEV_STATE_PRESSED;
-        data->point.x = hardware.x;
-        data->point.y = hardware.y;
-    } else {
-        data->state = LV_INDEV_STATE_RELEASED;
+auto kb = KeypadInput::create();
+kb.set_group(active_group);
+kb.on_read([](InputData& data) {
+    if (SDL_HasKey()) {
+        data.key = SDL_GetKey(); // Maps to LV_KEY_*
+        data.state = LV_INDEV_STATE_PRESSED;
     }
 });
 ```
 
-#### Scenario B: Keyboard Navigation
-```cpp
-// 1. Setup Group
-Group nav_group;
-nav_group.set_default(); // Widgets added hereafter join this group automatically? 
-// Or manual:
-nav_group.add(my_button);
-
-// 2. Setup Keypad
-auto kb = InputDevice::create(LV_INDEV_TYPE_KEYPAD);
-kb.set_group(nav_group);
-kb.set_read_cb(read_keyboard_matrix);
-```
-
-## 5. Recommendation
-1.  **Refactor `InputDevice`**: Add `create()` static factory.
-2.  **Implement `InputDriver`**: A helper/mixin to manage the `read_cb` bridging.
-3.  **Enhance `Group`**: Ensure it exposes all `lv_group` operations (focus, freeze, edit mode).
-4.  **Utilities**: Add `Cursor` helper class for Pointer devices.
-
-This approach ensures `lvgl_cpp` is not just a UI toolkit but a full application framework capable of managing the hardware layer in idiomatic C++.
+## 4. Implementation Plan
+1.  **Core Class w/ Trampoline**: Implement `InputDevice` with `user_data` logic.
+2.  **Subclasses**: Implement `PointerInput`, `KeypadInput`, etc., exposing only relevant methods.
+3.  **Group Integration**: Ensure `Group` class (in `core/group.h`) is robust enough to be passed to these devices.
