@@ -32,8 +32,8 @@ static void event_handler(lvgl::Event& e) {
 void test_button_1() {
   std::cout << "Testing Button Example 1..." << std::endl;
   lvgl::Button btn1;
-  btn1.align(lvgl::Object::Align::Center, 0, -40);
-  btn1.align(lvgl::Object::Align::Center, 0, -40);
+  btn1.align(LV_ALIGN_CENTER, 0, -40);
+  btn1.align(LV_ALIGN_CENTER, 0, -40);
   btn1.remove_flag(LV_OBJ_FLAG_PRESS_LOCK);
   // Note: C++ wrapper might not expose add_event_cb directly in a way that
   // matches C exactly without a wrapper, but let's assume valid standard usage
@@ -45,7 +45,7 @@ void test_button_1() {
   label.center();
 
   lvgl::Button btn2;
-  btn2.align(lvgl::Object::Align::Center, 0, 40);
+  btn2.align(LV_ALIGN_CENTER, 0, 40);
   btn2.add_flag(LV_OBJ_FLAG_CHECKABLE);
   btn2.set_height(LV_SIZE_CONTENT);
 
@@ -71,13 +71,13 @@ void test_label_1() {
       "and wrap long text automatically.");
   label1.set_width(150);
   label1.set_style_text_align(LV_TEXT_ALIGN_CENTER, 0);
-  label1.align(lvgl::Object::Align::Center, 0, -40);
+  label1.align(LV_ALIGN_CENTER, 0, -40);
 
   lvgl::Label label2;
   label2.set_long_mode(LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
   label2.set_width(150);
   label2.set_text("It is a circularly scrolling text. ");
-  label2.align(lvgl::Object::Align::Center, 0, 40);
+  label2.align(LV_ALIGN_CENTER, 0, 40);
   std::cout << "Label Example 1 Passed" << std::endl;
 }
 
@@ -104,7 +104,7 @@ void test_slider_1() {
   lvgl::Label label(screen);
 
   label.set_text("0%");
-  label.align_to(slider, lvgl::Object::Align::OutBottomMid, 0, 10);
+  label.align_to(slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
   std::cout << "Slider Example 1 Passed" << std::endl;
 }
 
@@ -195,11 +195,11 @@ void test_image_1() {
   // for API test
   lvgl::Image img1(screen);
   img1.set_src(LV_SYMBOL_OK " Accept");
-  img1.align(lvgl::Object::Align::Center, 0, 0);
+  img1.align(LV_ALIGN_CENTER, 0, 0);
 
   lvgl::Image img2(screen);
   img2.set_src(LV_SYMBOL_CLOSE);
-  img2.align_to(img1, lvgl::Object::Align::OutBottomMid, 0, 20);
+  img2.align_to(img1, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
 
   // Test API for opacity/recolor from Example 2
   img2.set_style_image_recolor_opa(LV_OPA_50, 0);
@@ -212,16 +212,16 @@ void test_image_1() {
 void test_led_1() {
   std::cout << "Testing LED Example 1..." << std::endl;
   lvgl::Led led1;
-  led1.align(lvgl::Object::Align::Center, -80, 0);
+  led1.align(LV_ALIGN_CENTER, -80, 0);
   led1.off();
 
   lvgl::Led led2;
-  led2.align(lvgl::Object::Align::Center, 0, 0);
+  led2.align(LV_ALIGN_CENTER, 0, 0);
   led2.set_brightness(150);
   led2.set_color(lv_palette_main(LV_PALETTE_RED));
 
   lvgl::Led led3;
-  led3.align(lvgl::Object::Align::Center, 80, 0);
+  led3.align(LV_ALIGN_CENTER, 80, 0);
   led3.on();
 
   std::cout << "LED Example 1 Passed" << std::endl;

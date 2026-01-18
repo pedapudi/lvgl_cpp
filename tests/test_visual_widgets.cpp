@@ -117,7 +117,7 @@ void test_imagebutton_1() {
   imgbtn.set_src(LV_IMAGEBUTTON_STATE_RELEASED, &img_left, &img_mid,
                  &img_right);
   imgbtn.set_width(100);
-  imgbtn.align(lvgl::Object::Align::Center, 0, 0);
+  imgbtn.align(LV_ALIGN_CENTER, 0, 0);
 
   // Create label on imgbtn
   // Note: imgbtn is an object, so we can wrap it if needed or use as parent if
@@ -125,7 +125,7 @@ void test_imagebutton_1() {
   // Object via valid copy/move or just &imgbtn.
   Label label(imgbtn);
   label.set_text("Button");
-  label.align(lvgl::Object::Align::Center, 0, -4);
+  label.align(LV_ALIGN_CENTER, 0, -4);
 
   std::cout << "ImageButton Example 1 Passed" << std::endl;
 }

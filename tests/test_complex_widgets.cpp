@@ -169,7 +169,7 @@ void test_btnmatrix_1() {
 
   static const char* btnm_map[] = {"1", "2", "3", "\n", "4", "5", "6", ""};
   btnm.set_map(btnm_map);
-  btnm.align(lvgl::Object::Align::Center, 0, 0);
+  btnm.align(LV_ALIGN_CENTER, 0, 0);
 
   std::cout << "ButtonMatrix Example 1 Passed" << std::endl;
 }
