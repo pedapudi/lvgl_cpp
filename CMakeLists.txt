@@ -204,6 +204,11 @@ add_executable(test_animation_timeline tests/test_animation_timeline.cpp misc/an
 target_link_libraries(test_animation_timeline PRIVATE lvgl_cpp)
 add_test(NAME test_animation_timeline COMMAND test_animation_timeline)
 
+add_executable(test_menu tests/test_menu.cpp widgets/menu.cpp widgets/button.cpp widgets/label.cpp core/object.cpp display/display.cpp)
+target_link_libraries(test_menu PRIVATE lvgl_cpp)
+add_test(NAME test_menu COMMAND test_menu)
+
+
 
 
 

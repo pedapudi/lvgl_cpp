@@ -34,13 +34,13 @@ Menu& Menu::set_page(MenuPage& page) {
   return *this;
 }
 
-Menu& Menu::set_page_title(lv_obj_t* page, const char* title) {
-  lv_menu_set_page_title(page, title);
+Menu& Menu::set_page_title(MenuPage& page, const char* title) {
+  lv_menu_set_page_title(page.raw(), title);
   return *this;
 }
 
-Menu& Menu::set_page_title_static(lv_obj_t* page, const char* title) {
-  lv_menu_set_page_title_static(page, title);
+Menu& Menu::set_page_title_static(MenuPage& page, const char* title) {
+  lv_menu_set_page_title_static(page.raw(), title);
   return *this;
 }
 
@@ -59,8 +59,8 @@ Menu& Menu::set_mode_root_back_button(lv_menu_mode_root_back_button_t mode) {
   return *this;
 }
 
-Menu& Menu::set_load_page_event(lv_obj_t* obj, MenuPage& page) {
-  if (obj_) lv_menu_set_load_page_event(obj_, obj, page.raw());
+Menu& Menu::set_load_page_event(Object& obj, MenuPage& page) {
+  if (obj_) lv_menu_set_load_page_event(obj_, obj.raw(), page.raw());
   return *this;
 }
 

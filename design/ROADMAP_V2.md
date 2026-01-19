@@ -33,7 +33,7 @@ Moving from wrapping C functions to idiomatic C++ behaviors.
 ### Batch C: High-Level Components & Systems
 Handling the application lifecycle, complex UI flows, and system abstractions.
 - **[x] Screen Management (#26)**: A dedicated `Screen` class for transitions, background tasks, and active screen tracking.
-- **[ ] Complex Widget Encapsulation (#34)**: Deep refactor of the `Menu` widget to encapsulate "Pages" as first-class C++ objects.
+- **[x] Complex Widget Encapsulation (#34)**: Deep refactor of the `Menu` widget to encapsulate "Pages" as first-class C++ objects.
 - [x] TabView & TileView Refactor (#37): Encapsulate page/tile management for `TabView` and `TileView`, similar to `Menu`.
 - **[x] Modal & Window Management (#38)**: Idiomatic wrappers for `MsgBox` (modals) and `Win` (header/content windows).
 - [x] Animation & Timer System (#39): RAII wrappers for `lv_anim` and `lv_timer` to manage safe lifecycles using C++ functors.
