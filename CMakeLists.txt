@@ -110,7 +110,12 @@ else()
 
     function(add_benchmark target_name source_file)
         add_executable(${target_name} ${source_file})
-        target_link_libraries(${target_name} PRIVATE lvgl_cpp)
+        if(source_file MATCHES "\\.cpp$")
+            target_link_libraries(${target_name} PRIVATE lvgl_cpp)
+        else()
+            target_link_libraries(${target_name} PRIVATE lvgl)
+        endif()
+        
         if(ENABLE_PROFILING)
             target_compile_definitions(${target_name} PRIVATE ENABLE_PROFILING)
             target_link_libraries(${target_name} PRIVATE ${GPERFTOOLS_LIBRARIES})
