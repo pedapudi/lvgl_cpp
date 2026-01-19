@@ -5,116 +5,234 @@
         <title>LVGL C++ Binding Memory Profile</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
-            body { font-family: 'Inter', sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
-            .container { max_width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-            h1 { text-align: center; color: #333; }
-            .chart-container { position: relative; height: 300px; margin-bottom: 50px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-            th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
-            th { background-color: #f8f9fa; }
-            .status-pass { color: green; font-weight: bold; }
-            .status-fail { color: red; font-weight: bold; }
+            :root {
+                --primary: #2563eb;
+                --secondary: #64748b;
+                --success: #16a34a;
+                --danger: #dc2626;
+                --bg: #f8fafc;
+                --card-bg: #ffffff;
+                --text: #1e293b;
+                --border: #e2e8f0;
+            }
+            body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px; line-height: 1.6; }
+            .container { max_width: 1200px; margin: 0 auto; }
+            h1 { text-align: center; color: var(--text); font-size: 2.5rem; margin-bottom: 0.5rem; }
+            .subtitle { text-align: center; color: var(--secondary); margin-bottom: 3rem; }
+            
+            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 40px; }
+            .card { background: var(--card-bg); padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+            
+            .chart-container { position: relative; height: 400px; }
+            
+            .benchmark-section { display: flex; flex-direction: column; gap: 30px; }
+            .benchmark-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+            .benchmark-header { background: #f8fafc; padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+            .benchmark-header h2 { margin: 0; font-size: 1.25rem; color: var(--text); }
+            
+            .benchmark-content { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+            .benchmark-desc { color: var(--secondary); font-size: 0.95rem; }
+            .benchmark-desc strong { color: var(--text); font-weight: 600; }
+            .benchmark-desc ul { padding-left: 20px; margin: 8px 0; }
+            
+            .benchmark-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: start; }
+            .stat-box { background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid var(--border); }
+            .stat-box.cpp { background: #eff6ff; border-color: #bfdbfe; }
+            .stat-box h3 { margin: 0 0 12px 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--secondary); }
+            .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+            .stat-row:last-child { margin-bottom: 0; }
+            .stat-val { font-weight: 600; font-family: monospace; }
+            
+            .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+            .badge-pass { background: #dcfce7; color: var(--success); }
+            .badge-fail { background: #fee2e2; color: var(--danger); }
+            
+            @media (max-width: 768px) {
+                .benchmark-content { grid-template-columns: 1fr; }
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>LVGL C++ Wrapper Memory Overhead</h1>
-            <p style="text-align: center; color: #666;">Generated on 2026-01-19 09:00:16</p>
+            <h1>LVGL C++ Memory Profile</h1>
+            <p class="subtitle">Generated on 2026-01-19 09:28:47</p>
             
-            <div class="chart-container">
-                <canvas id="rssChart"></canvas>
+            <div class="card" style="margin-bottom: 40px;">
+                <h2 style="margin-top:0;">Performance Overview</h2>
+                <div class="grid" style="margin-bottom:0;">
+                    <div class="chart-container">
+                        <canvas id="rssChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
             </div>
             
-            <div class="chart-container">
-                <canvas id="timeChart"></canvas>
-            </div>
-            
-             <div class="chart-container">
-                <canvas id="heapChart"></canvas>
-            </div>
-            
-            <h2>Detailed Results</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Benchmark</th>
-                        <th>Lang</th>
-                        <th>Time (ms)</th>
-                        <th>RSS (KB)</th>
-                        <th>Heap (Bytes)</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="benchmark-section">
     
-                    <tr>
-                        <td>Baseline</td>
-                        <td>C</td>
-                        <td>4.24</td>
-                        <td>2516</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                    <tr>
-                        <td>Baseline</td>
-                        <td>CPP</td>
-                        <td>5.00</td>
-                        <td>4628</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                    <tr>
-                        <td>Churn</td>
-                        <td>CPP</td>
-                        <td>27.00</td>
-                        <td>4680</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                    <tr>
-                        <td>Events</td>
-                        <td>C</td>
-                        <td>3.42</td>
-                        <td>2580</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                    <tr>
-                        <td>Events</td>
-                        <td>CPP</td>
-                        <td>5.00</td>
-                        <td>4588</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                    <tr>
-                        <td>Fragmentation</td>
-                        <td>C</td>
-                        <td>0.09</td>
-                        <td>1904</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                    <tr>
-                        <td>Fragmentation</td>
-                        <td>CPP</td>
-                        <td>0.39</td>
-                        <td>3492</td>
-                        <td>0</td>
-                        <td class="status-pass">SUCCESS</td>
-                    </tr>
-                
-                </tbody>
-            </table>
-        </div>
+                <div class="benchmark-card">
+                    <div class="benchmark-header">
+                        <h2>baseline</h2>
+                    </div>
+                    <div class="benchmark-content">
+                        <div class="benchmark-desc">
+                            
+            <strong>Objective:</strong> Measure the fixed overhead of creating static LVGL objects via C++ wrappers.<br>
+            <strong>Methodology:</strong> The test creates <strong>50</strong> <code>lvgl::Button</code> objects. Each button is wrapped in a <code>std::unique_ptr</code>, positioned, and sized. 
+            This validates the baseline cost of the C++ class hierarchy, vtable overhead, and RAII container usage.<br>
+            <strong>Comparison:</strong> Compares against equivalent C code calling <code>lv_button_create</code>, <code>lv_obj_set_pos</code>, and <code>lv_obj_set_size</code> directly.
         
+                        </div>
+                        <div class="benchmark-stats">
+                            
+                <div class="stat-box ">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C Baseline</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">4.50 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">2588 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                            
+                <div class="stat-box cpp">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C++ Wrapper</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">4.00 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">4552 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="benchmark-card">
+                    <div class="benchmark-header">
+                        <h2>churn</h2>
+                    </div>
+                    <div class="benchmark-content">
+                        <div class="benchmark-desc">
+                            
+            <strong>Objective:</strong> Detect slow memory leaks or fragmentation over repeated create/destroy cycles.<br>
+            <strong>Methodology:</strong> Runs <strong>100 cycles</strong>. In each cycle, it creates a <code>lvgl::Screen</code>, populates it with <strong>20</strong> <code>lvgl::Button</code> objects (each with a lambda callback), 
+            processes events via <code>lv_timer_handler</code>, and then destroys the screen. This tests the destructors and parent-child cleanup mechanisms.<br>
+            <strong>Scale:</strong> 2,000 total allocations/deallocations.<br>
+            <strong>Comparison:</strong> Compares against C code performing the exact same create/destroy cycle logic.
+        
+                        </div>
+                        <div class="benchmark-stats">
+                            
+                <div class="stat-box ">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C Baseline</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">30.00 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">4660 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                            <div class="stat-box cpp"><h3>C++ Wrapper</h3><p>No Data</p></div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="benchmark-card">
+                    <div class="benchmark-header">
+                        <h2>events</h2>
+                    </div>
+                    <div class="benchmark-content">
+                        <div class="benchmark-desc">
+                            
+            <strong>Objective:</strong> Measure the overhead of the C++ event dispatch mechanism, specifically <code>std::function</code> storage and lambda copying.<br>
+            <strong>Methodology:</strong> Creates <strong>50</strong> <code>lvgl::Button</code> objects and attaches a C++ lambda callback to each user <code>add_event_cb</code>. 
+            The lambda is stateless but exercises the type-erasure mechanics of <code>std::function&lt;void(lvgl::Event&)&gt;</code>.<br>
+            <strong>Comparison:</strong> Compares against C code attaching a static C function pointer <code>event_cb</code> via <code>lv_obj_add_event_cb</code>.
+        
+                        </div>
+                        <div class="benchmark-stats">
+                            
+                <div class="stat-box ">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C Baseline</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">3.45 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">2620 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                            
+                <div class="stat-box cpp">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C++ Wrapper</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">3.00 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">4572 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="benchmark-card">
+                    <div class="benchmark-header">
+                        <h2>fragmentation</h2>
+                    </div>
+                    <div class="benchmark-content">
+                        <div class="benchmark-desc">
+                            
+            <strong>Objective:</strong> Stress the heap allocator with randomized allocation patterns to measure fragmentation overhead from C++ closures.<br>
+            <strong>Methodology:</strong> Runs <strong>50 iterations</strong> with an inner loop of 50 operations. Operations are randomized:
+            <ul>
+                <li><strong>Alloc (33%):</strong> Creates a button and attaches a lambda capturing a 64-byte struct <code>CaptureState</code>.</li>
+                <li><strong>Free (33%):</strong> Deletes a random existing button (and its closure).</li>
+                <li><strong>No-op (33%):</strong> Idle.</li>
+            </ul>
+            <strong>Comparison:</strong> Compares against C code creating buttons with standard C callbacks (no capture context), highlighting the specific cost of stateful C++ closures.
+        
+                        </div>
+                        <div class="benchmark-stats">
+                            
+                <div class="stat-box ">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C Baseline</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">13.13 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">2616 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                            
+                <div class="stat-box cpp">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <h3>C++ Wrapper</h3>
+                        <span class="badge badge-pass">SUCCESS</span>
+                    </div>
+                    <div class="stat-row"><span>Time:</span> <span class="stat-val">11.48 ms</span></div>
+                    <div class="stat-row"><span>RSS:</span> <span class="stat-val">4732 KB</span></div>
+                    <div class="stat-row"><span>Heap:</span> <span class="stat-val">0 B</span></div>
+                </div>
+            
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
         <script>
+    
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+            
             const labels = ["Baseline", "Churn", "Events", "Fragmentation"];
             
             new Chart(document.getElementById('rssChart'), {
@@ -122,11 +240,22 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'C RSS (KB)', data: [2516, 4680, 2580, 1904], backgroundColor: '#94a3b8' },
-                        { label: 'C++ RSS (KB)', data: [4628, 0, 4588, 3492], backgroundColor: '#3b82f6' }
+                        { label: 'C Baseline', data: [2588, 4660, 2620, 2616], backgroundColor: '#94a3b8', borderRadius: 4 },
+                        { label: 'C++ Wrapper', data: [4552, 0, 4572, 4732], backgroundColor: '#2563eb', borderRadius: 4 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Peak Resident Set Size (RSS)' } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        title: { display: true, text: 'Peak Resident Set Size (RSS in KB)', padding: 20, font: { size: 16 } },
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'KB' } },
+                        x: { grid: { display: false } }
+                    }
+                }
             });
 
             new Chart(document.getElementById('timeChart'), {
@@ -134,11 +263,22 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'C Time (ms)', data: [4.24, 27.0, 3.42, 0.09], backgroundColor: '#94a3b8' },
-                        { label: 'C++ Time (ms)', data: [5.0, 0, 5.0, 0.387775], backgroundColor: '#ef4444' }
+                        { label: 'C Baseline', data: [4.5, 30.0, 3.45, 13.13], backgroundColor: '#94a3b8', borderRadius: 4 },
+                        { label: 'C++ Wrapper', data: [4.0, 0, 3.0, 11.4849], backgroundColor: '#ef4444', borderRadius: 4 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Execution Time' } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        title: { display: true, text: 'Execution Time (ms)', padding: 20, font: { size: 16 } },
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'ms' } },
+                        x: { grid: { display: false } }
+                    }
+                }
             });
             
              new Chart(document.getElementById('heapChart'), {
@@ -146,11 +286,22 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'C Heap (Bytes)', data: [0, 0, 0, 0], backgroundColor: '#94a3b8' },
-                        { label: 'C++ Heap (Bytes)', data: [0, 0, 0, 0], backgroundColor: '#10b981' }
+                        { label: 'C Baseline', data: [0, 0, 0, 0], backgroundColor: '#94a3b8', borderRadius: 4 },
+                        { label: 'C++ Wrapper', data: [0, 0, 0, 0], backgroundColor: '#10b981', borderRadius: 4 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Heap Usage (pprof)' } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        title: { display: true, text: 'Heap Usage (Bytes)', padding: 20, font: { size: 16 } },
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Bytes' } },
+                        x: { grid: { display: false } }
+                    }
+                }
             });
         </script>
     </body>
