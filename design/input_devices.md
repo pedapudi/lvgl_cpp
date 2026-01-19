@@ -45,7 +45,7 @@ The standard lifecycle in C involves:
 ### 2.1. Current implementation
 *   **Wrappers**: `InputDevice` exists but is a *passive* wrapper around an existing `lv_indev_t*`.
 *   **Gap 1: No Creation**: Users cannot create a new driver (e.g., "I have a button connected to GPIO 5") using C++. They must write C boilerplate.
-*   **Gap 2: No Type Safety**: `lv_indev_t` is opaque. There is no distinction in the C++ type system between a Keypad (requires Group) and a Pointer (requires Cursor).
+*   **Gap 2: No Type Safety**: `lv_indev_t` is opaque. The current C++ wrapper exposes methods like `set_group` on the base `InputDevice`, allowing runtime errors (e.g., setting a group on a Pointer).
 *   **Gap 3: Callback Hell**: Implementing `read_cb` requires a static C function. Accessing C++ instance data from there requires unsafe `void*` casting.
 
 ## 3. Proposed C++ Design
@@ -54,7 +54,8 @@ The standard lifecycle in C involves:
 1.  **Idiomatic Creation**: `auto touch = PointerInput::create();`
 2.  **Lambda Callbacks**: `touch.on_read([](auto& data){ ... });`
 3.  **RAII Ownership**: The C++ object should manage the `lv_indev_delete()` lifecycle if it created the device.
-4.  **Type Safety**: Distinct classes (`PointerInput`, `KeypadInput`) enforcing requirements like Groups.
+4.  **Strict Type Safety**: Separate classes (`PointerInput`, `KeypadInput`) enforcing requirements. `set_group` should *only* exist on `KeypadInput` and `EncoderInput`.
+5.  **Hybrid Synthesis**: Enable easy Python bindings via standard C++ interoperability patterns.
 
 ### 3.2. Class hierarchy
 
@@ -64,27 +65,37 @@ classDiagram
         +lv_indev_t* raw()
         +set_read_cb(function)
         +enable(bool)
+        +get_state()
     }
     class PointerInput {
         +set_cursor(Object)
         +set_range(w, h)
+        +get_point()
+        +get_gesture_dir()
     }
     class KeypadInput {
         +set_group(Group)
+        +get_key()
     }
     class EncoderInput {
         +set_group(Group)
+        +get_enc_diff()
+    }
+    class ButtonInput {
+        +set_points(vector point_map)
+        +get_btn_id()
     }
     
     InputDevice <|-- PointerInput
     InputDevice <|-- KeypadInput
     InputDevice <|-- EncoderInput
+    InputDevice <|-- ButtonInput
 ```
 
 ### 3.3. Technical implementation details
 
 #### The callback dispatcher
-To support C++ lambdas, we use `lv_indev_set_user_data`.
+To support C++ lambdas, we use `lv_indev_set_user_data` and a trampoline.
 
 ```cpp
 // Static trampoline
@@ -100,6 +111,10 @@ static void cpp_read_cb_trampoline(lv_indev_t* indev, lv_indev_data_t* data) {
 We support two modes:
 1.  **Managed (Owner)**: Created via `InputDevice::create()`. Destructor calls `lv_indev_delete()`.
 2.  **Unmanaged (Observer)**: Wrapped via `InputDevice::wrap()`. Destructor does nothing.
+
+#### Safety Analysis: The Singleton Risk
+Accessing the "active" input device via `lv::InputDevice::get_act()` returns a temporary wrapper. This poses a risk if the returned object outlives the scope.
+**Remediation**: `get_act()` should return a `std::optional<InputDeviceReference>`, a non-owning, lightweight handle that cannot be stored persistently or deleted.
 
 ### 3.4. Usage recipes
 
@@ -119,7 +134,7 @@ touch.on_read([](InputData& data) {
     }
 });
 
-// Optional: Assign a customized cursor
+// Optional: Assign a customized cursor (Valid only on PointerInput)
 Image cursor_img;
 cursor_img.set_src("S:/mouse_icon.png");
 touch.set_cursor(cursor_img);
@@ -144,19 +159,39 @@ enc.on_read([](InputData& data) {
 });
 ```
 
-#### Recipe 3: Keyboard (desktop/SDL style)
-```cpp
-auto kb = KeypadInput::create();
-kb.set_group(active_group);
-kb.on_read([](InputData& data) {
-    if (SDL_HasKey()) {
-        data.key = SDL_GetKey(); // Maps to LV_KEY_*
-        data.state = LV_INDEV_STATE_PRESSED;
-    }
-});
+## 4. Hybrid Synthesis (Python Layer)
+
+This architecture bridges the performance of C++ with the flexibility of Python.
+
+### 4.1. Conceptual Binding
+By designing the C++ layer with strict ownership and `std::function` callbacks, we map directly to Python's `ctypes` or `pybind11` capabilities.
+
+**Python Ideal Usage:**
+```python
+class MyTouch(lvgl.PointerInput):
+    def on_read(self, data):
+        x, y = touchscreen.read()
+        data.point = (x, y)
+        data.state = lvgl.INDEV_STATE.PRESSED
+
+# Instantiation
+touch = MyTouch()
+cursor = lvgl.Image("S:/cursor.png")
+touch.set_cursor(cursor)
 ```
 
-## 4. Implementation Plan
-1.  **Core Class w/ Trampoline**: Implement `InputDevice` with `user_data` logic.
-2.  **Subclasses**: Implement `PointerInput`, `KeypadInput`, etc., exposing only relevant methods.
-3.  **Group Integration**: Ensure `Group` class (in `core/group.h`) is robust enough to be passed to these devices.
+### 4.2. Implementation Strategy
+*   **Trampoline into Python**: The C++ `read_cb` will hold a `std::function` that invokes the Python callable (via the Global Interpreter Lock if needed).
+*   **Data Structures**: `lv_indev_data_t` is a POD (Plain Old Data) struct. We expose a lightweight Python wrapper that modifies the underlying C struct directly during the callback, ensuring zero-copy overhead where possible.
+
+## 5. Verification Plan
+
+### 5.1. Automated Tests (GTest)
+1.  **Lifecycle Test**: Create `PointerInput`, ensure `lv_indev_create` was called. Destroy it, ensure `lv_indev_delete` was called (mocking `lv_indev` functions).
+2.  **Callback Dispatch**: Register a lambda that sets `data->point.x = 10`. Trigger `read_cb`, verify `data` was modified.
+3.  **Type Safety (Compilation)**:
+    *   `PointerInput p; p.set_group(g);` -> **Should Fail to Compile**.
+    *   `EncoderInput e; e.set_cursor(c);` -> **Should Fail to Compile**.
+
+### 5.2. Manual Verification
+*   **Hardware Loop**: distinct test on real hardware (ESP32/SDL) verifying cursor movement matches input coordinates.
