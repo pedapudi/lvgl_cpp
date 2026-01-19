@@ -16,12 +16,17 @@ TileView::TileView(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
 
 Tile TileView::add_tile(uint8_t col_id, uint8_t row_id, lv_dir_t dir) {
-  return Tile(obj_ ? lv_tileview_add_tile(obj_, col_id, row_id, dir) : nullptr);
+  return Tile(obj_ ? lv_tileview_add_tile(obj_, col_id, row_id, dir) : nullptr,
+              Ownership::Unmanaged);
 }
 
 TileView& TileView::set_tile(lv_obj_t* tile_obj, lv_anim_enable_t anim_en) {
   if (obj_) lv_tileview_set_tile(obj_, tile_obj, anim_en);
   return *this;
+}
+
+TileView& TileView::set_tile(Tile& tile, lv_anim_enable_t anim_en) {
+  return set_tile(tile.raw(), anim_en);
 }
 
 TileView& TileView::set_tile_by_index(uint32_t col_id, uint32_t row_id,

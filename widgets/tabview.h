@@ -12,6 +12,7 @@ namespace lvgl {
 
 /**
  * @brief Represents a single tab page container.
+ * Inherits from Widget<TabPage> to allow fluent API on the page itself.
  */
 class TabPage : public Widget<TabPage> {
  public:
@@ -28,7 +29,14 @@ class TabView : public Widget<TabView> {
   explicit TabView(Object& parent);
   explicit TabView(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
+  /**
+   * @brief Add a new tab.
+   * @param name The title of the tab.
+   * @return A TabPage wrapper with Ownership::Unmanaged.
+   *         The page is owned by the TabView.
+   */
   TabPage add_tab(const char* name);
+
   TabView& rename_tab(uint32_t idx, const char* new_name);
   TabView& set_active(uint32_t idx, lv_anim_enable_t anim_en);
   TabView& set_tab_bar_position(lv_dir_t dir);

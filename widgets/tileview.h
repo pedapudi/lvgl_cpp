@@ -33,8 +33,15 @@ class TileView : public Widget<TileView> {
   explicit TileView(Object& parent);
   explicit TileView(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
+  /**
+   * @brief Add a tile to the TileView.
+   * @return A Tile wrapper with Ownership::Unmanaged.
+   */
   Tile add_tile(uint8_t col_id, uint8_t row_id, lv_dir_t dir);
+
   TileView& set_tile(lv_obj_t* tile_obj, lv_anim_enable_t anim_en);
+  TileView& set_tile(Tile& tile, lv_anim_enable_t anim_en);
+
   TileView& set_tile_by_index(uint32_t col_id, uint32_t row_id,
                               lv_anim_enable_t anim_en);
 

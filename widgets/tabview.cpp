@@ -15,7 +15,8 @@ TabView::TabView(Object& parent) : TabView(&parent) {}
 TabView::TabView(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 TabPage TabView::add_tab(const char* name) {
-  return TabPage(obj_ ? lv_tabview_add_tab(obj_, name) : nullptr);
+  return TabPage(obj_ ? lv_tabview_add_tab(obj_, name) : nullptr,
+                 Ownership::Unmanaged);
 }
 
 TabView& TabView::rename_tab(uint32_t idx, const char* new_name) {

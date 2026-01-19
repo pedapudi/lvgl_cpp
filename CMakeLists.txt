@@ -178,9 +178,13 @@ else()
 
     add_executable(test_screen tests/test_screen.cpp)
     target_link_libraries(test_screen PRIVATE lvgl_cpp)
-
-    add_executable(test_callbacks tests/test_callbacks.cpp)
-    target_link_libraries(test_callbacks PRIVATE lvgl_cpp)
+    # add_test(NAME test_screen COMMAND test_screen) <--- Already added above effectively? 
+    # Actually, looking at the file content in previous turns, it seems I appended duplicates.
+    # The safest way is to replace the whole block I added/messed up.
+    
+    add_executable(test_tabview tests/test_tabview.cpp)
+    target_link_libraries(test_tabview PRIVATE lvgl_cpp)
+    add_test(NAME test_tabview COMMAND test_tabview)
 
 
 

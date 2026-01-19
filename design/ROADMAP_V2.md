@@ -21,14 +21,14 @@ The remaining work is categorized into three strategic batches.
 
 ### Batch A: The "Idiomatic Core" (Unblocking Data Types)
 Before deep widget APIs can be finalized, we need strictly typed data structures and scoped enums.
-- **[ ] Geometry Utilities (#22)**: Implement C++ `Point`, `Area`, and `Coord` classes to replace raw `lv_point_t`.
-- **[ ] Scoped Enums (#24)**: Migrate `LV_STATE_...` and `LV_PART_...` to `lvgl::State::Pressed` and `lvgl::Part::Main`.
+- **[x] Geometry Utilities (#22)**: Implement C++ `Point`, `Area`, and `Coord` classes to replace raw `lv_point_t`.
+- **[x] Scoped Enums (#24)**: Migrate `LV_STATE_...` and `LV_PART_...` to `lvgl::State::Pressed` and `lvgl::Part::Main`.
 
 ### Batch B: Behavioral Deepening (The Event System)
 Moving from wrapping C functions to idiomatic C++ behaviors.
 - **[x] Advanced Callbacks (#31)**: Support `std::function` and lambdas for widget-specific events (e.g., `on_clicked`, `on_value_changed`).
-- **[ ] Comprehensive Callbacks Extension (#35)**: Extend standardized callbacks to `Checkbox`, `Arc`, `Textarea`, `Spinbox`, `Calendar`, and `Table`.
-- **[ ] Group Management (#25)**: Wrapper for `lv_group_t` to handle focus/editing logic for input devices.
+- **[x] Comprehensive Callbacks Extension (#35)**: Extend standardized callbacks to `Checkbox`, `Arc`, `Textarea`, `Spinbox`, `Calendar`, and `Table`.
+- **[x] Group Management (#25)**: Wrapper for `lv_group_t` to handle focus/editing logic for input devices.
 
 ### Batch C: High-Level Components & Systems
 Handling the application lifecycle, complex UI flows, and system abstractions.
