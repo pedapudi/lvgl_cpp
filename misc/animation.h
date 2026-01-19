@@ -12,7 +12,11 @@
 
 namespace lvgl {
 
+class AnimationTimeline;
+
 class Animation {
+  friend class AnimationTimeline;
+
  public:
   using ExecCallback = std::function<void(void*, int32_t)>;
   using PathCallback = std::function<int32_t(const lv_anim_t*)>;
@@ -139,6 +143,32 @@ class Animation {
   Animation& set_deleted_cb(std::function<void()> cb);
 
   /**
+   * @brief Apply start value immediately, even if there is a delay.
+   * @param en Enable or disable early apply.
+   */
+  Animation& set_early_apply(bool en);
+
+  /**
+   * @brief Set a callback to run when animation starts (after delay).
+   * @param cb The callback to run when animation starts.
+   */
+  Animation& set_start_cb(std::function<void()> cb);
+
+  /**
+   * @brief Calculate and set duration based on speed and current values.
+   * @param speed Speed in pixels per second (or units per second).
+   * @param start Start value.
+   * @param end End value.
+   */
+  Animation& set_duration_from_speed(uint32_t speed, int32_t start,
+                                     int32_t end);
+
+  /**
+   * @brief Get the internal C struct (const access).
+   */
+  const lv_anim_t* raw() const { return &anim_; }
+
+  /**
    * @brief Set the duration of the animation.
    * @param duration Duration in milliseconds.
    */
@@ -204,6 +234,7 @@ class Animation {
     PathCallback path_cb;
     CompletedCallback completed_cb;
     std::function<void()> deleted_cb;
+    std::function<void()> start_cb;
   };
 
   std::unique_ptr<CallbackData> user_data_;
@@ -212,6 +243,7 @@ class Animation {
   static int32_t path_cb_proxy(const lv_anim_t* a);
   static void completed_cb_proxy(lv_anim_t* a);
   static void deleted_cb_proxy(lv_anim_t* a);
+  static void start_cb_proxy(lv_anim_t* a);
 };
 
 }  // namespace lvgl

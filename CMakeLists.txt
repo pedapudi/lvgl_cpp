@@ -50,6 +50,7 @@ set(SOURCES
     indev/input_device.cpp
     misc/timer.cpp
     misc/animation.cpp
+    misc/animation_timeline.cpp
 )
 
 if(IDF_TARGET)
@@ -139,6 +140,9 @@ else()
     add_executable(test_screen tests/test_screen.cpp)
     target_link_libraries(test_screen PRIVATE lvgl_cpp)
 
+    add_executable(test_animation_timeline tests/test_animation_timeline.cpp)
+    target_link_libraries(test_animation_timeline PRIVATE lvgl_cpp)
+
     enable_testing()
     add_test(NAME test_core_widgets COMMAND test_core_widgets)
     add_test(NAME test_input_widgets COMMAND test_input_widgets)
@@ -157,4 +161,55 @@ else()
     add_test(NAME test_enums COMMAND test_enums)
     add_test(NAME test_screen COMMAND test_screen)
     add_test(NAME test_input_device COMMAND test_input_device)
+    add_test(NAME test_animation_timeline COMMAND test_animation_timeline)
 endif()
+
+# ==============================================================================
+# Benchmarks & Profiling
+# ==============================================================================
+option(ENABLE_PROFILING "Enable gperftools profiling linkage" OFF)
+
+if(ENABLE_PROFILING)
+    find_library(PROFILER_LIB profiler)
+    find_library(TCMALLOC_LIB tcmalloc)
+    if(PROFILER_LIB AND TCMALLOC_LIB)
+        message(STATUS "Profiling enabled: Found ${PROFILER_LIB} and ${TCMALLOC_LIB}")
+    else()
+        message(WARNING "Profiling requested but libraries not found.")
+    endif()
+endif()
+
+# Helper to add a benchmark executable
+function(add_benchmark NAME SOURCES)
+    add_executable(${NAME} ${SOURCES})
+    target_link_libraries(${NAME} PRIVATE lvgl_cpp) # Links lvgl internally
+    
+    # Pure C benchmarks might need direct lvgl link if they don't use the C++ lib,
+    # but linking lvgl_cpp pulls in lvgl transitively, so it should be fine.
+    # However, strictly C benchmarks should probably link `lvgl` directly to avoid C++ runtime overlap if possible,
+    # though for comparison we want the environments to be similar.
+    # Actually, for C benchmarks, let's link just lvgl to be "Pure".
+    
+    if(NAME MATCHES "_c$")
+        target_link_libraries(${NAME} PRIVATE lvgl)
+    endif()
+
+    if(ENABLE_PROFILING AND PROFILER_LIB)
+        target_link_libraries(${NAME} PRIVATE ${PROFILER_LIB} ${TCMALLOC_LIB})
+    endif()
+endfunction()
+
+# 1. Baseline (creation cost)
+add_benchmark(bench_baseline_c   tests/bench_baseline.c)
+add_benchmark(bench_baseline_cpp tests/bench_baseline.cpp)
+
+# 2. Events (callback cost)
+add_benchmark(bench_events_c   tests/bench_events.c)
+add_benchmark(bench_events_cpp tests/bench_events.cpp)
+
+# 3. Stability (churn)
+add_benchmark(bench_churn tests/bench_churn.cpp)
+
+# 4. Fragmentation
+add_benchmark(bench_fragmentation tests/bench_fragmentation.cpp)
+

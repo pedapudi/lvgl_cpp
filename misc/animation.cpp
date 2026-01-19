@@ -77,6 +77,20 @@ Animation& Animation::set_playback_delay(uint32_t delay) {
   return *this;
 }
 
+Animation& Animation::set_early_apply(bool en) {
+  lv_anim_set_early_apply(&anim_, en);
+  return *this;
+}
+
+Animation& Animation::set_duration_from_speed(uint32_t speed, int32_t start,
+                                              int32_t end) {
+  // Use LVGL helper to calculate time
+  uint32_t duration = lv_anim_speed_to_time(speed, start, end);
+  set_duration(duration);
+  set_values(start, end);
+  return *this;
+}
+
 void Animation::exec_cb_proxy(lv_anim_t* a, int32_t v) {
   CallbackData* data = static_cast<CallbackData*>(a->user_data);
   if (data && data->exec_cb) {
@@ -106,6 +120,13 @@ void Animation::deleted_cb_proxy(lv_anim_t* a) {
       data->deleted_cb();
     }
     delete data;
+  }
+}
+
+void Animation::start_cb_proxy(lv_anim_t* a) {
+  CallbackData* data = static_cast<CallbackData*>(a->user_data);
+  if (data && data->start_cb) {
+    data->start_cb();
   }
 }
 
@@ -181,6 +202,12 @@ Animation& Animation::set_deleted_cb(std::function<void()> cb) {
   return *this;
 }
 
+Animation& Animation::set_start_cb(std::function<void()> cb) {
+  if (!user_data_) user_data_ = std::make_unique<CallbackData>();
+  user_data_->start_cb = cb;
+  return *this;
+}
+
 void Animation::start() {
   if (user_data_) {
     // Clone the callback data for this specific animation instance
@@ -198,6 +225,9 @@ void Animation::start() {
     }
     if (user_data_->completed_cb) {
       lv_anim_set_completed_cb(&anim_, completed_cb_proxy);
+    }
+    if (user_data_->start_cb) {
+      lv_anim_set_start_cb(&anim_, start_cb_proxy);
     }
   }
   lv_anim_start(&anim_);
