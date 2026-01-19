@@ -2,9 +2,11 @@
 #define LVGL_CPP_WIDGETS_IMAGE_H_
 
 #include <cstdint>
+#include <string>
 
 #include "../core/widget.h"  // IWYU pragma: export
-#include "lvgl.h"            // IWYU pragma: export
+#include "../draw/image_descriptor.h"
+#include "lvgl.h"  // IWYU pragma: export
 
 #if LV_USE_IMAGE
 /**
@@ -39,7 +41,26 @@ class Image : public Widget<Image> {
    */
   explicit Image(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
+  /**
+   * @brief Set the image source.
+   * @param src Pointer to image descriptor or path.
+   * @note If src is a path, it must remain valid (static or global).
+   * Use set_src(const std::string&) for safe path handling.
+   */
   Image& set_src(const void* src);
+
+  /**
+   * @brief Set the image source from a string path.
+   * @param path The file path. The string content is copied by LVGL.
+   */
+  Image& set_src(const std::string& path);
+
+  /**
+   * @brief Set the image source from an ImageDescriptor.
+   * @param dsc The image descriptor.
+   */
+  Image& set_src(const ImageDescriptor& dsc);
+
   Image& set_offset_x(int32_t x);
   Image& set_offset_y(int32_t y);
   Image& set_rotation(int32_t angle);

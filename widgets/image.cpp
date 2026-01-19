@@ -20,6 +20,18 @@ Image& Image::set_src(const void* src) {
   return *this;
 }
 
+Image& Image::set_src(const std::string& path) {
+  // lv_image_set_src copies the string if it's a file path (verified in
+  // source).
+  if (obj_) lv_image_set_src(obj_, path.c_str());
+  return *this;
+}
+
+Image& Image::set_src(const ImageDescriptor& dsc) {
+  if (obj_) lv_image_set_src(obj_, dsc.raw());
+  return *this;
+}
+
 Image& Image::set_offset_x(int32_t x) {
   if (obj_) lv_image_set_offset_x(obj_, x);
   return *this;

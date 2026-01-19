@@ -11,6 +11,7 @@ set(SOURCES
     draw/image_decoder.cpp
     draw/draw.cpp
     draw/draw_task.cpp
+    draw/image_descriptor.cpp
     
     widgets/button.cpp
     widgets/label.cpp
@@ -187,9 +188,12 @@ else()
     add_test(NAME test_tabview COMMAND test_tabview)
 
     
-add_executable(test_timer tests/test_timer.cpp misc/timer.cpp)
-target_link_libraries(test_timer PRIVATE lvgl_cpp)
-add_test(NAME test_timer COMMAND test_timer)
+
+add_executable(test_image tests/test_image.cpp widgets/image.cpp draw/image_descriptor.cpp core/object.cpp display/display.cpp)
+target_link_libraries(test_image PRIVATE lvgl_cpp)
+add_test(NAME test_image COMMAND test_image)
+
+
 
 add_executable(test_msgbox_win tests/test_msgbox_win.cpp widgets/msgbox.cpp widgets/win.cpp widgets/button.cpp widgets/label.cpp core/object.cpp misc/timer.cpp)
 target_link_libraries(test_msgbox_win PRIVATE lvgl_cpp)
@@ -199,6 +203,10 @@ add_test(NAME test_msgbox_win COMMAND test_msgbox_win)
 add_executable(test_animation_timeline tests/test_animation_timeline.cpp misc/animation_timeline.cpp misc/animation.cpp widgets/button.cpp core/object.cpp misc/timer.cpp)
 target_link_libraries(test_animation_timeline PRIVATE lvgl_cpp)
 add_test(NAME test_animation_timeline COMMAND test_animation_timeline)
+
+
+
+
 
 
     enable_testing()

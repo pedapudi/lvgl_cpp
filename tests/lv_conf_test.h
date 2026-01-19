@@ -60,4 +60,17 @@
 #define LV_USE_IMAGEBUTTON 1
 #define LV_USE_SPINNER 1
 
+// Filesystem
+#define LV_USE_FS_STDIO 1
+#if LV_USE_FS_STDIO
+#define LV_FS_STDIO_LETTER                                                  \
+  'A' /**< Set an upper-case driver-identifier letter for this driver (e.g. \
+         'A'). */
+#define LV_FS_STDIO_PATH                                                      \
+  "" /**< Set the working directory. File/directory paths will be appended to \
+        it. */
+#define LV_FS_STDIO_CACHE_SIZE \
+  0 /**< >0 to cache this number of bytes in lv_fs_read() */
+#endif
+
 #endif /*LV_CONF_H*/
