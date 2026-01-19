@@ -26,13 +26,18 @@ Before deep widget APIs can be finalized, we need strictly typed data structures
 
 ### Batch B: Behavioral Deepening (The Event System)
 Moving from wrapping C functions to idiomatic C++ behaviors.
-- **[ ] Advanced Callbacks (#31)**: Support `std::function` and lambdas for widget-specific events (e.g., `on_clicked`, `on_value_changed`).
+- **[x] Advanced Callbacks (#31)**: Support `std::function` and lambdas for widget-specific events (e.g., `on_clicked`, `on_value_changed`).
+- **[ ] Comprehensive Callbacks Extension (#35)**: Extend standardized callbacks to `Checkbox`, `Arc`, `Textarea`, `Spinbox`, `Calendar`, and `Table`.
 - **[ ] Group Management (#25)**: Wrapper for `lv_group_t` to handle focus/editing logic for input devices.
 
-### Batch C: High-Level Orchestration
-Handling the application lifecycle and complex UI flows.
-- **[ ] Screen Management (#26)**: A dedicated `Screen` class for transitions, background tasks, and active screen tracking.
+### Batch C: High-Level Components & Systems
+Handling the application lifecycle, complex UI flows, and system abstractions.
+- **[x] Screen Management (#26)**: A dedicated `Screen` class for transitions, background tasks, and active screen tracking.
 - **[ ] Complex Widget Encapsulation (#34)**: Deep refactor of the `Menu` widget to encapsulate "Pages" as first-class C++ objects.
+- **[ ] TabView & TileView Refactor (#37)**: Encapsulate page/tile management for `TabView` and `TileView`, similar to `Menu`.
+- **[ ] Modal & Window Management (#38)**: Idiomatic wrappers for `MsgBox` (modals) and `Win` (header/content windows).
+- **[ ] Animation & Timer System (#39)**: RAII wrappers for `lv_anim` and `lv_timer` to manage safe lifecycles using C++ functors.
+- **[ ] Filesystem & Images (#40)**: C++ wrappers for `lv_fs` and `lv_img` handling, ensuring resource safety.
 
 ## 4. Definition of Done for v0.2.0 Release
 The refactoring is considered complete when:

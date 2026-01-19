@@ -1,31 +1,67 @@
 #include "group.h"
 
+#include <utility>
+
 namespace lvgl {
 
-Group::Group() {
-  group_ = lv_group_create();
-  owned_ = true;
-}
+Group::Group(Ownership ownership)
+    : group_(lv_group_create()), ownership_(ownership) {}
 
-Group::Group(lv_group_t* g, bool owned) : group_(g), owned_(owned) {}
+Group::Group(lv_group_t* group, Ownership ownership)
+    : group_(group), ownership_(ownership) {}
 
 Group::~Group() {
-  if (owned_ && group_) {
+  if (ownership_ == Ownership::Managed && group_) {
     lv_group_delete(group_);
   }
+}
+
+Group::Group(Group&& other) noexcept
+    : group_(other.group_), ownership_(other.ownership_) {
+  other.group_ = nullptr;
+  other.ownership_ = Ownership::Unmanaged;
+}
+
+Group& Group::operator=(Group&& other) noexcept {
+  if (this != &other) {
+    if (ownership_ == Ownership::Managed && group_) {
+      lv_group_delete(group_);
+    }
+    group_ = other.group_;
+    ownership_ = other.ownership_;
+    other.group_ = nullptr;
+    other.ownership_ = Ownership::Unmanaged;
+  }
+  return *this;
 }
 
 void Group::add_obj(Object& obj) {
   if (group_) lv_group_add_obj(group_, obj.raw());
 }
 
-void Group::remove_obj(Object& obj) { lv_group_remove_obj(obj.raw()); }
+void Group::add_obj(lv_obj_t* obj) {
+  if (group_) lv_group_add_obj(group_, obj);
+}
+
+void Group::remove_obj(Object& obj) {
+  if (group_) lv_group_remove_obj(obj.raw());
+}
+
+void Group::remove_obj(lv_obj_t* obj) {
+  if (group_) lv_group_remove_obj(obj);
+}
 
 void Group::remove_all_objs() {
   if (group_) lv_group_remove_all_objs(group_);
 }
 
-void Group::focus_obj(Object& obj) { lv_group_focus_obj(obj.raw()); }
+void Group::focus_obj(Object& obj) {
+  if (group_) lv_group_focus_obj(obj.raw());
+}
+
+void Group::focus_obj(lv_obj_t* obj) {
+  if (group_) lv_group_focus_obj(obj);
+}
 
 void Group::focus_next() {
   if (group_) lv_group_focus_next(group_);
@@ -39,41 +75,27 @@ void Group::focus_freeze(bool en) {
   if (group_) lv_group_focus_freeze(group_, en);
 }
 
-void Group::set_default() {
-  if (group_) lv_group_set_default(group_);
-}
-
 void Group::set_editing(bool edit) {
   if (group_) lv_group_set_editing(group_, edit);
 }
 
-void Group::set_wrap(bool en) {
-  if (group_) lv_group_set_wrap(group_, en);
-}
-
-lv_obj_t* Group::get_focused() {
+lv_obj_t* Group::get_focused() const {
   return group_ ? lv_group_get_focused(group_) : nullptr;
 }
 
-bool Group::get_editing() {
-  return group_ ? lv_group_get_editing(group_) : false;
+lv_group_t* Group::raw() const { return group_; }
+
+// --- Static Helpers ---
+
+Group Group::get_default() {
+  return Group(lv_group_get_default(), Ownership::Unmanaged);
 }
 
-bool Group::get_wrap() { return group_ ? lv_group_get_wrap(group_) : false; }
+void Group::set_default(Group& group) { lv_group_set_default(group.raw()); }
 
-uint32_t Group::get_obj_count() {
-  return group_ ? lv_group_get_obj_count(group_) : 0;
+void Group::swap(Group& other) {
+  std::swap(group_, other.group_);
+  std::swap(ownership_, other.ownership_);
 }
-
-// Static method implementation needs care.
-// We return a pointer to a static global wrapper or create a temporary one?
-// Problem: if we return new Group(ptr), user might delete it.
-// Ideally we shouldn't return Group* for get_default since we don't track it.
-// I will comment it out or implement it safely later.
-// For now, let's implement a 'wrap' static method if needed, but not expose
-// get_default returning a convenient pointer object yet to avoid memory
-// confusion. Or better, just return a non-owning Group. But who owns the
-// pointer? I will skip get_default wrapper for now or return void. Attempting
-// to implement it safely is out of scope for quick wrapper.
 
 }  // namespace lvgl

@@ -142,6 +142,8 @@ else()
     add_executable(test_callbacks tests/test_callbacks.cpp)
     target_link_libraries(test_callbacks PRIVATE lvgl_cpp)
 
+
+
     enable_testing()
     add_test(NAME test_core_widgets COMMAND test_core_widgets)
     add_test(NAME test_input_widgets COMMAND test_input_widgets)

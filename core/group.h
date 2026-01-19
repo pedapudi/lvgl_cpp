@@ -1,47 +1,78 @@
-#ifndef LVGL_CPP_CORE_GROUP_H_
-#define LVGL_CPP_CORE_GROUP_H_
+#pragma once
 
-#include <cstdint>
+#include <memory>
 
-#include "lvgl.h"    // IWYU pragma: export
-#include "object.h"  // IWYU pragma: export
+#include "lvgl.h"  // IWYU pragma: export
+#include "object.h"
 
 namespace lvgl {
 
 /**
- * @brief Wrapper for lv_group_t.
- * Groups are used to control multiple objects with an encoder or keyboard.
+ * @brief Wrapper for lv_group_t, managing input device focus.
  */
 class Group {
  public:
-  Group();
-  ~Group();
+  /**
+   * @brief Ownership policy for the underlying lv_group_t.
+   */
+  enum class Ownership {
+    Managed,   ///< The C++ object owns the lv_group_t and deletes it on
+               ///< destruction.
+    Unmanaged  ///< The C++ object does not own the lv_group_t.
+  };
+
+  /**
+   * @brief Create a new Group.
+   * @param ownership Ownership policy (default: Managed).
+   */
+  explicit Group(Ownership ownership = Ownership::Managed);
+
+  /**
+   * @brief Wrap an existing lv_group_t.
+   * @param group The raw LVGL group.
+   * @param ownership Ownership policy.
+   */
+  explicit Group(lv_group_t* group, Ownership ownership = Ownership::Unmanaged);
+
+  virtual ~Group();
+
+  // Disable copy
+  Group(const Group&) = delete;
+  Group& operator=(const Group&) = delete;
+
+  // Allow move
+  Group(Group&& other) noexcept;
+  Group& operator=(Group&& other) noexcept;
+
+  // --- Object Management ---
 
   /**
    * @brief Add an object to the group.
    * @param obj The object to add.
-   * @note Ownership of the object is NOT transferred to the group.
-   *       The caller is responsible for the object's lifecycle.
    */
   void add_obj(Object& obj);
+  void add_obj(lv_obj_t* obj);
 
   /**
    * @brief Remove an object from the group.
    * @param obj The object to remove.
    */
   void remove_obj(Object& obj);
+  void remove_obj(lv_obj_t* obj);
 
   /**
    * @brief Remove all objects from the group.
    */
   void remove_all_objs();
 
+  // --- Focus Management ---
+
   /**
-   * @brief Focus on a specific object.
+   * @brief Focus on an object.
    * @param obj The object to focus.
-   * @note Ownership is not transferred.
    */
   void focus_obj(Object& obj);
+  void focus_obj(lv_obj_t* obj);
 
   /**
    * @brief Focus the next object in the group.
@@ -54,71 +85,52 @@ class Group {
   void focus_prev();
 
   /**
-   * @brief Freeze the focus (prevent changing focus).
-   * @param en true to freeze, false to unfreeze.
+   * @brief Freeze the group focus (prevent changing focus).
+   * @param en true: freeze, false: unfreeze.
    */
   void focus_freeze(bool en);
 
   /**
-   * @brief Set this group as the default group for new objects.
-   */
-  void set_default();
-
-  /**
-   * @brief Get the default group.
-   * @return Pointer to the default Group wrapper.
-   * @note The returned pointer represents the global default group.
-   *       Ownership is not transferred.
-   */
-  static Group* get_default();
-
-  /**
-   * @brief Set editing mode for the group.
-   * @param edit true to enable editing mode, false for navigation mode.
+   * @brief Set editing mode for the focused object.
+   * @param edit true: edit mode, false: navigate mode.
    */
   void set_editing(bool edit);
 
   /**
-   * @brief Enable or disable wrapping (cyclic focus).
-   * @param en true to enable wrapping.
-   */
-  void set_wrap(bool en);
-
-  /**
    * @brief Get the currently focused object.
-   * @return Pointer to the focused object, or nullptr.
+   * @return The raw object pointer, or nullptr if none.
    */
-  lv_obj_t* get_focused();
+  lv_obj_t* get_focused() const;
 
   /**
-   * @brief Check if the group is in editing mode.
-   * @return true if editing, false if navigating.
+   * @brief Get the raw lv_group_t pointer.
+   * @return The raw pointer.
    */
-  bool get_editing();
+  lv_group_t* raw() const;
+
+  // --- Static Helpers ---
 
   /**
-   * @brief Check if wrapping is enabled.
-   * @return true if wrapping is enabled.
+   * @brief Get the default group.
+   * @return A Group wrapper around the default group (Unmanaged).
    */
-  bool get_wrap();
+  static Group get_default();
 
   /**
-   * @brief Get the number of objects in the group.
-   * @return The object count.
+   * @brief Set the default group.
+   * @param group The group to set as default.
    */
-  uint32_t get_obj_count();
+  static void set_default(Group& group);
 
-  lv_group_t* raw() const { return group_; }
+  /**
+   * @brief Swap the wrapped group with another.
+   * @param other The other Group to swap with.
+   */
+  void swap(Group& other);
 
  private:
-  lv_group_t* group_;
-  bool owned_;
-
-  // Private constructor for wrapping existing group without taking ownership
-  // (or maybe default group shouldn't be deleted)
-  explicit Group(lv_group_t* g, bool owned = false);
+  lv_group_t* group_ = nullptr;
+  Ownership ownership_ = Ownership::Unmanaged;
 };
 
 }  // namespace lvgl
-
-#endif  // LVGL_CPP_CORE_GROUP_H_
