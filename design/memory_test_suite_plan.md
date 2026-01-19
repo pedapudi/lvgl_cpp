@@ -30,6 +30,14 @@ Each scenario will be compiled as a separate executable to ensure clean heap sta
 - **Task**: Create a nested Flex/Grid layout with mixed C++ and raw C objects.
 - **Metric**: Validation of "Zero Overhead" claims for mixins.
 
+#### Scenario D: "Long-Run Stability (Churn)"
+- **Task**: Loop 1,000,000 times: Create Screen -> Add 10 Widgets -> Destroy Screen.
+- **Metric**: Pass/Fail on OOM. Detecting slow leaks that `valgrind` might miss due to false positives in intrusive pointers.
+
+#### Scenario E: "Fragmentation Analysis"
+- **Task**: Randomly allocate/deallocate 1,000 closures of varying sizes.
+- **Metric**: "Largest Free Block" (High water mark). If Total Free is 20KB but Largest Block is 1KB, we have fatal fragmentation.
+
 ### 3. Implementation plan
 
 #### 3.1 Build system updates
@@ -71,6 +79,16 @@ The final output will be a Markdown report generated automatically.
    48.5MB  98.1%  98.1%   48.5MB  98.1% lvgl::Object::add_event_cb
     0.5MB   1.1%  99.2%    0.5MB   1.1% std::vector::push_back
 ```
+
+#### 3.4 Static Analysis & Performance Budget
+We will enforce design constraints at compile time where possible.
+
+- **Clang-Tidy Checks**:
+    - `performance-unnecessary-value-param`: Detect large objects passed by value.
+    - `bugprone-unused-raii`: Detects if wrappers are created but discarded immediately.
+- **CI Budget**:
+    - "Test B (Event Heavy) must not exceed 64 bytes per callback average."
+    - "Base Object size must remain <= 24 bytes."
 
 ### 4. Leak detection strategy (Embedded/ESP32)
 
