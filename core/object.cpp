@@ -36,9 +36,11 @@ Object::Object(Object* parent, Ownership ownership) {
 
 Object::~Object() {
   if (obj_) {
-    // Always remove our specific callback to avoid re-entry or interfering with
-    // other wrappers
-    // lv_obj_remove_event_cb_with_user_data(obj_, on_delete_event, this);
+    // Clean up event callbacks registered by this wrapper instance
+    for (auto& node : callback_nodes_) {
+      lv_obj_remove_event_cb_with_user_data(obj_, event_proxy, node.get());
+    }
+
     if (owned_) {
       lv_obj_delete(obj_);
     }
@@ -149,6 +151,7 @@ void Object::event_proxy(lv_event_t* e) {
 void Object::add_event_cb(lv_event_code_t event_code, EventCallback callback) {
   if (!obj_) return;
   auto node = std::make_unique<CallbackNode>();
+  node->event_code = event_code;
   node->callback = std::move(callback);
   lv_obj_add_event_cb(obj_, event_proxy, event_code, node.get());
   callback_nodes_.push_back(std::move(node));

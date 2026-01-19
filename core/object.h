@@ -314,6 +314,7 @@ class Object {
   bool owned_ = false;
 
   struct CallbackNode {
+    lv_event_code_t event_code;
     EventCallback callback;
   };
 

@@ -39,6 +39,10 @@ int main(void) {
 
   // Array to hold object pointers
   lv_obj_t** objects = (lv_obj_t**)malloc(MAX_ALLOCS * sizeof(lv_obj_t*));
+  if (!objects) {
+    fprintf(stderr, "Failed to allocate objects array\n");
+    return 1;
+  }
   int obj_count = 0;
 
   lv_obj_t* screen = lv_screen_active();
