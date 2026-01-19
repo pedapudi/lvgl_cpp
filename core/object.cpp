@@ -112,6 +112,18 @@ bool Object::has_flag(lv_obj_flag_t f) const {
   return obj_ ? lv_obj_has_flag(obj_, f) : false;
 }
 
+void Object::add_state(State state) {
+  if (obj_) lv_obj_add_state(obj_, static_cast<lv_state_t>(state));
+}
+
+void Object::remove_state(State state) {
+  if (obj_) lv_obj_remove_state(obj_, static_cast<lv_state_t>(state));
+}
+
+bool Object::has_state(State state) const {
+  return obj_ ? lv_obj_has_state(obj_, static_cast<lv_state_t>(state)) : false;
+}
+
 void Object::add_state(lv_state_t state) {
   if (obj_) lv_obj_add_state(obj_, state);
 }

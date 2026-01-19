@@ -46,6 +46,9 @@ class Widget : public Object,
   Derived& set_pos(int32_t x, int32_t y) {
     return Positionable<Derived>::set_pos(x, y);
   }
+  Derived& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
+    return Positionable<Derived>::align(align, x_ofs, y_ofs);
+  }
   Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
     return Positionable<Derived>::align(align, x_ofs, y_ofs);
   }
@@ -87,6 +90,14 @@ class Widget : public Object,
   }
   Derived& remove_flag(lv_obj_flag_t f) {
     Object::remove_flag(f);
+    return *static_cast<Derived*>(this);
+  }
+  Derived& add_state(State state) {
+    Object::add_state(state);
+    return *static_cast<Derived*>(this);
+  }
+  Derived& remove_state(State state) {
+    Object::remove_state(state);
     return *static_cast<Derived*>(this);
   }
   Derived& add_state(lv_state_t state) {

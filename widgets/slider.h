@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "../../misc/enums.h"
 #include "bar.h"   // IWYU pragma: export
 #include "lvgl.h"  // IWYU pragma: export
 
@@ -63,8 +64,8 @@ class Slider : public Bar {
   Slider& set_height(int32_t height);
   Slider& set_size(int32_t width, int32_t height);
   Slider& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Slider& add_state(lv_state_t state);
-  Slider& remove_state(lv_state_t state);
+  Slider& add_state(State state);
+  Slider& remove_state(State state);
   Slider& add_flag(lv_obj_flag_t flag);
   Slider& remove_flag(lv_obj_flag_t flag);
 

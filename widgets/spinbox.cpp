@@ -1,5 +1,7 @@
 #include "spinbox.h"
 
+#include "lvgl.h"
+
 #if LV_USE_SPINBOX
 
 namespace lvgl {
@@ -111,15 +113,15 @@ Spinbox& Spinbox::set_size(int32_t width, int32_t height) {
   Widget::set_size(width, height);
   return *this;
 }
-Spinbox& Spinbox::align(Align align, int32_t x_ofs, int32_t y_ofs) {
+Spinbox& Spinbox::align(lvgl::Align align, int32_t x_ofs, int32_t y_ofs) {
   Widget::align(align, x_ofs, y_ofs);
   return *this;
 }
-Spinbox& Spinbox::add_state(lv_state_t state) {
+Spinbox& Spinbox::add_state(lvgl::State state) {
   Object::add_state(state);
   return *this;
 }
-Spinbox& Spinbox::remove_state(lv_state_t state) {
+Spinbox& Spinbox::remove_state(lvgl::State state) {
   Object::remove_state(state);
   return *this;
 }

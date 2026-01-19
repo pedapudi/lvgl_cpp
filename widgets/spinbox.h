@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "../../misc/enums.h"
 #include "lvgl.h"      // IWYU pragma: export
 #include "textarea.h"  // IWYU pragma: export
 
@@ -53,8 +54,8 @@ class Spinbox : public Textarea {
   Spinbox& set_height(int32_t height);
   Spinbox& set_size(int32_t width, int32_t height);
   Spinbox& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-  Spinbox& add_state(lv_state_t state);
-  Spinbox& remove_state(lv_state_t state);
+  Spinbox& add_state(State state);
+  Spinbox& remove_state(State state);
   Spinbox& add_flag(lv_obj_flag_t flag);
   Spinbox& remove_flag(lv_obj_flag_t flag);
 };

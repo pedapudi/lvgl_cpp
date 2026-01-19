@@ -64,12 +64,12 @@ Slider& Slider::align(Align align, int32_t x_ofs, int32_t y_ofs) {
   return *this;
 }
 
-Slider& Slider::add_state(lv_state_t state) {
+Slider& Slider::add_state(State state) {
   Bar::add_state(state);
   return *this;
 }
 
-Slider& Slider::remove_state(lv_state_t state) {
+Slider& Slider::remove_state(State state) {
   Bar::remove_state(state);
   return *this;
 }

@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_MISC_GEOMETRY_H_
 #define LVGL_CPP_MISC_GEOMETRY_H_
 
+#include "enums.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -106,9 +107,10 @@ class Area {
     lv_area_move(&area_, x_ofs, y_ofs);
   }
 
-  void align(const Area& to, lv_align_t align, lv_coord_t ofs_x,
+  void align(const Area& to, lvgl::Align align, lv_coord_t ofs_x,
              lv_coord_t ofs_y) {
-    lv_area_align(&to.area_, &area_, align, ofs_x, ofs_y);
+    lv_area_align(&to.area_, &area_, static_cast<lv_align_t>(align), ofs_x,
+                  ofs_y);
   }
 
   lv_area_t* raw() { return &area_; }

@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 
+#include "../misc/enums.h"
 #include "event.h"
 #include "lvgl.h"  // IWYU pragma: export
 
@@ -83,7 +84,7 @@ class Object {
   /**
    * @brief Alignment types.
    */
-  using Align = lv_align_t;
+  using Align = lvgl::Align;
 
   /**
    * @brief Create a wrapper around an existing LVGL object.
@@ -183,18 +184,36 @@ class Object {
 
   /**
    * @brief Add a state to the object.
-   * @param state The state to add (e.g., `LV_STATE_PRESSED`).
+   * @param state The state to add (e.g., `State::Pressed`).
    */
-  void add_state(lv_state_t state);
+  void add_state(State state);
 
   /**
    * @brief Remove a state from the object.
    * @param state The state to remove.
    */
-  void remove_state(lv_state_t state);
+  void remove_state(State state);
 
   /**
    * @brief Check if a state is active.
+   * @param state The state to check.
+   */
+  bool has_state(State state) const;
+
+  /**
+   * @brief Add a state to the object (Legacy overload).
+   * @param state The state to add.
+   */
+  void add_state(lv_state_t state);
+
+  /**
+   * @brief Remove a state from the object (Legacy overload).
+   * @param state The state to remove.
+   */
+  void remove_state(lv_state_t state);
+
+  /**
+   * @brief Check if a state is active (Legacy overload).
    * @param state The state to check.
    */
   bool has_state(lv_state_t state) const;

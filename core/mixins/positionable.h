@@ -23,6 +23,20 @@ class Positionable {
     return *static_cast<Derived*>(this);
   }
 
+  Derived& align(lvgl::Align align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
+    lv_obj_set_align(static_cast<Derived*>(this)->raw(),
+                     static_cast<lv_align_t>(align));
+    lv_obj_set_pos(static_cast<Derived*>(this)->raw(), x_ofs, y_ofs);
+    return *static_cast<Derived*>(this);
+  }
+
+  Derived& align_to(const Object& base, lvgl::Align align, int32_t x_ofs = 0,
+                    int32_t y_ofs = 0) {
+    lv_obj_align_to(static_cast<Derived*>(this)->raw(), base.raw(),
+                    static_cast<lv_align_t>(align), x_ofs, y_ofs);
+    return *static_cast<Derived*>(this);
+  }
+
   Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
     lv_obj_set_align(static_cast<Derived*>(this)->raw(), align);
     lv_obj_set_pos(static_cast<Derived*>(this)->raw(), x_ofs, y_ofs);
