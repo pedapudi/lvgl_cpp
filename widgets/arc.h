@@ -62,6 +62,12 @@ class Arc : public Widget<Arc> {
   Arc& set_value(int32_t value);
 
   /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Arc& on_value_changed(std::function<void(lvgl::Event&)> cb);
+
+  /**
    * @brief Set the range.
    * @param min Minimum value.
    * @param max Maximum value.

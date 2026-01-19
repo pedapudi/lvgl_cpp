@@ -33,7 +33,15 @@ class Calendar : public Widget<Calendar> {
   Calendar& set_shown_date(uint32_t year, uint32_t month);
   Calendar& set_highlighted_dates(lv_calendar_date_t highlighted[],
                                   size_t date_num);
+  Calendar& set_highlighted_dates(lv_calendar_date_t highlighted[],
+                                  size_t date_num);
   Calendar& set_day_names(const char** day_names);
+
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Calendar& on_value_changed(std::function<void(lvgl::Event&)> cb);
 
   ButtonMatrix get_btnmatrix();
   const lv_calendar_date_t* get_today_date();

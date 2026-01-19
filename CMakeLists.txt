@@ -86,6 +86,39 @@ else()
 
     target_link_libraries(lvgl_cpp PUBLIC lvgl)
 
+    # Profiling Support
+    option(ENABLE_PROFILING "Enable gperftools profiling" OFF)
+    if(ENABLE_PROFILING)
+        find_library(LIBPROFILER profiler)
+        find_library(LIBTCMALLOC tcmalloc)
+        
+        if(LIBPROFILER)
+            message(STATUS "Found libprofiler: ${LIBPROFILER}")
+            set(GPERFTOOLS_LIBRARIES ${LIBPROFILER})
+            
+            if(LIBTCMALLOC)
+                 message(STATUS "Found libtcmalloc: ${LIBTCMALLOC}")
+                 set(TCMALLOC_FOUND ON)
+                 set(TCMALLOC_LIBRARIES ${LIBTCMALLOC})
+            endif()
+        else()
+            message(WARNING "libprofiler not found. Profiling disabled.")
+            set(ENABLE_PROFILING OFF)
+        endif()
+    endif()
+
+    function(add_benchmark target_name source_file)
+        add_executable(${target_name} ${source_file})
+        target_link_libraries(${target_name} PRIVATE lvgl_cpp)
+        if(ENABLE_PROFILING)
+            target_compile_definitions(${target_name} PRIVATE ENABLE_PROFILING)
+            target_link_libraries(${target_name} PRIVATE ${GPERFTOOLS_LIBRARIES})
+            if(TCMALLOC_FOUND)
+                target_link_libraries(${target_name} PRIVATE ${TCMALLOC_LIBRARIES})
+            endif()
+        endif()
+    endfunction()
+
     add_executable(test_core_widgets tests/test_core_widgets.cpp)
     target_link_libraries(test_core_widgets PRIVATE lvgl_cpp)
 
@@ -112,7 +145,14 @@ else()
 
     add_executable(test_group tests/test_group.cpp)
     target_link_libraries(test_group PRIVATE lvgl_cpp)
-
+    add_benchmark(bench_baseline tests/bench_baseline.cpp)
+    add_benchmark(bench_baseline_c tests/bench_baseline.c)
+    add_benchmark(bench_events tests/bench_events.cpp)
+    add_benchmark(bench_events_c tests/bench_events.c)
+    add_benchmark(bench_churn tests/bench_churn.cpp)
+    add_benchmark(bench_churn_c tests/bench_churn.c) # New C Baseline
+    add_benchmark(bench_fragmentation tests/bench_fragmentation.cpp)
+    add_benchmark(bench_fragmentation_c tests/bench_fragmentation.c) # New C Baseline
     add_executable(test_rotation tests/test_rotation.cpp)
     target_link_libraries(test_rotation PRIVATE lvgl_cpp)
 

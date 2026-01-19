@@ -130,7 +130,12 @@ Spinbox& Spinbox::add_flag(lv_obj_flag_t flag) {
   return *this;
 }
 Spinbox& Spinbox::remove_flag(lv_obj_flag_t flag) {
-  Object::remove_flag(flag);
+  if (obj_) lv_obj_remove_flag(obj_, flag);
+  return *this;
+}
+
+Spinbox& Spinbox::on_value_changed(std::function<void(lvgl::Event&)> cb) {
+  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
   return *this;
 }
 

@@ -123,6 +123,11 @@ int32_t Arc::get_knob_offset() const {
   return obj_ ? lv_arc_get_knob_offset(obj_) : 0;
 }
 
+Arc& Arc::on_value_changed(std::function<void(lvgl::Event&)> cb) {
+  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return *this;
+}
+
 Observer Arc::bind_value(Subject& subject) {
   return Observer(lv_arc_bind_value(raw(), subject.raw()));
 }

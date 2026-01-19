@@ -61,6 +61,12 @@ class Textarea : public Widget<Textarea> {
   Textarea& set_password_show_time(uint32_t time);
   Textarea& set_align(lv_text_align_t align);
 
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Textarea& on_value_changed(std::function<void(lvgl::Event&)> cb);
+
   const char* get_text() const;
   const char* get_placeholder_text();
   Label get_label();

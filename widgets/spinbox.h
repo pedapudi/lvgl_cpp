@@ -49,6 +49,12 @@ class Spinbox : public Textarea {
   Spinbox& increment();
   Spinbox& decrement();
 
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Spinbox& on_value_changed(std::function<void(lvgl::Event&)> cb);
+
   // Fluent API shadows
   Spinbox& set_width(int32_t width);
   Spinbox& set_height(int32_t height);

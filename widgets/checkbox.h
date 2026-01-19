@@ -66,6 +66,12 @@ class Checkbox : public Widget<Checkbox> {
   Checkbox& set_text(const char* txt);
 
   /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Checkbox& on_value_changed(std::function<void(lvgl::Event&)> cb);
+
+  /**
    * @brief Set the text with a static string (no copy).
    * @param txt The text pointer.
    */
