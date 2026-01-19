@@ -5,7 +5,7 @@ As part of the modernization of the C++ wrapper for LVGL 9, we have introduced a
 
 ## Key changes
 
-### 1. `Object` is no longer a "God Object"
+### 1. `Object` is no longer a "Monolithic Base Class"
 In previous versions, the base `Object` class contained methods for positioning, sizing, and alignment (`set_x`, `set_width`, `align`, etc.). These have been removed to enforce usage of concrete Widget types.
 
 **Old Code:**
@@ -67,3 +67,21 @@ public:
     }
 };
 ```
+### 4. Scoped Enums
+Use C++ Scoped Enums instead of raw macros for improved type safety.
+- `LV_STATE_PRESSED` -> `lvgl::State::Pressed`
+- `LV_PART_MAIN` -> `lvgl::Part::Main`
+
+### 5. Advanced Callbacks
+You can now use `std::function`, lambdas, and method binders directly.
+```cpp
+btn.on_clicked([](lvgl::Event& e) {
+    std::cout << "Clicked!" << std::endl;
+});
+```
+
+### 6. New Manager Classes
+- **Screen**: `lvgl::Screen` for dedicated screen objects.
+- **Group**: `lvgl::Group` for input device groups.
+- **FileSystem**: `lvgl::File` and `lvgl::Directory` (stdio wrapper).
+- **Images**: `lvgl::Image` with `ImageDescriptor` resource management.
