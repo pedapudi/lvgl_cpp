@@ -22,6 +22,11 @@ lv_switch_orientation_t Switch::get_orientation() const {
   return obj_ ? lv_switch_get_orientation(obj_) : LV_SWITCH_ORIENTATION_AUTO;
 }
 
+Switch& Switch::on_value_changed(Object::EventCallback cb) {
+  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return *this;
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_SWITCH

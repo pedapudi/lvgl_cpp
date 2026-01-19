@@ -31,6 +31,12 @@ class Switch : public Widget<Switch> {
   explicit Switch(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Switch& set_orientation(lv_switch_orientation_t orientation);
+
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Switch& on_value_changed(Object::EventCallback cb);
   lv_switch_orientation_t get_orientation() const;
 };
 

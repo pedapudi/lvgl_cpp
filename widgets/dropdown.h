@@ -59,6 +59,12 @@ class Dropdown : public Widget<Dropdown> {
   Dropdown& set_symbol(const void* symbol);
   Dropdown& set_selected_highlight(bool en);
 
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Dropdown& on_value_changed(Object::EventCallback cb);
+
   lv_obj_t* get_list();
   const char* get_text();
   const char* get_options();

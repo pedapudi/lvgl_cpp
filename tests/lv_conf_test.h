@@ -23,6 +23,7 @@
 #define LV_USE_DISPLAY 1
 #define LV_USE_TIMER 1
 #define LV_USE_ANIMATION 1
+#define LV_USE_ANIM_TIMELINE 1
 #define LV_USE_OBSERVER 1
 
 // Layouts

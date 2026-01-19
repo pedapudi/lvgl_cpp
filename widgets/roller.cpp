@@ -34,6 +34,11 @@ Roller& Roller::set_visible_row_count(uint32_t row_cnt) {
   return *this;
 }
 
+Roller& Roller::on_value_changed(Object::EventCallback cb) {
+  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return *this;
+}
+
 uint32_t Roller::get_selected() {
   return obj_ ? lv_roller_get_selected(obj_) : 0;
 }

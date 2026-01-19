@@ -55,6 +55,12 @@ class Roller : public Widget<Roller> {
                         lv_anim_enable_t anim = LV_ANIM_ON);
   Roller& set_visible_row_count(uint32_t row_cnt);
 
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Roller& on_value_changed(Object::EventCallback cb);
+
   uint32_t get_selected();
   void get_selected_str(char* buf, uint32_t buf_size);
   const char* get_options();
