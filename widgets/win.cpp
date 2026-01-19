@@ -17,19 +17,23 @@ Win::Win(Object& parent) : Win(&parent) {}
 Win::Win(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Label Win::add_title(const char* txt) {
-  return Label(obj_ ? lv_win_add_title(obj_, txt) : nullptr);
+  return Label(obj_ ? lv_win_add_title(obj_, txt) : nullptr,
+               Ownership::Unmanaged);
 }
 
 Button Win::add_button(const void* icon, int32_t btn_w) {
-  return Button(obj_ ? lv_win_add_button(obj_, icon, btn_w) : nullptr);
+  return Button(obj_ ? lv_win_add_button(obj_, icon, btn_w) : nullptr,
+                Ownership::Unmanaged);
 }
 
 WinHeader Win::get_header() {
-  return WinHeader(obj_ ? lv_win_get_header(obj_) : nullptr);
+  return WinHeader(obj_ ? lv_win_get_header(obj_) : nullptr,
+                   Ownership::Unmanaged);
 }
 
 WinContent Win::get_content() {
-  return WinContent(obj_ ? lv_win_get_content(obj_) : nullptr);
+  return WinContent(obj_ ? lv_win_get_content(obj_) : nullptr,
+                    Ownership::Unmanaged);
 }
 
 }  // namespace lvgl

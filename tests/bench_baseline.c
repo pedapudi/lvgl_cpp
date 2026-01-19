@@ -5,10 +5,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/resource.h>
+#include <time.h>
 
 #include "lvgl.h"
 
-#define OBJ_COUNT 1000
+#define OBJ_COUNT 500
 
 // Mock driver to satisfy LVGL
 static void flush_cb(lv_display_t* disp, const lv_area_t* area,
@@ -31,6 +33,9 @@ int main(void) {
   lv_obj_t* screen = lv_scr_act();
   lv_obj_t* objects[OBJ_COUNT];
 
+  struct timespec start, end;
+  clock_gettime(CLOCK_MONOTONIC, &start);
+
   for (int i = 0; i < OBJ_COUNT; i++) {
     objects[i] = lv_button_create(screen);
     lv_obj_set_pos(objects[i], i % 100, i / 100);
@@ -40,9 +45,15 @@ int main(void) {
   // Force a layout/update to ensure structures are fully allocated
   lv_timer_handler();
 
-  printf("Objects created. Sleeping for profile capture...\n");
-  // In a real profile run, this sleep allows ensuring background threads (if
-  // any) settle, though for heap profile we just care about the snapshot here.
+  clock_gettime(CLOCK_MONOTONIC, &end);
+  double elapsed_ms = (end.tv_sec - start.tv_sec) * 1000.0 +
+                      (end.tv_nsec - start.tv_nsec) / 1000000.0;
+
+  struct rusage usage;
+  getrusage(RUSAGE_SELF, &usage);
+
+  printf("BENCHMARK_METRIC: TIME=%.2f unit=ms\n", elapsed_ms);
+  printf("BENCHMARK_METRIC: RSS=%ld unit=kb\n", usage.ru_maxrss);
 
   return 0;
 }

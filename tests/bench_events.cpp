@@ -3,6 +3,9 @@
  * Objective: Measure cost of std::function + wrapper per callback.
  */
 
+#include <sys/resource.h>
+
+#include <chrono>
 #include <iostream>
 #include <vector>
 
@@ -10,7 +13,7 @@
 #include "lvgl_cpp/core/object.h"
 #include "lvgl_cpp/widgets/button.h"
 
-#define OBJ_COUNT 1000
+#define OBJ_COUNT 500
 
 static void flush_cb(lv_display_t* disp, const lv_area_t* area,
                      uint8_t* px_map) {
@@ -33,6 +36,8 @@ int main(void) {
   std::vector<std::unique_ptr<lvgl::Button>> objects;
   objects.reserve(OBJ_COUNT);
 
+  auto start = std::chrono::high_resolution_clock::now();
+
   for (int i = 0; i < OBJ_COUNT; i++) {
     auto btn = std::make_unique<lvgl::Button>(&screen);
 
@@ -48,6 +53,20 @@ int main(void) {
   }
 
   lv_timer_handler();
-  std::cout << "Objects with C++ events created." << std::endl;
+  lv_timer_handler();
+
+  auto end = std::chrono::high_resolution_clock::now();
+  auto elapsed_ms =
+      std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+          .count();
+
+  struct rusage usage;
+  getrusage(RUSAGE_SELF, &usage);
+
+  std::cout << "BENCHMARK_METRIC: TIME=" << elapsed_ms << " unit=ms"
+            << std::endl;
+  std::cout << "BENCHMARK_METRIC: RSS=" << usage.ru_maxrss << " unit=kb"
+            << std::endl;
+
   return 0;
 }

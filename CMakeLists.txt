@@ -186,6 +186,10 @@ else()
     target_link_libraries(test_tabview PRIVATE lvgl_cpp)
     add_test(NAME test_tabview COMMAND test_tabview)
 
+    add_executable(test_msgbox_win tests/test_msgbox_win.cpp)
+    target_link_libraries(test_msgbox_win PRIVATE lvgl_cpp)
+    add_test(NAME test_msgbox_win COMMAND test_msgbox_win)
+
 
 
     enable_testing()
