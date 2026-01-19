@@ -43,6 +43,7 @@ set(SOURCES
     widgets/led.cpp
     widgets/image_button.cpp
     widgets/spinner.cpp
+    widgets/screen.cpp
     
     core/group.cpp
     display/display.cpp
@@ -135,6 +136,9 @@ else()
     add_executable(test_enums tests/test_enums.cpp)
     target_link_libraries(test_enums PRIVATE lvgl_cpp)
 
+    add_executable(test_screen tests/test_screen.cpp)
+    target_link_libraries(test_screen PRIVATE lvgl_cpp)
+
     enable_testing()
     add_test(NAME test_core_widgets COMMAND test_core_widgets)
     add_test(NAME test_input_widgets COMMAND test_input_widgets)
@@ -151,5 +155,6 @@ else()
     add_test(NAME test_file_system COMMAND test_file_system)
     add_test(NAME test_geometry COMMAND test_geometry)
     add_test(NAME test_enums COMMAND test_enums)
+    add_test(NAME test_screen COMMAND test_screen)
     add_test(NAME test_input_device COMMAND test_input_device)
 endif()
