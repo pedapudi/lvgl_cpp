@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../../misc/enums.h"
+#include "../misc/enums.h"
 #include "bar.h"   // IWYU pragma: export
 #include "lvgl.h"  // IWYU pragma: export
 
@@ -63,7 +63,11 @@ class Slider : public Bar {
    * @brief Register a callback for the ValueChanged event.
    * @param cb The callback function.
    */
-  Slider& on_value_changed(std::function<void(lvgl::Event&)> cb);
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Slider& on_value_changed(Object::EventCallback cb);
 
   // Fluent API shadows for Object
   Slider& set_width(int32_t width);

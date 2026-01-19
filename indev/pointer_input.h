@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_INDEV_POINTER_INPUT_H_
 #define LVGL_CPP_INDEV_POINTER_INPUT_H_
 
+#include "../core/object.h"
 #include "input_device.h"
 
 namespace lvgl {
@@ -44,6 +45,9 @@ class PointerInput : public InputDevice {
 
   // Shadow set_cursor to be more prominent or just inherit it
   // using InputDevice::set_cursor;
+  void set_cursor(Object* cur_obj) {
+    if (raw() && cur_obj) lv_indev_set_cursor(raw(), cur_obj->raw());
+  }
 };
 
 }  // namespace lvgl

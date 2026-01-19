@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <functional>
 
-#include "../core/group.h"   // IWYU pragma: export
+// #include "../core/group.h"   // Removed: cleanup
 #include "../core/object.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
@@ -40,8 +40,6 @@ class InputDevice {
   lv_indev_type_t get_type();
   void reset(Object* obj);
   void stop_processing();
-  void set_group(Group* group);
-  void set_cursor(Object* cur_obj);
   void enable(bool en);
   void read();  // Manual trigger
 

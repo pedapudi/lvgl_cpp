@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_INDEV_ENCODER_INPUT_H_
 #define LVGL_CPP_INDEV_ENCODER_INPUT_H_
 
+#include "../core/group.h"
 #include "input_device.h"
 
 namespace lvgl {
@@ -23,6 +24,10 @@ class EncoderInput : public InputDevice {
   EncoderInput& operator=(EncoderInput&& other) noexcept {
     InputDevice::operator=(std::move(other));
     return *this;
+  }
+
+  void set_group(Group* group) {
+    if (raw() && group) lv_indev_set_group(raw(), group->raw());
   }
 };
 

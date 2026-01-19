@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_INDEV_KEYPAD_INPUT_H_
 #define LVGL_CPP_INDEV_KEYPAD_INPUT_H_
 
+#include "../core/group.h"
 #include "input_device.h"
 
 namespace lvgl {
@@ -27,6 +28,9 @@ class KeypadInput : public InputDevice {
 
   // Inherits set_group from InputDevice, which is the primary configuration for
   // Keypad
+  void set_group(Group* group) {
+    if (raw() && group) lv_indev_set_group(raw(), group->raw());
+  }
 };
 
 }  // namespace lvgl

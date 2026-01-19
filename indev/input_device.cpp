@@ -103,14 +103,6 @@ void InputDevice::stop_processing() {
   if (indev_) lv_indev_stop_processing(indev_);
 }
 
-void InputDevice::set_group(Group* group) {
-  if (indev_ && group) lv_indev_set_group(indev_, group->raw());
-}
-
-void InputDevice::set_cursor(Object* cur_obj) {
-  if (indev_ && cur_obj) lv_indev_set_cursor(indev_, cur_obj->raw());
-}
-
 void InputDevice::enable(bool en) {
   if (indev_) lv_indev_enable(indev_, en);
 }
