@@ -72,6 +72,11 @@ lv_obj_t* Calendar::create_dropdown_header() {
   return obj_ ? lv_calendar_header_dropdown_create(obj_) : nullptr;
 }
 
+Calendar& Calendar::on_value_changed(std::function<void(lvgl::Event&)> cb) {
+  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return *this;
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_CALENDAR

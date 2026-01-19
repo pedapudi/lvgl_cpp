@@ -33,8 +33,7 @@ class Calendar : public Widget<Calendar> {
   Calendar& set_shown_date(uint32_t year, uint32_t month);
   Calendar& set_highlighted_dates(lv_calendar_date_t highlighted[],
                                   size_t date_num);
-  Calendar& set_highlighted_dates(lv_calendar_date_t highlighted[],
-                                  size_t date_num);
+
   Calendar& set_day_names(const char** day_names);
 
   /**

@@ -84,6 +84,11 @@ void* Table::get_cell_user_data(uint16_t row, uint16_t col) {
   return obj_ ? lv_table_get_cell_user_data(obj_, row, col) : nullptr;
 }
 
+Table& Table::on_value_changed(std::function<void(lvgl::Event&)> cb) {
+  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return *this;
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_TABLE

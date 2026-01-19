@@ -36,6 +36,12 @@ class Table : public Widget<Table> {
   Table& set_cell_user_data(uint16_t row, uint16_t col, void* user_data);
   Table& set_selected_cell(uint16_t row, uint16_t col);
 
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Table& on_value_changed(std::function<void(lvgl::Event&)> cb);
+
   const char* get_cell_value(uint32_t row, uint32_t col);
   uint32_t get_row_count();
   uint32_t get_column_count();
