@@ -1,5 +1,7 @@
 # Memory overhead analysis: lvgl_cpp vs lvgl
 
+**Tracking Issue:** #67
+
 ## Executive Summary
 
 The `lvgl_cpp` wrapper introduces a **Fixed Overhead** of ~48 bytes per widget and a **Variable Overhead** of ~80+ bytes per callback. 

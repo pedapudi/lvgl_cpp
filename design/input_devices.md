@@ -1,5 +1,7 @@
 # design/input_devices.md
 
+**Tracking Issue:** #66
+
 ## 1. Analysis of LVGL Input Device Architecture (v9)
 
 LVGL 9.4 introduces a simplified yet powerful API for Input Devices (`lv_indev`), abstracting hardware inputs into four logical types. Unlike v8, where drivers were registered via structs, v9 uses a direct object-creation model.

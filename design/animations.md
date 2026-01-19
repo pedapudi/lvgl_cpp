@@ -1,5 +1,7 @@
 # Research report: LVGL animations and timelines in C++
 
+**Tracking Issue:** #64
+
 ## Executive Summary
 
 LVGL's animation system (`lv_anim_t`) and timeline system (`lv_anim_timeline_t`) provide powerful tools for creating dynamic user interfaces. The `lvgl_cpp` library currently wraps single animations via the `Animation` class but lacks a wrapper for Timelines.

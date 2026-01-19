@@ -1,5 +1,7 @@
 # Integrating LVGL Fonts within C++
 
+**Tracking Issue:** #65
+
 ## Executive Summary
 
 Fonts in LVGL (`lv_font_t`) are treated as resources rather than widgets. They are typically:

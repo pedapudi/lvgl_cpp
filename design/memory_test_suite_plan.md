@@ -1,5 +1,7 @@
 # Memory test suite design plan
 
+**Tracking Issue:** #68
+
 ## Objective
 Empirically measure heap usage, detect memory leaks, and generate detailed comparative profiles between `lvgl_cpp` and pure C `lvgl`.
 
