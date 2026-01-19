@@ -59,7 +59,7 @@ class Roller : public Widget<Roller> {
    * @brief Register a callback for the ValueChanged event.
    * @param cb The callback function.
    */
-  Roller& on_value_changed(Object::EventCallback cb);
+  Roller& on_value_changed(std::function<void(lvgl::Event&)> cb);
 
   uint32_t get_selected();
   void get_selected_str(char* buf, uint32_t buf_size);

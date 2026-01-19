@@ -36,7 +36,7 @@ class Switch : public Widget<Switch> {
    * @brief Register a callback for the ValueChanged event.
    * @param cb The callback function.
    */
-  Switch& on_value_changed(Object::EventCallback cb);
+  Switch& on_value_changed(std::function<void(lvgl::Event&)> cb);
   lv_switch_orientation_t get_orientation() const;
 };
 

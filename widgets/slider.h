@@ -59,6 +59,12 @@ class Slider : public Bar {
    */
   Slider& set_left_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
 
+  /**
+   * @brief Register a callback for the ValueChanged event.
+   * @param cb The callback function.
+   */
+  Slider& on_value_changed(std::function<void(lvgl::Event&)> cb);
+
   // Fluent API shadows for Object
   Slider& set_width(int32_t width);
   Slider& set_height(int32_t height);

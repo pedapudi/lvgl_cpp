@@ -24,6 +24,10 @@ class EventSource {
     return add_event_cb(cb, LV_EVENT_CLICKED);
   }
 
+  Derived& on_clicked(EventCallback cb) {
+    return add_event_cb(cb, LV_EVENT_CLICKED);
+  }
+
   Derived& on_event(EventCallback cb) { return add_event_cb(cb, LV_EVENT_ALL); }
 
   Derived& on_pressed(EventCallback cb) {

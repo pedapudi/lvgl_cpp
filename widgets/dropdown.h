@@ -63,7 +63,7 @@ class Dropdown : public Widget<Dropdown> {
    * @brief Register a callback for the ValueChanged event.
    * @param cb The callback function.
    */
-  Dropdown& on_value_changed(Object::EventCallback cb);
+  Dropdown& on_value_changed(std::function<void(lvgl::Event&)> cb);
 
   lv_obj_t* get_list();
   const char* get_text();

@@ -120,6 +120,18 @@ class Widget : public Object,
   Derived& on_event(typename EventSource<Derived>::EventCallback cb) {
     return EventSource<Derived>::on_event(cb);
   }
+  Derived& on_clicked(typename EventSource<Derived>::EventCallback cb) {
+    return EventSource<Derived>::on_clicked(cb);
+  }
+  Derived& on_pressed(typename EventSource<Derived>::EventCallback cb) {
+    return EventSource<Derived>::on_pressed(cb);
+  }
+  Derived& on_released(typename EventSource<Derived>::EventCallback cb) {
+    return EventSource<Derived>::on_released(cb);
+  }
+  Derived& on_long_pressed(typename EventSource<Derived>::EventCallback cb) {
+    return EventSource<Derived>::on_long_pressed(cb);
+  }
 
   // --- Layoutable Forwarding ---
   Derived& layout(const Flex& flex) {
