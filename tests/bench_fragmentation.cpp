@@ -1,10 +1,11 @@
 /*
  * Benchmark: Fragmentation (C++ Wrapper)
- * Objective: Measure heap fragmentation via std::function closures.
- * Comparison: Should match bench_fragmentation.c allocation patterns.
+ * Objective: Measure heap fragmentation using actual LVGL widgets and C++
+ * callbacks. Comparison: Matches bench_fragmentation.c allocation patterns.
  */
 
 #include <sys/resource.h>
+#include <unistd.h>
 
 #include <functional>
 #include <iostream>
@@ -12,60 +13,84 @@
 #include <vector>
 
 #include "lvgl.h"
+#include "lvgl_cpp/lvgl_cpp.h"
 
-#define MAX_ALLOCS 10000
+#define MAX_ALLOCS 1000
 #define ITERATIONS 50
 
-// Simulate closure captures matching C structs
-struct SmallCapture {
-  char pad[16];
-};
-struct LargeCapture {
+struct CaptureState {
   char pad[64];
 };
 
 int main(void) {
-  std::cout << "Starting Fragmentation C++ benchmark..." << std::endl;
+  lv_init();
+
+  // Need a display for widgets (even if partial)
+  lv_display_t* disp = lv_display_create(800, 600);
+  lv_display_set_flush_cb(
+      disp, [](lv_display_t* disp, const lv_area_t* area, uint8_t* px_map) {
+        lv_display_flush_ready(disp);
+      });
+  static uint8_t buf[800 * 10 * 4];
+  lv_display_set_buffers(disp, buf, NULL, sizeof(buf),
+                         LV_DISPLAY_RENDER_MODE_PARTIAL);
+
+  std::cout << "Starting Fragmentation C++ benchmark (LVGL Widgets)..."
+            << std::endl;
 
   struct timespec start_time;
   clock_gettime(CLOCK_MONOTONIC, &start_time);
 
-  // Vector to hold the closures (keeping them alive)
-  std::vector<std::function<void()>> closures;
-  closures.reserve(MAX_ALLOCS);
+  // Keep track of created widgets
+  std::vector<lvgl::Object> objects;
+  objects.reserve(MAX_ALLOCS);
+
+  // Root screen
+  lvgl::Object screen(lv_screen_active());
 
   std::mt19937 rng(42);
   std::uniform_int_distribution<int> dist_op(0,
                                              2);  // 0: alloc, 1: free, 2: no-op
 
   for (int i = 0; i < ITERATIONS; i++) {
-    for (int j = 0; j < 100; j++) {
+    for (int j = 0; j < 50; j++) {
       int op = dist_op(rng);
 
-      if (op == 0 && closures.size() < MAX_ALLOCS) {
-        // Alloc
-        if (rng() % 2 == 0) {
-          SmallCapture c;
-          // Capture by value copies the struct into the closure
-          closures.push_back([c]() { (void)c; });
-        } else {
-          LargeCapture c;
-          closures.push_back([c]() { (void)c; });
-        }
-      } else if (op == 1 && !closures.empty()) {
-        // Random free
-        size_t idx = rng() % closures.size();
+      if (op == 0 && objects.size() < MAX_ALLOCS) {
+        // Alloc: Create Button + Attach Callback
+        lvgl::Button btn(screen);
 
-        // Swap with last and pop to avoid shifting vector capability overhead
-        // simulating random free in heap
-        closures[idx] = closures.back();
-        closures.pop_back();
+        // Add a lambda with capture to exercise std::function allocation
+        CaptureState state;
+        btn.add_event_cb(
+            [state](lvgl::Event& e) {
+              (void)state;
+              (void)e;
+            },
+            LV_EVENT_CLICKED);
+
+        objects.push_back(std::move(btn));
+
+      } else if (op == 1 && !objects.empty()) {
+        // Free: Delete random object
+        size_t idx = rng() % objects.size();
+
+        // Explicitly delete the underlying LVGL object
+        // The wrapper is stateless/view-like generally, but we want to ensure
+        // the LVGL memory is freed.
+        lv_obj_delete(objects[idx].raw());
+
+        // Remove from vector
+        objects[idx] = std::move(objects.back());
+        objects.pop_back();
       }
     }
+    // Simulate tick to allow LVGL to process/cleanup
+    lv_timer_handler();
   }
 
-  std::cout << "Fragmentation C++ workload completed. Existing closures: "
-            << closures.size() << std::endl;
+  std::cout << "Fragmentation C++ workload completed. Objects alive: "
+            << objects.size() << std::endl;
 
   struct timespec end_time;
   clock_gettime(CLOCK_MONOTONIC, &end_time);
