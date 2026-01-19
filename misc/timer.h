@@ -17,6 +17,27 @@ class Timer {
   Timer(uint32_t period, TimerCallback cb);
   ~Timer();
 
+  // Move-only type
+  Timer(const Timer&) = delete;
+  Timer& operator=(const Timer&) = delete;
+  Timer(Timer&& other) noexcept;
+  Timer& operator=(Timer&& other) noexcept;
+
+  /**
+   * @brief Create a one-shot timer that runs once and deletes itself.
+   * @param delay Delay in milliseconds.
+   * @param cb Callback function (no arguments).
+   */
+  static void oneshot(uint32_t delay, std::function<void()> cb);
+
+  /**
+   * @brief Create a periodic timer.
+   * @param period Period in milliseconds.
+   * @param cb Callback function.
+   * @return A Timer object that manages the underlying LVGL timer.
+   */
+  static Timer periodic(uint32_t period, TimerCallback cb);
+
   /**
    * @brief Set the timer period.
    * @param period Period in milliseconds.
@@ -54,12 +75,6 @@ class Timer {
    * @param repeat_count Number of repeats (-1 for infinite).
    */
   void set_repeat_count(int32_t repeat_count);
-
-  /**
-   * @brief Enable auto-deletion of the timer after it runs out.
-   * @param auto_delete true to auto-delete.
-   */
-  void set_auto_delete(bool auto_delete);
 
   /**
    * @brief Enable or disable the timer.

@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/resource.h>
 #include <time.h>
 
 #define MAX_ALLOCS 10000
@@ -26,6 +27,9 @@ int alloc_count = 0;
 int main(void) {
   printf("Starting Fragmentation C benchmark...\n");
   srand(42);
+
+  struct timespec start, end;
+  clock_gettime(CLOCK_MONOTONIC, &start);
 
   for (int i = 0; i < ITERATIONS; i++) {
     for (int j = 0; j < 100; j++) {
@@ -49,6 +53,16 @@ int main(void) {
       }
     }
   }
+
+  clock_gettime(CLOCK_MONOTONIC, &end);
+  double elapsed_ms = (end.tv_sec - start.tv_sec) * 1000.0 +
+                      (end.tv_nsec - start.tv_nsec) / 1000000.0;
+
+  struct rusage usage;
+  getrusage(RUSAGE_SELF, &usage);
+
+  printf("BENCHMARK_METRIC: TIME=%.2f unit=ms\n", elapsed_ms);
+  printf("BENCHMARK_METRIC: RSS=%ld unit=kb\n", usage.ru_maxrss);
 
   printf("Fragmentation C workload completed. Existing allocations: %d\n",
          alloc_count);

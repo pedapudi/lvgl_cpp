@@ -1,0 +1,158 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>LVGL C++ Binding Memory Profile</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { font-family: 'Inter', sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+            .container { max_width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+            h1 { text-align: center; color: #333; }
+            .chart-container { position: relative; height: 300px; margin-bottom: 50px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+            th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+            th { background-color: #f8f9fa; }
+            .status-pass { color: green; font-weight: bold; }
+            .status-fail { color: red; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>LVGL C++ Wrapper Memory Overhead</h1>
+            <p style="text-align: center; color: #666;">Generated on 2026-01-19 09:00:16</p>
+            
+            <div class="chart-container">
+                <canvas id="rssChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="timeChart"></canvas>
+            </div>
+            
+             <div class="chart-container">
+                <canvas id="heapChart"></canvas>
+            </div>
+            
+            <h2>Detailed Results</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Benchmark</th>
+                        <th>Lang</th>
+                        <th>Time (ms)</th>
+                        <th>RSS (KB)</th>
+                        <th>Heap (Bytes)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td>Baseline</td>
+                        <td>C</td>
+                        <td>4.24</td>
+                        <td>2516</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Baseline</td>
+                        <td>CPP</td>
+                        <td>5.00</td>
+                        <td>4628</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Churn</td>
+                        <td>CPP</td>
+                        <td>27.00</td>
+                        <td>4680</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Events</td>
+                        <td>C</td>
+                        <td>3.42</td>
+                        <td>2580</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Events</td>
+                        <td>CPP</td>
+                        <td>5.00</td>
+                        <td>4588</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Fragmentation</td>
+                        <td>C</td>
+                        <td>0.09</td>
+                        <td>1904</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Fragmentation</td>
+                        <td>CPP</td>
+                        <td>0.39</td>
+                        <td>3492</td>
+                        <td>0</td>
+                        <td class="status-pass">SUCCESS</td>
+                    </tr>
+                
+                </tbody>
+            </table>
+        </div>
+        
+        <script>
+            const labels = ["Baseline", "Churn", "Events", "Fragmentation"];
+            
+            new Chart(document.getElementById('rssChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'C RSS (KB)', data: [2516, 4680, 2580, 1904], backgroundColor: '#94a3b8' },
+                        { label: 'C++ RSS (KB)', data: [4628, 0, 4588, 3492], backgroundColor: '#3b82f6' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Peak Resident Set Size (RSS)' } } }
+            });
+
+            new Chart(document.getElementById('timeChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'C Time (ms)', data: [4.24, 27.0, 3.42, 0.09], backgroundColor: '#94a3b8' },
+                        { label: 'C++ Time (ms)', data: [5.0, 0, 5.0, 0.387775], backgroundColor: '#ef4444' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Execution Time' } } }
+            });
+            
+             new Chart(document.getElementById('heapChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'C Heap (Bytes)', data: [0, 0, 0, 0], backgroundColor: '#94a3b8' },
+                        { label: 'C++ Heap (Bytes)', data: [0, 0, 0, 0], backgroundColor: '#10b981' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Heap Usage (pprof)' } } }
+            });
+        </script>
+    </body>
+    </html>
+    

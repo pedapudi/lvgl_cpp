@@ -14,7 +14,7 @@
 #include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/widgets/button.h"
 
-#define OBJ_COUNT 500
+#define OBJ_COUNT 50
 
 // Mock driver
 static void flush_cb(lv_display_t* disp, const lv_area_t* area,

@@ -12,7 +12,11 @@
 
 namespace lvgl {
 
+class AnimationTimeline;
+
 class Animation {
+  friend class AnimationTimeline;
+
  public:
   using ExecCallback = std::function<void(void*, int32_t)>;
   using PathCallback = std::function<int32_t(const lv_anim_t*)>;

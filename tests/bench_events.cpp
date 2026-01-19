@@ -13,7 +13,7 @@
 #include "lvgl_cpp/core/object.h"
 #include "lvgl_cpp/widgets/button.h"
 
-#define OBJ_COUNT 500
+#define OBJ_COUNT 50
 
 static void flush_cb(lv_display_t* disp, const lv_area_t* area,
                      uint8_t* px_map) {

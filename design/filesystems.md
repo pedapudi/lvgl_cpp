@@ -1,5 +1,7 @@
 # Research Report: LVGL Filesystem in C++
 
+**Tracking Issue:** #40
+
 ## Executive Summary
 
 LVGL provides a unified File System interface (`lv_fs`) that abstracts underlying storage drivers (FATFS, SD Card, POSIX, etc.) using a drive letter mechanism (e.g., `S:/path/to/file`). The `lvgl_cpp` library currently lacks a wrapper for this subsystem.

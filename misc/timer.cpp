@@ -19,7 +19,59 @@ Timer::Timer(uint32_t period, TimerCallback cb) {
 Timer::~Timer() {
   if (timer_) {
     lv_timer_delete(timer_);
+    timer_ = nullptr;
   }
+}
+
+Timer::Timer(Timer&& other) noexcept
+    : timer_(other.timer_), cb_(std::move(other.cb_)) {
+  other.timer_ = nullptr;
+  if (timer_) {
+    lv_timer_set_user_data(timer_, this);
+  }
+}
+
+Timer& Timer::operator=(Timer&& other) noexcept {
+  if (this != &other) {
+    if (timer_) {
+      lv_timer_delete(timer_);
+    }
+    timer_ = other.timer_;
+    cb_ = std::move(other.cb_);
+    other.timer_ = nullptr;
+    if (timer_) {
+      lv_timer_set_user_data(timer_, this);
+    }
+  }
+  return *this;
+}
+
+namespace {
+struct OneshotData {
+  std::function<void()> cb;
+};
+
+void oneshot_proxy(lv_timer_t* t) {
+  auto* data = static_cast<OneshotData*>(lv_timer_get_user_data(t));
+  if (data && data->cb) {
+    data->cb();
+  }
+  // Data is deleted by lv_timer auto_delete mechanism?
+  // No, lv_timer doesn't delete user_data automatically.
+  // We need to delete it here since the timer is about to be auto-deleted.
+  delete data;
+}
+}  // namespace
+
+void Timer::oneshot(uint32_t delay, std::function<void()> cb) {
+  auto* data = new OneshotData{std::move(cb)};
+  lv_timer_t* t = lv_timer_create(oneshot_proxy, delay, data);
+  lv_timer_set_repeat_count(t, 1);
+  lv_timer_set_auto_delete(t, true);
+}
+
+Timer Timer::periodic(uint32_t period, TimerCallback cb) {
+  return Timer(period, cb);
 }
 
 void Timer::set_period(uint32_t period) {
@@ -32,32 +84,10 @@ void Timer::set_cb(TimerCallback cb) {
   } else {
     *cb_ = cb;
   }
-  // If timer was empty, we might need to recreate or set user data if wrapped
-  // differently For now assume created with constructor
-}
-
-void Timer::ready() {
-  if (timer_) lv_timer_ready(timer_);
-}
-
-void Timer::pause() {
-  if (timer_) lv_timer_pause(timer_);
-}
-
-void Timer::resume() {
-  if (timer_) lv_timer_resume(timer_);
-}
-
-void Timer::reset() {
-  if (timer_) lv_timer_reset(timer_);
-}
-
-void Timer::set_repeat_count(int32_t repeat_count) {
-  if (timer_) lv_timer_set_repeat_count(timer_, repeat_count);
-}
-
-void Timer::set_auto_delete(bool auto_delete) {
-  if (timer_) lv_timer_set_auto_delete(timer_, auto_delete);
+  // Ensure user data points to this instance if we updated callback
+  if (timer_) {
+    lv_timer_set_user_data(timer_, this);
+  }
 }
 
 void Timer::enable(bool en) { lv_timer_enable(en); }

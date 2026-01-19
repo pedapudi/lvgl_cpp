@@ -4,6 +4,8 @@
  * Comparison: Should match bench_fragmentation.c allocation patterns.
  */
 
+#include <sys/resource.h>
+
 #include <functional>
 #include <iostream>
 #include <random>
@@ -24,6 +26,9 @@ struct LargeCapture {
 
 int main(void) {
   std::cout << "Starting Fragmentation C++ benchmark..." << std::endl;
+
+  struct timespec start_time;
+  clock_gettime(CLOCK_MONOTONIC, &start_time);
 
   // Vector to hold the closures (keeping them alive)
   std::vector<std::function<void()>> closures;
@@ -61,5 +66,19 @@ int main(void) {
 
   std::cout << "Fragmentation C++ workload completed. Existing closures: "
             << closures.size() << std::endl;
+
+  struct timespec end_time;
+  clock_gettime(CLOCK_MONOTONIC, &end_time);
+  double elapsed_ms = (end_time.tv_sec - start_time.tv_sec) * 1000.0 +
+                      (end_time.tv_nsec - start_time.tv_nsec) / 1000000.0;
+
+  struct rusage usage;
+  getrusage(RUSAGE_SELF, &usage);
+
+  std::cout << "BENCHMARK_METRIC: TIME=" << elapsed_ms << " unit=ms"
+            << std::endl;
+  std::cout << "BENCHMARK_METRIC: RSS=" << usage.ru_maxrss << " unit=kb"
+            << std::endl;
+
   return 0;
 }

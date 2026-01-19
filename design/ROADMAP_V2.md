@@ -36,7 +36,7 @@ Handling the application lifecycle, complex UI flows, and system abstractions.
 - **[ ] Complex Widget Encapsulation (#34)**: Deep refactor of the `Menu` widget to encapsulate "Pages" as first-class C++ objects.
 - [x] TabView & TileView Refactor (#37): Encapsulate page/tile management for `TabView` and `TileView`, similar to `Menu`.
 - **[ ] Modal & Window Management (#38)**: Idiomatic wrappers for `MsgBox` (modals) and `Win` (header/content windows).
-- **[ ] Animation & Timer System (#39)**: RAII wrappers for `lv_anim` and `lv_timer` to manage safe lifecycles using C++ functors.
+- [x] Animation & Timer System (#39): RAII wrappers for `lv_anim` and `lv_timer` to manage safe lifecycles using C++ functors.
 - **[ ] Filesystem & Images (#40)**: C++ wrappers for `lv_fs` and `lv_img` handling, ensuring resource safety.
 
 ## 4. Definition of Done for v0.2.0 Release
