@@ -42,7 +42,7 @@ class Font {
   static const Font& montserrat_30();
   static const Font& montserrat_32();
 
- private:
+ protected:
   const lv_font_t* font_;
 };
 
