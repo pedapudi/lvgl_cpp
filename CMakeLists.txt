@@ -163,6 +163,14 @@ else()
     add_benchmark(bench_churn_stability tests/bench_churn_stability.cpp) # Stability Test
     add_benchmark(bench_widgets tests/bench_widgets.cpp) # Generic Widget Test
     add_benchmark(bench_widgets_c tests/bench_widgets.c) # C version
+
+    # Soak Test
+    add_custom_target(bench_soak
+        COMMAND bench_churn --duration 3600
+        DEPENDS bench_churn
+        COMMENT "Running Churn Benchmark for 1 hour..."
+        USES_TERMINAL
+    )
     add_executable(test_rotation tests/test_rotation.cpp)
     target_link_libraries(test_rotation PRIVATE lvgl_cpp)
 

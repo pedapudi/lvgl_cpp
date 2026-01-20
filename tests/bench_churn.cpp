@@ -42,7 +42,7 @@ void run_cycle() {
   // 3. Destroy
 }
 
-int main(void) {
+int main(int argc, char** argv) {
   lv_init();
 
   // Use C++ Display Wrapper
@@ -53,14 +53,39 @@ int main(void) {
   static uint8_t buf[800 * 10 * 4];
   disp.set_buffers(buf, nullptr, sizeof(buf), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
-  std::cout << "Starting Churn benchmark (" << ITERATIONS << " cycles)..."
-            << std::endl;
+  int duration_sec = 0;
+  if (argc > 1) {
+    std::string arg = argv[1];
+    if (arg == "--duration" && argc > 2) {
+      duration_sec = std::stoi(argv[2]);
+    }
+  }
+
+  if (duration_sec > 0) {
+    std::cout << "Starting Churn benchmark for " << duration_sec
+              << " seconds..." << std::endl;
+  } else {
+    std::cout << "Starting Churn benchmark (" << ITERATIONS << " cycles)..."
+              << std::endl;
+  }
 
   auto start = std::chrono::high_resolution_clock::now();
+  int cycles = 0;
 
-  for (int i = 0; i < ITERATIONS; i++) {
-    if (i % 10 == 0) std::cout << "Cycle " << i << std::endl;
+  while (true) {
+    if (cycles % 10 == 0) std::cout << "Cycle " << cycles << std::endl;
     run_cycle();
+    cycles++;
+
+    auto now = std::chrono::high_resolution_clock::now();
+    auto elapsed =
+        std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
+
+    if (duration_sec > 0) {
+      if (elapsed >= duration_sec) break;
+    } else {
+      if (cycles >= ITERATIONS) break;
+    }
   }
 
   auto end = std::chrono::high_resolution_clock::now();
