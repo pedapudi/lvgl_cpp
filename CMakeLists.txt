@@ -6,6 +6,7 @@ set(SOURCES
     core/style.cpp
     misc/color.cpp
     font/font.cpp
+    font/owned_font.cpp
     misc/file_system.cpp
     core/observer.cpp
     draw/image_decoder.cpp
@@ -252,6 +253,10 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp)
     target_link_libraries(test_fluent_styles PRIVATE lvgl_cpp)
     add_test(NAME test_fluent_styles COMMAND test_fluent_styles)
+
+    add_executable(test_font tests/test_font.cpp font/font.cpp font/owned_font.cpp core/object.cpp misc/timer.cpp)
+    target_link_libraries(test_font PRIVATE lvgl_cpp)
+    add_test(NAME test_font COMMAND test_font)
 
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
