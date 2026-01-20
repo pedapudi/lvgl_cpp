@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../font/font.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -102,6 +103,10 @@ class Stylable {
     lv_obj_set_style_text_font(static_cast<Derived*>(this)->raw(), value,
                                selector);
     return *static_cast<Derived*>(this);
+  }
+
+  Derived& set_text_font(const Font& font, lv_style_selector_t selector = 0) {
+    return set_text_font(font.raw(), selector);
   }
 
   // Image

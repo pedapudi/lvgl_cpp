@@ -61,6 +61,13 @@ int main() {
     lv_color_t text_color = lv_obj_get_style_text_color(obj, LV_PART_MAIN);
     assert(lv_color_to_int(text_color) ==
            lv_color_to_int(lv_color_hex(0x0000FF)));
+
+    // Font (Standardization validaton)
+    if (lvgl::Font::montserrat_14().is_valid()) {
+      btn.set_text_font(lvgl::Font::montserrat_14());
+      const lv_font_t* font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
+      assert(font == lvgl::Font::montserrat_14().raw());
+    }
   }
 
   std::cout << "[SUCCESS] Fluent style setters validated." << std::endl;

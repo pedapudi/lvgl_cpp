@@ -250,7 +250,7 @@ add_test(NAME test_menu COMMAND test_menu)
     add_test(NAME test_callbacks COMMAND test_callbacks)
     add_test(NAME test_input_device COMMAND test_input_device)
 
-    add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp)
+    add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp font/font.cpp)
     target_link_libraries(test_fluent_styles PRIVATE lvgl_cpp)
     add_test(NAME test_fluent_styles COMMAND test_fluent_styles)
 
