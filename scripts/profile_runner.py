@@ -269,8 +269,8 @@ def render_graph_modal(res, idx):
                 <div id="{modal_id}_svg" style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; text-align:center;">
                     {res.heap_graph_svg if has_svg else '<p>No call graph available</p>'}
                 </div>
-                <div id="{modal_id}_flame" style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; display:none;">
-                    <div id="{flamegraph_id}" style="width:100%; height:100%;"></div>
+                <div id="{modal_id}_flame" style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; display:none; min-height:500px;">
+                    <div id="{flamegraph_id}" style="width:100%; min-height:500px;"></div>
                 </div>
                 <p style="margin-top:10px; font-size:0.85rem; color:#64748b;">
                     Call Graph: Nodes show allocated objects. Flamegraph: Click to zoom, hover for details.
@@ -283,9 +283,14 @@ def render_graph_modal(res, idx):
         var flamegraphInit_{flamegraph_id.replace('-', '_')} = false;
         function initFlamegraph_{flamegraph_id.replace('-', '_')}() {{
             if (flamegraphInit_{flamegraph_id.replace('-', '_')} || !flamegraphData_{flamegraph_id.replace('-', '_')}) return;
-            flamegraphInit_{flamegraph_id.replace('-', '_')} = true;
-            var chart = flamegraph().width(document.getElementById('{flamegraph_id}').clientWidth);
-            d3.select('#{flamegraph_id}').datum(flamegraphData_{flamegraph_id.replace('-', '_')}).call(chart);
+            // Delay to allow container to become visible and get proper dimensions
+            setTimeout(function() {{
+                var container = document.getElementById('{flamegraph_id}');
+                var width = container.clientWidth || container.parentElement.clientWidth || 800;
+                flamegraphInit_{flamegraph_id.replace('-', '_')} = true;
+                var chart = flamegraph().width(width).height(400);
+                d3.select('#{flamegraph_id}').datum(flamegraphData_{flamegraph_id.replace('-', '_')}).call(chart);
+            }}, 100);
         }}
     </script>
     """
