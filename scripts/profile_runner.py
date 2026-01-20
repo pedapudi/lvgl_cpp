@@ -290,7 +290,8 @@ def run_stability_test():
     # Calculate simple slope or net change
     start_rss = stability_data["rss"][0] if stability_data["rss"] else 0
     end_rss = stability_data["rss"][-1] if stability_data["rss"] else 0
-    print(f"  Stability Result: Start={start_rss}KB End={end_rss}KB Delta={end_rss - start_rss}KB")
+    stability_data["delta_kb"] = end_rss - start_rss
+    print(f"  Stability Result: Start={start_rss}KB End={end_rss}KB Delta={stability_data['delta_kb']}KB")
 
     return stability_data
 
@@ -385,6 +386,7 @@ def generate_html_report(results, trend_data=None, stability_data=None, filename
     <head>
         <title>LVGL C++ Binding Memory Profile</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
         <style>
             :root {{
                 --primary: #2563eb;
@@ -437,6 +439,29 @@ def generate_html_report(results, trend_data=None, stability_data=None, filename
         <div class="container">
             <h1>LVGL C++ Memory Profile</h1>
             <p class="subtitle">Generated on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+            
+            <!-- Executive Summary -->
+            <div class="card" style="margin-bottom: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h2 style="margin-top:0; color: white;">Executive Summary</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: bold;">{len(results)}</div>
+                        <div style="opacity: 0.8;">Benchmarks Run</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: bold;">{sum(1 for r in results if r.status == 'SUCCESS')}/{len(results)}</div>
+                        <div style="opacity: 0.8;">Passed</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: bold;">{f'{sum(trend_data["overhead_per_obj"])/len(trend_data["overhead_per_obj"])/1024:.2f} KB' if trend_data and trend_data.get('overhead_per_obj') else 'N/A'}</div>
+                        <div style="opacity: 0.8;">Avg Per-Object Overhead</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: bold;">{f'{stability_data["delta_kb"]} KB' if stability_data else 'N/A'}</div>
+                        <div style="opacity: 0.8;">Stability Delta (1k iterations)</div>
+                    </div>
+                </div>
+            </div>
             
             <div class="card" style="margin-bottom: 40px;">
                 <h2 style="margin-top:0;">Performance Overview</h2>
@@ -668,6 +693,29 @@ def generate_html_report(results, trend_data=None, stability_data=None, filename
                         y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Bytes' } },
                         x: { grid: { display: false } }
                     }
+                }
+            });
+            
+            // Initialize svg-pan-zoom on modal SVGs when they become visible
+            document.querySelectorAll('[id^="modal_"]').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+                const svgEl = modal.querySelector('svg');
+                if (svgEl && !svgEl.dataset.panZoomInit) {
+                    svgEl.dataset.panZoomInit = 'true';
+                    svgEl.style.width = '100%';
+                    svgEl.style.height = '100%';
+                    try {
+                        svgPanZoom(svgEl, {
+                            zoomEnabled: true,
+                            controlIconsEnabled: true,
+                            fit: true,
+                            center: true
+                        });
+                    } catch(e) { console.warn('svg-pan-zoom init failed:', e); }
                 }
             });
         </script>
