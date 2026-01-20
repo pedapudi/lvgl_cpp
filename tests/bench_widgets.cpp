@@ -19,9 +19,11 @@
 
 // Include specific widgets
 #include "lvgl_cpp/widgets/arc.h"
+#include "lvgl_cpp/widgets/chart.h"
 #include "lvgl_cpp/widgets/checkbox.h"
 #include "lvgl_cpp/widgets/slider.h"
 #include "lvgl_cpp/widgets/switch.h"
+#include "lvgl_cpp/widgets/table.h"
 #include "lvgl_cpp/widgets/textarea.h"
 
 #define OBJ_COUNT 50
@@ -71,14 +73,33 @@ int main(int argc, char** argv) {
       auto ta = std::make_unique<lvgl::Textarea>(screen.get());
       ta->set_text("Hello");
       obj = std::move(ta);
+    } else if (widget_type == "chart") {
+      auto chart = std::make_unique<lvgl::Chart>(screen.get());
+      chart->set_type(LV_CHART_TYPE_LINE);
+      chart->set_point_count(20);
+      auto s1 =
+          chart->add_series(lv_color_hex(0xFF0000), LV_CHART_AXIS_PRIMARY_Y);
+      for (int j = 0; j < 20; j++) s1.set_next_value(j * 5);
+      obj = std::move(chart);
+    } else if (widget_type == "table") {
+      auto table = std::make_unique<lvgl::Table>(screen.get());
+      table->set_row_count(5).set_column_count(3);
+      table->cell(0, 0).set_value("Header1");
+      table->cell(1, 1).set_value("Data");
+      obj = std::move(table);
     } else {
       std::cerr << "Unknown widget type: " << widget_type << std::endl;
       return 1;
     }
 
     // Use C API for positioning since generic Object wrapper doesn't expose it
+    // Or use the newly verified fluent set_x/y if
+    // Stylable/Positionable/Layoutable is fully integrated? bench_widgets.cpp
+    // includes "lvgl_cpp/core/object.h" but might not have full Mixin
+    // definitions visible unless Widget is fully defined. Let's stick to C API
+    // for positioning to be safe.
     lv_obj_set_pos(obj->raw(), i % 100, i / 100);
-    lv_obj_set_size(obj->raw(), 50, 30);
+    lv_obj_set_size(obj->raw(), 100, 100);
 
     objects.push_back(std::move(obj));
   }
