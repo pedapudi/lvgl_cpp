@@ -45,6 +45,7 @@ class BenchmarkResult:
         }
 
     heap_graph_svg = None
+    flamegraph_data = None
 
 
 def run_cmd(cmd, env=None, capture_output=True):
@@ -174,32 +175,121 @@ def generate_heap_graph(pprof_bin, binary_path, heap_file):
     return None
 
 
-
+def generate_flamegraph_data(pprof_bin, binary_path, heap_file):
+    """Generate flamegraph data in d3-flame-graph JSON format from pprof --collapsed output."""
+    success, out, err = run_cmd(f"{pprof_bin} --collapsed --show_bytes {binary_path} {heap_file}")
+    if not success or not out.strip():
+        return None
+    
+    # Parse collapsed format: "stack;trace;path value"
+    # Build hierarchical JSON for d3-flame-graph
+    root = {"name": "root", "value": 0, "children": []}
+    
+    for line in out.strip().split('\n'):
+        if not line.strip():
+            continue
+        parts = line.rsplit(' ', 1)
+        if len(parts) != 2:
+            continue
+        
+        stack_str, value_str = parts
+        try:
+            value = int(value_str)
+        except ValueError:
+            continue
+        
+        if value <= 0:
+            continue
+        
+        # Split stack by ';'
+        frames = stack_str.split(';')
+        
+        # Traverse/build the tree
+        current = root
+        for frame in frames:
+            # Simplify frame name (remove address suffixes like <0x...>)
+            frame_clean = frame.split('<')[0].strip()
+            if not frame_clean:
+                continue
+            
+            # Find or create child
+            found = None
+            for child in current.get("children", []):
+                if child["name"] == frame_clean:
+                    found = child
+                    break
+            
+            if not found:
+                found = {"name": frame_clean, "value": 0, "children": []}
+                current.setdefault("children", []).append(found)
+            
+            current = found
+        
+        # Add value to leaf
+        current["value"] += value
+    
+    # Calculate totals for intermediate nodes
+    def calc_total(node):
+        if not node.get("children"):
+            return node["value"]
+        child_sum = sum(calc_total(c) for c in node["children"])
+        node["value"] = max(node["value"], child_sum)
+        return node["value"]
+    
+    calc_total(root)
+    
+    return root if root["children"] else None
 
 def render_graph_modal(res, idx):
     if not res or not res.name: return "" 
-    if getattr(res, 'heap_graph_svg', None) is None: return ""
+    has_svg = getattr(res, 'heap_graph_svg', None) is not None
+    has_flamegraph = getattr(res, 'flamegraph_data', None) is not None
+    
+    if not has_svg and not has_flamegraph:
+        return ""
     
     modal_id = f"modal_{idx.replace(' ', '_')}"
+    flamegraph_id = f"flamegraph_{idx.replace(' ', '_')}"
+    
+    flamegraph_json = json.dumps(res.flamegraph_data) if has_flamegraph else "null"
+    
     return f"""
     <div style="margin-top:10px;">
-        <button onclick="document.getElementById('{modal_id}').style.display='block'" class="badge badge-pass" style="cursor:pointer; border:none; background:#3b82f6; color:white;">View Heap Graph</button>
+        <button onclick="document.getElementById('{modal_id}').style.display='block'; initFlamegraph_{flamegraph_id.replace('-', '_')}();" class="badge badge-pass" style="cursor:pointer; border:none; background:#3b82f6; color:white;">View Heap Analysis</button>
         <div id="{modal_id}" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000;">
             <div style="background:white; margin:2% auto; width:95%; height:95%; padding:20px; border-radius:8px; position:relative; display:flex; flex-direction:column;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <h3 style="margin:0;">Heap Call Graph: {res.name}</h3>
+                    <h3 style="margin:0;">Heap Analysis: {res.name}</h3>
                     <span onclick="document.getElementById('{modal_id}').style.display='none'" style="cursor:pointer; font-size:24px; font-weight:bold;">&times;</span>
                 </div>
-                <div style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; text-align:center;">
-                    {res.heap_graph_svg}
+                <div style="margin-bottom:10px;">
+                    <button onclick="document.getElementById('{modal_id}_svg').style.display='block'; document.getElementById('{modal_id}_flame').style.display='none'; this.classList.add('active');" style="padding:8px 16px; cursor:pointer;">Call Graph</button>
+                    <button onclick="document.getElementById('{modal_id}_svg').style.display='none'; document.getElementById('{modal_id}_flame').style.display='block'; this.classList.add('active'); initFlamegraph_{flamegraph_id.replace('-', '_')}();" style="padding:8px 16px; cursor:pointer;">Flamegraph</button>
+                </div>
+                <div id="{modal_id}_svg" style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; text-align:center;">
+                    {res.heap_graph_svg if has_svg else '<p>No call graph available</p>'}
+                </div>
+                <div id="{modal_id}_flame" style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; display:none;">
+                    <div id="{flamegraph_id}" style="width:100%; height:100%;"></div>
                 </div>
                 <p style="margin-top:10px; font-size:0.85rem; color:#64748b;">
-                    Nodes show allocated objects. Edges show references/allocating functions. Larger nodes = more memory.
+                    Call Graph: Nodes show allocated objects. Flamegraph: Click to zoom, hover for details.
                 </p>
             </div>
         </div>
     </div>
+    <script>
+        var flamegraphData_{flamegraph_id.replace('-', '_')} = {flamegraph_json};
+        var flamegraphInit_{flamegraph_id.replace('-', '_')} = false;
+        function initFlamegraph_{flamegraph_id.replace('-', '_')}() {{
+            if (flamegraphInit_{flamegraph_id.replace('-', '_')} || !flamegraphData_{flamegraph_id.replace('-', '_')}) return;
+            flamegraphInit_{flamegraph_id.replace('-', '_')} = true;
+            var chart = flamegraph().width(document.getElementById('{flamegraph_id}').clientWidth);
+            d3.select('#{flamegraph_id}').datum(flamegraphData_{flamegraph_id.replace('-', '_')}).call(chart);
+        }}
+    </script>
     """
+
 def run_trend_analysis():
     print("\n>>> Running Trend Analysis (Linearity check)...")
 
@@ -387,6 +477,9 @@ def generate_html_report(results, trend_data=None, stability_data=None, filename
         <title>LVGL C++ Binding Memory Profile</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
         <style>
             :root {{
                 --primary: #2563eb;
@@ -842,6 +935,7 @@ def main():
                     res_cpp.heap_bytes = get_pprof_heap_bytes(pprof_bin, f"{BUILD_DIR}/{cpp_bin}", heap_file)
 
                     res_cpp.heap_graph_svg = generate_heap_graph(pprof_bin, f"{BUILD_DIR}/{cpp_bin}", heap_file)
+                    res_cpp.flamegraph_data = generate_flamegraph_data(pprof_bin, f"{BUILD_DIR}/{cpp_bin}", heap_file)
 
         else:
             res_cpp.status = "CRASH"
