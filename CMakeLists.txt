@@ -170,6 +170,10 @@ else()
 
 
 
+    add_executable(test_chart_table tests/test_chart_table.cpp)
+    target_link_libraries(test_chart_table PRIVATE lvgl_cpp)
+    add_test(NAME test_chart_table COMMAND test_chart_table)
+
     add_executable(test_input_device tests/test_input_device.cpp)
     target_link_libraries(test_input_device PRIVATE lvgl_cpp)
 
@@ -181,6 +185,9 @@ else()
 
     add_executable(test_enums tests/test_enums.cpp)
     target_link_libraries(test_enums PRIVATE lvgl_cpp)
+    
+    add_executable(test_callbacks tests/test_callbacks.cpp)
+    target_link_libraries(test_callbacks PRIVATE lvgl_cpp)
 
     add_executable(test_screen tests/test_screen.cpp)
     target_link_libraries(test_screen PRIVATE lvgl_cpp)

@@ -26,14 +26,14 @@ void test_chart_1() {
   chart.center();
   chart.set_type(LV_CHART_TYPE_LINE);
 
-  lv_chart_series_t* ser1 = chart.add_series(lv_palette_main(LV_PALETTE_GREEN),
-                                             LV_CHART_AXIS_PRIMARY_Y);
-  lv_chart_series_t* ser2 = chart.add_series(lv_palette_main(LV_PALETTE_RED),
-                                             LV_CHART_AXIS_SECONDARY_Y);
+  ChartSeries ser1 = chart.add_series(lv_palette_main(LV_PALETTE_GREEN),
+                                      LV_CHART_AXIS_PRIMARY_Y);
+  ChartSeries ser2 = chart.add_series(lv_palette_main(LV_PALETTE_RED),
+                                      LV_CHART_AXIS_SECONDARY_Y);
 
   for (int i = 0; i < 10; i++) {
-    chart.set_next_value(ser1, i * 10);
-    chart.set_next_value(ser2, i * 5);
+    ser1.set_next_value(i * 10);
+    ser2.set_next_value(i * 5);
   }
 
   chart.refresh();

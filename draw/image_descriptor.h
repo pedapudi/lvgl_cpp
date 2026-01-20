@@ -59,7 +59,7 @@ class ImageDescriptor {
 
  private:
   lv_image_dsc_t dsc_;
-  std::vector<uint8_t> owned_data_;  // If we own the data
+  uint8_t* owned_data_ = nullptr;  // If we own the data
   bool owns_data_ = false;
 };
 

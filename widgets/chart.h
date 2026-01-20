@@ -20,6 +20,29 @@
  */
 namespace lvgl {
 
+class Chart;  // Forward declaration
+
+/**
+ * @brief Wrapper for a chart series.
+ */
+class ChartSeries {
+ public:
+  ChartSeries(Chart* chart, lv_chart_series_t* series)
+      : chart_(chart), series_(series) {}
+
+  void set_next_value(int32_t value);
+  void set_next_value2(int32_t x_value, int32_t y_value);
+  void set_all_values(int32_t value);
+  void set_color(lv_color_t color);
+  void set_value_by_id(uint32_t id, int32_t value);
+
+  lv_chart_series_t* raw() const { return series_; }
+
+ private:
+  Chart* chart_;
+  lv_chart_series_t* series_;
+};
+
 class Chart : public Widget<Chart> {
  public:
   Chart();
@@ -36,13 +59,9 @@ class Chart : public Widget<Chart> {
   lv_chart_type_t get_type();
   uint32_t get_point_count();
 
-  lv_chart_series_t* add_series(lv_color_t color, lv_chart_axis_t axis);
-  void remove_series(lv_chart_series_t* series);
-  void set_series_color(lv_chart_series_t* series, lv_color_t color);
-  void set_next_value(lv_chart_series_t* series, int32_t value);
-  void set_next_value2(lv_chart_series_t* series, int32_t x_value,
-                       int32_t y_value);
-  void set_all_values(lv_chart_series_t* series, int32_t value);
+  ChartSeries add_series(lv_color_t color, lv_chart_axis_t axis);
+  void remove_series(ChartSeries series);
+  // Removed specific set_series_* methods as they are now in ChartSeries
   void refresh();
 };
 

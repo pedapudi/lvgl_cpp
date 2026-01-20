@@ -50,16 +50,16 @@ void test_table_1() {
   Table table(screen);
 
   // Fill first column
-  table.set_cell_value(0, 0, "Name");
-  table.set_cell_value(1, 0, "Apple");
-  table.set_cell_value(2, 0, "Banana");
-  table.set_cell_value(3, 0, "Lemon");
+  table.cell(0, 0).set_value("Name");
+  table.cell(1, 0).set_value("Apple");
+  table.cell(2, 0).set_value("Banana");
+  table.cell(3, 0).set_value("Lemon");
 
   // Fill second column
-  table.set_cell_value(0, 1, "Price");
-  table.set_cell_value(1, 1, "$7");
-  table.set_cell_value(2, 1, "$4");
-  table.set_cell_value(3, 1, "$6");
+  table.cell(0, 1).set_value("Price");
+  table.cell(1, 1).set_value("$7");
+  table.cell(2, 1).set_value("$4");
+  table.cell(3, 1).set_value("$6");
 
   table.set_height(200);
   table.center();

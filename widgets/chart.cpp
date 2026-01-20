@@ -4,6 +4,40 @@
 
 namespace lvgl {
 
+// --- ChartSeries ---
+
+void ChartSeries::set_next_value(int32_t value) {
+  if (chart_ && chart_->raw() && series_) {
+    lv_chart_set_next_value(chart_->raw(), series_, value);
+  }
+}
+
+void ChartSeries::set_next_value2(int32_t x_value, int32_t y_value) {
+  if (chart_ && chart_->raw() && series_) {
+    lv_chart_set_next_value2(chart_->raw(), series_, x_value, y_value);
+  }
+}
+
+void ChartSeries::set_all_values(int32_t value) {
+  if (chart_ && chart_->raw() && series_) {
+    lv_chart_set_all_values(chart_->raw(), series_, value);
+  }
+}
+
+void ChartSeries::set_color(lv_color_t color) {
+  if (chart_ && chart_->raw() && series_) {
+    lv_chart_set_series_color(chart_->raw(), series_, color);
+  }
+}
+
+void ChartSeries::set_value_by_id(uint32_t id, int32_t value) {
+  if (chart_ && chart_->raw() && series_) {
+    lv_chart_set_series_value_by_id(chart_->raw(), series_, id, value);
+  }
+}
+
+// --- Chart ---
+
 Chart::Chart() : Chart(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
 Chart::Chart(Object* parent, Ownership ownership)
@@ -46,29 +80,17 @@ uint32_t Chart::get_point_count() {
   return obj_ ? lv_chart_get_point_count(obj_) : 0;
 }
 
-lv_chart_series_t* Chart::add_series(lv_color_t color, lv_chart_axis_t axis) {
-  return obj_ ? lv_chart_add_series(obj_, color, axis) : nullptr;
+ChartSeries Chart::add_series(lv_color_t color, lv_chart_axis_t axis) {
+  if (obj_) {
+    return ChartSeries(this, lv_chart_add_series(obj_, color, axis));
+  }
+  return ChartSeries(this, nullptr);
 }
 
-void Chart::remove_series(lv_chart_series_t* series) {
-  if (obj_) lv_chart_remove_series(obj_, series);
-}
-
-void Chart::set_series_color(lv_chart_series_t* series, lv_color_t color) {
-  if (obj_) lv_chart_set_series_color(obj_, series, color);
-}
-
-void Chart::set_next_value(lv_chart_series_t* series, int32_t value) {
-  if (obj_) lv_chart_set_next_value(obj_, series, value);
-}
-
-void Chart::set_next_value2(lv_chart_series_t* series, int32_t x_value,
-                            int32_t y_value) {
-  if (obj_) lv_chart_set_next_value2(obj_, series, x_value, y_value);
-}
-
-void Chart::set_all_values(lv_chart_series_t* series, int32_t value) {
-  if (obj_) lv_chart_set_all_values(obj_, series, value);
+void Chart::remove_series(ChartSeries series) {
+  if (obj_ && series.raw()) {
+    lv_chart_remove_series(obj_, series.raw());
+  }
 }
 
 void Chart::refresh() {
