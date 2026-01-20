@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "../../misc/enums.h"
+#include "../misc/enums.h"
 #include "lvgl.h"      // IWYU pragma: export
 #include "textarea.h"  // IWYU pragma: export
 
