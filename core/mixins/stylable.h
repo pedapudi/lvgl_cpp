@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../font/font.h"
+#include "../../misc/enums.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -38,6 +39,9 @@ class Stylable {
                             selector);
     return *static_cast<Derived*>(this);
   }
+  Derived& set_bg_opa(Opacity value, lv_style_selector_t selector = 0) {
+    return set_bg_opa(static_cast<lv_opa_t>(value), selector);
+  }
 
   // Border
   Derived& set_border_width(int32_t value, lv_style_selector_t selector = 0) {
@@ -56,11 +60,18 @@ class Stylable {
                                 selector);
     return *static_cast<Derived*>(this);
   }
+  Derived& set_border_opa(Opacity value, lv_style_selector_t selector = 0) {
+    return set_border_opa(static_cast<lv_opa_t>(value), selector);
+  }
+
   Derived& set_border_side(lv_border_side_t value,
                            lv_style_selector_t selector = 0) {
     lv_obj_set_style_border_side(static_cast<Derived*>(this)->raw(), value,
                                  selector);
     return *static_cast<Derived*>(this);
+  }
+  Derived& set_border_side(BorderSide value, lv_style_selector_t selector = 0) {
+    return set_border_side(static_cast<lv_border_side_t>(value), selector);
   }
 
   // Outline
@@ -93,11 +104,19 @@ class Stylable {
                                 selector);
     return *static_cast<Derived*>(this);
   }
+  Derived& set_text_align(TextAlign value, lv_style_selector_t selector = 0) {
+    return set_text_align(static_cast<lv_text_align_t>(value), selector);
+  }
+
   Derived& set_text_opa(lv_opa_t value, lv_style_selector_t selector = 0) {
     lv_obj_set_style_text_opa(static_cast<Derived*>(this)->raw(), value,
                               selector);
     return *static_cast<Derived*>(this);
   }
+  Derived& set_text_opa(Opacity value, lv_style_selector_t selector = 0) {
+    return set_text_opa(static_cast<lv_opa_t>(value), selector);
+  }
+
   Derived& set_text_font(const lv_font_t* value,
                          lv_style_selector_t selector = 0) {
     lv_obj_set_style_text_font(static_cast<Derived*>(this)->raw(), value,
@@ -121,6 +140,10 @@ class Stylable {
     lv_obj_set_style_image_recolor_opa(static_cast<Derived*>(this)->raw(),
                                        value, selector);
     return *static_cast<Derived*>(this);
+  }
+  Derived& set_image_recolor_opa(Opacity value,
+                                 lv_style_selector_t selector = 0) {
+    return set_image_recolor_opa(static_cast<lv_opa_t>(value), selector);
   }
 
   // Geometry / Padding

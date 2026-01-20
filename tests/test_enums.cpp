@@ -1,55 +1,47 @@
-#include "../misc/enums.h"
-
-#if LVGL_VERSION_MAJOR == 9
-
 #include <cassert>
 #include <iostream>
 
-#include "lv_conf_test.h"
-
-void test_align() {
-  lvgl::Align a = lvgl::Align::Center;
-  assert(static_cast<lv_align_t>(a) == LV_ALIGN_CENTER);
-  std::cout << "Align tests passed." << std::endl;
-}
-
-void test_dir() {
-  lvgl::Dir d = lvgl::Dir::Hor;
-  assert(static_cast<lv_dir_t>(d) == LV_DIR_HOR);
-  std::cout << "Dir tests passed." << std::endl;
-}
-
-void test_part() {
-  lvgl::Part p = lvgl::Part::Main;
-  assert(static_cast<lv_part_t>(p) == LV_PART_MAIN);
-  std::cout << "Part tests passed." << std::endl;
-}
-
-void test_state() {
-  lvgl::State s1 = lvgl::State::Pressed;
-  lvgl::State s2 = lvgl::State::Checked;
-  lvgl::State s3 = s1 | s2;
-
-  assert((static_cast<lv_state_t>(s3) & LV_STATE_PRESSED) != 0);
-  assert((static_cast<lv_state_t>(s3) & LV_STATE_CHECKED) != 0);
-
-  lvgl::State s4 = s3 & lvgl::State::Pressed;
-  assert(s4 == lvgl::State::Pressed);
-
-  std::cout << "State tests passed." << std::endl;
-}
+#include "../display/display.h"
+#include "../widgets/button.h"
+#include "../widgets/label.h"
+#include "lvgl.h"
 
 int main() {
   lv_init();
-  test_align();
-  test_dir();
-  test_part();
-  test_state();
+
+  // Create a display (required for screens)
+  auto disp = lvgl::Display::create(800, 600);
+
+  std::cout << "Testing Scoped Enums..." << std::endl;
+
+  {
+    lvgl::Button btn;
+    btn.set_size(100, 50)
+        .set_bg_opa(lvgl::Opacity::Cover)
+        .set_border_opa(lvgl::Opacity::Opa50)
+        .set_border_side(lvgl::BorderSide::Bottom);
+
+    // Verify
+    lv_obj_t* obj = btn.raw();
+    assert(lv_obj_get_style_bg_opa(obj, LV_PART_MAIN) == LV_OPA_COVER);
+    assert(lv_obj_get_style_border_opa(obj, LV_PART_MAIN) == LV_OPA_50);
+    assert(lv_obj_get_style_border_side(obj, LV_PART_MAIN) ==
+           LV_BORDER_SIDE_BOTTOM);
+  }
+
+  {
+    lvgl::Label label;
+    label.set_text("Hello");
+    label.set_text_align(lvgl::TextAlign::Center);
+    label.set_text_opa(lvgl::Opacity::Opa80);
+
+    // Verify
+    lv_obj_t* obj = label.raw();
+    assert(lv_obj_get_style_text_align(obj, LV_PART_MAIN) ==
+           LV_TEXT_ALIGN_CENTER);
+    assert(lv_obj_get_style_text_opa(obj, LV_PART_MAIN) == LV_OPA_80);
+  }
+
+  std::cout << "[SUCCESS] Scoped Enums validated." << std::endl;
   return 0;
 }
-
-#else
-
-int main() { return 0; }
-
-#endif

@@ -106,6 +106,58 @@ inline State& operator&=(State& lhs, State rhs) {
   return lhs;
 }
 
+/**
+ * @brief Wrapper for lv_opa_t.
+ */
+enum class Opacity : lv_opa_t {
+  Transparent = LV_OPA_TRANSP,
+  Opa0 = LV_OPA_0,
+  Opa10 = LV_OPA_10,
+  Opa20 = LV_OPA_20,
+  Opa30 = LV_OPA_30,
+  Opa40 = LV_OPA_40,
+  Opa50 = LV_OPA_50,
+  Opa60 = LV_OPA_60,
+  Opa70 = LV_OPA_70,
+  Opa80 = LV_OPA_80,
+  Opa90 = LV_OPA_90,
+  Opa100 = LV_OPA_100,
+  Cover = LV_OPA_COVER,
+};
+
+/**
+ * @brief Wrapper for lv_text_align_t.
+ */
+enum class TextAlign : uint8_t {
+  Auto = LV_TEXT_ALIGN_AUTO,
+  Left = LV_TEXT_ALIGN_LEFT,
+  Center = LV_TEXT_ALIGN_CENTER,
+  Right = LV_TEXT_ALIGN_RIGHT,
+};
+
+/**
+ * @brief Wrapper for lv_border_side_t.
+ */
+enum class BorderSide : uint8_t {
+  None = LV_BORDER_SIDE_NONE,
+  Bottom = LV_BORDER_SIDE_BOTTOM,
+  Top = LV_BORDER_SIDE_TOP,
+  Left = LV_BORDER_SIDE_LEFT,
+  Right = LV_BORDER_SIDE_RIGHT,
+  Full = LV_BORDER_SIDE_FULL,
+  Internal = LV_BORDER_SIDE_INTERNAL,
+};
+
+/**
+ * @brief Wrapper for lv_blend_mode_t.
+ */
+enum class BlendMode : uint8_t {
+  Normal = LV_BLEND_MODE_NORMAL,
+  Additive = LV_BLEND_MODE_ADDITIVE,
+  Subtractive = LV_BLEND_MODE_SUBTRACTIVE,
+  Multiply = LV_BLEND_MODE_MULTIPLY,
+};
+
 }  // namespace lvgl
 
 #endif  // LVGL_CPP_MISC_ENUMS_H_
