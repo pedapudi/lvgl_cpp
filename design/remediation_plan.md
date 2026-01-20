@@ -17,25 +17,24 @@ This document outlines a comprehensive plan to address current open issues in `l
 **Goal**: Transition from "Experimental" to "Standard Operating Procedure".
 
 - **Issue #80 (Churn Stability)**
-  - **Gap**: `bench_churn` exists but runs for a fixed duration.
-  - **Plan**: Create a `long_soak` CMake target that runs `bench_churn` for extended periods (e.g., 1 hour) with aggressive memory limits.
+  - **Resolution**: Implemented `bench_soak` custom target and `--duration` support in `bench_churn` (PR #89).
+  - **Action**: Run nightly soak tests.
 
 - **Issues #78 (Widget Coverage) & #77 (Trendlines)**
-  - **Gap**: Current tests cover major widgets. Need a systematic audit to ensure *every* widget type is instantiated in the churn test.
-  - **Plan**: Update `bench_churn.c` to iterate through a registry of all widget creation functions.
+  - **Resolution**: `bench_widgets` expanded to cover complex widgets (`Chart`, `Table` etc) in PR #87.
+  - **Action**: Monitor stability.
 
 ## 3. API Ergonomics & Completeness
 **Status**: Fluent API is popular but inconsistent (#83). Font handling is primitive (#65).
 **Goal**: Make the C++ wrapper usage seamless and idiomatic.
 
 - **Issue #83 (Fluent Style Setters)**
-  - **Problem**: Users have to grab `Style` objects for simple tweaks.
-  - **Solution**: Implement "Mixin" pattern for common style properties (e.g., `Stylable<T>`).
-  - **Action**: Design `core/mixins/fluent_style.h` to autogenerate fluent setters for `set_bg_color`, `set_pad_all`, etc., for any widget.
+  - **Resolution**: Implemented `Stylable<T>` mixin in `core/mixins/stylable.h`.
+  - **Status**: **Resolved** in PR #85.
 
 - **Issue #65 (OwnedFont)**
-  - **Problem**: Raw `lv_font_t*` usage is unsafe and lacks lifecycle management.
-  - **Solution**: Create `Font` class with `load/unload` capabilities and `freetype` integration hooks.
+  - **Resolution**: Created `OwnedFont` RAII wrapper and `Font` view.
+  - **Status**: **Resolved** in PR #86.
 
 ## 4. Systemic Quality Assurance
 **Status**: Unit tests are robust (`test_header_integrity` added).
@@ -52,10 +51,10 @@ This document outlines a comprehensive plan to address current open issues in `l
 - Close #66, #67, #74, #75, #81, #82 (Done via merge).
 - Review #80, #79 against `profiling-v2` capabilities.
 
-### Phase 2: Core Features (Short Term)
-- Implement `FluentStyle` mixin (#83).
-- Implement `Font` wrapper (#65).
+### Phase 2: Core Features (Completed)
+- [x] Implement `FluentStyle` mixin (#83).
+- [x] Implement `Font` wrapper (#65).
 
-### Phase 3: Stability Hardening (Medium Term)
-- Implement `bench_soak` target.
-- Expand `bench_churn` coverage.
+### Phase 3: Stability Hardening (Completed)
+- [x] Implement `bench_soak` target (#80).
+- [x] Expand `bench_churn` coverage (#78).
