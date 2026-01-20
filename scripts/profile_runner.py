@@ -140,8 +140,13 @@ def generate_heap_graph(pprof_bin, binary_path, heap_file):
     # Try pprof --svg
     success, out, err = run_cmd(f"{pprof_bin} --svg --show_bytes {binary_path} {heap_file}")
     if success and "<svg" in out:
+        # Strip width/height to make it responsive
+        import re
+        out = re.sub(r'width="[^"]+"', '', out, count=1)
+        out = re.sub(r'height="[^"]+"', '', out, count=1)
         return out
     return None
+
 
 
 def render_graph_modal(res, idx):
