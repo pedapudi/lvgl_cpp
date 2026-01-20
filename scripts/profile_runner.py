@@ -140,12 +140,39 @@ def generate_heap_graph(pprof_bin, binary_path, heap_file):
     # Try pprof --svg
     success, out, err = run_cmd(f"{pprof_bin} --svg --show_bytes {binary_path} {heap_file}")
     if success and "<svg" in out:
-        # Strip width/height to make it responsive
+        # Pprof outputs 100% width/height which creates tiny graphs in modals.
+        # We need to extract the actual bounding box and set explicit dimensions to allow scrolling.
         import re
-        out = re.sub(r'width="[^"]+"', '', out, count=1)
-        out = re.sub(r'height="[^"]+"', '', out, count=1)
+        
+        # 1. Parse background polygon to get dimensions from the FIRST polygon (background)
+        # It usually looks like: <polygon fill="white" ... points="-4,4 -4,-1430 ..."/>
+        poly_match = re.search(r'<polygon [^>]*points="([^"]+)"', out)
+        if poly_match:
+            try:
+                pts = poly_match.group(1).strip().split()
+                xs = []
+                ys = []
+                for p in pts:
+                    if ',' in p:
+                        x, y = map(float, p.split(','))
+                        xs.append(x)
+                        ys.append(y)
+                
+                if xs and ys:
+                    width = max(xs) - min(xs)
+                    height = max(ys) - min(ys)
+                    
+                    # 2. Replace 100% with calculated dimensions (in pt)
+                    out = re.sub(r'width="[^"]+"', f'width="{width}pt"', out, count=1)
+                    out = re.sub(r'height="[^"]+"', f'height="{height}pt"', out, count=1)
+            except Exception as e:
+                print(f"[!] Clean SVG failed: {e}")
+                # Fallback: keep original or strip? If we fail, original 100% is better than broken.
+                pass
+        
         return out
     return None
+
 
 
 
