@@ -13,3 +13,6 @@ compile_commands.json
 
 # Profiling Reports
 memory_report.html
+
+# Agent Configuration
+.agent/
