@@ -16,6 +16,11 @@ BENCHMARKS = [
     ("bench_events_c", "bench_events"),
     ("bench_churn_c", "bench_churn"),
     ("bench_fragmentation_c", "bench_fragmentation"),
+    ("bench_widgets_c slider", "bench_widgets slider"),
+    ("bench_widgets_c switch", "bench_widgets switch"),
+    ("bench_widgets_c checkbox", "bench_widgets checkbox"),
+    ("bench_widgets_c textarea", "bench_widgets textarea"),
+    ("bench_widgets_c arc", "bench_widgets arc"),
 ]
 
 class BenchmarkResult:
@@ -38,6 +43,9 @@ class BenchmarkResult:
             "status": self.status,
             "error_msg": self.error_msg
         }
+
+    heap_graph_svg = None
+
 
 def run_cmd(cmd, env=None, capture_output=True):
     try:
@@ -92,7 +100,7 @@ def get_heap_file(prefix):
     except OSError:
         return None
 
-def get_pprof_heap_bytes(binary_path, heap_file):
+def get_pprof_heap_bytes(pprof_bin, binary_path, heap_file):
     if not heap_file or not os.path.exists(heap_file):
         return 0
     
@@ -105,7 +113,8 @@ def get_pprof_heap_bytes(binary_path, heap_file):
     # pprof doesn't always support --bytes in all versions.
     # Standard: "Total: 10.5 MB"
     
-    success, out, err = run_cmd(f"pprof --text {binary_path} {heap_file} | head -n 1")
+    success, out, err = run_cmd(f"{pprof_bin} --text --show_bytes {binary_path} {heap_file} | head -n 1")
+
     if success and "Total:" in out:
         # Example: "Total: 1024.0 B" or "Total: 1.5 MB"
         try:
@@ -126,7 +135,134 @@ def get_pprof_heap_bytes(binary_path, heap_file):
             pass
     return 0
 
-def generate_html_report(results, filename="memory_report.html"):
+def generate_heap_graph(pprof_bin, binary_path, heap_file):
+    # Generates SVG call graph and returns it as a string
+    # Try pprof --svg
+    success, out, err = run_cmd(f"{pprof_bin} --svg --show_bytes {binary_path} {heap_file}")
+    if success and "<svg" in out:
+        return out
+    return None
+
+
+def render_graph_modal(res, idx):
+    if not res or not res.name: return "" 
+    if getattr(res, 'heap_graph_svg', None) is None: return ""
+    
+    modal_id = f"modal_{idx.replace(' ', '_')}"
+    return f"""
+    <div style="margin-top:10px;">
+        <button onclick="document.getElementById('{modal_id}').style.display='block'" class="badge badge-pass" style="cursor:pointer; border:none; background:#3b82f6; color:white;">View Heap Graph</button>
+        <div id="{modal_id}" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000;">
+            <div style="background:white; margin:2% auto; width:95%; height:95%; padding:20px; border-radius:8px; position:relative; display:flex; flex-direction:column;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h3 style="margin:0;">Heap Call Graph: {res.name}</h3>
+                    <span onclick="document.getElementById('{modal_id}').style.display='none'" style="cursor:pointer; font-size:24px; font-weight:bold;">&times;</span>
+                </div>
+                <div style="flex-grow:1; overflow:auto; border:1px solid #ccc; background:#f8fafc; text-align:center;">
+                    {res.heap_graph_svg}
+                </div>
+                <p style="margin-top:10px; font-size:0.85rem; color:#64748b;">
+                    Nodes show allocated objects. Edges show references/allocating functions. Larger nodes = more memory.
+                </p>
+            </div>
+        </div>
+    </div>
+    """
+def run_trend_analysis():
+    print("\n>>> Running Trend Analysis (Linearity check)...")
+
+    counts = list(range(1, 17)) + list(range(18, 33, 2))
+    trend_data = {
+        "counts": counts,
+        "c_rss": [],
+        "cpp_rss": [],
+        "overhead_per_obj": []
+    }
+    
+    # Pre-warm or cleanup
+    # Safer to just use subprocess directly as run_cmd is defined in this file
+    subprocess.run("rm -f /tmp/bench_baseline*", shell=True)
+
+    for n in counts:
+        # Run C
+        res_c = BenchmarkResult(f"baseline_c_{n}", "c")
+        env = {
+            "HEAPPROFILE": f"/tmp/bench_baseline_c_{n}",
+            "TCMALLOC_SAMPLE_PARAMETER": "1"
+        }
+
+        success, out, _ = run_cmd(f"./{BUILD_DIR}/bench_baseline_c {n}", env=env)
+        if success:
+            parse_metrics(out, res_c)
+            trend_data["c_rss"].append(res_c.rss_kb)
+        else:
+            trend_data["c_rss"].append(0)
+
+        # Run C++
+        res_cpp = BenchmarkResult(f"baseline_cpp_{n}", "cpp")
+        env = {
+            "HEAPPROFILE": f"/tmp/bench_baseline_cpp_{n}",
+            "TCMALLOC_SAMPLE_PARAMETER": "1"
+        }
+
+        success, out, _ = run_cmd(f"./{BUILD_DIR}/bench_baseline {n}", env=env)
+        if success:
+            parse_metrics(out, res_cpp)
+            trend_data["cpp_rss"].append(res_cpp.rss_kb)
+        else:
+            trend_data["cpp_rss"].append(0)
+            
+        # Calculate overhead
+        if trend_data["c_rss"][-1] > 0 and trend_data["cpp_rss"][-1] > 0:
+            diff = (trend_data["cpp_rss"][-1] - trend_data["c_rss"][-1]) * 1024 # bytes
+            trend_data["overhead_per_obj"].append(diff / n)
+        else:
+           trend_data["overhead_per_obj"].append(0)
+           
+        print(f"  N={n}: C={trend_data['c_rss'][-1]}KB CPP={trend_data['cpp_rss'][-1]}KB")
+
+    return trend_data
+
+def run_stability_test():
+    print("\n>>> Running Stability Test (Issue #80)...")
+    
+    # Run benchmark and capture output live or post-process
+    # Since it might take time, just capture standard output
+    env = {} 
+    # Use different heap profile? Or none, just RSS.
+    # HEAPPROFILE might be too heavy for 100 iterations depending on sampling.
+    # We rely on RSS reported by the benchmark itself.
+    
+    success, out, err = run_cmd(f"./{BUILD_DIR}/bench_churn_stability", env=env)
+    
+    stability_data = {
+        "iters": [],
+        "rss": []
+    }
+
+    if success:
+        for line in out.splitlines():
+            if "METRIC_STABILITY:" in line:
+                # METRIC_STABILITY: ITER=50 RSS=1234
+                try:
+                    parts = line.split(":")
+                    kv_parts = parts[1].strip().split()
+                    iter_val = int(kv_parts[0].split("=")[1])
+                    rss_val = int(kv_parts[1].split("=")[1])
+                    
+                    stability_data["iters"].append(iter_val)
+                    stability_data["rss"].append(rss_val)
+                except:
+                    pass
+    
+    # Calculate simple slope or net change
+    start_rss = stability_data["rss"][0] if stability_data["rss"] else 0
+    end_rss = stability_data["rss"][-1] if stability_data["rss"] else 0
+    print(f"  Stability Result: Start={start_rss}KB End={end_rss}KB Delta={end_rss - start_rss}KB")
+
+    return stability_data
+
+def generate_html_report(results, trend_data=None, stability_data=None, filename="memory_report.html"):
     # Structuring data for Chart.js
     labels = []
     
@@ -150,12 +286,33 @@ def generate_html_report(results, filename="memory_report.html"):
         if base_name == "bench": base_name = "Baseline" # fix for bench_baseline -> Baseline
         
         # Cleaner logic
+        # For widget benchmarks like "bench_widgets_c_slider", we need robust parsing
+        # But we replaced " " with "_" in the loop
+        
+        # This parsing logic is a bit brittle if names contain multiple underscores.
+        # But our names maximize 2 segments or 3.
+        # bench_widgets_c_slider -> key=widgets_slider?
+        
+        # Current logic:
+        # if "_c" in res.name: key = remove "bench_" remove "_c"
+        # "bench_widgets_c_slider" -> "widgets_slider"
+        
         if "_c" in res.name:
-            key = res.name.replace("bench_", "").replace("_c", "")
+            key = res.name.replace("bench_", "").replace("_c", "").replace("__", "_")
             if key not in bench_data: bench_data[key] = {}
             bench_data[key]["c"] = res
         else:
-            key = res.name.replace("bench_", "").replace("_cpp", "")
+            key = res.name.replace("bench_", "").replace("_cpp", "").replace("__", "_")
+            # For C++, "bench_widgets_cpp_slider" (no, it was "bench_widgets_slider" if using cpp_name)
+            
+            # Wait, in the loop: 
+            # c_name = "bench_widgets_c_slider" (bench_widgets_c slider -> replace space)
+            # cpp_name = "bench_widgets_slider" (bench_widgets slider -> replace space)
+            
+            # So key extraction:
+            # c: "widgets_slider"
+            # cpp: "widgets_slider"
+            
             if key not in bench_data: bench_data[key] = {}
             bench_data[key]["cpp"] = res
 
@@ -163,7 +320,7 @@ def generate_html_report(results, filename="memory_report.html"):
     sorted_keys = sorted(bench_data.keys())
     
     for key in sorted_keys:
-        labels.append(key.capitalize())
+        labels.append(key.capitalize().replace("_", " "))
         pair = bench_data[key]
         
         c_res = pair.get("c")
@@ -179,35 +336,15 @@ def generate_html_report(results, filename="memory_report.html"):
         heap_cpp.append(cpp_res.heap_bytes if cpp_res else 0)
 
     bench_descriptions = {
-        "Baseline": """
-            <strong>Objective:</strong> Measure the fixed overhead of creating static LVGL objects via C++ wrappers.<br>
-            <strong>Methodology:</strong> The test creates <strong>50</strong> <code>lvgl::Button</code> objects. Each button is wrapped in a <code>std::unique_ptr</code>, positioned, and sized. 
-            This validates the baseline cost of the C++ class hierarchy, vtable overhead, and RAII container usage.<br>
-            <strong>Comparison:</strong> Compares against equivalent C code calling <code>lv_button_create</code>, <code>lv_obj_set_pos</code>, and <code>lv_obj_set_size</code> directly.
-        """,
-        "Events": """
-            <strong>Objective:</strong> Measure the overhead of the C++ event dispatch mechanism, specifically <code>std::function</code> storage and lambda copying.<br>
-            <strong>Methodology:</strong> Creates <strong>50</strong> <code>lvgl::Button</code> objects and attaches a C++ lambda callback to each user <code>add_event_cb</code>. 
-            The lambda is stateless but exercises the type-erasure mechanics of <code>std::function&lt;void(lvgl::Event&)&gt;</code>.<br>
-            <strong>Comparison:</strong> Compares against C code attaching a static C function pointer <code>event_cb</code> via <code>lv_obj_add_event_cb</code>.
-        """,
-        "Churn": """
-            <strong>Objective:</strong> Detect slow memory leaks or fragmentation over repeated create/destroy cycles.<br>
-            <strong>Methodology:</strong> Runs <strong>100 cycles</strong>. In each cycle, it creates a <code>lvgl::Screen</code>, populates it with <strong>20</strong> <code>lvgl::Button</code> objects (each with a lambda callback), 
-            processes events via <code>lv_timer_handler</code>, and then destroys the screen. This tests the destructors and parent-child cleanup mechanisms.<br>
-            <strong>Scale:</strong> 2,000 total allocations/deallocations.<br>
-            <strong>Comparison:</strong> Compares against C code performing the exact same create/destroy cycle logic.
-        """,
-        "Fragmentation": """
-            <strong>Objective:</strong> Stress the heap allocator with randomized allocation patterns to measure fragmentation overhead from C++ closures.<br>
-            <strong>Methodology:</strong> Runs <strong>50 iterations</strong> with an inner loop of 50 operations. Operations are randomized:
-            <ul>
-                <li><strong>Alloc (33%):</strong> Creates a button and attaches a lambda capturing a 64-byte struct <code>CaptureState</code>.</li>
-                <li><strong>Free (33%):</strong> Deletes a random existing button (and its closure).</li>
-                <li><strong>No-op (33%):</strong> Idle.</li>
-            </ul>
-            <strong>Comparison:</strong> Compares against C code creating buttons with standard C callbacks (no capture context), highlighting the specific cost of stateful C++ closures.
-        """
+        "Baseline": "<b>Objective:</b> Measure the fixed overhead of the `lvgl::Object` C++ wrapper.<br><b>Methodology:</b> Creates 50 generic objects (Buttons) parented to the active screen. Compares raw C `lv_button_create` vs C++ `std::make_unique<lvgl::Button>`.<br><b>Insight:</b> Demonstrates the cost of the C++ smart pointer and wrapper allocation.",
+        "Events": "<b>Objective:</b> Measure the overhead of the C++ event dispatch system.<br><b>Methodology:</b> Registers a C++ `std::function` callback vs a raw C function pointer. Triggers `LV_EVENT_CLICKED` 50 times.<br><b>Insight:</b> Validates the efficiency of `lvgl::Object::add_event_cb` and the proxy mechanism.",
+        "Churn": "<b>Objective:</b> Stress-test memory stability during rapid creation/destruction.<br><b>Methodology:</b> Creates and destroys a Screen filled with 20 buttons, repeated 100 times.<br><b>Insight:</b> Detects memory leaks or fragmentation issues in the wrapper's lifecycle management.",
+        "Fragmentation": "<b>Objective:</b> Simulate real-world usage with mixed allocations.<br><b>Methodology:</b> Creates objects with varying lifecycles and captures (lambdas), forcing non-monotonic heap usage.<br><b>Insight:</b> Checks for heap fragmentation that might not appear in simple linear benchmarks.",
+        "Widgets slider": "<b>Widget:</b> Slider<br><b>Complexity:</b> Low (Bar + Knob)<br><b>Test:</b> Creation overhead of `lvgl::Slider`.",
+        "Widgets switch": "<b>Widget:</b> Switch<br><b>Complexity:</b> Low (Rect + Circle)<br><b>Test:</b> Creation overhead of `lvgl::Switch`.",
+        "Widgets checkbox": "<b>Widget:</b> Checkbox<br><b>Complexity:</b> Medium (Label + Indicator)<br><b>Test:</b> Creation overhead of `lvgl::Checkbox`.",
+        "Widgets textarea": "<b>Widget:</b> Textarea<br><b>Complexity:</b> High (Label + Cursor + Background + Scroll)<br><b>Test:</b> Creation overhead of `lvgl::Textarea` (includes font rendering).",
+        "Widgets arc": "<b>Widget:</b> Arc<br><b>Complexity:</b> Medium (Arc drawing)<br><b>Test:</b> Creation overhead of `lvgl::Arc`."
     }
 
     html_content = f"""
@@ -289,7 +426,11 @@ def generate_html_report(results, filename="memory_report.html"):
         c_res = pair.get('c')
         cpp_res = pair.get('cpp')
         
-        desc = bench_descriptions.get(key.capitalize(), "No description available.")
+        # Friendly lookup description
+        lookup_key = key.capitalize().replace("_", " ")
+        # "Widgets slider" matches
+        
+        desc = bench_descriptions.get(lookup_key, "Benchmark measurements.")
         
         # Helper to render stat box
         def render_stat_box(res, title, extra_class=""):
@@ -310,20 +451,54 @@ def generate_html_report(results, filename="memory_report.html"):
         html_content += f"""
                 <div class="benchmark-card">
                     <div class="benchmark-header">
-                        <h2>{key}</h2>
+                        <h2>{key.replace("_", " ").title()}</h2>
                     </div>
                     <div class="benchmark-content">
                         <div class="benchmark-desc">
                             {desc}
                         </div>
                         <div class="benchmark-stats">
-                            {render_stat_box(c_res, "C Baseline")}
-                            {render_stat_box(cpp_res, "C++ Wrapper", "cpp")}
+                            <div class="stat-wrapper">
+                                {render_stat_box(c_res, "C Baseline")}
+                            </div>
+                            <div class="stat-wrapper">
+                                {render_stat_box(cpp_res, "C++ Wrapper", "cpp")}
+                                {render_graph_modal(cpp_res, key)}
+                            </div>
                         </div>
                     </div>
                 </div>
         """
     
+    # Add Trend Section
+    if trend_data:
+        html_content += """
+        <div class="card" style="margin-top: 40px;">
+            <h2 style="margin-top:0;">Memory Growth Trend (Issue #77)</h2>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+            <p style="text-align:center; color:#64748b; margin-top:10px;">
+                Measures RSS growth as object count increases from 1 to 32. 
+                Slope indicates per-object overhead.
+            </p>
+        </div>
+        """
+
+    # Add Stability Section
+    if stability_data and len(stability_data["iters"]) > 0:
+        html_content += """
+        <div class="card" style="margin-top: 40px;">
+            <h2 style="margin-top:0;">Long-running Stability (Issue #80)</h2>
+            <div class="chart-container">
+                <canvas id="stabilityChart"></canvas>
+            </div>
+            <p style="text-align:center; color:#64748b; margin-top:10px;">
+                RSS Usage over 1000 iterations of screen churn. Flat line indicates no leaks.
+            </p>
+        </div>
+        """
+
     html_content += """
             </div>
         </div>
@@ -332,7 +507,68 @@ def generate_html_report(results, filename="memory_report.html"):
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.color = '#64748b';
             
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+            
             const labels = """ + json.dumps(labels) + """;
+            
+            // Trend Data
+            const trendCounts = """ + (json.dumps(trend_data["counts"]) if trend_data else "[]") + """;
+            const trendCRss = """ + (json.dumps(trend_data["c_rss"]) if trend_data else "[]") + """;
+            const trendCppRss = """ + (json.dumps(trend_data["cpp_rss"]) if trend_data else "[]") + """;
+            
+            // Stability Data
+            const stableIters = """ + (json.dumps(stability_data["iters"]) if stability_data else "[]") + """;
+            const stableRss = """ + (json.dumps(stability_data["rss"]) if stability_data else "[]") + """;
+
+            if (stableIters.length > 0) {
+                 new Chart(document.getElementById('stabilityChart'), {
+                    type: 'line',
+                    data: {
+                        labels: stableIters,
+                        datasets: [
+                            { label: 'RSS (KB)', data: stableRss, borderColor: '#16a34a', backgroundColor: '#16a34a', tension: 0.1, fill: false }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: { display: true, text: 'Stability Check (RSS vs Iterations)' },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: {
+                            y: { title: { display: true, text: 'KB' } },
+                            x: { title: { display: true, text: 'Iteration' } }
+                        }
+                    }
+                });
+            }
+
+            if (trendCounts.length > 0) {
+                new Chart(document.getElementById('trendChart'), {
+                    type: 'line',
+                    data: {
+                        labels: trendCounts,
+                        datasets: [
+                            { label: 'C Baseline RSS', data: trendCRss, borderColor: '#94a3b8', backgroundColor: '#94a3b8', tension: 0.1 },
+                            { label: 'C++ Wrapper RSS', data: trendCppRss, borderColor: '#2563eb', backgroundColor: '#2563eb', tension: 0.1 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: { display: true, text: 'Memory Growth (RSS vs Object Count)' },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: {
+                            y: { title: { display: true, text: 'KB' } },
+                            x: { title: { display: true, text: 'Object Count (N)' } }
+                        }
+                    }
+                });
+            }
             
             new Chart(document.getElementById('rssChart'), {
                 type: 'bar',
@@ -443,65 +679,90 @@ def main():
     print("=== LVGL Memory Profile Runner (Extended) ===")
     
     # Check for pprof
+    pprof_bin = "pprof"
     has_pprof = False
-    try:
-        run_cmd("which pprof", capture_output=False)
+    if subprocess.call("which pprof > /dev/null 2>&1", shell=True) == 0:
         has_pprof = True
-        print("[+] pprof detected.")
-    except:
+    elif subprocess.call("which google-pprof > /dev/null 2>&1", shell=True) == 0:
+        has_pprof = True
+        pprof_bin = "google-pprof"
+        
+    if has_pprof:
+        print(f"[+] pprof detected: {pprof_bin}")
+    else:
         print("[-] pprof not found.")
 
     all_results = []
 
-    for c_bench, cpp_bench in BENCHMARKS:
-        print(f"\n>>> Processing: {c_bench} vs {cpp_bench}")
+    for c_bench_str, cpp_bench_str in BENCHMARKS:
+        print(f"\n>>> Processing: {c_bench_str} vs {cpp_bench_str}")
         
+        # Parse binary and args for C
+        c_parts = c_bench_str.split()
+        c_bin = c_parts[0]
+        c_args = " ".join(c_parts[1:])
+        c_name = c_bench_str.replace(" ", "_")
+        
+        # Parse binary and args for C++
+        cpp_parts = cpp_bench_str.split()
+        cpp_bin = cpp_parts[0]
+        cpp_args = " ".join(cpp_parts[1:])
+        cpp_name = cpp_bench_str.replace(" ", "_")
+
         # Cleanup old profiles
         if has_pprof:
-            # os.system(f"rm -f /tmp/{c_bench}* /tmp/{cpp_bench}*")
-            # Safer to just let them accumulate and pick the latest, but cleaning ensures fresh data
-            subprocess.run(f"rm -f /tmp/{c_bench}* /tmp/{cpp_bench}*", shell=True)
+            subprocess.run(f"rm -f /tmp/{c_name}* /tmp/{cpp_name}*", shell=True)
 
         # Run C
-        res_c = BenchmarkResult(c_bench, "c")
+        res_c = BenchmarkResult(c_name, "c")
         env_c = {}
-        if has_pprof: env_c["HEAPPROFILE"] = f"/tmp/{c_bench}"
+        if has_pprof: 
+            env_c["HEAPPROFILE"] = f"/tmp/{c_name}"
+            env_c["TCMALLOC_SAMPLE_PARAMETER"] = "1"
+
         
-        print(f"  Running {c_bench}...", end=" ", flush=True)
-        success_c, out_c, err_c = run_cmd(f"./{BUILD_DIR}/{c_bench}", env=env_c)
+        print(f"  Running {c_bench_str}...", end=" ", flush=True)
+        success_c, out_c, err_c = run_cmd(f"./{BUILD_DIR}/{c_bin} {c_args}", env=env_c)
         
         if success_c:
             res_c.status = "SUCCESS"
             print("DONE")
             parse_metrics(out_c, res_c)
             if has_pprof:
-                heap_file = get_heap_file(c_bench)
+                heap_file = get_heap_file(c_name)
                 if heap_file:
-                    res_c.heap_bytes = get_pprof_heap_bytes(f"{BUILD_DIR}/{c_bench}", heap_file)
+                    res_c.heap_bytes = get_pprof_heap_bytes(pprof_bin, f"{BUILD_DIR}/{c_bin}", heap_file)
+
         else:
             res_c.status = "CRASH"
             res_c.error_msg = err_c
             print("FAIL")
             print(err_c)
-
+            
         all_results.append(res_c)
 
         # Run C++
-        res_cpp = BenchmarkResult(cpp_bench, "cpp")
+        res_cpp = BenchmarkResult(cpp_name, "cpp")
         env_cpp = {}
-        if has_pprof: env_cpp["HEAPPROFILE"] = f"/tmp/{cpp_bench}"
+        if has_pprof: 
+            env_cpp["HEAPPROFILE"] = f"/tmp/{cpp_name}"
+            env_cpp["TCMALLOC_SAMPLE_PARAMETER"] = "1"
+
         
-        print(f"  Running {cpp_bench}...", end=" ", flush=True)
-        success_cpp, out_cpp, err_cpp = run_cmd(f"./{BUILD_DIR}/{cpp_bench}", env=env_cpp)
+        print(f"  Running {cpp_bench_str}...", end=" ", flush=True)
+        success_cpp, out_cpp, err_cpp = run_cmd(f"./{BUILD_DIR}/{cpp_bin} {cpp_args}", env=env_cpp)
         
         if success_cpp:
             res_cpp.status = "SUCCESS"
             print("DONE")
             parse_metrics(out_cpp, res_cpp)
             if has_pprof:
-                heap_file = get_heap_file(cpp_bench)
+                heap_file = get_heap_file(cpp_name)
                 if heap_file:
-                    res_cpp.heap_bytes = get_pprof_heap_bytes(f"{BUILD_DIR}/{cpp_bench}", heap_file)
+                    res_cpp.heap_bytes = get_pprof_heap_bytes(pprof_bin, f"{BUILD_DIR}/{cpp_bin}", heap_file)
+
+                    res_cpp.heap_graph_svg = generate_heap_graph(pprof_bin, f"{BUILD_DIR}/{cpp_bin}", heap_file)
+
         else:
             res_cpp.status = "CRASH"
             res_cpp.error_msg = err_cpp
@@ -510,7 +771,13 @@ def main():
             
         all_results.append(res_cpp)
 
-    generate_html_report(all_results)
+    # Run Trend Analysis
+    trend_data = run_trend_analysis()
+    
+    # Run Stability Test
+    stability_data = run_stability_test()
+
+    generate_html_report(all_results, trend_data, stability_data)
     print_console_summary(all_results)
     
     # Check for critical failures

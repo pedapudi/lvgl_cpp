@@ -159,6 +159,9 @@ else()
     add_benchmark(bench_churn_c tests/bench_churn.c) # New C Baseline
     add_benchmark(bench_fragmentation tests/bench_fragmentation.cpp)
     add_benchmark(bench_fragmentation_c tests/bench_fragmentation.c) # New C Baseline
+    add_benchmark(bench_churn_stability tests/bench_churn_stability.cpp) # Stability Test
+    add_benchmark(bench_widgets tests/bench_widgets.cpp) # Generic Widget Test
+    add_benchmark(bench_widgets_c tests/bench_widgets.c) # C version
     add_executable(test_rotation tests/test_rotation.cpp)
     target_link_libraries(test_rotation PRIVATE lvgl_cpp)
 
