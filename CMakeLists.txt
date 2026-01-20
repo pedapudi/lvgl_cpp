@@ -245,4 +245,9 @@ add_test(NAME test_menu COMMAND test_menu)
     add_test(NAME test_screen COMMAND test_screen)
     add_test(NAME test_callbacks COMMAND test_callbacks)
     add_test(NAME test_input_device COMMAND test_input_device)
+
+    # Header Integrity Check (Regression test for self-contained headers)
+    find_package(Python3 REQUIRED)
+    add_test(NAME test_header_integrity 
+             COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/check_headers.py)
 endif()
