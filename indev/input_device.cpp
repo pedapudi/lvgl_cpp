@@ -91,8 +91,9 @@ void InputDevice::set_type(lv_indev_type_t type) {
 
 // ... wrapped methods ...
 
-lv_indev_type_t InputDevice::get_type() {
-  return indev_ ? lv_indev_get_type(indev_) : LV_INDEV_TYPE_NONE;
+IndevType InputDevice::get_type() const {
+  return indev_ ? static_cast<IndevType>(lv_indev_get_type(indev_))
+                : IndevType::None;
 }
 
 void InputDevice::reset(Object* obj) {
@@ -111,8 +112,9 @@ void InputDevice::read() {
   if (indev_) lv_indev_read(indev_);
 }
 
-lv_indev_state_t InputDevice::get_state() {
-  return indev_ ? lv_indev_get_state(indev_) : LV_INDEV_STATE_RELEASED;
+IndevState InputDevice::get_state() const {
+  return indev_ ? static_cast<IndevState>(lv_indev_get_state(indev_))
+                : IndevState::Released;
 }
 
 void InputDevice::get_point(lv_point_t* point) {

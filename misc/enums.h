@@ -445,6 +445,29 @@ enum class Key : uint8_t {
   End = LV_KEY_END,
 };
 
+// ============================================================================
+// Input Device Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_indev_state_t.
+ */
+enum class IndevState : uint8_t {
+  Released = LV_INDEV_STATE_RELEASED,
+  Pressed = LV_INDEV_STATE_PRESSED,
+};
+
+/**
+ * @brief Wrapper for lv_indev_type_t.
+ */
+enum class IndevType : uint8_t {
+  None = LV_INDEV_TYPE_NONE,
+  Pointer = LV_INDEV_TYPE_POINTER,
+  Keypad = LV_INDEV_TYPE_KEYPAD,
+  Button = LV_INDEV_TYPE_BUTTON,
+  Encoder = LV_INDEV_TYPE_ENCODER,
+};
+
 /**
  * @brief Wrapper for lv_roller_mode_t.
  */
