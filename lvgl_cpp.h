@@ -10,6 +10,7 @@
 #include "font/font.h"           // IWYU pragma: export
 #include "indev/input_device.h"  // IWYU pragma: export
 #include "misc/animation.h"      // IWYU pragma: export
+#include "misc/async.h"          // IWYU pragma: export
 #include "misc/color.h"          // IWYU pragma: export
 #include "misc/file_system.h"    // IWYU pragma: export
 #include "misc/timer.h"          // IWYU pragma: export

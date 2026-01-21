@@ -94,6 +94,55 @@ lv_obj_t* Object::release() {
   return ptr;
 }
 
+// --- Object Tree Management ---
+
+void Object::clean() {
+  if (obj_) lv_obj_clean(obj_);
+}
+
+Object Object::get_parent() const {
+  if (!obj_)
+    return Object(static_cast<lv_obj_t*>(nullptr), Ownership::Unmanaged);
+  lv_obj_t* parent = lv_obj_get_parent(obj_);
+  return Object(parent, Ownership::Unmanaged);
+}
+
+Object Object::get_child(int32_t index) const {
+  if (!obj_)
+    return Object(static_cast<lv_obj_t*>(nullptr), Ownership::Unmanaged);
+  lv_obj_t* child = lv_obj_get_child(obj_, index);
+  return Object(child, Ownership::Unmanaged);
+}
+
+uint32_t Object::get_child_count() const {
+  return obj_ ? lv_obj_get_child_count(obj_) : 0;
+}
+
+void Object::set_parent(Object& parent) {
+  if (obj_ && parent.raw()) lv_obj_set_parent(obj_, parent.raw());
+}
+
+void Object::set_parent(lv_obj_t* parent) {
+  if (obj_ && parent) lv_obj_set_parent(obj_, parent);
+}
+
+int32_t Object::get_index() const { return obj_ ? lv_obj_get_index(obj_) : -1; }
+
+void Object::move_foreground() {
+  if (obj_) lv_obj_move_foreground(obj_);
+}
+
+void Object::move_background() {
+  if (obj_) lv_obj_move_background(obj_);
+}
+
+void Object::delete_async() {
+  if (obj_) {
+    owned_ = false;  // Prevent double-delete
+    lv_obj_delete_async(obj_);
+  }
+}
+
 void Object::install_delete_hook() {
   fprintf(stderr, "Install hook: obj=%p, wrapper=%p\n", obj_, this);
   lv_obj_add_event_cb(obj_, on_delete_event, LV_EVENT_DELETE, this);

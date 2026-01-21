@@ -52,6 +52,7 @@ set(SOURCES
     indev/input_device.cpp
     misc/timer.cpp
     misc/animation.cpp
+    misc/async.cpp
 )
 
 if(IDF_TARGET)
@@ -266,6 +267,10 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_font tests/test_font.cpp font/font.cpp font/owned_font.cpp core/object.cpp misc/timer.cpp)
     target_link_libraries(test_font PRIVATE lvgl_cpp)
     add_test(NAME test_font COMMAND test_font)
+
+    add_executable(test_async tests/test_async.cpp)
+    target_link_libraries(test_async PRIVATE lvgl_cpp)
+    add_test(NAME test_async COMMAND test_async)
 
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)

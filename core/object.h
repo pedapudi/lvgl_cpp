@@ -162,7 +162,70 @@ class Object {
    */
   bool is_valid() const { return obj_ != nullptr; }
 
-  // --- Layout & Scroll ---
+  // --- Object Tree Management ---
+
+  /**
+   * @brief Delete all children of this object.
+   * Useful for rebuilding container contents.
+   */
+  void clean();
+
+  /**
+   * @brief Get the parent object.
+   * @return An unmanaged Object wrapper for the parent, or invalid if no
+   * parent.
+   */
+  Object get_parent() const;
+
+  /**
+   * @brief Get a child object by index.
+   * @param index The child index (0-based). Negative indexes count from the
+   * end.
+   * @return An unmanaged Object wrapper for the child, or invalid if not found.
+   */
+  Object get_child(int32_t index) const;
+
+  /**
+   * @brief Get the number of children.
+   * @return The child count.
+   */
+  uint32_t get_child_count() const;
+
+  /**
+   * @brief Set the parent of this object.
+   * @param parent The new parent.
+   */
+  void set_parent(Object& parent);
+
+  /**
+   * @brief Set the parent of this object.
+   * @param parent The new parent (raw pointer).
+   */
+  void set_parent(lv_obj_t* parent);
+
+  /**
+   * @brief Get the index of this object among its siblings.
+   * @return The index (0-based).
+   */
+  int32_t get_index() const;
+
+  /**
+   * @brief Move this object to the foreground (on top of siblings).
+   */
+  void move_foreground();
+
+  /**
+   * @brief Move this object to the background (behind siblings).
+   */
+  void move_background();
+
+  /**
+   * @brief Schedule this object for deletion on the next timer handler cycle.
+   * Safe to call from callbacks to avoid use-after-free.
+   */
+  void delete_async();
+
+  // --- Layout and Scroll ---
 
   /**
    * @brief Set the flex flow.
