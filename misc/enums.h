@@ -353,6 +353,16 @@ enum class ChartUpdateMode : uint8_t {
   Circular = LV_CHART_UPDATE_MODE_CIRCULAR,
 };
 
+/**
+ * @brief Wrapper for lv_chart_axis_t.
+ */
+enum class ChartAxis : uint8_t {
+  PrimaryY = LV_CHART_AXIS_PRIMARY_Y,
+  SecondaryY = LV_CHART_AXIS_SECONDARY_Y,
+  PrimaryX = LV_CHART_AXIS_PRIMARY_X,
+  SecondaryX = LV_CHART_AXIS_SECONDARY_X,
+};
+
 // ============================================================================
 // Scroll Enums
 // ============================================================================
@@ -375,6 +385,110 @@ enum class ScrollSnap : uint8_t {
   Start = LV_SCROLL_SNAP_START,
   End = LV_SCROLL_SNAP_END,
   Center = LV_SCROLL_SNAP_CENTER,
+};
+
+/**
+ * @brief Wrapper for lv_obj_flag_t.
+ */
+enum class ObjFlag : uint32_t {
+  None = 0,
+  Hidden = LV_OBJ_FLAG_HIDDEN,
+  Clickable = LV_OBJ_FLAG_CLICKABLE,
+  ClickFocusable = LV_OBJ_FLAG_CLICK_FOCUSABLE,
+  Checkable = LV_OBJ_FLAG_CHECKABLE,
+  Scrollable = LV_OBJ_FLAG_SCROLLABLE,
+  ScrollElastic = LV_OBJ_FLAG_SCROLL_ELASTIC,
+  ScrollMomentum = LV_OBJ_FLAG_SCROLL_MOMENTUM,
+  ScrollChainHor = LV_OBJ_FLAG_SCROLL_CHAIN_HOR,
+  ScrollChainVer = LV_OBJ_FLAG_SCROLL_CHAIN_VER,
+  ScrollChain = LV_OBJ_FLAG_SCROLL_CHAIN,
+  ScrollOnFocus = LV_OBJ_FLAG_SCROLL_ON_FOCUS,
+  ScrollWithArrow = LV_OBJ_FLAG_SCROLL_WITH_ARROW,
+  Snappable = LV_OBJ_FLAG_SNAPPABLE,
+  PressLock = LV_OBJ_FLAG_PRESS_LOCK,
+  EventBubble = LV_OBJ_FLAG_EVENT_BUBBLE,
+  GestureBubble = LV_OBJ_FLAG_GESTURE_BUBBLE,
+  AdvHitTest = LV_OBJ_FLAG_ADV_HITTEST,
+  IgnoreLayout = LV_OBJ_FLAG_IGNORE_LAYOUT,
+  Floating = LV_OBJ_FLAG_FLOATING,
+  OverflowVisible = LV_OBJ_FLAG_OVERFLOW_VISIBLE,
+  Layout1 = LV_OBJ_FLAG_LAYOUT_1,
+  Layout2 = LV_OBJ_FLAG_LAYOUT_2,
+  Widget1 = LV_OBJ_FLAG_WIDGET_1,
+  Widget2 = LV_OBJ_FLAG_WIDGET_2,
+  User1 = LV_OBJ_FLAG_USER_1,
+  User2 = LV_OBJ_FLAG_USER_2,
+  User3 = LV_OBJ_FLAG_USER_3,
+  User4 = LV_OBJ_FLAG_USER_4,
+};
+
+inline ObjFlag operator|(ObjFlag lhs, ObjFlag rhs) {
+  return static_cast<ObjFlag>(static_cast<uint32_t>(lhs) |
+                              static_cast<uint32_t>(rhs));
+}
+
+/**
+ * @brief Wrapper for lv_key_t.
+ */
+enum class Key : uint8_t {
+  Up = LV_KEY_UP,
+  Down = LV_KEY_DOWN,
+  Right = LV_KEY_RIGHT,
+  Left = LV_KEY_LEFT,
+  Esc = LV_KEY_ESC,
+  Del = LV_KEY_DEL,
+  Backspace = LV_KEY_BACKSPACE,
+  Enter = LV_KEY_ENTER,
+  Next = LV_KEY_NEXT,
+  Prev = LV_KEY_PREV,
+  Home = LV_KEY_HOME,
+  End = LV_KEY_END,
+};
+
+/**
+ * @brief Wrapper for lv_roller_mode_t.
+ */
+enum class RollerMode : uint8_t {
+  Normal = LV_ROLLER_MODE_NORMAL,
+  Infinite = LV_ROLLER_MODE_INFINITE,
+};
+
+/**
+ * @brief Wrapper for lv_chart_update_mode_t.
+ */
+enum class ChartUpdateMode : uint8_t {
+  Shift = LV_CHART_UPDATE_MODE_SHIFT,
+  Circular = LV_CHART_UPDATE_MODE_CIRCULAR,
+};
+
+/**
+ * @brief Wrapper for lv_base_dir_t.
+ */
+enum class BaseDir : uint8_t {
+  Ltr = LV_BASE_DIR_LTR,
+  Rtl = LV_BASE_DIR_RTL,
+  Auto = LV_BASE_DIR_AUTO,
+};
+
+/**
+ * @brief Wrapper for lv_screen_load_anim_t.
+ */
+enum class ScreenLoadAnim : uint8_t {
+  None = LV_SCR_LOAD_ANIM_NONE,
+  OverLeft = LV_SCR_LOAD_ANIM_OVER_LEFT,
+  OverRight = LV_SCR_LOAD_ANIM_OVER_RIGHT,
+  OverTop = LV_SCR_LOAD_ANIM_OVER_TOP,
+  OverBottom = LV_SCR_LOAD_ANIM_OVER_BOTTOM,
+  MoveLeft = LV_SCR_LOAD_ANIM_MOVE_LEFT,
+  MoveRight = LV_SCR_LOAD_ANIM_MOVE_RIGHT,
+  MoveTop = LV_SCR_LOAD_ANIM_MOVE_TOP,
+  MoveBottom = LV_SCR_LOAD_ANIM_MOVE_BOTTOM,
+  FadeOn = LV_SCR_LOAD_ANIM_FADE_ON,
+  FadeOut = LV_SCR_LOAD_ANIM_FADE_OUT,
+  OutLeft = LV_SCR_LOAD_ANIM_OUT_LEFT,
+  OutRight = LV_SCR_LOAD_ANIM_OUT_RIGHT,
+  OutTop = LV_SCR_LOAD_ANIM_OUT_TOP,
+  OutBottom = LV_SCR_LOAD_ANIM_OUT_BOTTOM,
 };
 
 }  // namespace lvgl

@@ -30,9 +30,7 @@ class Keyboard : public Widget<Keyboard> {
   Keyboard& set_textarea(lv_obj_t* ta);
   Keyboard& set_textarea(Object& ta);
   Keyboard& set_mode(lv_keyboard_mode_t mode);
-  Keyboard& set_mode(KeyboardMode mode) {
-    return set_mode(static_cast<lv_keyboard_mode_t>(mode));
-  }
+  Keyboard& set_mode(KeyboardMode mode);
   Keyboard& set_popovers(bool en);
   Keyboard& set_map(lv_keyboard_mode_t mode, const char* const map[],
                     const lv_buttonmatrix_ctrl_t ctrl_map[]);

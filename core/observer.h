@@ -43,117 +43,46 @@ class Subject {
 
   void notify();
 
-  /**
-   * @brief Bind an object flag to an integer value equality condition.
-   * If (subject's int value == ref_value), the flag is ADDED. Otherwise
-   * REMOVED.
-   * @param obj The target object.
-   * @param flag The flag to toggle.
-   * @param ref_value The reference value to compare against.
-   */
-  void bind_flag_if_eq(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_eq(lvgl::Object& obj, lv_obj_flag_t flag,
+                       int32_t ref_value);
+  void bind_flag_if_not_eq(lvgl::Object& obj, lv_obj_flag_t flag,
+                           int32_t ref_value);
+  void bind_flag_if_gt(lvgl::Object& obj, lv_obj_flag_t flag,
+                       int32_t ref_value);
+  void bind_flag_if_ge(lvgl::Object& obj, lv_obj_flag_t flag,
+                       int32_t ref_value);
+  void bind_flag_if_lt(lvgl::Object& obj, lv_obj_flag_t flag,
+                       int32_t ref_value);
+  void bind_flag_if_le(lvgl::Object& obj, lv_obj_flag_t flag,
+                       int32_t ref_value);
 
   /**
-   * @brief Bind an object flag to an integer value inequality condition.
-   * If (subject's int value != ref_value), the flag is ADDED. Otherwise
-   * REMOVED.
-   * @param obj The target object.
-   * @param flag The flag to toggle.
-   * @param ref_value The reference value.
+   * @brief Bind an object flag to an integer value condition (Scoped Enum).
    */
-  void bind_flag_if_not_eq(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
+  void bind_flag_if_eq(Object& obj, ObjFlag flag, int32_t ref_value);
+  void bind_flag_if_not_eq(Object& obj, ObjFlag flag, int32_t ref_value);
+  void bind_flag_if_gt(Object& obj, ObjFlag flag, int32_t ref_value);
+  void bind_flag_if_ge(Object& obj, ObjFlag flag, int32_t ref_value);
+  void bind_flag_if_lt(Object& obj, ObjFlag flag, int32_t ref_value);
+  void bind_flag_if_le(Object& obj, ObjFlag flag, int32_t ref_value);
+
+  void bind_state_if_eq(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_not_eq(lvgl::Object& obj, lv_state_t state,
+                            int32_t ref_value);
+  void bind_state_if_gt(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_ge(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_lt(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_le(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
 
   /**
-   * @brief Bind an object flag to a greater-than condition.
-   * If (subject's int value > ref_value), the flag is ADDED.
-   * @param obj The target object.
-   * @param flag The flag to toggle.
-   * @param ref_value The reference value.
+   * @brief Bind an object state to an integer value condition (Scoped Enum).
    */
-  void bind_flag_if_gt(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
-
-  /**
-   * @brief Bind an object flag to a greater-or-equal condition.
-   * If (subject's int value >= ref_value), the flag is ADDED.
-   * @param obj The target object.
-   * @param flag The flag to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_flag_if_ge(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
-
-  /**
-   * @brief Bind an object flag to a less-than condition.
-   * If (subject's int value < ref_value), the flag is ADDED.
-   * @param obj The target object.
-   * @param flag The flag to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_flag_if_lt(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
-
-  /**
-   * @brief Bind an object flag to a less-or-equal condition.
-   * If (subject's int value <= ref_value), the flag is ADDED.
-   * @param obj The target object.
-   * @param flag The flag to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_flag_if_le(Object& obj, lv_obj_flag_t flag, int32_t ref_value);
-
-  // State Bindings
-
-  /**
-   * @brief Bind an object state to an integer value equality condition.
-   * If (subject's int value == ref_value), the state is ADDED.
-   * @param obj The target object.
-   * @param state The state to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_state_if_eq(Object& obj, lv_state_t state, int32_t ref_value);
-
-  /**
-   * @brief Bind an object state to an integer value inequality condition.
-   * If (subject's int value != ref_value), the state is ADDED.
-   * @param obj The target object.
-   * @param state The state to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_state_if_not_eq(Object& obj, lv_state_t state, int32_t ref_value);
-
-  /**
-   * @brief Bind an object state to a greater-than condition.
-   * If (subject's int value > ref_value), the state is ADDED.
-   * @param obj The target object.
-   * @param state The state to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_state_if_gt(Object& obj, lv_state_t state, int32_t ref_value);
-
-  /**
-   * @brief Bind an object state to a greater-or-equal condition.
-   * If (subject's int value >= ref_value), the state is ADDED.
-   * @param obj The target object.
-   * @param state The state to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_state_if_ge(Object& obj, lv_state_t state, int32_t ref_value);
-
-  /**
-   * @brief Bind an object state to a less-than condition.
-   * If (subject's int value < ref_value), the state is ADDED.
-   * @param obj The target object.
-   * @param state The state to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_state_if_lt(Object& obj, lv_state_t state, int32_t ref_value);
-
-  /**
-   * @brief Bind an object state to a less-or-equal condition.
-   * If (subject's int value <= ref_value), the state is ADDED.
-   * @param obj The target object.
-   * @param state The state to toggle.
-   * @param ref_value The reference value.
-   */
-  void bind_state_if_le(Object& obj, lv_state_t state, int32_t ref_value);
+  void bind_state_if_eq(Object& obj, State state, int32_t ref_value);
+  void bind_state_if_not_eq(Object& obj, State state, int32_t ref_value);
+  void bind_state_if_gt(Object& obj, State state, int32_t ref_value);
+  void bind_state_if_ge(Object& obj, State state, int32_t ref_value);
+  void bind_state_if_lt(Object& obj, State state, int32_t ref_value);
+  void bind_state_if_le(Object& obj, State state, int32_t ref_value);
 
   // Checked Binding
 

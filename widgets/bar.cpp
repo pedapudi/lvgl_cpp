@@ -45,6 +45,10 @@ Bar& Bar::set_mode(lv_bar_mode_t mode) {
   return *this;
 }
 
+Bar& Bar::set_mode(BarMode mode) {
+  return set_mode(static_cast<lv_bar_mode_t>(mode));
+}
+
 Bar& Bar::set_orientation(lv_bar_orientation_t orientation) {
   if (obj_) lv_bar_set_orientation(obj_, orientation);
   return *this;

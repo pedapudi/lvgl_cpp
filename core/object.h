@@ -210,7 +210,19 @@ class Object {
    * @brief Add a flag to the object.
    * @param f The flag to add (e.g., `LV_OBJ_FLAG_HIDDEN`).
    */
+  bool has_flag(lv_obj_flag_t f) const;
+
+  /**
+   * @brief Add a flag to the object.
+   * @param f The flag to add.
+   */
   void add_flag(lv_obj_flag_t f);
+
+  /**
+   * @brief Add a flag to the object.
+   * @param f The flag to add.
+   */
+  void add_flag(ObjFlag f);
 
   /**
    * @brief Remove a flag from the object.
@@ -219,10 +231,16 @@ class Object {
   void remove_flag(lv_obj_flag_t f);
 
   /**
+   * @brief Remove a flag from the object.
+   * @param f The flag to remove.
+   */
+  void remove_flag(ObjFlag f);
+
+  /**
    * @brief Check if a flag is set.
    * @param f The flag to check.
    */
-  bool has_flag(lv_obj_flag_t f) const;
+  bool has_flag(ObjFlag f) const;
 
   /**
    * @brief Add a state to the object.
@@ -259,6 +277,58 @@ class Object {
    * @param state The state to check.
    */
   bool has_state(lv_state_t state) const;
+
+  // --- Scroll ---
+
+  /**
+   * @brief Set the scrollbar mode.
+   * @param mode The mode (e.g. `ScrollbarMode::Auto`).
+   */
+  void set_scrollbar_mode(lv_scrollbar_mode_t mode);
+
+  /**
+   * @brief Set the scrollbar mode.
+   * @param mode The mode.
+   */
+  void set_scrollbar_mode(ScrollbarMode mode);
+
+  /**
+   * @brief Set the scroll snap in X direction.
+   * @param snap The snap type.
+   */
+  void set_scroll_snap_x(lv_scroll_snap_t snap);
+
+  /**
+   * @brief Set the scroll snap in X direction.
+   * @param snap The snap type.
+   */
+  void set_scroll_snap_x(ScrollSnap snap);
+
+  /**
+   * @brief Set the scroll snap in Y direction.
+   * @param snap The snap type.
+   */
+  void set_scroll_snap_y(lv_scroll_snap_t snap);
+
+  /**
+   * @brief Set the scroll snap in Y direction.
+   * @param snap The snap type.
+   */
+  void set_scroll_snap_y(ScrollSnap snap);
+
+  // --- Other Properties ---
+
+  /**
+   * @brief Set the base direction (LTR, RTL, Auto).
+   * @param dir The direction.
+   */
+  void set_base_dir(lv_base_dir_t dir);
+
+  /**
+   * @brief Set the base direction.
+   * @param dir The direction.
+   */
+  void set_base_dir(BaseDir dir);
 
   // --- Events ---
 
@@ -316,6 +386,14 @@ class Object {
    * @param selector The part/state selector.
    */
   void set_style_text_align(lv_text_align_t value,
+                            lv_style_selector_t selector = LV_PART_MAIN);
+
+  /**
+   * @brief Set the text alignment.
+   * @param value The alignment.
+   * @param selector The part/state selector.
+   */
+  void set_style_text_align(TextAlign value,
                             lv_style_selector_t selector = LV_PART_MAIN);
 
   /**

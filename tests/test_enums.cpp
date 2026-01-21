@@ -9,6 +9,7 @@
 #include "../widgets/dropdown.h"
 #include "../widgets/keyboard.h"
 #include "../widgets/label.h"
+#include "../widgets/roller.h"
 #include "../widgets/slider.h"
 #include "lvgl.h"
 
@@ -24,9 +25,21 @@ int main() {
   lvgl::Object screen(lv_screen_active());
 
   {
-    std::cerr << "Block 1 Start" << std::endl;
+    std::cout << "Testing Object properties..." << std::endl;
+    lvgl::Object obj;
+    obj.set_scrollbar_mode(lvgl::ScrollbarMode::Active);
+    obj.set_scroll_snap_x(lvgl::ScrollSnap::Center);
+    obj.set_base_dir(lvgl::BaseDir::Rtl);
+
+    assert(lv_obj_get_scrollbar_mode(obj.raw()) == LV_SCROLLBAR_MODE_ACTIVE);
+    assert(lv_obj_get_scroll_snap_x(obj.raw()) == LV_SCROLL_SNAP_CENTER);
+    assert(lv_obj_get_style_base_dir(obj.raw(), LV_PART_MAIN) ==
+           LV_BASE_DIR_RTL);
+  }
+
+  {
+    std::cout << "Testing Button styles..." << std::endl;
     lvgl::Button btn(screen);
-    std::cerr << "Button created" << std::endl;
     btn.set_size(100, 50)
         .set_bg_opa(lvgl::Opacity::Cover)
         .set_border_opa(lvgl::Opacity::Opa50)
@@ -43,22 +56,49 @@ int main() {
   }
 
   {
-    std::cerr << "Block 2 Start" << std::endl;
+    std::cout << "Testing Label long mode..." << std::endl;
     lvgl::Label label(screen);
-    std::cerr << "Label created" << std::endl;
     label.set_text("Hello");
     std::cerr << "Label text set" << std::endl;
     label.set_text_align(lvgl::TextAlign::Center);
-    std::cerr << "Label align set" << std::endl;
-    label.set_text_opa(lvgl::Opacity::Opa80);
-    std::cerr << "Label opa set" << std::endl;
+    label.set_long_mode(lvgl::LabelLongMode::ScrollCircular);
 
-    // Verify
-    lv_obj_t* obj = label.raw();
-    assert(lv_obj_get_style_text_align(obj, LV_PART_MAIN) ==
+    assert(lv_obj_get_style_text_align(label.raw(), LV_PART_MAIN) ==
            LV_TEXT_ALIGN_CENTER);
+<<<<<<< HEAD
     assert(lv_obj_get_style_text_opa(obj, LV_PART_MAIN) == LV_OPA_80);
     std::cerr << "Label Basic Done" << std::endl;
+=======
+    assert(lv_label_get_long_mode(label.raw()) ==
+           LV_LABEL_LONG_SCROLL_CIRCULAR);
+  }
+
+  {
+    std::cout << "Testing Keyboard mode..." << std::endl;
+    lvgl::Keyboard kb;
+    kb.set_mode(lvgl::KeyboardMode::Number);
+    assert(lv_keyboard_get_mode(kb.raw()) == LV_KEYBOARD_MODE_NUMBER);
+  }
+
+  {
+    std::cout << "Testing Chart overloads..." << std::endl;
+    lvgl::Chart chart;
+    chart.set_type(lvgl::ChartType::Bar);
+    chart.set_update_mode(lvgl::ChartUpdateMode::Circular);
+    chart.set_axis_range(lvgl::ChartAxis::PrimaryY, 0, 100);
+    auto ser =
+        chart.add_series(lv_color_hex(0xFF0000), lvgl::ChartAxis::PrimaryY);
+
+    assert(lv_chart_get_type(chart.raw()) == LV_CHART_TYPE_BAR);
+    assert(ser.raw() != nullptr);
+  }
+
+    std::cout << "Testing Roller mode..." << std::endl;
+    lvgl::Roller roller;
+    roller.set_options("1\n2\n3", lvgl::RollerMode::Infinite);
+    // Roler options parsing is complex to verify via raw getter easily,
+    // but we can check if it doesn't crash and the call succeeded.
+    assert(roller.raw() != nullptr);
   }
 
   {

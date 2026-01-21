@@ -55,6 +55,10 @@ Label& Label::set_long_mode(lv_label_long_mode_t mode) {
   return *this;
 }
 
+Label& Label::set_long_mode(LabelLongMode mode) {
+  return set_long_mode(static_cast<lv_label_long_mode_t>(mode));
+}
+
 lv_label_long_mode_t Label::get_long_mode() const {
   return obj_ ? lv_label_get_long_mode(obj_) : LV_LABEL_LONG_MODE_WRAP;
 }

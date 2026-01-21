@@ -78,9 +78,7 @@ class Bar : public Widget<Bar> {
    * @param mode Bar mode (`LV_BAR_MODE_NORMAL` or `LV_BAR_MODE_RANGE`).
    */
   Bar& set_mode(lv_bar_mode_t mode);
-  Bar& set_mode(BarMode mode) {
-    return set_mode(static_cast<lv_bar_mode_t>(mode));
-  }
+  Bar& set_mode(BarMode mode);
 
   /**
    * @brief Set the orientation of the bar.

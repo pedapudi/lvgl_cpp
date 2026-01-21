@@ -30,6 +30,10 @@ Keyboard& Keyboard::set_mode(lv_keyboard_mode_t mode) {
   return *this;
 }
 
+Keyboard& Keyboard::set_mode(KeyboardMode mode) {
+  return set_mode(static_cast<lv_keyboard_mode_t>(mode));
+}
+
 Keyboard& Keyboard::set_popovers(bool en) {
   if (obj_) lv_keyboard_set_popovers(obj_, en);
   return *this;

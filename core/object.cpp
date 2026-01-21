@@ -114,12 +114,22 @@ void Object::add_flag(lv_obj_flag_t f) {
   if (obj_) lv_obj_add_flag(obj_, f);
 }
 
+void Object::add_flag(ObjFlag f) { add_flag(static_cast<lv_obj_flag_t>(f)); }
+
 void Object::remove_flag(lv_obj_flag_t f) {
   if (obj_) lv_obj_remove_flag(obj_, f);
 }
 
+void Object::remove_flag(ObjFlag f) {
+  remove_flag(static_cast<lv_obj_flag_t>(f));
+}
+
 bool Object::has_flag(lv_obj_flag_t f) const {
   return obj_ ? lv_obj_has_flag(obj_, f) : false;
+}
+
+bool Object::has_flag(ObjFlag f) const {
+  return has_flag(static_cast<lv_obj_flag_t>(f));
 }
 
 void Object::add_state(State state) {
@@ -144,6 +154,42 @@ void Object::remove_state(lv_state_t state) {
 
 bool Object::has_state(lv_state_t state) const {
   return obj_ ? lv_obj_has_state(obj_, state) : false;
+}
+
+// --- Scroll ---
+
+void Object::set_scrollbar_mode(lv_scrollbar_mode_t mode) {
+  if (obj_) lv_obj_set_scrollbar_mode(obj_, mode);
+}
+
+void Object::set_scrollbar_mode(ScrollbarMode mode) {
+  set_scrollbar_mode(static_cast<lv_scrollbar_mode_t>(mode));
+}
+
+void Object::set_scroll_snap_x(lv_scroll_snap_t snap) {
+  if (obj_) lv_obj_set_scroll_snap_x(obj_, snap);
+}
+
+void Object::set_scroll_snap_x(ScrollSnap snap) {
+  set_scroll_snap_x(static_cast<lv_scroll_snap_t>(snap));
+}
+
+void Object::set_scroll_snap_y(lv_scroll_snap_t snap) {
+  if (obj_) lv_obj_set_scroll_snap_y(obj_, snap);
+}
+
+void Object::set_scroll_snap_y(ScrollSnap snap) {
+  set_scroll_snap_y(static_cast<lv_scroll_snap_t>(snap));
+}
+
+// --- Other Properties ---
+
+void Object::set_base_dir(lv_base_dir_t dir) {
+  if (obj_) lv_obj_set_style_base_dir(obj_, dir, LV_PART_MAIN);
+}
+
+void Object::set_base_dir(BaseDir dir) {
+  set_base_dir(static_cast<lv_base_dir_t>(dir));
 }
 
 // --- Events ---
@@ -187,6 +233,11 @@ void Object::set_style_anim_duration(uint32_t value,
 void Object::set_style_text_align(lv_text_align_t value,
                                   lv_style_selector_t selector) {
   if (obj_) lv_obj_set_style_text_align(obj_, value, selector);
+}
+
+void Object::set_style_text_align(TextAlign value,
+                                  lv_style_selector_t selector) {
+  set_style_text_align(static_cast<lv_text_align_t>(value), selector);
 }
 
 void Object::set_style_bg_color(lv_color_t value,

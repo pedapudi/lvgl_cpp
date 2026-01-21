@@ -55,6 +55,10 @@ Arc& Arc::set_mode(lv_arc_mode_t type) {
   return *this;
 }
 
+Arc& Arc::set_mode(ArcMode mode) {
+  return set_mode(static_cast<lv_arc_mode_t>(mode));
+}
+
 Arc& Arc::set_value(int32_t value) {
   if (obj_) lv_arc_set_value(obj_, value);
   return *this;

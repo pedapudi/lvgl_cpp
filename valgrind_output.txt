@@ -1,0 +1,108 @@
+[Info]	(0.000, +0)	 lv_init: begin lv_init.c:191
+[Info]	(0.000, +0)	 lv_obj_create: begin lv_obj.c:238
+[Info]	(0.000, +0)	 lv_obj_create: begin lv_obj.c:238
+[Info]	(0.000, +0)	 lv_obj_create: begin lv_obj.c:238
+[Info]	(0.000, +0)	 lv_obj_create: begin lv_obj.c:238
+Starting Stability benchmark (1000 cycles)...
+[Info]	(0.000, +0)	 lv_obj_create: begin lv_obj.c:238
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+[Info]	(0.000, +0)	 lv_button_create: begin lv_button.c:51
+=================================================================
+==24166==ERROR: AddressSanitizer: heap-use-after-free on address 0x755b94fe0058 at pc 0x5e43185320c6 bp 0x7ffc7c601510 sp 0x7ffc7c601500
+WRITE of size 8 at 0x755b94fe0058 thread T0
+    #0 0x5e43185320c5 in lvgl::Object::on_delete_event(_lv_event_t*) /home/sunil/git/lvgl/lvgl_cpp/core/object.cpp:99
+    #1 0x5e43185c08c3 in lv_event_send /home/sunil/git/lvgl/lvgl/src/misc/lv_event.c:121
+    #2 0x5e43185463e7 in event_send_core /home/sunil/git/lvgl/lvgl/src/core/lv_obj_event.c:376
+    #3 0x5e4318544e7b in lv_obj_send_event /home/sunil/git/lvgl/lvgl/src/core/lv_obj_event.c:69
+    #4 0x5e4318566e19 in obj_delete_core /home/sunil/git/lvgl/lvgl/src/core/lv_obj_tree.c:676
+    #5 0x5e4318566ed9 in obj_delete_core /home/sunil/git/lvgl/lvgl/src/core/lv_obj_tree.c:688
+    #6 0x5e43185646f9 in lv_obj_delete /home/sunil/git/lvgl/lvgl/src/core/lv_obj_tree.c:75
+    #7 0x5e4318531ab8 in lvgl::Object::~Object() /home/sunil/git/lvgl/lvgl_cpp/core/object.cpp:45
+    #8 0x5e4318528cfa in lvgl::Widget<lvgl::Screen>::~Widget() /home/sunil/git/lvgl/lvgl_cpp/widgets/../core/widget.h:21
+    #9 0x5e4318528d78 in lvgl::Screen::~Screen() /home/sunil/git/lvgl/lvgl_cpp/widgets/screen.h:12
+    #10 0x5e4318528d97 in lvgl::Screen::~Screen() /home/sunil/git/lvgl/lvgl_cpp/widgets/screen.h:12
+    #11 0x5e4318525b2c in std::default_delete<lvgl::Screen>::operator()(lvgl::Screen*) const /usr/include/c++/15/bits/unique_ptr.h:92
+    #12 0x5e431852530a in std::unique_ptr<lvgl::Screen, std::default_delete<lvgl::Screen> >::~unique_ptr() /usr/include/c++/15/bits/unique_ptr.h:398
+    #13 0x5e4318523bc3 in run_cycle() /home/sunil/git/lvgl/lvgl_cpp/tests/bench_churn_stability.cpp:37
+    #14 0x5e4318524073 in main /home/sunil/git/lvgl/lvgl_cpp/tests/bench_churn_stability.cpp:59
+    #15 0x791b95e2a574 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #16 0x791b95e2a627 in __libc_start_main_impl ../csu/libc-start.c:360
+    #17 0x5e43185237a4 in _start (/home/sunil/git/lvgl/lvgl_cpp/build_asan/bench_churn_stability+0x3f7a4) (BuildId: 652bd66868d39ae5790712aa0eab711fe08df4cd)
+
+0x755b94fe0058 is located 8 bytes inside of 48-byte region [0x755b94fe0050,0x755b94fe0080)
+freed by thread T0 here:
+    #0 0x791b967242bb in operator delete(void*, unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:155
+    #1 0x5e4318528a20 in lvgl::Button::~Button() /home/sunil/git/lvgl/lvgl_cpp/widgets/button.h:31
+    #2 0x5e4318525de0 in std::default_delete<lvgl::Button>::operator()(lvgl::Button*) const /usr/include/c++/15/bits/unique_ptr.h:92
+    #3 0x5e43185255f4 in std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >::~unique_ptr() /usr/include/c++/15/bits/unique_ptr.h:398
+    #4 0x5e4318527fde in void std::destroy_at<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> > >(std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*) /usr/include/c++/15/bits/stl_construct.h:88
+    #5 0x5e43185277aa in void std::_Destroy<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> > >(std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*) /usr/include/c++/15/bits/stl_construct.h:164
+    #6 0x5e4318526389 in void std::_Destroy<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*>(std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*, std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*) /usr/include/c++/15/bits/stl_construct.h:226
+    #7 0x5e4318525464 in void std::_Destroy<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*, std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> > >(std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*, std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >*, std::allocator<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> > >&) /usr/include/c++/15/bits/alloc_traits.h:1045
+    #8 0x5e4318525464 in std::vector<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> >, std::allocator<std::unique_ptr<lvgl::Button, std::default_delete<lvgl::Button> > > >::~vector() /usr/include/c++/15/bits/stl_vector.h:802
+    #9 0x5e4318523bb4 in run_cycle() /home/sunil/git/lvgl/lvgl_cpp/tests/bench_churn_stability.cpp:37
+    #10 0x5e4318524073 in main /home/sunil/git/lvgl/lvgl_cpp/tests/bench_churn_stability.cpp:59
+    #11 0x791b95e2a574 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #12 0x791b95e2a627 in __libc_start_main_impl ../csu/libc-start.c:360
+    #13 0x5e43185237a4 in _start (/home/sunil/git/lvgl/lvgl_cpp/build_asan/bench_churn_stability+0x3f7a4) (BuildId: 652bd66868d39ae5790712aa0eab711fe08df4cd)
+
+previously allocated by thread T0 here:
+    #0 0x791b9672319b in operator new(unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:86
+    #1 0x5e43185254b6 in std::__detail::_MakeUniq<lvgl::Button>::__single_object std::make_unique<lvgl::Button, lvgl::Screen*>(lvgl::Screen*&&) /usr/include/c++/15/bits/unique_ptr.h:1084
+    #2 0x5e4318523a66 in run_cycle() /home/sunil/git/lvgl/lvgl_cpp/tests/bench_churn_stability.cpp:29
+    #3 0x5e4318524073 in main /home/sunil/git/lvgl/lvgl_cpp/tests/bench_churn_stability.cpp:59
+    #4 0x791b95e2a574 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #5 0x791b95e2a627 in __libc_start_main_impl ../csu/libc-start.c:360
+    #6 0x5e43185237a4 in _start (/home/sunil/git/lvgl/lvgl_cpp/build_asan/bench_churn_stability+0x3f7a4) (BuildId: 652bd66868d39ae5790712aa0eab711fe08df4cd)
+
+SUMMARY: AddressSanitizer: heap-use-after-free /home/sunil/git/lvgl/lvgl_cpp/core/object.cpp:99 in lvgl::Object::on_delete_event(_lv_event_t*)
+Shadow bytes around the buggy address:
+  0x755b94fdfd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x755b94fdfe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x755b94fdfe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x755b94fdff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x755b94fdff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x755b94fe0000: fa fa 00 00 00 00 00 00 fa fa fd[fd]fd fd fd fd
+  0x755b94fe0080: fa fa fd fd fd fd fd fd fa fa fd fd fd fd fd fd
+  0x755b94fe0100: fa fa fd fd fd fd fd fd fa fa fd fd fd fd fd fd
+  0x755b94fe0180: fa fa fd fd fd fd fd fd fa fa fd fd fd fd fd fd
+  0x755b94fe0200: fa fa fd fd fd fd fd fd fa fa fd fd fd fd fd fd
+  0x755b94fe0280: fa fa fd fd fd fd fd fd fa fa fd fd fd fd fd fd
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==24166==ABORTING

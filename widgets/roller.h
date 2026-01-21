@@ -50,6 +50,7 @@ class Roller : public Widget<Roller> {
   explicit Roller(Object& parent);
 
   Roller& set_options(const char* options, lv_roller_mode_t mode);
+  Roller& set_options(const char* options, RollerMode mode);
   Roller& set_selected(uint32_t sel_opt, lv_anim_enable_t anim = LV_ANIM_ON);
   bool set_selected_str(const char* sel_opt,
                         lv_anim_enable_t anim = LV_ANIM_ON);

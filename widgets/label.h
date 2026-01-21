@@ -76,9 +76,7 @@ class Label : public Widget<Label> {
    * @param mode The long mode to set.
    */
   Label& set_long_mode(lv_label_long_mode_t mode);
-  Label& set_long_mode(LabelLongMode mode) {
-    return set_long_mode(static_cast<lv_label_long_mode_t>(mode));
-  }
+  Label& set_long_mode(LabelLongMode mode);
 
   /**
    * @brief Get the long mode behavior.

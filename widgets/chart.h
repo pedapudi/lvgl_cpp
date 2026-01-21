@@ -51,21 +51,19 @@ class Chart : public Widget<Chart> {
   explicit Chart(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Chart& set_type(lv_chart_type_t type);
-  Chart& set_type(ChartType type) {
-    return set_type(static_cast<lv_chart_type_t>(type));
-  }
+  Chart& set_type(ChartType type);
   Chart& set_point_count(uint32_t cnt);
   Chart& set_axis_range(lv_chart_axis_t axis, int32_t min, int32_t max);
+  Chart& set_axis_range(ChartAxis axis, int32_t min, int32_t max);
   Chart& set_div_line_count(uint32_t hdiv, uint32_t vdiv);
   Chart& set_update_mode(lv_chart_update_mode_t update_mode);
-  Chart& set_update_mode(ChartUpdateMode update_mode) {
-    return set_update_mode(static_cast<lv_chart_update_mode_t>(update_mode));
-  }
+  Chart& set_update_mode(ChartUpdateMode update_mode);
 
   lv_chart_type_t get_type();
   uint32_t get_point_count();
 
   ChartSeries add_series(lv_color_t color, lv_chart_axis_t axis);
+  ChartSeries add_series(lv_color_t color, ChartAxis axis);
   void remove_series(ChartSeries series);
   // Removed specific set_series_* methods as they are now in ChartSeries
   void refresh();

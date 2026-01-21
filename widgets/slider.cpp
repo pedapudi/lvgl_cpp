@@ -34,9 +34,13 @@ Slider& Slider::set_range(int32_t min, int32_t max) {
   return *this;
 }
 
-Slider& Slider::set_mode(lv_bar_mode_t mode) {
-  Bar::set_mode(mode);
+Slider& Slider::set_mode(lv_slider_mode_t mode) {
+  if (obj_) lv_slider_set_mode(obj_, mode);
   return *this;
+}
+
+Slider& Slider::set_mode(SliderMode mode) {
+  return set_mode(static_cast<lv_slider_mode_t>(mode));
 }
 
 Slider& Slider::set_left_value(int32_t value, lv_anim_enable_t anim) {
