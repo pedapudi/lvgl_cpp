@@ -65,10 +65,6 @@ int main() {
 
     assert(lv_obj_get_style_text_align(label.raw(), LV_PART_MAIN) ==
            LV_TEXT_ALIGN_CENTER);
-<<<<<<< HEAD
-    assert(lv_obj_get_style_text_opa(obj, LV_PART_MAIN) == LV_OPA_80);
-    std::cerr << "Label Basic Done" << std::endl;
-=======
     assert(lv_label_get_long_mode(label.raw()) ==
            LV_LABEL_LONG_SCROLL_CIRCULAR);
   }
@@ -93,6 +89,7 @@ int main() {
     assert(ser.raw() != nullptr);
   }
 
+  {
     std::cout << "Testing Roller mode..." << std::endl;
     lvgl::Roller roller;
     roller.set_options("1\n2\n3", lvgl::RollerMode::Infinite);

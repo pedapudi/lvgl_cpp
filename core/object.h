@@ -186,24 +186,6 @@ class Object {
    */
   void set_grid_align(GridAlign column_align, GridAlign row_align);
 
-  /**
-   * @brief Set the scrollbar mode.
-   * @param mode The scrollbar mode.
-   */
-  void set_scrollbar_mode(ScrollbarMode mode);
-
-  /**
-   * @brief Set the horizontal scroll snap.
-   * @param snap The snap mode.
-   */
-  void set_scroll_snap_x(ScrollSnap snap);
-
-  /**
-   * @brief Set the vertical scroll snap.
-   * @param snap The snap mode.
-   */
-  void set_scroll_snap_y(ScrollSnap snap);
-
   // --- Flags & States ---
 
   /**

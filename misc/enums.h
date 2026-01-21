@@ -454,14 +454,6 @@ enum class RollerMode : uint8_t {
 };
 
 /**
- * @brief Wrapper for lv_chart_update_mode_t.
- */
-enum class ChartUpdateMode : uint8_t {
-  Shift = LV_CHART_UPDATE_MODE_SHIFT,
-  Circular = LV_CHART_UPDATE_MODE_CIRCULAR,
-};
-
-/**
  * @brief Wrapper for lv_base_dir_t.
  */
 enum class BaseDir : uint8_t {

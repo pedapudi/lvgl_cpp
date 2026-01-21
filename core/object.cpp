@@ -286,17 +286,4 @@ void Object::set_grid_align(GridAlign column_align, GridAlign row_align) {
   }
 }
 
-void Object::set_scrollbar_mode(ScrollbarMode mode) {
-  if (obj_)
-    lv_obj_set_scrollbar_mode(obj_, static_cast<lv_scrollbar_mode_t>(mode));
-}
-
-void Object::set_scroll_snap_x(ScrollSnap snap) {
-  if (obj_) lv_obj_set_scroll_snap_x(obj_, static_cast<lv_scroll_snap_t>(snap));
-}
-
-void Object::set_scroll_snap_y(ScrollSnap snap) {
-  if (obj_) lv_obj_set_scroll_snap_y(obj_, static_cast<lv_scroll_snap_t>(snap));
-}
-
 }  // namespace lvgl
