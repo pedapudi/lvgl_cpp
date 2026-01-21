@@ -54,6 +54,9 @@ class Arc : public Widget<Arc> {
    * @param type Mode (e.g., `LV_ARC_MODE_NORMAL`).
    */
   Arc& set_mode(lv_arc_mode_t type);
+  Arc& set_mode(ArcMode type) {
+    return set_mode(static_cast<lv_arc_mode_t>(type));
+  }
 
   /**
    * @brief Set the current value.

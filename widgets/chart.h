@@ -51,6 +51,9 @@ class Chart : public Widget<Chart> {
   explicit Chart(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Chart& set_type(lv_chart_type_t type);
+  Chart& set_type(ChartType type) {
+    return set_type(static_cast<lv_chart_type_t>(type));
+  }
   Chart& set_point_count(uint32_t cnt);
   Chart& set_axis_range(lv_chart_axis_t axis, int32_t min, int32_t max);
   Chart& set_div_line_count(uint32_t hdiv, uint32_t vdiv);

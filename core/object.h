@@ -162,7 +162,49 @@ class Object {
    */
   bool is_valid() const { return obj_ != nullptr; }
 
-  // --- Flags& States ---
+  // --- Layout & Scroll ---
+
+  /**
+   * @brief Set the flex flow.
+   * @param flow The flex flow direction/wrap.
+   */
+  void set_flex_flow(FlexFlow flow);
+
+  /**
+   * @brief Set the flex alignment.
+   * @param main_place Main axis alignment.
+   * @param cross_place Cross axis alignment.
+   * @param track_cross_place Cross axis alignment of the tracks.
+   */
+  void set_flex_align(FlexAlign main_place, FlexAlign cross_place,
+                      FlexAlign track_cross_place);
+
+  /**
+   * @brief Set the grid alignment.
+   * @param column_align Column alignment.
+   * @param row_align Row alignment.
+   */
+  void set_grid_align(GridAlign column_align, GridAlign row_align);
+
+  /**
+   * @brief Set the scrollbar mode.
+   * @param mode The scrollbar mode.
+   */
+  void set_scrollbar_mode(ScrollbarMode mode);
+
+  /**
+   * @brief Set the horizontal scroll snap.
+   * @param snap The snap mode.
+   */
+  void set_scroll_snap_x(ScrollSnap snap);
+
+  /**
+   * @brief Set the vertical scroll snap.
+   * @param snap The snap mode.
+   */
+  void set_scroll_snap_y(ScrollSnap snap);
+
+  // --- Flags & States ---
 
   /**
    * @brief Add a flag to the object.
@@ -232,6 +274,13 @@ class Object {
    * @param callback The callable to execute.
    */
   void add_event_cb(lv_event_code_t event_code, EventCallback callback);
+
+  /**
+   * @brief Add a functional event callback (Scoped Enum).
+   * @param event_code The event code to listen for.
+   * @param callback The callable to execute.
+   */
+  void add_event_cb(EventCode event_code, EventCallback callback);
 
   // --- Styles ---
 

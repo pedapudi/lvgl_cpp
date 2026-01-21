@@ -4,7 +4,9 @@
 
 namespace lvgl {
 
-lv_event_code_t Event::get_code() const { return lv_event_get_code(evt_); }
+EventCode Event::get_code() const {
+  return static_cast<EventCode>(lv_event_get_code(evt_));
+}
 
 Object Event::get_target() const {
   return Object(static_cast<lv_obj_t*>(lv_event_get_target(evt_)),

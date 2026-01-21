@@ -51,6 +51,9 @@ class Slider : public Bar {
   Slider& set_start_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
   Slider& set_range(int32_t min, int32_t max);
   Slider& set_mode(lv_bar_mode_t mode);
+  Slider& set_mode(SliderMode mode) {
+    return set_mode(static_cast<lv_bar_mode_t>(mode));
+  }
 
   /**
    * @brief Set the value of the left knob (for range slider).

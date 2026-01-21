@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_CORE_EVENT_H_
 #define LVGL_CPP_CORE_EVENT_H_
 
+#include "../misc/enums.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -17,7 +18,7 @@ class Event {
   /**
    * @brief Get the event code.
    */
-  lv_event_code_t get_code() const;
+  EventCode get_code() const;
 
   /**
    * @brief Get the original target of the event.
