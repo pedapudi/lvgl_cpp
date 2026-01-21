@@ -146,6 +146,13 @@ class Stylable {
     return set_image_recolor_opa(static_cast<lv_opa_t>(value), selector);
   }
 
+  Derived& set_style_blend_mode(BlendMode value,
+                                lv_style_selector_t selector = 0) {
+    lv_obj_set_style_blend_mode(static_cast<Derived*>(this)->raw(),
+                                static_cast<lv_blend_mode_t>(value), selector);
+    return *static_cast<Derived*>(this);
+  }
+
   // Geometry / Padding
   Derived& set_radius(int32_t value, lv_style_selector_t selector = 0) {
     lv_obj_set_style_radius(static_cast<Derived*>(this)->raw(), value,

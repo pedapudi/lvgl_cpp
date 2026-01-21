@@ -56,6 +56,7 @@ class Dropdown : public Widget<Dropdown> {
   Dropdown& clear_options();
   Dropdown& set_selected(uint32_t sel_opt);
   Dropdown& set_dir(lv_dir_t dir);
+  Dropdown& set_dir(Dir dir) { return set_dir(static_cast<lv_dir_t>(dir)); }
   Dropdown& set_symbol(const void* symbol);
   Dropdown& set_selected_highlight(bool en);
 
