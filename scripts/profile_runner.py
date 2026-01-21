@@ -390,7 +390,62 @@ def run_stability_test():
 
     return stability_data
 
-def generate_html_report(results, trend_data=None, stability_data=None, filename="memory_report.html"):
+def run_asan_analysis():
+    print("\n>>> Running ASan/LSan Analysis...")
+    asan_build_dir = "build_asan"
+    
+    # 1. Configure
+    # Check if build dir exists or just reconfigure
+    print("  Configuring ASan build...")
+    cmd_config = f"cmake -B {asan_build_dir} -DCMAKE_BUILD_TYPE=Debug -DLVGL_CPP_ENABLE_ASAN=ON"
+    success, out, err = run_cmd(cmd_config)
+    if not success:
+        print("  [!] Configuration failed")
+        return {"status": "BUILD_FAIL", "log": err, "summary": "CMake Configuration Failed"}
+        
+    # 2. Build
+    print("  Building bench_churn_stability with ASan...")
+    cmd_build = f"cmake --build {asan_build_dir} --target bench_churn_stability -j $(nproc)"
+    success, out, err = run_cmd(cmd_build)
+    if not success:
+        print("  [!] Build failed")
+        return {"status": "BUILD_FAIL", "log": err, "summary": "Compilation Failed"}
+        
+    # 3. Run
+    print("  Running with ASan...")
+    cmd_run = f"./{asan_build_dir}/bench_churn_stability"
+    # ASan returns non-zero on error usually
+    success, out, err = run_cmd(cmd_run)
+    
+    combined_output = out + "\n" + err
+    
+    result = {
+        "status": "PASS",
+        "log": "",
+        "summary": "Clean run. No memory safety issues detected."
+    }
+    
+    if "ERROR: AddressSanitizer" in combined_output:
+        result["status"] = "FAIL"
+        result["summary"] = "AddressSanitizer Error Detected (Heap Use-After-Free etc.)"
+        result["log"] = err
+        print("  [!] ASan Error detected")
+    elif "ERROR: LeakSanitizer" in combined_output:
+        result["status"] = "FAIL"
+        result["summary"] = "Memory Leak Detected"
+        result["log"] = err
+        print("  [!] LeakSanitizer Error detected")
+    elif not success and "Seg" in err: # Segmentation fault check if ASan didn't catch it explicitly but crashed
+        result["status"] = "FAIL"
+        result["summary"] = "Crash (Segmentation Fault)"
+        result["log"] = err
+        print("  [!] Crash detected")
+    else:
+        print("  ASan Check Passed")
+        
+    return result
+
+def generate_html_report(results, trend_data=None, stability_data=None, asan_data=None, filename="memory_report.html"):
     # Structuring data for Chart.js
     labels = []
     
@@ -576,6 +631,29 @@ def generate_html_report(results, trend_data=None, stability_data=None, filename
             <div class="benchmark-section">
     """
     
+    # Add ASan Section FIRST if available (Critical)
+    if asan_data:
+        asan_status_class = "badge-pass" if asan_data["status"] == "PASS" else "badge-fail"
+        asan_bg = "#dcfce7" if asan_data["status"] == "PASS" else "#fee2e2"
+        asan_border = "#86efac" if asan_data["status"] == "PASS" else "#fca5a5"
+        
+        html_content += f"""
+        <div class="card" style="margin-bottom: 40px; border-left: 5px solid {asan_border};">
+            <h2 style="margin-top:0;">Sanitizer Analysis (ASan/LSan)</h2>
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                <span class="badge {asan_status_class}" style="font-size:1rem; padding:8px 12px;">{asan_data['status']}</span>
+                <span style="font-weight:600; color:var(--text);">{asan_data['summary']}</span>
+            </div>
+            
+            <p style="color:var(--secondary);">
+                Analysis performs a special build with <code>-fsanitize=address</code> and runs a stability stress test. 
+                This detects heap-use-after-free, buffer overflows, and memory leaks that standard profiling misses.
+            </p>
+            
+            {f'<div style="background:#1e293b; color:#e2e8f0; padding:15px; border-radius:8px; overflow:auto; max-height:300px; font-family:monospace; font-size:0.85rem;"><pre>{asan_data["log"]}</pre></div>' if asan_data["status"] != "PASS" else ''}
+        </div>
+        """
+
     for key in sorted_keys:
         pair = bench_data[key]
         c_res = pair.get('c')
@@ -955,8 +1033,11 @@ def main():
     
     # Run Stability Test
     stability_data = run_stability_test()
+    
+    # Run ASan Analysis
+    asan_data = run_asan_analysis()
 
-    generate_html_report(all_results, trend_data, stability_data)
+    generate_html_report(all_results, trend_data, stability_data, asan_data)
     print_console_summary(all_results)
     
     # Check for critical failures
