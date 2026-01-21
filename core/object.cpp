@@ -3,13 +3,20 @@
 #include <vector>
 
 #include "event.h"
+#include "lvgl.h"
 #include "style.h"
 
 namespace lvgl {
 
+Object::Object() : obj_(lv_obj_create(nullptr)), owned_(true) {
+  if (obj_) {
+    install_delete_hook();
+  }
+}
+
 Object::Object(lv_obj_t* obj, Ownership ownership) : obj_(obj) {
   if (ownership == Ownership::Default) {
-    owned_ = false;  // Wrapping an existing pointer defaults to view/weak
+    if (obj_) owned_ = false;  // Default for wrapping existing obj is Unmanaged
   } else {
     owned_ = (ownership == Ownership::Managed);
   }
@@ -18,20 +25,16 @@ Object::Object(lv_obj_t* obj, Ownership ownership) : obj_(obj) {
   }
 }
 
-Object::Object(lv_obj_t* obj, bool owned)
-    : Object(obj, owned ? Ownership::Managed : Ownership::Unmanaged) {}
-
-Object::Object() : Object((Object*)nullptr) {}
-
 Object::Object(Object* parent, Ownership ownership) {
-  lv_obj_t* parent_obj = parent ? parent->raw() : nullptr;
-  obj_ = lv_obj_create(parent_obj);
+  obj_ = lv_obj_create(parent ? parent->raw() : nullptr);
   if (ownership == Ownership::Default) {
-    owned_ = true;  // Creating a new child defaults to owned
+    owned_ = true;  // Default for new child is Owned
   } else {
     owned_ = (ownership == Ownership::Managed);
   }
-  install_delete_hook();
+  if (obj_) {
+    install_delete_hook();
+  }
 }
 
 Object::~Object() {
@@ -92,11 +95,14 @@ lv_obj_t* Object::release() {
 }
 
 void Object::install_delete_hook() {
+  fprintf(stderr, "Install hook: obj=%p, wrapper=%p\n", obj_, this);
   lv_obj_add_event_cb(obj_, on_delete_event, LV_EVENT_DELETE, this);
 }
 
 void Object::on_delete_event(lv_event_t* e) {
   Object* self = static_cast<Object*>(lv_event_get_user_data(e));
+  fprintf(stderr, "On delete event trigger: obj=%p, wrapper=%p\n",
+          lv_event_get_target(e), self);
   if (self) {
     self->obj_ = nullptr;  // Invalidate wrapper
   }

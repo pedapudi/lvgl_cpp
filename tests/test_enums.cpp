@@ -5,6 +5,9 @@
 #include "../widgets/arc.h"
 #include "../widgets/bar.h"
 #include "../widgets/button.h"
+#include "../widgets/chart.h"
+#include "../widgets/dropdown.h"
+#include "../widgets/keyboard.h"
 #include "../widgets/label.h"
 #include "../widgets/slider.h"
 #include "lvgl.h"
@@ -114,6 +117,25 @@ int main() {
   }
 
   {
+    std::cerr << "Keyboard Mode Start" << std::endl;
+    lvgl::Keyboard kb(screen);
+    kb.set_mode(lvgl::KeyboardMode::Number);
+    assert(kb.get_mode() == LV_KEYBOARD_MODE_NUMBER);
+    std::cerr << "Keyboard Mode Done" << std::endl;
+  }
+
+  {
+    std::cerr << "Chart Type/Mode Start" << std::endl;
+    lvgl::Chart chart(screen);
+    chart.set_type(lvgl::ChartType::Bar);
+    assert(chart.get_type() == LV_CHART_TYPE_BAR);
+
+    // Check Update Mode (no getter usually available, just compile check)
+    chart.set_update_mode(lvgl::ChartUpdateMode::Circular);
+    std::cerr << "Chart Type/Mode Done" << std::endl;
+  }
+
+  {
     std::cerr << "Event Start" << std::endl;
     // EventCode compilation check with AddEventCb
     lvgl::Object obj(&screen);
@@ -121,6 +143,65 @@ int main() {
     // Run an event?
     lv_obj_send_event(obj.raw(), LV_EVENT_CLICKED, nullptr);
     std::cerr << "Event Done" << std::endl;
+  }
+
+  {
+    std::cerr << "State Enum Start" << std::endl;
+    lvgl::Object obj(&screen);
+    obj.add_state(lvgl::State::Checked);
+    assert(obj.has_state(lvgl::State::Checked));
+    obj.remove_state(lvgl::State::Checked);
+    assert(!obj.has_state(lvgl::State::Checked));
+    std::cerr << "State Enum Done" << std::endl;
+  }
+
+  {
+    std::cerr << "Align Enum Start" << std::endl;
+    lvgl::Button obj(screen);
+    obj.set_bg_opa(lvgl::Opacity::Cover);  // Use fluent Stylable method
+    obj.set_size(100, 100);
+    obj.align(lvgl::Align::Center);
+    // Rough check of position, assuming parent is sizeable
+    assert(lv_obj_get_style_align(obj.raw(), LV_PART_MAIN) == LV_ALIGN_CENTER);
+    std::cerr << "Align Enum Done" << std::endl;
+  }
+
+  {
+    std::cerr << "ScrollSnap Enum Start" << std::endl;
+    lvgl::Object obj(&screen);
+    obj.set_scroll_snap_y(lvgl::ScrollSnap::Center);
+    assert(lv_obj_get_scroll_snap_y(obj.raw()) == LV_SCROLL_SNAP_CENTER);
+    std::cerr << "ScrollSnap Enum Done" << std::endl;
+  }
+
+  {
+    std::cerr << "BlendMode Enum Start" << std::endl;
+    lvgl::Button obj(screen);
+    obj.set_style_blend_mode(
+        lvgl::BlendMode::Additive,
+        static_cast<lv_style_selector_t>(lvgl::Part::Main));
+    assert(lv_obj_get_style_blend_mode(obj.raw(), LV_PART_MAIN) ==
+           LV_BLEND_MODE_ADDITIVE);
+    std::cerr << "BlendMode Enum Done" << std::endl;
+  }
+
+  {
+    std::cerr << "GridAlign Enum Start" << std::endl;
+    lvgl::Object obj(&screen);
+    obj.set_grid_align(lvgl::GridAlign::Center, lvgl::GridAlign::End);
+    assert(lv_obj_get_style_grid_column_align(obj.raw(), LV_PART_MAIN) ==
+           LV_GRID_ALIGN_CENTER);
+    assert(lv_obj_get_style_grid_row_align(obj.raw(), LV_PART_MAIN) ==
+           LV_GRID_ALIGN_END);
+    std::cerr << "GridAlign Enum Done" << std::endl;
+  }
+
+  {
+    std::cerr << "Dir Enum Start" << std::endl;
+    lvgl::Dropdown dd(screen);
+    dd.set_dir(lvgl::Dir::Bottom);
+    assert(dd.get_dir() == LV_DIR_BOTTOM);
+    std::cerr << "Dir Enum Done" << std::endl;
   }
 
   std::cerr << "[SUCCESS] Scoped Enums validated." << std::endl;

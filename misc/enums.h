@@ -345,6 +345,14 @@ enum class ChartType : uint8_t {
   Scatter = LV_CHART_TYPE_SCATTER,
 };
 
+/**
+ * @brief Wrapper for lv_chart_update_mode_t.
+ */
+enum class ChartUpdateMode : uint8_t {
+  Shift = LV_CHART_UPDATE_MODE_SHIFT,
+  Circular = LV_CHART_UPDATE_MODE_CIRCULAR,
+};
+
 // ============================================================================
 // Scroll Enums
 // ============================================================================
