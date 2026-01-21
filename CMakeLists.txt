@@ -53,6 +53,7 @@ set(SOURCES
     misc/timer.cpp
     misc/animation.cpp
     misc/async.cpp
+    misc/log.cpp
 )
 
 if(IDF_TARGET)
@@ -271,6 +272,10 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_async tests/test_async.cpp)
     target_link_libraries(test_async PRIVATE lvgl_cpp)
     add_test(NAME test_async COMMAND test_async)
+
+    add_executable(test_log tests/test_log.cpp)
+    target_link_libraries(test_log PRIVATE lvgl_cpp)
+    add_test(NAME test_log COMMAND test_log)
 
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
