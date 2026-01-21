@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <functional>
 
+#include "indev_data.h"
 // #include "../core/group.h"   // Removed: cleanup
 #include "../core/object.h"  // IWYU pragma: export
 #include "../misc/enums.h"   // For IndevType, IndevState
@@ -35,6 +36,7 @@ class InputDevice {
 
   // Configuration
   void set_read_cb(std::function<void(lv_indev_data_t*)> cb);
+  void set_read_cb(std::function<void(IndevData&)> cb);
   void set_type(lv_indev_type_t type);
 
   // Methods
@@ -61,6 +63,7 @@ class InputDevice {
   lv_indev_t* indev_ = nullptr;
   bool owned_ = false;
   std::function<void(lv_indev_data_t*)> read_cb_;
+  std::function<void(IndevData&)> read_cb_v2_;
 };
 
 }  // namespace lvgl
