@@ -554,16 +554,6 @@ enum class ColorFormat : uint8_t {
 };
 
 /**
- * @brief Wrapper for lv_display_rotation_t.
- */
-enum class DisplayRotation : uint8_t {
-  Rotation0 = LV_DISPLAY_ROTATION_0,
-  Rotation90 = LV_DISPLAY_ROTATION_90,
-  Rotation180 = LV_DISPLAY_ROTATION_180,
-  Rotation270 = LV_DISPLAY_ROTATION_270,
-};
-
-/**
  * @brief Wrapper for lv_anim_enable_t.
  */
 enum class AnimEnable : uint8_t {
