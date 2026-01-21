@@ -40,6 +40,8 @@ Object::~Object() {
     for (auto& node : callback_nodes_) {
       lv_obj_remove_event_cb_with_user_data(obj_, event_proxy, node.get());
     }
+    // Remove the internal delete hook to prevent use-after-free of 'this'
+    lv_obj_remove_event_cb_with_user_data(obj_, on_delete_event, this);
 
     if (owned_) {
       lv_obj_delete(obj_);
@@ -157,6 +159,10 @@ void Object::add_event_cb(lv_event_code_t event_code, EventCallback callback) {
   callback_nodes_.push_back(std::move(node));
 }
 
+void Object::add_event_cb(EventCode event_code, EventCallback callback) {
+  add_event_cb(static_cast<lv_event_code_t>(event_code), std::move(callback));
+}
+
 // --- Styles ---
 
 void Object::add_style(Style& style, lv_style_selector_t selector) {
@@ -199,6 +205,41 @@ void Object::set_style_image_recolor(lv_color_t value,
 void Object::set_style_bg_image_src(const void* value,
                                     lv_style_selector_t selector) {
   if (obj_) lv_obj_set_style_bg_image_src(obj_, value, selector);
+}
+
+// --- Layout & Scroll ---
+
+void Object::set_flex_flow(FlexFlow flow) {
+  if (obj_) lv_obj_set_flex_flow(obj_, static_cast<lv_flex_flow_t>(flow));
+}
+
+void Object::set_flex_align(FlexAlign main_place, FlexAlign cross_place,
+                            FlexAlign track_cross_place) {
+  if (obj_) {
+    lv_obj_set_flex_align(obj_, static_cast<lv_flex_align_t>(main_place),
+                          static_cast<lv_flex_align_t>(cross_place),
+                          static_cast<lv_flex_align_t>(track_cross_place));
+  }
+}
+
+void Object::set_grid_align(GridAlign column_align, GridAlign row_align) {
+  if (obj_) {
+    lv_obj_set_grid_align(obj_, static_cast<lv_grid_align_t>(column_align),
+                          static_cast<lv_grid_align_t>(row_align));
+  }
+}
+
+void Object::set_scrollbar_mode(ScrollbarMode mode) {
+  if (obj_)
+    lv_obj_set_scrollbar_mode(obj_, static_cast<lv_scrollbar_mode_t>(mode));
+}
+
+void Object::set_scroll_snap_x(ScrollSnap snap) {
+  if (obj_) lv_obj_set_scroll_snap_x(obj_, static_cast<lv_scroll_snap_t>(snap));
+}
+
+void Object::set_scroll_snap_y(ScrollSnap snap) {
+  if (obj_) lv_obj_set_scroll_snap_y(obj_, static_cast<lv_scroll_snap_t>(snap));
 }
 
 }  // namespace lvgl
