@@ -277,6 +277,10 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_log PRIVATE lvgl_cpp)
     add_test(NAME test_log COMMAND test_log)
 
+    add_executable(test_timer tests/test_timer.cpp)
+    target_link_libraries(test_timer PRIVATE lvgl_cpp)
+    add_test(NAME test_timer COMMAND test_timer)
+
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
     add_test(NAME test_header_integrity 
