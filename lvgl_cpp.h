@@ -13,6 +13,7 @@
 #include "misc/async.h"          // IWYU pragma: export
 #include "misc/color.h"          // IWYU pragma: export
 #include "misc/file_system.h"    // IWYU pragma: export
+#include "misc/log.h"            // IWYU pragma: export
 #include "misc/timer.h"          // IWYU pragma: export
 #if LV_USE_ANIMIMG
 #include "widgets/anim_image.h"  // IWYU pragma: export
