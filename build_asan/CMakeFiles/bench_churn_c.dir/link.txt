@@ -1,1 +1,0 @@
-/usr/bin/c++ -fsanitize=address -fno-omit-frame-pointer -g -Wl,--dependency-file=CMakeFiles/bench_churn_c.dir/link.d CMakeFiles/bench_churn_c.dir/tests/bench_churn.c.o -o bench_churn_c  lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a

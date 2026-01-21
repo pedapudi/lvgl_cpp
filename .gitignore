@@ -1,4 +1,5 @@
 build/
+build_asan/
 *.o
 *.a
 *.so
@@ -13,6 +14,9 @@ compile_commands.json
 
 # Profiling Reports
 memory_report.html
+
+# Benchmark Outputs
+*_output.txt
 
 # Agent Configuration
 .agent/
