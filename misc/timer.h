@@ -84,11 +84,28 @@ class Timer {
 
   lv_timer_t* raw() const { return timer_; }
 
+  /**
+   * @brief Set a callback to be called when the timer system resumes.
+   *
+   * This is called when lv_timer_enable(true) is called after the
+   * timer system was disabled.
+   *
+   * @param callback The resume callback.
+   */
+  static void set_resume_handler(std::function<void()> callback);
+
+  /**
+   * @brief Clear the resume handler.
+   */
+  static void clear_resume_handler();
+
  private:
   lv_timer_t* timer_;
   std::unique_ptr<TimerCallback> cb_;
 
   static void timer_proxy(lv_timer_t* t);
+  static std::function<void()> resume_handler_;
+  static void resume_handler_proxy(void* data);
 };
 
 }  // namespace lvgl

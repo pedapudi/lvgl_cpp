@@ -92,4 +92,26 @@ void Timer::set_cb(TimerCallback cb) {
 
 void Timer::enable(bool en) { lv_timer_enable(en); }
 
+std::function<void()> Timer::resume_handler_ = nullptr;
+
+void Timer::set_resume_handler(std::function<void()> callback) {
+  resume_handler_ = std::move(callback);
+  if (resume_handler_) {
+    lv_timer_handler_set_resume_cb(resume_handler_proxy, nullptr);
+  } else {
+    lv_timer_handler_set_resume_cb(nullptr, nullptr);
+  }
+}
+
+void Timer::clear_resume_handler() {
+  resume_handler_ = nullptr;
+  lv_timer_handler_set_resume_cb(nullptr, nullptr);
+}
+
+void Timer::resume_handler_proxy(void* data) {
+  if (resume_handler_) {
+    resume_handler_();
+  }
+}
+
 }  // namespace lvgl

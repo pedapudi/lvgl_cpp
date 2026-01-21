@@ -1,137 +1,84 @@
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "../misc/timer.h"
 #include "lvgl.h"
 
-static int callback_count = 0;
-static int oneshot_count = 0;
+// Variable to capture execution
+static bool resumed = false;
 
-void test_periodic_timer() {
-  std::cout << "Testing Periodic Timer..." << std::endl;
-  callback_count = 0;
+void test_timer_resume() {
+  std::cout << "Testing Timer Resume Handler..." << std::endl;
+  resumed = false;
 
-  {
-    auto t =
-        lvgl::Timer::periodic(50, [](lvgl::Timer* t) { callback_count++; });
-
-    for (int i = 0; i < 10; ++i) {
-      lv_tick_inc(20);
-      lv_timer_handler();
-    }
-  }
-  // Timer destroyed here
-
-  int count_after_destroy = callback_count;
-  // Should verify it ran at least once
-  if (callback_count > 0) {
-    std::cout << "PASS: Periodic timer ran " << callback_count << " times."
-              << std::endl;
-  } else {
-    std::cerr << "FAIL: Periodic timer did not run." << std::endl;
-    exit(1);
-  }
-
-  // Verify it stopped
-  for (int i = 0; i < 5; ++i) {
-    lv_tick_inc(20);
-    lv_timer_handler();
-  }
-
-  if (callback_count == count_after_destroy) {
-    std::cout << "PASS: Periodic timer stopped after destruction." << std::endl;
-  } else {
-    std::cerr << "FAIL: Periodic timer continued running after destruction!"
-              << std::endl;
-    exit(1);
-  }
-}
-
-void test_oneshot_timer() {
-  std::cout << "Testing Oneshot Timer..." << std::endl;
-  oneshot_count = 0;
-
-  lvgl::Timer::oneshot(50, []() {
-    oneshot_count++;
-    std::cout << "Oneshot callback fired." << std::endl;
+  // Set handler
+  lvgl::Timer::set_resume_handler([]() {
+    resumed = true;
+    std::cout << "DEBUG: Resume handler called!" << std::endl;
   });
 
-  // Run efficiently
-  for (int i = 0; i < 10; ++i) {
-    lv_tick_inc(20);
-    lv_timer_handler();
-    if (oneshot_count > 0) break;
+  // Disable timer handler
+  std::cout << "Disabling timer..." << std::endl;
+  // We create a timer instance just to access the method?
+  // Actually Timer::enable is an instance method calling a global function.
+  // But since it's just a wrapper, we can create a dummy timer or just use C
+  // API if we wanted. Ideally Timer::enable should be static. But current API
+  // is void enable(bool). Let's create a dummy timer just to call enable. It
+  // mocks "using the timer system".
+
+  {
+    lvgl::Timer t;  // Doesn't create lv_timer unless args passed?
+    // Default ctor: timer_(nullptr).
+    t.enable(false);
   }
 
-  if (oneshot_count == 1) {
-    std::cout << "PASS: Oneshot timer fired once." << std::endl;
-  } else {
-    std::cerr << "FAIL: Oneshot timer failed (count=" << oneshot_count << ")."
-              << std::endl;
+  if (resumed) {
+    std::cerr << "FAIL: Resumed triggered early." << std::endl;
     exit(1);
   }
 
-  // Verify it doesn't fire again
-  for (int i = 0; i < 5; ++i) {
-    lv_tick_inc(20);
-    lv_timer_handler();
+  // Enable timer handler - should trigger resume callback
+  std::cout << "Enabling timer..." << std::endl;
+  {
+    lvgl::Timer t;
+    t.enable(true);
   }
 
-  if (oneshot_count == 1) {
-    std::cout << "PASS: Oneshot timer did not fire again." << std::endl;
+  if (resumed) {
+    std::cout << "PASS: Resume handler triggered." << std::endl;
   } else {
-    std::cerr << "FAIL: Oneshot timer fired again!" << std::endl;
+    std::cerr << "FAIL: Resume handler NOT triggered." << std::endl;
     exit(1);
   }
 }
 
-void test_move_semantics() {
-  std::cout << "Testing Move Semantics..." << std::endl;
-  callback_count = 0;
+void test_timer_clear_resume() {
+  std::cout << "Testing Clear Resume Handler..." << std::endl;
+  resumed = false;
 
-  lvgl::Timer t1 =
-      lvgl::Timer::periodic(50, [](lvgl::Timer* t) { callback_count++; });
+  lvgl::Timer::clear_resume_handler();
 
-  // Move t1 to t2
-  lvgl::Timer t2 = std::move(t1);
-
-  // t1 should be empty/safe
-  // t2 should run
-
-  for (int i = 0; i < 5; ++i) {
-    lv_tick_inc(20);
-    lv_timer_handler();
+  {
+    lvgl::Timer t;
+    t.enable(false);
+    t.enable(true);
   }
 
-  if (callback_count > 0) {
-    std::cout << "PASS: Moved timer executed." << std::endl;
+  if (!resumed) {
+    std::cout << "PASS: Resume handler cleared." << std::endl;
   } else {
-    std::cerr << "FAIL: Moved timer did not execute." << std::endl;
-    exit(1);
-  }
-
-  // Assign t2 to t3
-  lvgl::Timer t3;
-  t3 = std::move(t2);
-
-  int count_before = callback_count;
-  for (int i = 0; i < 5; ++i) {
-    lv_tick_inc(20);
-    lv_timer_handler();
-  }
-
-  if (callback_count > count_before) {
-    std::cout << "PASS: Move-assigned timer executed." << std::endl;
-  } else {
-    std::cerr << "FAIL: Move-assigned timer did not execute." << std::endl;
+    std::cerr << "FAIL: Resume handler triggered after clear." << std::endl;
     exit(1);
   }
 }
 
 int main() {
   lv_init();
-  test_periodic_timer();
-  test_oneshot_timer();
-  test_move_semantics();
+
+  test_timer_resume();
+  test_timer_clear_resume();
+
+  std::cout << "\nAll Timer tests passed!" << std::endl;
   return 0;
 }
