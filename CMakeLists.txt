@@ -60,6 +60,8 @@ if(IDF_TARGET)
     idf_component_register(SRCS ${SOURCES}
                         INCLUDE_DIRS "." ".."
                         REQUIRES lvgl)
+    target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type)
+    target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_20)
 else()
     project(lvgl_cpp)
 

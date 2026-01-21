@@ -1,7 +1,9 @@
 #include "select_hello.h"
 
+#include "esp_log.h"
 #include "hello_world.h"
 
+// Declare the font used for the roller and labels
 LV_FONT_DECLARE(lv_font_unscii_8);
 
 SelectHello::SelectHello() {}
@@ -11,59 +13,71 @@ void SelectHello::show_menu(lvgl::Display& display) {
   auto screen = display_->get_screen_active();
   lvgl::Object scr(screen);
 
-  // Clean current screen
-  lv_obj_clean(scr.raw());
+  // Clean the current screen by deleting all its child objects.
+  // This is a standard way to "clear" a screen before building a new UI.
+  // Note: This invalidates any previous C++ widgets (like roller_) that were
+  // children of this screen.
+  scr.clean();
 
   in_menu_mode_ = true;
 
-  // Create Roller
+  // Create the Roller widget
   roller_ = lvgl::Roller(&scr);
   static const char* options = "Hello World\nHello ESP32\nHello LVGL C++";
-  roller_.set_options(options, LV_ROLLER_MODE_INFINITE);
+  roller_.set_options(options, lvgl::RollerMode::Infinite);
 
-  // Use small 8px font for 128x64 display
-  lv_obj_set_style_text_font(roller_.raw(), &lv_font_unscii_8, 0);
-  lv_obj_set_style_text_font(roller_.raw(), &lv_font_unscii_8, LV_PART_SELECTED);
+  // Use the small 8px font for the 128x64 SSD1306 display.
+  // We set it for both the normal part and the selected part.
+  roller_.set_text_font(lvgl::Font(&lv_font_unscii_8))
+      .set_text_font(lvgl::Font(&lv_font_unscii_8),
+                     static_cast<lv_style_selector_t>(lvgl::Part::Selected));
 
-  // Ensure background is opaque to prevent artifacts
-  lv_obj_set_style_bg_opa(roller_.raw(), LV_OPA_COVER, 0);
+  // Set the background opacity to cover (100%) to ensure it's not transparent.
+  roller_.set_bg_opa(lvgl::Opacity::Cover);
+
+  // Remove the border and outline that LVGL automatically adds when a widget
+  // is focused via keypad/encoder. This results in a cleaner, border-less UI.
+  roller_.set_border_width(0);
+  roller_.set_outline_width(0);
+  roller_.set_border_width(0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
+  roller_.set_outline_width(0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
 
   roller_.set_visible_row_count(2);
   roller_.set_width(120);
-  roller_.align(LV_ALIGN_TOP_MID, 0, 0);
+  roller_.align(lvgl::Align::TopMid, 0, 0);
 
-  // Create Hint Label
+  // Create a Label at the bottom to hint at navigation buttons
   hint_label_ = lvgl::Label(&scr);
-  hint_label_.set_text("Next     Select");
-  lv_obj_set_style_text_font(hint_label_.raw(), &lv_font_unscii_8, 0);
-  hint_label_.align(LV_ALIGN_BOTTOM_MID, 0, -2);
-}
+  hint_label_.set_text("Next     Select")
+      .set_text_font(lvgl::Font(&lv_font_unscii_8))
+      .align(lvgl::Align::BottomMid, 0, -2);
 
-void SelectHello::handle_input(bool next, bool enter) {
-  if (!display_) return;
+  // Input Handling: Add the roller to the group so it can receive key events.
+  group_.remove_all_objs();
+  group_.add_obj(roller_);
 
-  if (in_menu_mode_) {
-    if (next) {
-      // Cycle to next option
-      uint32_t current = roller_.get_selected();
-      uint32_t total = roller_.get_option_count();
-      roller_.set_selected((current + 1) % total, LV_ANIM_ON);
-    } else if (enter) {
-      // Select option
-      uint32_t selected = roller_.get_selected();
-      load_hello_screen(selected);
-      in_menu_mode_ = false;
-    }
-  } else {
-    // If not in menu, any button press returns to menu
-    if (next || enter) {
-      show_menu(*display_);
-    }
-  }
+  // Register an event callback for key presses.
+  // We only care about ENTER here because the Roller widget
+  // natively handles LV_KEY_UP/DOWN to scroll through options.
+  roller_.add_event_cb(
+      [this](lvgl::Event& e) {
+        uint32_t key = *e.get_param<uint32_t>();
+        if (key == static_cast<uint32_t>(lvgl::Key::Enter)) {
+          ESP_LOGI("SelectHello", "ENTER pressed, selection: %lu",
+                   (unsigned long)roller_.get_selected());
+
+          // Step 1: Store the selection immediately.
+          pending_selection_ = roller_.get_selected();
+
+          // Step 2: Use lvgl::Async::call to defer the screen transition.
+          lvgl::Async::call([this]() { this->load_hello_screen(this->pending_selection_); });
+        }
+      },
+      static_cast<lv_event_code_t>(lvgl::EventCode::Key));
 }
 
 void SelectHello::load_hello_screen(int index) {
-  std::string text;
+  const char* text;
   switch (index) {
     case 0:
       text = "Hello World";
@@ -79,9 +93,50 @@ void SelectHello::load_hello_screen(int index) {
       break;
   }
 
-  // Clean screen and load hello UI
+  in_menu_mode_ = false;
+  ESP_LOGI("SelectHello", "Loading hello screen: %s", text);
+
   if (display_) {
-    lv_obj_clean(display_->get_screen_active());
+    // CRITICAL: We wrap the active screen in a member variable (active_screen_).
+    active_screen_ = lvgl::Object(display_->get_screen_active());
+
+    // Clean the screen for the new UI.
+    active_screen_.clean();
+
+    // Load the HelloWorld UI (it creates its own widgets and animations).
     HelloWorld::load(*display_, text);
+
+    // Create a "Back" hint at the top of the screen.
+    lvgl::Label back_hint(&active_screen_);
+    back_hint.set_text("Press any key to go back")
+        .set_text_font(lvgl::Font(&lv_font_unscii_8))
+        .align(lvgl::Align::TopMid, 0, 2)
+        .add_flag(lvgl::ObjFlag::Hidden);
+
+    // Release the C++ wrapper's ownership of the label.
+    lv_obj_t* hint_obj = back_hint.release();
+
+    // Show the hint text ONLY after the 2-second animation finishes.
+    lvgl::Timer::oneshot(
+        2100, [hint_obj]() { lvgl::Object(hint_obj).remove_flag(lvgl::ObjFlag::Hidden); });
+
+    // To capture "Back" key presses, we make the screen itself focusable.
+    active_screen_.add_flag(lvgl::ObjFlag::Clickable);
+    group_.remove_all_objs();
+    group_.add_obj(active_screen_);
+
+    // Register the "Back" handler on the screen object.
+    active_screen_.add_event_cb(lvgl::EventCode::Key, [this](lvgl::Event& e) {
+      if (in_menu_mode_) return;  // Guard against double-clicks
+
+      ESP_LOGI("SelectHello", "Back key received");
+      in_menu_mode_ = true;
+
+      // Again, use async call for a safe transition back to the menu.
+      lvgl::Async::call([this]() {
+        ESP_LOGI("SelectHello", "Returning to menu");
+        this->show_menu(*this->display_);
+      });
+    });
   }
 }
