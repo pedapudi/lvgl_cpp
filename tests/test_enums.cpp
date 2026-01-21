@@ -5,6 +5,8 @@
 #include "../widgets/arc.h"
 #include "../widgets/bar.h"
 #include "../widgets/button.h"
+#include "../widgets/chart.h"
+#include "../widgets/keyboard.h"
 #include "../widgets/label.h"
 #include "../widgets/slider.h"
 #include "lvgl.h"
@@ -111,6 +113,25 @@ int main() {
     std::cerr << "Label2 set_mode" << std::endl;
     assert(lv_label_get_long_mode(label.raw()) == LV_LABEL_LONG_DOT);
     std::cerr << "Label Long Mode Done" << std::endl;
+  }
+
+  {
+    std::cerr << "Keyboard Mode Start" << std::endl;
+    lvgl::Keyboard kb(screen);
+    kb.set_mode(lvgl::KeyboardMode::Number);
+    assert(kb.get_mode() == LV_KEYBOARD_MODE_NUMBER);
+    std::cerr << "Keyboard Mode Done" << std::endl;
+  }
+
+  {
+    std::cerr << "Chart Type/Mode Start" << std::endl;
+    lvgl::Chart chart(screen);
+    chart.set_type(lvgl::ChartType::Bar);
+    assert(chart.get_type() == LV_CHART_TYPE_BAR);
+
+    // Check Update Mode (no getter usually available, just compile check)
+    chart.set_update_mode(lvgl::ChartUpdateMode::Circular);
+    std::cerr << "Chart Type/Mode Done" << std::endl;
   }
 
   {
