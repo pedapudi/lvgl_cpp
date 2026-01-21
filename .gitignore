@@ -15,8 +15,9 @@ compile_commands.json
 # Profiling Reports
 memory_report.html
 
-# Benchmark Outputs
+# Benchmark and Tool Outputs
 *_output.txt
+valgrind_output*.txt
 
 # Agent Configuration
 .agent/
