@@ -17,7 +17,7 @@ void setup() { lv_init(); }
 void test_pointer_creation() {
   std::cout << "Testing PointerInput creation..." << std::endl;
   auto ptr = lvgl::PointerInput::create();
-  assert(ptr.get_type() == LV_INDEV_TYPE_POINTER);
+  assert(ptr.get_type() == lvgl::IndevType::Pointer);
   assert(ptr.raw() != nullptr);
   std::cout << "PointerInput creation passed." << std::endl;
 }
@@ -33,7 +33,7 @@ void test_callback_dispatch() {
   ptr.set_read_cb([](lv_indev_data_t* data) {
     callback_called = true;
     callback_count++;
-    data->state = LV_INDEV_STATE_PRESSED;
+    data->state = static_cast<lv_indev_state_t>(lvgl::IndevState::Pressed);
   });
 
   // Manually trigger a read (which calls the trampoline -> lambda)
@@ -64,17 +64,17 @@ void test_subclasses() {
 
   {
     auto keypad = lvgl::KeypadInput::create();
-    assert(keypad.get_type() == LV_INDEV_TYPE_KEYPAD);
+    assert(keypad.get_type() == lvgl::IndevType::Keypad);
   }  // Should delete keypad here
 
   {
     auto encoder = lvgl::EncoderInput::create();
-    assert(encoder.get_type() == LV_INDEV_TYPE_ENCODER);
+    assert(encoder.get_type() == lvgl::IndevType::Encoder);
   }  // Should delete encoder here
 
   {
     auto btn = lvgl::ButtonInput::create();
-    assert(btn.get_type() == LV_INDEV_TYPE_BUTTON);
+    assert(btn.get_type() == lvgl::IndevType::Button);
 
     std::vector<lv_point_t> points = {{10, 10}, {50, 50}};
     btn.set_points(points);

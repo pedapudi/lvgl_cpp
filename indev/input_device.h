@@ -6,6 +6,7 @@
 
 // #include "../core/group.h"   // Removed: cleanup
 #include "../core/object.h"  // IWYU pragma: export
+#include "../misc/enums.h"   // For IndevType, IndevState
 #include "lvgl.h"            // IWYU pragma: export
 
 namespace lvgl {
@@ -37,14 +38,14 @@ class InputDevice {
   void set_type(lv_indev_type_t type);
 
   // Methods
-  lv_indev_type_t get_type();
+  IndevType get_type() const;
   void reset(Object* obj);
   void stop_processing();
   void enable(bool en);
   void read();  // Manual trigger
 
   // Data Access
-  lv_indev_state_t get_state();
+  IndevState get_state() const;
   void get_point(lv_point_t* point);
   lv_dir_t get_gesture_dir();
   uint32_t get_key();
