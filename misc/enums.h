@@ -158,6 +158,217 @@ enum class BlendMode : uint8_t {
   Multiply = LV_BLEND_MODE_MULTIPLY,
 };
 
+// ============================================================================
+// Event Codes
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_event_code_t.
+ */
+enum class EventCode : uint32_t {
+  All = LV_EVENT_ALL,
+  Pressed = LV_EVENT_PRESSED,
+  Pressing = LV_EVENT_PRESSING,
+  PressLost = LV_EVENT_PRESS_LOST,
+  ShortClicked = LV_EVENT_SHORT_CLICKED,
+  SingleClicked = LV_EVENT_SINGLE_CLICKED,
+  DoubleClicked = LV_EVENT_DOUBLE_CLICKED,
+  TripleClicked = LV_EVENT_TRIPLE_CLICKED,
+  LongPressed = LV_EVENT_LONG_PRESSED,
+  LongPressedRepeat = LV_EVENT_LONG_PRESSED_REPEAT,
+  Clicked = LV_EVENT_CLICKED,
+  Released = LV_EVENT_RELEASED,
+  ScrollBegin = LV_EVENT_SCROLL_BEGIN,
+  ScrollThrowBegin = LV_EVENT_SCROLL_THROW_BEGIN,
+  ScrollEnd = LV_EVENT_SCROLL_END,
+  Scroll = LV_EVENT_SCROLL,
+  Gesture = LV_EVENT_GESTURE,
+  Key = LV_EVENT_KEY,
+  Rotary = LV_EVENT_ROTARY,
+  Focused = LV_EVENT_FOCUSED,
+  Defocused = LV_EVENT_DEFOCUSED,
+  Leave = LV_EVENT_LEAVE,
+  HitTest = LV_EVENT_HIT_TEST,
+  IndevReset = LV_EVENT_INDEV_RESET,
+  HoverOver = LV_EVENT_HOVER_OVER,
+  HoverLeave = LV_EVENT_HOVER_LEAVE,
+  CoverCheck = LV_EVENT_COVER_CHECK,
+  RefrExtDrawSize = LV_EVENT_REFR_EXT_DRAW_SIZE,
+  DrawMainBegin = LV_EVENT_DRAW_MAIN_BEGIN,
+  DrawMain = LV_EVENT_DRAW_MAIN,
+  DrawMainEnd = LV_EVENT_DRAW_MAIN_END,
+  DrawPostBegin = LV_EVENT_DRAW_POST_BEGIN,
+  DrawPost = LV_EVENT_DRAW_POST,
+  DrawPostEnd = LV_EVENT_DRAW_POST_END,
+  DrawTaskAdded = LV_EVENT_DRAW_TASK_ADDED,
+  ValueChanged = LV_EVENT_VALUE_CHANGED,
+  Insert = LV_EVENT_INSERT,
+  Refresh = LV_EVENT_REFRESH,
+  Ready = LV_EVENT_READY,
+  Cancel = LV_EVENT_CANCEL,
+  Create = LV_EVENT_CREATE,
+  Delete = LV_EVENT_DELETE,
+  ChildChanged = LV_EVENT_CHILD_CHANGED,
+  ChildCreated = LV_EVENT_CHILD_CREATED,
+  ChildDeleted = LV_EVENT_CHILD_DELETED,
+  ScreenUnloadStart = LV_EVENT_SCREEN_UNLOAD_START,
+  ScreenLoadStart = LV_EVENT_SCREEN_LOAD_START,
+  ScreenLoaded = LV_EVENT_SCREEN_LOADED,
+  ScreenUnloaded = LV_EVENT_SCREEN_UNLOADED,
+  SizeChanged = LV_EVENT_SIZE_CHANGED,
+  StyleChanged = LV_EVENT_STYLE_CHANGED,
+  LayoutChanged = LV_EVENT_LAYOUT_CHANGED,
+  GetSelfSize = LV_EVENT_GET_SELF_SIZE,
+  InvalidateArea = LV_EVENT_INVALIDATE_AREA,
+  ResolutionChanged = LV_EVENT_RESOLUTION_CHANGED,
+  ColorFormatChanged = LV_EVENT_COLOR_FORMAT_CHANGED,
+  RefrRequest = LV_EVENT_REFR_REQUEST,
+  RefrStart = LV_EVENT_REFR_START,
+  RefrReady = LV_EVENT_REFR_READY,
+  RenderStart = LV_EVENT_RENDER_START,
+  RenderReady = LV_EVENT_RENDER_READY,
+  FlushStart = LV_EVENT_FLUSH_START,
+  FlushFinish = LV_EVENT_FLUSH_FINISH,
+  FlushWaitStart = LV_EVENT_FLUSH_WAIT_START,
+  FlushWaitFinish = LV_EVENT_FLUSH_WAIT_FINISH,
+  Vsync = LV_EVENT_VSYNC,
+  VsyncRequest = LV_EVENT_VSYNC_REQUEST,
+  Last = LV_EVENT_LAST,
+};
+
+// ============================================================================
+// Layout Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_flex_flow_t.
+ */
+enum class FlexFlow : uint8_t {
+  Row = LV_FLEX_FLOW_ROW,
+  Column = LV_FLEX_FLOW_COLUMN,
+  RowWrap = LV_FLEX_FLOW_ROW_WRAP,
+  RowReverse = LV_FLEX_FLOW_ROW_REVERSE,
+  RowWrapReverse = LV_FLEX_FLOW_ROW_WRAP_REVERSE,
+  ColumnWrap = LV_FLEX_FLOW_COLUMN_WRAP,
+  ColumnReverse = LV_FLEX_FLOW_COLUMN_REVERSE,
+  ColumnWrapReverse = LV_FLEX_FLOW_COLUMN_WRAP_REVERSE,
+};
+
+/**
+ * @brief Wrapper for lv_flex_align_t.
+ */
+enum class FlexAlign : uint8_t {
+  Start = LV_FLEX_ALIGN_START,
+  End = LV_FLEX_ALIGN_END,
+  Center = LV_FLEX_ALIGN_CENTER,
+  SpaceEvenly = LV_FLEX_ALIGN_SPACE_EVENLY,
+  SpaceAround = LV_FLEX_ALIGN_SPACE_AROUND,
+  SpaceBetween = LV_FLEX_ALIGN_SPACE_BETWEEN,
+};
+
+/**
+ * @brief Wrapper for lv_grid_align_t.
+ */
+enum class GridAlign : uint8_t {
+  Start = LV_GRID_ALIGN_START,
+  Center = LV_GRID_ALIGN_CENTER,
+  End = LV_GRID_ALIGN_END,
+  Stretch = LV_GRID_ALIGN_STRETCH,
+  SpaceEvenly = LV_GRID_ALIGN_SPACE_EVENLY,
+  SpaceAround = LV_GRID_ALIGN_SPACE_AROUND,
+  SpaceBetween = LV_GRID_ALIGN_SPACE_BETWEEN,
+};
+
+// ============================================================================
+// Widget Mode Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_arc_mode_t.
+ */
+enum class ArcMode : uint8_t {
+  Normal = LV_ARC_MODE_NORMAL,
+  Symmetrical = LV_ARC_MODE_SYMMETRICAL,
+  Reverse = LV_ARC_MODE_REVERSE,
+};
+
+/**
+ * @brief Wrapper for lv_bar_mode_t.
+ */
+enum class BarMode : uint8_t {
+  Normal = LV_BAR_MODE_NORMAL,
+  Symmetrical = LV_BAR_MODE_SYMMETRICAL,
+  Range = LV_BAR_MODE_RANGE,
+};
+
+/**
+ * @brief Wrapper for lv_slider_mode_t.
+ */
+enum class SliderMode : uint8_t {
+  Normal = LV_SLIDER_MODE_NORMAL,
+  Symmetrical = LV_SLIDER_MODE_SYMMETRICAL,
+  Range = LV_SLIDER_MODE_RANGE,
+};
+
+/**
+ * @brief Wrapper for lv_label_long_mode_t.
+ */
+enum class LabelLongMode : uint8_t {
+  Wrap = LV_LABEL_LONG_WRAP,
+  Dot = LV_LABEL_LONG_DOT,
+  Scroll = LV_LABEL_LONG_SCROLL,
+  ScrollCircular = LV_LABEL_LONG_SCROLL_CIRCULAR,
+  Clip = LV_LABEL_LONG_CLIP,
+};
+
+/**
+ * @brief Wrapper for lv_keyboard_mode_t.
+ */
+enum class KeyboardMode : uint8_t {
+  TextLower = LV_KEYBOARD_MODE_TEXT_LOWER,
+  TextUpper = LV_KEYBOARD_MODE_TEXT_UPPER,
+  Special = LV_KEYBOARD_MODE_SPECIAL,
+  Number = LV_KEYBOARD_MODE_NUMBER,
+  UserMode1 = LV_KEYBOARD_MODE_USER_1,
+  UserMode2 = LV_KEYBOARD_MODE_USER_2,
+  UserMode3 = LV_KEYBOARD_MODE_USER_3,
+  UserMode4 = LV_KEYBOARD_MODE_USER_4,
+};
+
+/**
+ * @brief Wrapper for lv_chart_type_t.
+ */
+enum class ChartType : uint8_t {
+  None = LV_CHART_TYPE_NONE,
+  Line = LV_CHART_TYPE_LINE,
+  Bar = LV_CHART_TYPE_BAR,
+  Scatter = LV_CHART_TYPE_SCATTER,
+};
+
+// ============================================================================
+// Scroll Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_scrollbar_mode_t.
+ */
+enum class ScrollbarMode : uint8_t {
+  Off = LV_SCROLLBAR_MODE_OFF,
+  On = LV_SCROLLBAR_MODE_ON,
+  Active = LV_SCROLLBAR_MODE_ACTIVE,
+  Auto = LV_SCROLLBAR_MODE_AUTO,
+};
+
+/**
+ * @brief Wrapper for lv_scroll_snap_t.
+ */
+enum class ScrollSnap : uint8_t {
+  None = LV_SCROLL_SNAP_NONE,
+  Start = LV_SCROLL_SNAP_START,
+  End = LV_SCROLL_SNAP_END,
+  Center = LV_SCROLL_SNAP_CENTER,
+};
+
 }  // namespace lvgl
 
 #endif  // LVGL_CPP_MISC_ENUMS_H_
