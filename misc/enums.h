@@ -506,6 +506,79 @@ enum class ScreenLoadAnim : uint8_t {
   OutBottom = LV_SCR_LOAD_ANIM_OUT_BOTTOM,
 };
 
+// ============================================================================
+// Color and Display Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_palette_t.
+ */
+enum class Palette : uint8_t {
+  Red = LV_PALETTE_RED,
+  Pink = LV_PALETTE_PINK,
+  Purple = LV_PALETTE_PURPLE,
+  DeepPurple = LV_PALETTE_DEEP_PURPLE,
+  Indigo = LV_PALETTE_INDIGO,
+  Blue = LV_PALETTE_BLUE,
+  LightBlue = LV_PALETTE_LIGHT_BLUE,
+  Cyan = LV_PALETTE_CYAN,
+  Teal = LV_PALETTE_TEAL,
+  Green = LV_PALETTE_GREEN,
+  LightGreen = LV_PALETTE_LIGHT_GREEN,
+  Lime = LV_PALETTE_LIME,
+  Yellow = LV_PALETTE_YELLOW,
+  Amber = LV_PALETTE_AMBER,
+  Orange = LV_PALETTE_ORANGE,
+  DeepOrange = LV_PALETTE_DEEP_ORANGE,
+  Brown = LV_PALETTE_BROWN,
+  BlueGrey = LV_PALETTE_BLUE_GREY,
+  Grey = LV_PALETTE_GREY,
+  None = LV_PALETTE_NONE,
+};
+
+/**
+ * @brief Wrapper for lv_color_format_t.
+ */
+enum class ColorFormat : uint8_t {
+  Unknown = LV_COLOR_FORMAT_UNKNOWN,
+  L8 = LV_COLOR_FORMAT_L8,
+  A8 = LV_COLOR_FORMAT_A8,
+  I1 = LV_COLOR_FORMAT_I1,
+  I2 = LV_COLOR_FORMAT_I2,
+  I4 = LV_COLOR_FORMAT_I4,
+  I8 = LV_COLOR_FORMAT_I8,
+  RGB565 = LV_COLOR_FORMAT_RGB565,
+  RGB888 = LV_COLOR_FORMAT_RGB888,
+  ARGB8888 = LV_COLOR_FORMAT_ARGB8888,
+  XRGB8888 = LV_COLOR_FORMAT_XRGB8888,
+};
+
+/**
+ * @brief Wrapper for lv_display_rotation_t.
+ */
+enum class DisplayRotation : uint8_t {
+  Rotation0 = LV_DISPLAY_ROTATION_0,
+  Rotation90 = LV_DISPLAY_ROTATION_90,
+  Rotation180 = LV_DISPLAY_ROTATION_180,
+  Rotation270 = LV_DISPLAY_ROTATION_270,
+};
+
+/**
+ * @brief Wrapper for lv_anim_enable_t.
+ */
+enum class AnimEnable : uint8_t {
+  Off = LV_ANIM_OFF,
+  On = LV_ANIM_ON,
+};
+
+/**
+ * @brief Wrapper for lv_result_t.
+ */
+enum class Result : uint8_t {
+  Invalid = LV_RESULT_INVALID,
+  Ok = LV_RESULT_OK,
+};
+
 }  // namespace lvgl
 
 #endif  // LVGL_CPP_MISC_ENUMS_H_
