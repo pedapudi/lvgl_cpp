@@ -92,6 +92,14 @@ class Widget : public Object,
     Object::remove_flag(f);
     return *static_cast<Derived*>(this);
   }
+  Derived& add_flag(ObjFlag f) {
+    Object::add_flag(f);
+    return *static_cast<Derived*>(this);
+  }
+  Derived& remove_flag(ObjFlag f) {
+    Object::remove_flag(f);
+    return *static_cast<Derived*>(this);
+  }
   Derived& add_state(State state) {
     Object::add_state(state);
     return *static_cast<Derived*>(this);

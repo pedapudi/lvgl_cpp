@@ -21,10 +21,10 @@
 
 // Mock event handler
 static void event_handler(lvgl::Event& e) {
-  lv_event_code_t code = e.get_code();
-  if (code == LV_EVENT_CLICKED) {
+  lvgl::EventCode code = e.get_code();
+  if (code == lvgl::EventCode::Clicked) {
     std::cout << "Clicked" << std::endl;
-  } else if (code == LV_EVENT_VALUE_CHANGED) {
+  } else if (code == lvgl::EventCode::ValueChanged) {
     std::cout << "Toggled" << std::endl;
   }
 }
@@ -35,7 +35,7 @@ void test_button_1() {
   lvgl::Button btn1;
   btn1.align(lvgl::Align::Center, 0, -40);
   btn1.align(lvgl::Align::Center, 0, -40);
-  btn1.remove_flag(LV_OBJ_FLAG_PRESS_LOCK);
+  btn1.remove_flag(lvgl::ObjFlag::PressLock);
   // Note: C++ wrapper might not expose add_event_cb directly in a way that
   // matches C exactly without a wrapper, but let's assume valid standard usage
   // or just creation for now if event handling isn't fully wrapped yet. For
@@ -47,7 +47,7 @@ void test_button_1() {
 
   lvgl::Button btn2;
   btn2.align(lvgl::Align::Center, 0, 40);
-  btn2.add_flag(LV_OBJ_FLAG_CHECKABLE);
+  btn2.add_flag(lvgl::ObjFlag::Checkable);
   btn2.set_height(LV_SIZE_CONTENT);
 
   lvgl::Label label2(btn2);
@@ -117,7 +117,7 @@ void test_switch_1() {
   // to it or needs it. For now, testing basic instantiation.
 
   lvgl::Switch sw1;
-  sw1.add_flag(LV_OBJ_FLAG_EVENT_BUBBLE);
+  sw1.add_flag(lvgl::ObjFlag::EventBubble);
 
   lvgl::Switch sw2;
   sw2.add_state(lvgl::State::Checked);
@@ -182,7 +182,7 @@ void test_arc_1() {
   arc2.set_rotation(270);
   arc2.set_bg_angles(0, 360);
   arc2.remove_style(NULL, LV_PART_KNOB);
-  arc2.remove_flag(LV_OBJ_FLAG_CLICKABLE);
+  arc2.remove_flag(lvgl::ObjFlag::Clickable);
   arc2.center();
 
   std::cout << "Arc Example 1 Passed" << std::endl;
