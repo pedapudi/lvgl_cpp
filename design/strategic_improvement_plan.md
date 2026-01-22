@@ -662,6 +662,101 @@ class EventRegistry {
 
 ---
 
+### 2.6. Core system enhancements (P1: Important)
+
+#### Problem statement
+
+While widgets are well-covered, the core system APIs that glue the UI together have significant gaps, limiting the ability to build advanced interaction models:
+
+| Subsystem | Coverage | Key Missing Capabilities |
+|-----------|----------|--------------------------|
+| **Input Devices (`lv_indev_`)** | 31.3% | Gesture limits, scroll throw/inertia, cursor management |
+| **Groups (`lv_group_`)** | 48.1% | Focus/Edge callbacks, wrap policies, search |
+| **Animations (`lv_anim_`)** | 39.1% | Advanced duration/speed conversion, custom paths |
+
+#### Proposed solution
+
+Broaden the `Display`, `InputDevice`, and `Group` classes to cover the full functional surface of LVGL v9, prioritizing interaction logic and accessibility.
+
+```cpp
+// indev.h extension
+class InputDevice {
+ public:
+  InputDevice& set_scroll_throw(uint8_t throw_v);
+  InputDevice& set_gesture_limit(uint8_t limit);
+  InputDevice& set_gesture_min_velocity(uint8_t velocity);
+  InputDevice& set_cursor(const Object& obj);
+  
+  Point get_point() const;
+  Key get_key() const;
+  Object get_target() const;
+};
+
+// group.h extension
+class Group {
+ public:
+  using FocusCallback = std::function<void(Group&, Object&, Object&)>;
+  
+  Group& set_focus_cb(FocusCallback cb);
+  Group& set_wrap(bool en);
+  Group& set_refocus_policy(bool en);
+  
+  void focus_next();
+  void focus_prev();
+  void focus_obj(Object& obj);
+  
+  Object get_focused() const;
+  size_t get_count() const;
+};
+```
+
+#### Implementation breadcrumbs
+
+1. **Expand `indev/input_device.h`**:
+   - Add setters for scroll/gesture limits wrapping `lv_indev_set_*`
+   - Implement getters for current interaction state
+   - Reference: `lv_indev.h` in LVGL
+
+2. **Expand `core/group.h`**:
+   - Add focus management methods wrapping `lv_group_*`
+   - Implement C++ callback bridge for focus events (mirroring the `EventSource` pattern)
+   - Reference: `lv_group.h` in LVGL
+
+3. **Enhance `display/display.h`**:
+   - Add display-level event handling
+   - Wrap screen loading with advanced transition parameters
+   - Reference: `lv_display.h` in LVGL
+
+#### Why this approach
+
+| Consideration | Decision | Rationale |
+|--------------|----------|-----------|
+| Accessibility | Complete Group API | Essential for keyboard/encoder-only navigation |
+| Performance | Inlined getters | Zero cost access to input state (X/Y, key) |
+| Safety | Unmanaged Object returns | Core handles (Parent, Screen) should not be deleted by wrapper |
+
+#### Alternatives considered
+
+**Alternative A: Global input state hooks**
+```cpp
+auto point = Input::get_active_point();
+```
+- **Rejected**: LVGL supports multiple input devices; global state is ambiguous
+- **Intent**: Stick to the object-oriented `InputDevice` instance model
+
+**Alternative B: Group indices instead of Objects**
+```cpp
+group.focus(5);
+```
+- **Rejected**: Brittle, doesn't handle dynamic UI well
+- **Intent**: Use typed `Object` references for focus control
+
+#### Coverage impact
+
+- Functions: +40-50 system methods → +3-4% total coverage
+
+---
+
 ## 3. Implementation phases
 
 ### Phase 1: Style API and enum foundation
@@ -721,22 +816,22 @@ class EventRegistry {
 
 ---
 
-### Phase 4: Event system and documentation
+### Phase 4: Core systems and events
 
-**Goal**: Complete event handling and comprehensive docs.
+**Goal**: Complete interaction model and custom event handling.
 
 **Tasks**:
-1. Extend Event class with parameter extraction
-2. Add EventRegistry for custom events
-3. Update MIGRATION_GUIDE.md
-4. Create API examples
-5. Update design documents
+1. Extend `InputDevice` with scroll and gesture controls
+2. Extend `Group` with focus management and callbacks
+3. Extend `Event` class with parameter extraction
+4. Add `EventRegistry` for custom events
+5. Update MIGRATION_GUIDE.md and design docs
 
 **Dependencies**: Phases 1-3 complete
 
 **Verification**:
-- Custom events work end-to-end
-- Documentation covers all new APIs
+- Keyboard/Encoder navigation works fluously
+- Custom gestures and events validated in integration tests
 
 ---
 
