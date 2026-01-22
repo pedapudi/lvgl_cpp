@@ -24,6 +24,7 @@ InputDevice::~InputDevice() {
 InputDevice::InputDevice(InputDevice&& other) noexcept
     : indev_(other.indev_),
       owned_(other.owned_),
+      read_cb_raw_(std::move(other.read_cb_raw_)),
       read_cb_(std::move(other.read_cb_)) {
   other.indev_ = nullptr;
   other.owned_ = false;
@@ -40,6 +41,7 @@ InputDevice& InputDevice::operator=(InputDevice&& other) noexcept {
     }
     indev_ = other.indev_;
     owned_ = other.owned_;
+    read_cb_raw_ = std::move(other.read_cb_raw_);
     read_cb_ = std::move(other.read_cb_);
     other.indev_ = nullptr;
     other.owned_ = false;
@@ -72,7 +74,17 @@ InputDevice* InputDevice::get_act() {
 }
 
 void InputDevice::set_read_cb(std::function<void(lv_indev_data_t*)> cb) {
+  read_cb_raw_ = cb;
+  read_cb_ = nullptr;
+  if (indev_) {
+    lv_indev_set_user_data(indev_, this);
+    lv_indev_set_read_cb(indev_, cpp_read_cb_trampoline);
+  }
+}
+
+void InputDevice::set_read_cb(std::function<void(IndevData&)> cb) {
   read_cb_ = cb;
+  read_cb_raw_ = nullptr;
   if (indev_) {
     lv_indev_set_user_data(indev_, this);
     lv_indev_set_read_cb(indev_, cpp_read_cb_trampoline);
@@ -81,7 +93,10 @@ void InputDevice::set_read_cb(std::function<void(lv_indev_data_t*)> cb) {
 
 void InputDevice::process_read(lv_indev_data_t* data) {
   if (read_cb_) {
-    read_cb_(data);
+    IndevData wrapped(data);
+    read_cb_(wrapped);
+  } else if (read_cb_raw_) {
+    read_cb_raw_(data);
   }
 }
 

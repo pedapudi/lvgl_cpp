@@ -8,10 +8,10 @@ void HelloWorld::load(lvgl::Display& display, const std::string& text) {
 
   // Construct Label on stack and release ownership so it persists
   lvgl::Label label(&scr);
-  label.set_long_mode(LV_LABEL_LONG_SCROLL_CIRCULAR);
+  label.set_long_mode(lvgl::LabelLongMode::ScrollCircular);
   label.set_text(text);
   label.set_width(display.get_horizontal_resolution());
-  label.align(LV_ALIGN_BOTTOM_MID, 0, 0);
+  label.align(lvgl::Align::BottomMid, 0, 0);
 
   // Animation
   lvgl::Animation(label)

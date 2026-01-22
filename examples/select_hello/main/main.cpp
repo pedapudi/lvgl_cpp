@@ -7,14 +7,11 @@
 #include "core/lv_obj_tree.h"
 #include "esp_log.h"
 #include "hw/ssd1306_i2c.h"
-#include "soc/gpio_num.h"
+#include "sys/gpio_input.h"
 #include "sys/lvgl_port.h"
 #include "ui/select_hello.h"
 
 static const char* TAG = "main";
-
-#define BUTTON_PIN1 GPIO_NUM_2
-#define BUTTON_PIN2 GPIO_NUM_3
 
 extern "C" void app_main(void) {
   ESP_LOGI(TAG, "Starting Hello LVGL C++ Example");
@@ -37,48 +34,43 @@ extern "C" void app_main(void) {
   LvglPort sys(sys_config);
   sys.init(hw.get_panel_handle(), hw.get_io_handle());
 
-  gpio_config_t io_conf = {
-      .pin_bit_mask = (1ULL << BUTTON_PIN1 | 1ULL << BUTTON_PIN2),  // Select GPIO 2
-      .mode = GPIO_MODE_INPUT,                                      // Set as input
-      .pull_up_en = GPIO_PULLUP_ENABLE,                             // Enable internal pull-up
-      .pull_down_en = GPIO_PULLDOWN_DISABLE,                        // Disable pull-down
-      .intr_type = GPIO_INTR_DISABLE                                // Disable interrupts
-  };
-  gpio_config(&io_conf);
+  // 3. Input Initialization
+  GpioInput::Config input_config;
+  input_config.next_pin = GPIO_NUM_2;
+  input_config.enter_pin = GPIO_NUM_3;
+  GpioInput gpio_input(input_config);
 
-  // 3. UI Initialization
+  // 4. UI Initialization
   SelectHello select_hello;
 
   sys.lock(-1);
   if (auto* display = sys.get_display()) {
-    display->set_rotation(LV_DISPLAY_ROTATION_180);
+    display->set_rotation(lvgl::Display::Rotation::ROT_180);
     select_hello.show_menu(*display);
+
+    /**
+     * Bind the Input Device to the UI Group.
+     *
+     * In LVGL, navigation (like moving focus between buttons or scrolling a list)
+     * is managed through "Groups". An Input Device (in our case, the physical buttons
+     * wrapped by GpioInput) must be assigned to a Group so it knows which UI
+     * elements it should interact with.
+     *
+     * How it works:
+     * 1. GpioInput (Hardware Layer): Monitors the physical GPIO pins.
+     * 2. KeypadInput (LVGL Layer): When a button is pressed, GpioInput tells
+     *    this logical device that a "Key" (like 'Next' or 'Enter') was pressed.
+     * 3. Group (UI Layer): Because we call `set_group()` here, the logical
+     *    Input Device sends those keys to the Group managed by SelectHello.
+     * 4. Interaction: The Group then handles the "Focus" — for example,
+     *    telling the Roller to scroll to the next item when 'Next' is received.
+     */
+    gpio_input.get_input().set_group(select_hello.get_group());
   }
   sys.unlock();
 
-  bool last_button1 = false;
-  bool last_button2 = false;
-
   while (true) {
-    // Read current state (inverted because pull-up, so low means pressed)
-    bool button1_pressed = !gpio_get_level(BUTTON_PIN1);
-    bool button2_pressed = !gpio_get_level(BUTTON_PIN2);
-
-    // Simple edge detection
-    bool btn1_clicked = button1_pressed && !last_button1;
-    bool btn2_clicked = button2_pressed && !last_button2;
-
-    last_button1 = button1_pressed;
-    last_button2 = button2_pressed;
-
-    if (btn1_clicked || btn2_clicked) {
-      sys.lock(-1);
-      // Map Button 1 to "Next" and Button 2 to "Enter"
-      select_hello.handle_input(btn1_clicked, btn2_clicked);
-      sys.unlock();
-    }
-
-    // Short delay for responsiveness
-    vTaskDelay(pdMS_TO_TICKS(50));
+    // Keep the task alive (Input and UI are stack allocated)
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }

@@ -26,7 +26,7 @@ void LvglPort::init(esp_lcd_panel_handle_t panel_handle, esp_lcd_panel_io_handle
   size_t draw_buffer_sz = config_.h_res * config_.v_res / 8 + 8;  // +8 for palette
   draw_buffer_.resize(draw_buffer_sz);
 
-  display_->set_color_format(LV_COLOR_FORMAT_I1);
+  display_->set_color_format(static_cast<lv_color_format_t>(lvgl::ColorFormat::I1));
   display_->set_buffers(draw_buffer_.data(), nullptr, draw_buffer_sz, LV_DISPLAY_RENDER_MODE_FULL);
 
   // Use lambda to capture 'this' and call member function
