@@ -62,7 +62,7 @@ void test_slider() {
   lvgl::Slider sl;  // Use default or specific
   sl.set_value(50)
       .set_range(0, 100)
-      .set_mode(LV_BAR_MODE_NORMAL)
+      .set_mode(lvgl::SliderMode::Normal)
       .set_left_value(10)
       .set_width(200);
   std::cout << "Slider fluent API passed." << std::endl;

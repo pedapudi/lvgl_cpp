@@ -22,10 +22,10 @@ static void test_event_basic() {
   bool called = false;
 
   std::cout << "Adding callback..." << std::endl;
-  obj.add_event_cb(LV_EVENT_CLICKED, [&](Event& e) {
+  obj.add_event_cb(EventCode::Clicked, [&](Event& e) {
     std::cout << "Callback invoked!" << std::endl;
     called = true;
-    assert(e.get_code() == LV_EVENT_CLICKED);
+    assert(e.get_code() == EventCode::Clicked);
     assert(e.get_target().raw() == obj.raw());
     // Current target should also be obj in this simple case
     assert(e.get_current_target().raw() == obj.raw());
@@ -44,7 +44,7 @@ static void test_event_param() {
   int value = 42;
   bool called = false;
 
-  obj.add_event_cb(LV_EVENT_VALUE_CHANGED, [&](Event& e) {
+  obj.add_event_cb(EventCode::ValueChanged, [&](Event& e) {
     called = true;
     int* p = e.get_param<int>();
     assert(p != nullptr);

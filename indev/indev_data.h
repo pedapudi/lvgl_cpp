@@ -8,6 +8,9 @@ namespace lvgl {
 
 /**
  * @brief Wrapper for lv_indev_data_t to provide type-safe accessors.
+ *
+ * Provides a fluent API for setting input device data, consistent with
+ * the rest of lvgl_cpp.
  */
 class IndevData {
  public:
@@ -16,8 +19,9 @@ class IndevData {
   /**
    * @brief Set the input device state.
    */
-  void set_state(IndevState state) {
+  IndevData& set_state(IndevState state) {
     data_->state = static_cast<lv_indev_state_t>(state);
+    return *this;
   }
 
   /**
@@ -28,15 +32,19 @@ class IndevData {
   /**
    * @brief Set the point for pointer input devices.
    */
-  void set_point(int32_t x, int32_t y) {
+  IndevData& set_point(int32_t x, int32_t y) {
     data_->point.x = x;
     data_->point.y = y;
+    return *this;
   }
 
   /**
    * @brief Set the point for pointer input devices.
    */
-  void set_point(lv_point_t point) { data_->point = point; }
+  IndevData& set_point(lv_point_t point) {
+    data_->point = point;
+    return *this;
+  }
 
   /**
    * @brief Get the point for pointer input devices.
@@ -44,24 +52,25 @@ class IndevData {
   lv_point_t get_point() const { return data_->point; }
 
   /**
-   * @brief Set the key for keypad input devices.
-   */
-  void set_key(uint32_t key) { data_->key = key; }
-
-  /**
    * @brief Set the key for keypad input devices using lvgl::Key enum.
    */
-  void set_key(Key key) { data_->key = static_cast<uint32_t>(key); }
+  IndevData& set_key(Key key) {
+    data_->key = static_cast<uint32_t>(key);
+    return *this;
+  }
 
   /**
    * @brief Get the key for keypad input devices.
    */
-  uint32_t get_key() const { return data_->key; }
+  Key get_key() const { return static_cast<Key>(data_->key); }
 
   /**
    * @brief Set the button ID for button input devices.
    */
-  void set_btn_id(uint32_t btn_id) { data_->btn_id = btn_id; }
+  IndevData& set_btn_id(uint32_t btn_id) {
+    data_->btn_id = btn_id;
+    return *this;
+  }
 
   /**
    * @brief Get the button ID for button input devices.
@@ -71,7 +80,10 @@ class IndevData {
   /**
    * @brief Set the encoder difference for encoder input devices.
    */
-  void set_enc_diff(int16_t enc_diff) { data_->enc_diff = enc_diff; }
+  IndevData& set_enc_diff(int16_t enc_diff) {
+    data_->enc_diff = enc_diff;
+    return *this;
+  }
 
   /**
    * @brief Get the encoder difference for encoder input devices.
@@ -81,8 +93,9 @@ class IndevData {
   /**
    * @brief Set whether the input device should be read again.
    */
-  void set_continue_reading(bool continue_reading) {
+  IndevData& set_continue_reading(bool continue_reading) {
     data_->continue_reading = continue_reading;
+    return *this;
   }
 
   /**
