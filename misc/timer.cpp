@@ -90,6 +90,26 @@ void Timer::set_cb(TimerCallback cb) {
   }
 }
 
+void Timer::pause() {
+  if (timer_) lv_timer_pause(timer_);
+}
+
+void Timer::resume() {
+  if (timer_) lv_timer_resume(timer_);
+}
+
+void Timer::ready() {
+  if (timer_) lv_timer_ready(timer_);
+}
+
+void Timer::reset() {
+  if (timer_) lv_timer_reset(timer_);
+}
+
+void Timer::set_repeat_count(int32_t repeat_count) {
+  if (timer_) lv_timer_set_repeat_count(timer_, repeat_count);
+}
+
 void Timer::enable(bool en) { lv_timer_enable(en); }
 
 std::function<void()> Timer::resume_handler_ = nullptr;
