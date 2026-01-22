@@ -3,9 +3,10 @@
 Generate an accurate API coverage report for lvgl_cpp.
 
 This script:
-1. Extracts public C API functions from LVGL headers
-2. Scans ALL lvgl_cpp source files for actual usage of these functions
-3. Reports coverage based on actual calls, not method name matching
+1. Extracts public C API functions and enums from LVGL headers
+2. Scans ALL lvgl_cpp source files for actual usage
+3. Reports coverage based on actual usage
+4. Flags any use of internal LVGL APIs
 
 Usage:
   python3 scripts/audit_api_coverage.py [lvgl_path] [lvgl_cpp_path]
@@ -19,8 +20,8 @@ from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
 
-# Subsystem prefixes to track
-API_PREFIXES = [
+# User-facing API prefixes to track
+USER_API_PREFIXES = [
     'lv_timer_',
     'lv_anim_',
     'lv_obj_',
@@ -58,7 +59,6 @@ API_PREFIXES = [
     'lv_flex_',
     'lv_grid_',
     'lv_fs_',
-    'lv_draw_',
     'lv_event_',
     'lv_async_',
     'lv_font_',
@@ -66,13 +66,82 @@ API_PREFIXES = [
     'lv_palette_',
 ]
 
+# Enum prefixes to track (LV_* constants)
+ENUM_PREFIXES = [
+    'LV_EVENT_',
+    'LV_KEY_',
+    'LV_ALIGN_',
+    'LV_DIR_',
+    'LV_FLEX_',
+    'LV_GRID_',
+    'LV_STATE_',
+    'LV_PART_',
+    'LV_OPA_',
+    'LV_PALETTE_',
+    'LV_ANIM_',
+    'LV_SCR_LOAD_ANIM_',
+    'LV_TEXT_',
+    'LV_LABEL_',
+    'LV_BORDER_',
+    'LV_GRAD_',
+    'LV_ARC_',
+    'LV_BAR_',
+    'LV_SLIDER_',
+    'LV_CHART_',
+    'LV_TABLE_',
+    'LV_KEYBOARD_',
+    'LV_ROLLER_',
+    'LV_DROPDOWN_',
+    'LV_MENU_',
+    'LV_SCALE_',
+    'LV_INDEV_',
+    'LV_DISPLAY_',
+]
 
-def extract_c_functions(lvgl_path: Path) -> Dict[str, Set[str]]:
-    """Extract all public C function names from LVGL headers, grouped by prefix."""
-    functions: Dict[str, Set[str]] = {prefix: set() for prefix in API_PREFIXES}
+# Internal/private API patterns
+INTERNAL_PATTERNS = [
+    r'^_lv_',
+    r'_private$',
+    r'_priv$',
+    r'_class_init$',
+    r'_destructor$',
+    r'_constructor$',
+]
+
+DRAW_INTERNAL_PATTERNS = [
+    r'^lv_draw_sw_',
+    r'^lv_draw_buf_',
+    r'^lv_draw_task_',
+]
+
+
+def is_internal_function(func_name: str, header_path: str) -> bool:
+    """Check if a function is internal/private."""
+    path_str = str(header_path).lower()
+    if 'private' in path_str or '_priv' in path_str:
+        return True
+    if 'lvgl_private.h' in path_str:
+        return True
+    
+    for pattern in INTERNAL_PATTERNS:
+        if re.search(pattern, func_name):
+            return True
+    
+    for pattern in DRAW_INTERNAL_PATTERNS:
+        if re.search(pattern, func_name):
+            return True
+    
+    return False
+
+
+def extract_enums(lvgl_path: Path) -> Dict[str, Set[str]]:
+    """Extract enum values from LVGL headers."""
+    enums: Dict[str, Set[str]] = {prefix: set() for prefix in ENUM_PREFIXES}
     
     for header in lvgl_path.rglob('*.h'):
         if 'private' in str(header).lower():
+            continue
+        if 'test' in str(header).lower():
             continue
             
         try:
@@ -81,34 +150,69 @@ def extract_c_functions(lvgl_path: Path) -> Dict[str, Set[str]]:
         except:
             continue
         
-        # Remove comments to avoid false matches
+        # Remove comments
         content = re.sub(r'//.*?$', '', content, flags=re.MULTILINE)
         content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
         
-        # Pattern: function declarations
-        for prefix in API_PREFIXES:
+        # Find enum values
+        for prefix in ENUM_PREFIXES:
+            pattern = rf'\b({re.escape(prefix)}[A-Z_0-9]+)\b'
+            for match in re.finditer(pattern, content):
+                enum_val = match.group(1)
+                # Skip if it's a typedef or type declaration
+                if not re.search(rf'typedef.*{re.escape(enum_val)}', content):
+                    enums[prefix].add(enum_val)
+    
+    return enums
+
+
+def extract_c_functions(lvgl_path: Path) -> Tuple[Dict[str, Set[str]], Set[str]]:
+    """Extract C functions from LVGL headers."""
+    user_functions: Dict[str, Set[str]] = {prefix: set() for prefix in USER_API_PREFIXES}
+    internal_functions: Set[str] = set()
+    
+    for header in lvgl_path.rglob('*.h'):
+        if 'test' in str(header).lower() or 'example' in str(header).lower():
+            continue
+            
+        try:
+            with open(header, 'r', errors='ignore') as f:
+                content = f.read()
+        except:
+            continue
+        
+        content = re.sub(r'//.*?$', '', content, flags=re.MULTILINE)
+        content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+        
+        for prefix in USER_API_PREFIXES:
             pattern = rf'\b({re.escape(prefix)}\w+)\s*\('
             for match in re.finditer(pattern, content):
                 func_name = match.group(1)
-                # Skip macros (all caps after prefix) and internal functions
                 suffix = func_name[len(prefix):]
-                if suffix.isupper() or suffix.startswith('_'):
+                if suffix.isupper():
                     continue
-                functions[prefix].add(func_name)
+                
+                if is_internal_function(func_name, header):
+                    internal_functions.add(func_name)
+                else:
+                    user_functions[prefix].add(func_name)
+        
+        internal_pattern = r'\b(_lv_\w+)\s*\('
+        for match in re.finditer(internal_pattern, content):
+            internal_functions.add(match.group(1))
     
-    return functions
+    return user_functions, internal_functions
 
 
-def scan_cpp_for_usage(cpp_path: Path) -> Set[str]:
-    """Scan all lvgl_cpp source files for LVGL C function calls."""
-    used_functions: Set[str] = set()
+def scan_cpp_for_usage(cpp_path: Path) -> Tuple[Set[str], Set[str], Set[str]]:
+    """Scan lvgl_cpp for LVGL C function and enum usage."""
+    user_calls: Set[str] = set()
+    internal_calls: Set[str] = set()
+    enum_usage: Set[str] = set()
     
-    # Scan both .h and .cpp files
     for source_file in list(cpp_path.rglob('*.cpp')) + list(cpp_path.rglob('*.h')):
-        # Skip test files for coverage (they test the wrapper, not wrap LVGL)
         if 'test' in str(source_file):
             continue
-        # Skip build directories
         if 'build' in str(source_file):
             continue
             
@@ -118,37 +222,58 @@ def scan_cpp_for_usage(cpp_path: Path) -> Set[str]:
         except:
             continue
         
-        # Remove comments
         content = re.sub(r'//.*?$', '', content, flags=re.MULTILINE)
         content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
         
-        # Find all lv_* function calls
-        for prefix in API_PREFIXES:
+        for prefix in USER_API_PREFIXES:
             pattern = rf'\b({re.escape(prefix)}\w+)\s*\('
             for match in re.finditer(pattern, content):
-                func_name = match.group(1)
-                used_functions.add(func_name)
+                user_calls.add(match.group(1))
+        
+        for prefix in ENUM_PREFIXES:
+            pattern = rf'\b({re.escape(prefix)}[A-Z_0-9]+)\b'
+            for match in re.finditer(pattern, content):
+                enum_usage.add(match.group(1))
+        
+        internal_pattern = r'\b(_lv_\w+)\s*\('
+        for match in re.finditer(internal_pattern, content):
+            internal_calls.add(match.group(1))
     
-    return used_functions
+    return user_calls, internal_calls, enum_usage
 
 
-def generate_coverage_report(lvgl_path: Path, cpp_path: Path) -> Dict:
-    """Generate an accurate coverage report."""
-    c_functions = extract_c_functions(lvgl_path)
-    used_functions = scan_cpp_for_usage(cpp_path)
+def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
+    """Generate coverage report."""
+    user_api, internal_api = extract_c_functions(lvgl_path)
+    enums = extract_enums(lvgl_path)
+    used_user_api, used_internal_api, used_enums = scan_cpp_for_usage(cpp_path)
     
     report = {
-        'summary': {'total_c_functions': 0, 'wrapped': 0, 'not_wrapped': 0},
-        'subsystems': {}
+        'summary': {
+            'total_user_api': 0,
+            'wrapped': 0,
+            'not_wrapped': 0,
+            'internal_api_violations': [],
+            'total_enums': 0,
+            'enums_used': 0,
+        },
+        'subsystems': {},
+        'enums': {}
     }
     
-    for prefix in API_PREFIXES:
-        all_funcs = c_functions[prefix]
+    # Check for internal API violations
+    for func in used_internal_api:
+        if func in internal_api:
+            report['summary']['internal_api_violations'].append(func)
+    
+    # Function coverage per subsystem
+    for prefix in USER_API_PREFIXES:
+        all_funcs = user_api[prefix]
         if not all_funcs:
             continue
-            
-        wrapped = all_funcs & used_functions
-        not_wrapped = all_funcs - used_functions
+        
+        wrapped = all_funcs & used_user_api
+        not_wrapped = all_funcs - used_user_api
         
         subsystem = {
             'prefix': prefix,
@@ -158,54 +283,99 @@ def generate_coverage_report(lvgl_path: Path, cpp_path: Path) -> Dict:
             'not_wrapped': sorted(list(not_wrapped))
         }
         
-        report['summary']['total_c_functions'] += len(all_funcs)
+        report['summary']['total_user_api'] += len(all_funcs)
         report['summary']['wrapped'] += len(wrapped)
         report['summary']['not_wrapped'] += len(not_wrapped)
         
         report['subsystems'][prefix.rstrip('_')] = subsystem
     
-    # Calculate percentage
-    total = report['summary']['total_c_functions']
-    if total > 0:
-        report['summary']['coverage_percent'] = round(
-            100 * report['summary']['wrapped'] / total, 1
+    # Enum coverage
+    for prefix in ENUM_PREFIXES:
+        all_enums = enums[prefix]
+        if not all_enums:
+            continue
+        
+        used = all_enums & used_enums
+        not_used = all_enums - used_enums
+        
+        enum_data = {
+            'prefix': prefix,
+            'total': len(all_enums),
+            'used_count': len(used),
+            'used': sorted(list(used)),
+            'not_used': sorted(list(not_used))
+        }
+        
+        report['summary']['total_enums'] += len(all_enums)
+        report['summary']['enums_used'] += len(used)
+        
+        report['enums'][prefix.rstrip('_')] = enum_data
+    
+    # Calculate percentages
+    total_funcs = report['summary']['total_user_api']
+    if total_funcs > 0:
+        report['summary']['function_coverage_percent'] = round(
+            100 * report['summary']['wrapped'] / total_funcs, 1
         )
     else:
-        report['summary']['coverage_percent'] = 0
+        report['summary']['function_coverage_percent'] = 0
+    
+    total_enums = report['summary']['total_enums']
+    if total_enums > 0:
+        report['summary']['enum_coverage_percent'] = round(
+            100 * report['summary']['enums_used'] / total_enums, 1
+        )
+    else:
+        report['summary']['enum_coverage_percent'] = 0
     
     return report
 
 
 def print_report(report: Dict):
-    """Print a human-readable coverage report."""
+    """Print human-readable report."""
     summary = report['summary']
+    
     print(f"\n{'='*60}")
-    print(f"LVGL C API Coverage Report (Accurate)")
+    print(f"LVGL C API Coverage Report")
     print(f"{'='*60}")
-    print(f"\nSummary:")
-    print(f"  Total C functions in LVGL: {summary['total_c_functions']}")
-    print(f"  Called by lvgl_cpp:        {summary['wrapped']}")
-    print(f"  Not used:                  {summary['not_wrapped']}")
-    print(f"  Coverage:                  {summary['coverage_percent']}%")
+    
+    violations = summary['internal_api_violations']
+    if violations:
+        print(f"\n⚠️  INTERNAL API VIOLATIONS ({len(violations)}):")
+        for func in violations:
+            print(f"    - {func}")
+    else:
+        print(f"\n✅ No internal API violations detected")
+    
+    print(f"\nFunction Coverage:")
+    print(f"  User-facing functions: {summary['total_user_api']}")
+    print(f"  Called by lvgl_cpp:    {summary['wrapped']}")
+    print(f"  Coverage:              {summary['function_coverage_percent']}%")
+    
+    print(f"\nEnum/Constant Coverage:")
+    print(f"  Total enums:           {summary['total_enums']}")
+    print(f"  Used by lvgl_cpp:      {summary['enums_used']}")
+    print(f"  Coverage:              {summary['enum_coverage_percent']}%")
     
     print(f"\n{'-'*60}")
-    print(f"Subsystem Details:")
+    print(f"Subsystem Details (Functions):")
     print(f"{'-'*60}")
     
     for name, data in sorted(report['subsystems'].items(), key=lambda x: -x[1]['wrapped_count']):
         wrapped_count = data['wrapped_count']
         total = data['total']
         pct = round(100 * wrapped_count / total, 1) if total > 0 else 0
-        print(f"\n{name}: {wrapped_count}/{total} ({pct}%)")
-        
-        # Show a few not-wrapped functions for subsystems with low coverage
-        not_wrapped = data['not_wrapped']
-        if not_wrapped and pct < 80 and len(not_wrapped) <= 15:
-            print(f"  Not used:")
-            for func in not_wrapped[:15]:
-                print(f"    - {func}")
-        elif not_wrapped and pct < 80:
-            print(f"  Not used: {len(not_wrapped)} functions (too many to list)")
+        print(f"  {name}: {wrapped_count}/{total} ({pct}%)")
+    
+    print(f"\n{'-'*60}")
+    print(f"Enum Categories:")
+    print(f"{'-'*60}")
+    
+    for name, data in sorted(report['enums'].items(), key=lambda x: -x[1]['used_count']):
+        used_count = data['used_count']
+        total = data['total']
+        pct = round(100 * used_count / total, 1) if total > 0 else 0
+        print(f"  {name}: {used_count}/{total} ({pct}%)")
 
 
 def main():
@@ -213,7 +383,6 @@ def main():
         lvgl_path = Path(sys.argv[1])
         cpp_path = Path(sys.argv[2])
     else:
-        # Default paths
         script_dir = Path(__file__).parent.parent
         lvgl_path = script_dir.parent / 'lvgl'
         cpp_path = script_dir
@@ -229,7 +398,7 @@ def main():
     print(f"Scanning LVGL at: {lvgl_path}")
     print(f"Checking usage in: {cpp_path}")
     
-    report = generate_coverage_report(lvgl_path, cpp_path)
+    report = generate_report(lvgl_path, cpp_path)
     print_report(report)
     
     # Save JSON report
@@ -238,6 +407,9 @@ def main():
     with open(report_path, 'w') as f:
         json.dump(report, f, indent=2)
     print(f"\nJSON report saved to: {report_path}")
+    
+    if report['summary']['internal_api_violations']:
+        sys.exit(1)
 
 
 if __name__ == '__main__':

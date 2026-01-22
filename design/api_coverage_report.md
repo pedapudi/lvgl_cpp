@@ -1,29 +1,42 @@
 # API coverage report
 
-This document reports the coverage of LVGL C API functions by lvgl_cpp wrappers.
+This document reports the coverage of LVGL's **user-facing** C API by lvgl_cpp wrappers.
 
 ## Methodology
 
-The coverage analysis scans all lvgl_cpp source files (`.h` and `.cpp`) for actual LVGL C function calls, comparing against the complete set of public C functions extracted from LVGL headers. This approach accurately identifies which C functions are wrapped, including:
+### What is measured
 
-- Inline methods in headers
-- Methods inherited from parent classes
-- CRTP-generated methods
+The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
+1. **Functions**: LVGL C API function calls (e.g., `lv_obj_set_pos`)
+2. **Enums and Constants**: LVGL enum values (e.g., `LV_ALIGN_CENTER`)
+
+### Internal vs user-facing APIs
+
+| API Type | Description | lvgl_cpp Policy |
+|----------|-------------|-----------------|
+| **User-facing** | Public functions documented in [LVGL docs](https://docs.lvgl.io/9.4/) | ✅ Should be wrapped |
+| **Internal** | Implementation details (`_lv_*`, `*_private.h`) | ❌ Must NOT be wrapped |
+
+**Excluded from coverage**:
+- Functions starting with `_lv_` (internal)
+- Functions in `*_private.h` headers
+- Low-level draw primitives (`lv_draw_sw_*`, `lv_draw_buf_*`)
+
+### Internal API compliance
+
+> [!IMPORTANT]
+> **lvgl_cpp does NOT call any internal LVGL APIs.** The audit confirms zero violations.
 
 ## Summary
 
-| Metric | Value |
-|--------|-------|
-| Total LVGL C Functions | 1867 |
-| Called by lvgl_cpp | 613 |
-| Not Used | 1254 |
-| **Overall Coverage** | **32.8%** |
+| Category | Total | Used | Coverage |
+|----------|-------|------|----------|
+| **Functions** | 1,529 | 606 | **39.6%** |
+| **Enums and Constants** | 423 | 266 | **62.9%** |
 
-## Subsystem coverage
+## Function coverage
 
-### Complete coverage (100%)
-
-These widgets have full API coverage:
+### Complete (100%)
 
 | Widget | Functions |
 |--------|-----------|
@@ -46,76 +59,111 @@ These widgets have full API coverage:
 
 ### High coverage (>75%)
 
-| Subsystem | Coverage | Notes |
-|-----------|----------|-------|
-| `lv_spinbox` | 95.0% (19/20) | Missing 1 function |
-| `lv_arc` | 92.9% (26/28) | Missing 2 functions |
-| `lv_canvas` | 92.9% (13/14) | Missing 1 function |
-| `lv_keyboard` | 91.7% (11/12) | Missing 1 function |
-| `lv_table` | 82.4% (14/17) | Missing 3 functions |
-| `lv_display` | 75.0% (54/72) | Missing 18 functions |
+| Subsystem | Coverage |
+|-----------|----------|
+| `lv_spinbox` | 95.0% (19/20) |
+| `lv_arc` | 92.9% (26/28) |
+| `lv_canvas` | 92.9% (13/14) |
+| `lv_keyboard` | 91.7% (11/12) |
+| `lv_table` | 82.4% (14/17) |
+| `lv_display` | 75.0% (54/72) |
 
 ### Medium coverage (25-75%)
 
-| Subsystem | Coverage | Missing Functions |
-|-----------|----------|-------------------|
-| `lv_timer` | 63.6% (14/22) | `lv_timer_create_basic`, `lv_timer_get_idle`, `lv_timer_get_next`, `lv_timer_get_paused`, `lv_timer_get_time_until_next`, `lv_timer_handler_run_in_period`, `lv_timer_periodic_handler`, `lv_timer_set_cb` |
-| `lv_label` | 61.9% (13/21) | `lv_label_cut_text`, `lv_label_get_letter_on`, `lv_label_get_letter_pos`, `lv_label_ins_text`, `lv_label_is_char_under_pos`, `lv_label_set_text_fmt`, `lv_label_set_text_static`, `lv_label_set_translation_tag` |
-| `lv_scale` | 58.8% (20/34) | Section-related functions not wrapped |
-| `lv_calendar` | 50.0% (11/22) | Chinese calendar and header functions not wrapped |
-| `lv_group` | 48.1% (13/27) | Callback and wrap functions not wrapped |
-| `lv_fs` | 48.6% (18/37) | Advanced filesystem functions not wrapped |
-| `lv_image` | 45.0% (27/60) | Many image-specific functions not wrapped |
-| `lv_anim` | 39.1% (27/69) | Advanced animation controls not wrapped |
-| `lv_chart` | 38.1% (16/42) | Series manipulation functions not wrapped |
-| `lv_indev` | 31.3% (21/67) | Many input device functions not wrapped |
+| Subsystem | Coverage |
+|-----------|----------|
+| `lv_timer` | 63.6% (14/22) |
+| `lv_label` | 61.9% (13/21) |
+| `lv_scale` | 58.8% (20/34) |
+| `lv_calendar` | 50.0% (11/22) |
+| `lv_group` | 48.1% (13/27) |
+| `lv_fs` | 48.6% (18/37) |
+| `lv_image` | 45.0% (27/60) |
+| `lv_anim` | 39.1% (27/69) |
+| `lv_chart` | 38.1% (16/42) |
+| `lv_indev` | 31.3% (21/67) |
 
 ### Low coverage (<25%)
 
 | Subsystem | Coverage | Notes |
 |-----------|----------|-------|
 | `lv_slider` | 23.5% (4/17) | Uses `lv_bar_*` via inheritance |
-| `lv_color` | 22.0% (11/50) | Color manipulation utilities |
+| `lv_color` | 22.0% (11/50) | Color utilities |
 | `lv_obj` | 17.6% (89/505) | Very large API surface |
-| `lv_event` | 12.2% (5/41) | Event handling utilities |
-| `lv_font` | 8.3% (2/24) | Font manipulation functions |
-| `lv_style` | 4.1% (6/146) | Style property setters |
-| `lv_draw` | 2.1% (7/338) | Low-level drawing primitives |
-| `lv_span` | 0.0% (0/7) | Span widget not wrapped |
-| `lv_flex` | 0.0% (0/1) | Only `lv_flex_init` (system function) |
-| `lv_grid` | 0.0% (0/2) | Only system-level functions |
+| `lv_event` | 12.2% (5/41) | Event handling |
+| `lv_font` | 8.3% (2/24) | Font manipulation |
+| `lv_style` | 4.1% (6/146) | Style setters |
 
-## Analysis
+### Not wrapped
 
-### Why some coverage appears low
+| Subsystem | Note |
+|-----------|------|
+| `lv_span` | Widget not implemented |
+| `lv_flex` | Only `lv_flex_init` (system function) |
+| `lv_grid` | Only system-level functions |
 
-1. **Inheritance**: `Slider` uses `Bar`'s C functions, so `lv_slider_*` functions show low coverage even though the widget is fully functional.
+## Enum and constant coverage
 
-2. **System functions**: `lv_flex_init`, `lv_grid_init`, `lv_grid_fr` are internal LVGL setup functions not meant for user code.
+### Complete (100%)
 
-3. **Low-level primitives**: `lv_draw_*` functions (338 total) are primarily used internally by LVGL's rendering engine.
+| Category | Values |
+|----------|--------|
+| `LV_STATE` | 14/14 |
+| `LV_KEY` | 12/12 |
+| `LV_DIR` | 8/8 |
+| `LV_BORDER` | 7/7 |
 
-4. **Style setters**: The 146 `lv_style_*` functions include individual property setters that could be exposed through a type-safe wrapper.
+### High coverage (>75%)
 
-### Priority areas for improvement
+| Category | Coverage |
+|----------|----------|
+| `LV_ALIGN` | 95.7% (22/23) |
+| `LV_EVENT` | 94.4% (68/72) |
+| `LV_SCR_LOAD_ANIM` | 93.8% (15/16) |
+| `LV_PALETTE` | 90.9% (20/22) |
+| `LV_PART` | 90.0% (9/10) |
+| `LV_FLEX` | 77.8% (14/18) |
+| `LV_OPA` | 76.5% (13/17) |
+| `LV_DISPLAY` | 75.0% (6/8) |
+| `LV_ARC` | 75.0% (3/4) |
 
-1. **`lv_obj_*` (505 functions)**: Core object API. Many advanced layout, scrolling, and event functions are not wrapped.
+### Medium/low coverage
 
-2. **`lv_style_*` (146 functions)**: Consider creating a fluent Style builder API.
+| Category | Coverage |
+|----------|----------|
+| `LV_CHART` | 71.4% (10/14) |
+| `LV_KEYBOARD` | 72.7% (8/11) |
+| `LV_ROLLER` | 66.7% (2/3) |
+| `LV_GRID` | 63.6% (7/11) |
+| `LV_BAR` | 57.1% (4/7) |
+| `LV_SLIDER` | 42.9% (3/7) |
+| `LV_LABEL` | 38.9% (7/18) |
+| `LV_TEXT` | 28.6% (4/14) |
+| `LV_INDEV` | 25.9% (7/27) |
+| `LV_SCALE` | 6.7% (1/15) |
+| `LV_ANIM` | 6.1% (2/33) |
 
-3. **`lv_event_*` (41 functions)**: Event bubbling and custom event data handling.
+### Not used
 
-4. **`lv_chart_*` (42 functions)**: Chart series and cursor manipulation.
+| Category | Note |
+|----------|------|
+| `LV_GRAD` | Gradient constants |
+| `LV_TABLE` | Table cell flags |
+| `LV_DROPDOWN` | Dropdown direction |
+| `LV_MENU` | Menu mode constants |
 
-5. **`lv_span_*` (7 functions)**: Span widget has no wrapper.
+## Priority improvements
+
+1. **`lv_obj_*`** (505 functions): Core object API - layout, scrolling, events
+2. **`lv_style_*`** (146 functions): Consider fluent Style builder API
+3. **`LV_ANIM_*`** (33 constants): Animation path and playback constants
+4. **`lv_chart_*`** (42 functions): Series and cursor manipulation
 
 ## Regenerating this report
-
-Run the coverage audit script:
 
 ```bash
 cd lvgl_cpp
 python3 scripts/audit_api_coverage.py ../lvgl .
 ```
 
-The JSON data is saved to `docs/api_coverage.json`.
+JSON data saved to `docs/api_coverage.json`.
