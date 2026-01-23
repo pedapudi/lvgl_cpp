@@ -20,6 +20,33 @@
  */
 namespace lvgl {
 
+class Scale;  // Forward declaration
+
+/**
+ * @brief Wrapper for a scale section.
+ */
+class ScaleSection {
+ public:
+  ScaleSection(Scale* scale, lv_scale_section_t* section)
+      : scale_(scale), section_(section) {}
+
+  /**
+   * @brief Set the range of values for this section.
+   */
+  void set_range(int32_t min, int32_t max);
+
+  /**
+   * @brief Set the style for a specific part of this section.
+   */
+  void set_style(lv_part_t part, lv_style_t* style);
+
+  lv_scale_section_t* raw() const { return section_; }
+
+ private:
+  Scale* scale_;
+  lv_scale_section_t* section_;
+};
+
 class Scale : public Widget<Scale> {
  public:
   Scale();
@@ -48,6 +75,9 @@ class Scale : public Widget<Scale> {
   uint32_t get_angle_range();
   int32_t get_range_min_value();
   int32_t get_range_max_value();
+
+  // Section management
+  ScaleSection add_section();
 };
 
 }  // namespace lvgl
