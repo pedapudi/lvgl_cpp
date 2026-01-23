@@ -297,34 +297,6 @@ enum class KeyboardMode : uint8_t {
   UserMode4 = LV_KEYBOARD_MODE_USER_4,
 };
 
-/**
- * @brief Wrapper for lv_chart_type_t.
- */
-enum class ChartType : uint8_t {
-  None = LV_CHART_TYPE_NONE,
-  Line = LV_CHART_TYPE_LINE,
-  Bar = LV_CHART_TYPE_BAR,
-  Scatter = LV_CHART_TYPE_SCATTER,
-};
-
-/**
- * @brief Wrapper for lv_chart_update_mode_t.
- */
-enum class ChartUpdateMode : uint8_t {
-  Shift = LV_CHART_UPDATE_MODE_SHIFT,
-  Circular = LV_CHART_UPDATE_MODE_CIRCULAR,
-};
-
-/**
- * @brief Wrapper for lv_chart_axis_t.
- */
-enum class ChartAxis : uint8_t {
-  PrimaryY = LV_CHART_AXIS_PRIMARY_Y,
-  SecondaryY = LV_CHART_AXIS_SECONDARY_Y,
-  PrimaryX = LV_CHART_AXIS_PRIMARY_X,
-  SecondaryX = LV_CHART_AXIS_SECONDARY_X,
-};
-
 // ============================================================================
 // Scroll Enums
 // ============================================================================

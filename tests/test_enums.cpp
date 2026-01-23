@@ -79,13 +79,13 @@ int main() {
   {
     std::cout << "Testing Chart overloads..." << std::endl;
     lvgl::Chart chart;
-    chart.set_type(lvgl::ChartType::Bar);
-    chart.set_update_mode(lvgl::ChartUpdateMode::Circular);
-    chart.set_axis_range(lvgl::ChartAxis::PrimaryY, 0, 100);
+    chart.set_type(lvgl::Chart::Type::Bar);
+    chart.set_update_mode(lvgl::Chart::UpdateMode::Circular);
+    chart.set_axis_range(lvgl::Chart::Axis::PrimaryY, 0, 100);
     auto ser =
-        chart.add_series(lv_color_hex(0xFF0000), lvgl::ChartAxis::PrimaryY);
+        chart.add_series(lv_color_hex(0xFF0000), lvgl::Chart::Axis::PrimaryY);
 
-    assert(lv_chart_get_type(chart.raw()) == LV_CHART_TYPE_BAR);
+    assert(chart.get_type() == lvgl::Chart::Type::Bar);
     assert(ser.raw() != nullptr);
   }
 
@@ -164,11 +164,11 @@ int main() {
   {
     std::cerr << "Chart Type/Mode Start" << std::endl;
     lvgl::Chart chart(screen);
-    chart.set_type(lvgl::ChartType::Bar);
-    assert(chart.get_type() == LV_CHART_TYPE_BAR);
+    chart.set_type(lvgl::Chart::Type::Bar);
+    assert(chart.get_type() == lvgl::Chart::Type::Bar);
 
     // Check Update Mode (no getter usually available, just compile check)
-    chart.set_update_mode(lvgl::ChartUpdateMode::Circular);
+    chart.set_update_mode(lvgl::Chart::UpdateMode::Circular);
     std::cerr << "Chart Type/Mode Done" << std::endl;
   }
 

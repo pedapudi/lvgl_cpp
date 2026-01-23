@@ -18,11 +18,11 @@ void test_chart_series() {
 
   std::cout << "Chart created, raw: " << chart.raw() << std::endl;
 
-  chart.set_type(LV_CHART_TYPE_LINE);
+  chart.set_type(lvgl::Chart::Type::Line);
   chart.set_point_count(10);
 
   ChartSeries s1 =
-      chart.add_series(lv_color_make(255, 0, 0), LV_CHART_AXIS_PRIMARY_Y);
+      chart.add_series(lv_color_make(255, 0, 0), lvgl::Chart::Axis::PrimaryY);
 
   if (s1.raw() == nullptr) {
     std::cout << "Series 1 is NULL" << std::endl;

@@ -224,9 +224,9 @@ void test_canvas() {
 
 void test_chart() {
   lvgl::Chart chart;
-  chart.set_type(LV_CHART_TYPE_LINE)
+  chart.set_type(lvgl::Chart::Type::Line)
       .set_point_count(10)
-      .set_axis_range(LV_CHART_AXIS_PRIMARY_Y, 0, 100)
+      .set_axis_range(lvgl::Chart::Axis::PrimaryY, 0, 100)
       .set_width(200);
   std::cout << "Chart fluent API passed." << std::endl;
 }

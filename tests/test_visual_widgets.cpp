@@ -24,12 +24,12 @@ void test_chart_1() {
   Chart chart(screen);
   chart.set_size(200, 150);
   chart.center();
-  chart.set_type(LV_CHART_TYPE_LINE);
+  chart.set_type(lvgl::Chart::Type::Line);
 
   ChartSeries ser1 = chart.add_series(lv_palette_main(LV_PALETTE_GREEN),
-                                      LV_CHART_AXIS_PRIMARY_Y);
+                                      lvgl::Chart::Axis::PrimaryY);
   ChartSeries ser2 = chart.add_series(lv_palette_main(LV_PALETTE_RED),
-                                      LV_CHART_AXIS_SECONDARY_Y);
+                                      lvgl::Chart::Axis::SecondaryY);
 
   for (int i = 0; i < 10; i++) {
     ser1.set_next_value(i * 10);

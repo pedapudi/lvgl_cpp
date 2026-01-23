@@ -75,10 +75,10 @@ int main(int argc, char** argv) {
       obj = std::move(ta);
     } else if (widget_type == "chart") {
       auto chart = std::make_unique<lvgl::Chart>(screen.get());
-      chart->set_type(LV_CHART_TYPE_LINE);
+      chart->set_type(lvgl::Chart::Type::Line);
       chart->set_point_count(20);
-      auto s1 =
-          chart->add_series(lv_color_hex(0xFF0000), LV_CHART_AXIS_PRIMARY_Y);
+      auto s1 = chart->add_series(lv_color_hex(0xFF0000),
+                                  lvgl::Chart::Axis::PrimaryY);
       for (int j = 0; j < 20; j++) s1.set_next_value(j * 5);
       obj = std::move(chart);
     } else if (widget_type == "table") {

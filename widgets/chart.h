@@ -45,27 +45,50 @@ class ChartSeries {
 
 class Chart : public Widget<Chart> {
  public:
+  /**
+   * @brief Chart display types.
+   */
+  enum class Type : uint8_t {
+    None = LV_CHART_TYPE_NONE,
+    Line = LV_CHART_TYPE_LINE,
+    Bar = LV_CHART_TYPE_BAR,
+    Scatter = LV_CHART_TYPE_SCATTER,
+  };
+
+  /**
+   * @brief Chart axis identifiers.
+   */
+  enum class Axis : uint8_t {
+    PrimaryY = LV_CHART_AXIS_PRIMARY_Y,
+    SecondaryY = LV_CHART_AXIS_SECONDARY_Y,
+    PrimaryX = LV_CHART_AXIS_PRIMARY_X,
+    SecondaryX = LV_CHART_AXIS_SECONDARY_X,
+  };
+
+  /**
+   * @brief Chart update modes.
+   */
+  enum class UpdateMode : uint8_t {
+    Shift = LV_CHART_UPDATE_MODE_SHIFT,
+    Circular = LV_CHART_UPDATE_MODE_CIRCULAR,
+  };
+
   Chart();
   explicit Chart(Object* parent, Ownership ownership = Ownership::Default);
   explicit Chart(Object& parent);
   explicit Chart(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  Chart& set_type(lv_chart_type_t type);
-  Chart& set_type(ChartType type);
+  Chart& set_type(Type type);
   Chart& set_point_count(uint32_t cnt);
-  Chart& set_axis_range(lv_chart_axis_t axis, int32_t min, int32_t max);
-  Chart& set_axis_range(ChartAxis axis, int32_t min, int32_t max);
+  Chart& set_axis_range(Axis axis, int32_t min, int32_t max);
   Chart& set_div_line_count(uint32_t hdiv, uint32_t vdiv);
-  Chart& set_update_mode(lv_chart_update_mode_t update_mode);
-  Chart& set_update_mode(ChartUpdateMode update_mode);
+  Chart& set_update_mode(UpdateMode update_mode);
 
-  lv_chart_type_t get_type();
-  uint32_t get_point_count();
+  Type get_type() const;
+  uint32_t get_point_count() const;
 
-  ChartSeries add_series(lv_color_t color, lv_chart_axis_t axis);
-  ChartSeries add_series(lv_color_t color, ChartAxis axis);
+  ChartSeries add_series(lv_color_t color, Axis axis);
   void remove_series(ChartSeries series);
-  // Removed specific set_series_* methods as they are now in ChartSeries
   void refresh();
 };
 

@@ -79,6 +79,10 @@ void Group::set_editing(bool edit) {
   if (group_) lv_group_set_editing(group_, edit);
 }
 
+void Group::set_wrap(bool en) {
+  if (group_) lv_group_set_wrap(group_, en);
+}
+
 lv_obj_t* Group::get_focused() const {
   return group_ ? lv_group_get_focused(group_) : nullptr;
 }

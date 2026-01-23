@@ -47,13 +47,9 @@ Chart::Chart(Object& parent) : Chart(&parent) {}
 
 Chart::Chart(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
-Chart& Chart::set_type(lv_chart_type_t type) {
-  if (obj_) lv_chart_set_type(obj_, type);
+Chart& Chart::set_type(Type type) {
+  if (obj_) lv_chart_set_type(obj_, static_cast<lv_chart_type_t>(type));
   return *this;
-}
-
-Chart& Chart::set_type(ChartType type) {
-  return set_type(static_cast<lv_chart_type_t>(type));
 }
 
 Chart& Chart::set_point_count(uint32_t cnt) {
@@ -61,13 +57,10 @@ Chart& Chart::set_point_count(uint32_t cnt) {
   return *this;
 }
 
-Chart& Chart::set_axis_range(lv_chart_axis_t axis, int32_t min, int32_t max) {
-  if (obj_) lv_chart_set_axis_range(obj_, axis, min, max);
+Chart& Chart::set_axis_range(Axis axis, int32_t min, int32_t max) {
+  if (obj_)
+    lv_chart_set_axis_range(obj_, static_cast<lv_chart_axis_t>(axis), min, max);
   return *this;
-}
-
-Chart& Chart::set_axis_range(ChartAxis axis, int32_t min, int32_t max) {
-  return set_axis_range(static_cast<lv_chart_axis_t>(axis), min, max);
 }
 
 Chart& Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
@@ -75,32 +68,28 @@ Chart& Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
   return *this;
 }
 
-Chart& Chart::set_update_mode(lv_chart_update_mode_t update_mode) {
-  if (obj_) lv_chart_set_update_mode(obj_, update_mode);
+Chart& Chart::set_update_mode(UpdateMode update_mode) {
+  if (obj_)
+    lv_chart_set_update_mode(obj_,
+                             static_cast<lv_chart_update_mode_t>(update_mode));
   return *this;
 }
 
-Chart& Chart::set_update_mode(ChartUpdateMode update_mode) {
-  return set_update_mode(static_cast<lv_chart_update_mode_t>(update_mode));
+Chart::Type Chart::get_type() const {
+  return obj_ ? static_cast<Type>(lv_chart_get_type(obj_)) : Type::None;
 }
 
-lv_chart_type_t Chart::get_type() {
-  return obj_ ? lv_chart_get_type(obj_) : LV_CHART_TYPE_NONE;
-}
-
-uint32_t Chart::get_point_count() {
+uint32_t Chart::get_point_count() const {
   return obj_ ? lv_chart_get_point_count(obj_) : 0;
 }
 
-ChartSeries Chart::add_series(lv_color_t color, lv_chart_axis_t axis) {
+ChartSeries Chart::add_series(lv_color_t color, Axis axis) {
   if (obj_) {
-    return ChartSeries(this, lv_chart_add_series(obj_, color, axis));
+    return ChartSeries(
+        this,
+        lv_chart_add_series(obj_, color, static_cast<lv_chart_axis_t>(axis)));
   }
   return ChartSeries(this, nullptr);
-}
-
-ChartSeries Chart::add_series(lv_color_t color, ChartAxis axis) {
-  return add_series(color, static_cast<lv_chart_axis_t>(axis));
 }
 
 void Chart::remove_series(ChartSeries series) {

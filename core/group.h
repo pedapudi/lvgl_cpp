@@ -97,6 +97,12 @@ class Group {
   void set_editing(bool edit);
 
   /**
+   * @brief Set whether focus should wrap from last to first object.
+   * @param en true: wrap enabled, false: wrap disabled.
+   */
+  void set_wrap(bool en);
+
+  /**
    * @brief Get the currently focused object.
    * @return The raw object pointer, or nullptr if none.
    */
