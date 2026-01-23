@@ -467,7 +467,7 @@ class ChartSeries {
 
 ---
 
-### 2.4. Enum completion (P1: Important)
+### 2.4. Enum design taxonomy (P1: Important)
 
 #### Problem statement
 
@@ -481,114 +481,178 @@ Several enum categories have low coverage, forcing users to use raw `LV_*` const
 | `LV_TABLE_*` | 0.0% (0/9) | No cell control flags |
 | `LV_MENU_*` | 0.0% (0/6) | No menu modes |
 
-#### Proposed solution
+The original proposal to consolidate all enums in `misc/enums.h` conflicts with the design intent of placing constants close to their usage.
 
-Complete enum coverage in `misc/enums.h`:
+#### Revised design: Enum taxonomy
+
+Enums should be categorized and placed according to their semantic scope:
+
+| Category | Placement | Examples |
+|----------|-----------|----------|
+| **Global** | `misc/enums.h` | Align, State, Part, Dir, Key, EventCode |
+| **Widget-scoped** | Inside widget class | Arc::Mode, Chart::Type, Label::LongMode |
+| **Factory pattern** | Struct with static methods | Animation::Path, Animation::Exec |
+
+##### Decision criteria
+
+1. **Global enums** (`misc/enums.h`): Constants used across multiple widgets or subsystems
+   - Example: `lvgl::Align::Center` (used by all positioning)
+   - Example: `lvgl::Part::Main` (used by styling on any widget)
+
+2. **Widget-scoped enums**: Constants specific to one widget's behavior
+   - **Current pattern (deprecated)**: `lvgl::ArcMode::Normal`
+   - **Proposed pattern**: `lvgl::Arc::Mode::Normal`
+
+3. **Factory pattern**: When the "constant" is actually a callback or complex object
+   - **Example**: `lvgl::Animation::Path::EaseOut()` returns `PathCallback`
+   - **Rationale**: These are not simple enum values but factory methods
+
+#### Proposed solution: Widget-scoped enums
+
+Migrate widget-specific enums from `misc/enums.h` into their respective widget classes:
 
 ```cpp
-// Animation paths
-enum class AnimPath : uint16_t {
-  Linear = LV_ANIM_PATH_LINEAR,
-  EaseIn = LV_ANIM_PATH_EASE_IN,
-  EaseOut = LV_ANIM_PATH_EASE_OUT,
-  EaseInOut = LV_ANIM_PATH_EASE_IN_OUT,
-  Bounce = LV_ANIM_PATH_BOUNCE,
-  Overshoot = LV_ANIM_PATH_OVERSHOOT,
-  Step = LV_ANIM_PATH_STEP,
+// BEFORE (misc/enums.h)
+enum class ArcMode : uint8_t {
+  Normal = LV_ARC_MODE_NORMAL,
+  // ...
 };
 
-// Gradient
-enum class GradDir : uint8_t {
-  None = LV_GRAD_DIR_NONE,
-  Vertical = LV_GRAD_DIR_VER,
-  Horizontal = LV_GRAD_DIR_HOR,
+// AFTER (widgets/arc.h)
+class Arc : public Widget<Arc> {
+ public:
+  enum class Mode : uint8_t {
+    Normal = LV_ARC_MODE_NORMAL,
+    Symmetrical = LV_ARC_MODE_SYMMETRICAL,
+    Reverse = LV_ARC_MODE_REVERSE,
+  };
+  
+  Arc& set_mode(Mode mode);
+  Mode get_mode() const;
+  
+  // ...
 };
 
-// Table cell control
-enum class TableCellCtrl : uint8_t {
-  MergeRight = LV_TABLE_CELL_CTRL_MERGE_RIGHT,
-  TextCrop = LV_TABLE_CELL_CTRL_TEXT_CROP,
-  Custom1 = LV_TABLE_CELL_CTRL_CUSTOM_1,
-  Custom2 = LV_TABLE_CELL_CTRL_CUSTOM_2,
-  Custom3 = LV_TABLE_CELL_CTRL_CUSTOM_3,
-  Custom4 = LV_TABLE_CELL_CTRL_CUSTOM_4,
-};
-
-// Menu modes
-enum class MenuMode : uint8_t {
-  RootBackButton = LV_MENU_MODE_ROOT_BACK_BTN,
-  Header = LV_MENU_HEADER_MODE, // Note: verify exact constant
-};
+// Usage
+arc.set_mode(lvgl::Arc::Mode::Normal);
 ```
+
+##### Widgets to refactor
+
+| Widget | Current Enum | Proposed Scoped Enum |
+|--------|--------------|----------------------|
+| `Arc` | `ArcMode` | `Arc::Mode` |
+| `Bar` | `BarMode` | `Bar::Mode` |
+| `Slider` | `SliderMode` | `Slider::Mode` |
+| `Label` | `LabelLongMode` | `Label::LongMode` |
+| `Keyboard` | `KeyboardMode` | `Keyboard::Mode` |
+| `Chart` | `ChartType`, `ChartAxis`, `ChartUpdateMode` | `Chart::Type`, `Chart::Axis`, `Chart::UpdateMode` |
+| `Roller` | `RollerMode` | `Roller::Mode` |
+| `Table` | (new) | `Table::CellCtrl` |
+| `Scale` | (new) | `Scale::Mode` |
+| `Menu` | (new) | `Menu::Mode`, `Menu::HeaderMode` |
+
+#### Proposed solution: Animation constants
+
+Animation paths and exec callbacks use the **factory pattern** (already implemented):
+
+```cpp
+// Already exists in misc/animation.h
+class Animation {
+ public:
+  struct Path {
+    static PathCallback Linear();
+    static PathCallback EaseIn();
+    static PathCallback EaseOut();
+    static PathCallback EaseInOut();
+    static PathCallback Overshoot();
+    static PathCallback Bounce();
+    static PathCallback Step();
+  };
+  
+  struct Exec {
+    static ExecCallback X();
+    static ExecCallback Y();
+    static ExecCallback Width();
+    static ExecCallback Height();
+    static ExecCallback Opacity();
+  };
+};
+
+// Usage
+anim.set_path_cb(lvgl::Animation::Path::EaseOut());
+```
+
+**No changes needed** for Animation. The factory pattern is preferred because:
+1. It returns typed callbacks, not raw enum values
+2. It encapsulates the `lv_anim_path_*` function pointers
+3. IDE autocomplete shows available options contextually
 
 #### Implementation breadcrumbs
 
-1. **Audit LVGL headers** for all `LV_*` enums:
-   - `src/misc/lv_anim.h` for animation constants
-   - `src/misc/lv_style.h` for style-related enums
-   - `src/widgets/*/lv_*.h` for widget-specific enums
-
-2. **Add to `misc/enums.h`** following existing pattern:
-   - Group by subsystem
-   - Use `enum class` for type safety
-   - Match LVGL naming with PascalCase conversion
-
-3. **Update widget methods** to use new enums:
+1. **Phase A: Refactor existing widget enums** (non-breaking with aliases)
    ```cpp
-   // Before
-   void Animation::set_path(lv_anim_path_cb_t path);
+   // In widgets/arc.h
+   class Arc : public Widget<Arc> {
+    public:
+     enum class Mode : uint8_t { ... };
+   };
    
-   // After
-   Animation& Animation::set_path(AnimPath path);
+   // In misc/enums.h (deprecated alias)
+   [[deprecated("Use Arc::Mode instead")]]
+   using ArcMode = Arc::Mode;
    ```
 
-4. **Add conversion utilities** if needed:
-   ```cpp
-   inline lv_anim_path_cb_t to_lv(AnimPath path) {
-     switch (path) {
-       case AnimPath::Linear: return lv_anim_path_linear;
-       case AnimPath::EaseIn: return lv_anim_path_ease_in;
-       // ...
-     }
-   }
+2. **Phase B: Add new widget-scoped enums**
+   - `Table::CellCtrl`
+   - `Scale::Mode`
+   - `Menu::Mode`
+   - `Dropdown::Dir`
+
+3. **Phase C: Add global enums to misc/enums.h**
+   - `GradDir` (used by Style for gradients)
+   - `TextDecor` (used by Style for text)
+
+4. **Update audit script** to detect class-scoped enums:
+   ```python
+   # Patterns to match:
+   # - lvgl::Arc::Mode::Normal
+   # - lvgl::Animation::Path::EaseOut
    ```
 
 #### Why this approach
 
 | Consideration | Decision | Rationale |
 |--------------|----------|-----------|
-| Enum class vs enum | `enum class` | Type safety, no implicit conversion |
-| Underlying type | Match LVGL type | No truncation risks |
-| Naming | PascalCase | C++ convention, matches existing enums |
-| Placement | Single file | Easy discovery, consistent patterns |
+| Widget modes | Class-scoped | Discoverability: `arc.set_mode(Arc::` triggers IDE completion |
+| Global alignment | Namespace-level | Used by all widgets, no single owner |
+| Callbacks | Factory pattern | Type safety, encapsulates C function pointers |
+| Migration | Deprecation aliases | Non-breaking for existing code |
 
 #### Alternatives considered
 
-**Alternative A: Separate enum files per subsystem**
-```
-misc/anim_enums.h
-misc/style_enums.h
-```
-- **Rejected**: Increases file count, harder to discover
-- **Existing pattern**: All enums in `misc/enums.h`
+**Alternative A: All enums in misc/enums.h (original proposal)**
+- **Rejected**: Poor discoverability, doesn't scale
+- **Conflict**: `lvgl::Animation::Path::EaseOut()` already violates this pattern
 
-**Alternative B: Inline conversion operators**
-```cpp
-Button().set_state(LV_STATE_PRESSED);  // Auto-converts
+**Alternative B: Separate enum files per widget**
 ```
-- **Rejected**: Weakens type safety
-- **Intent**: Force explicit enum usage
+widgets/arc_enums.h
+widgets/chart_enums.h
+```
+- **Rejected**: Increases file count, breaks convention of single header per widget
+
+**Alternative C: Nested namespaces**
+```cpp
+namespace lvgl::arc { enum class Mode : uint8_t { ... }; }
+```
+- **Rejected**: Inconsistent with class-based widget design
 
 #### Coverage impact
 
-- Enums: +80-100 constants → +19-24% enum coverage
-
-> [!CAUTION]
-> **Design Conflict Alert**: The current proposal to centralize enums in `misc/enums.h` (Section 2.4) conflicts with the established design intent of placing constants close to their usage via class-scoped enums.
-> 
-> For example, `lvgl::Animation::Path::EaseOut()` provides a more idiomatic and discoverable API than a global `AnimPath::EaseOut`. 
-> 
-> **Action required**: Section 2.4 needs revision to prioritize class-scoped distributions over a monolithic header. The audit script must also be updated to ensure these patterns are correctly tracked.
+- Widget enums: Migrate existing 10 enums to class-scoped
+- New enums: +30-40 values (Table, Scale, Menu, Dropdown)
+- Global enums: +10-15 values (gradients, text decorations)
 
 ---
 
