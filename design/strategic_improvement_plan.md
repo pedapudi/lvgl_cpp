@@ -590,35 +590,31 @@ anim.set_path_cb(lvgl::Animation::Path::EaseOut());
 
 #### Implementation breadcrumbs
 
-1. **Phase A: Refactor existing widget enums** (non-breaking with aliases)
-   ```cpp
-   // In widgets/arc.h
-   class Arc : public Widget<Arc> {
-    public:
-     enum class Mode : uint8_t { ... };
-   };
-   
-   // In misc/enums.h (deprecated alias)
-   [[deprecated("Use Arc::Mode instead")]]
-   using ArcMode = Arc::Mode;
-   ```
+> [!IMPORTANT]
+> **Breaking changes accepted**. No deprecation aliases will be provided. Existing code using `ArcMode`, `ChartType`, etc. must be updated to use the new class-scoped enums.
+
+1. **Phase A: Migrate existing widget enums to class-scoped**
+   - Move `ArcMode` → `Arc::Mode` in `widgets/arc.h`
+   - Move `BarMode` → `Bar::Mode` in `widgets/bar.h`
+   - Move `SliderMode` → `Slider::Mode` in `widgets/slider.h`
+   - Move `LabelLongMode` → `Label::LongMode` in `widgets/label.h`
+   - Move `KeyboardMode` → `Keyboard::Mode` in `widgets/keyboard.h`
+   - Move `ChartType`, `ChartAxis`, `ChartUpdateMode` → `Chart::Type`, `Chart::Axis`, `Chart::UpdateMode`
+   - Move `RollerMode` → `Roller::Mode` in `widgets/roller.h`
+   - Remove the old enums from `misc/enums.h`
+   - Update all tests to use new scoped enums
 
 2. **Phase B: Add new widget-scoped enums**
-   - `Table::CellCtrl`
-   - `Scale::Mode`
-   - `Menu::Mode`
-   - `Dropdown::Dir`
+   - `Table::CellCtrl` in `widgets/table.h`
+   - `Scale::Mode` in `widgets/scale.h`
+   - `Menu::Mode`, `Menu::HeaderMode` in `widgets/menu.h`
+   - `Dropdown::Dir` in `widgets/dropdown.h`
 
 3. **Phase C: Add global enums to misc/enums.h**
-   - `GradDir` (used by Style for gradients)
-   - `TextDecor` (used by Style for text)
+   - `GradDir` (gradient direction for Style)
+   - `TextDecor` (text decoration for Style)
 
-4. **Update audit script** to detect class-scoped enums:
-   ```python
-   # Patterns to match:
-   # - lvgl::Arc::Mode::Normal
-   # - lvgl::Animation::Path::EaseOut
-   ```
+4. **Update audit script** to detect class-scoped enums
 
 #### Why this approach
 
