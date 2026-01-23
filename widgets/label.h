@@ -28,6 +28,17 @@ class Observer;
  */
 class Label : public Widget<Label> {
  public:
+  /**
+   * @brief Label long mode behavior.
+   */
+  enum class LongMode : uint8_t {
+    Wrap = LV_LABEL_LONG_WRAP,
+    Dot = LV_LABEL_LONG_DOT,
+    Scroll = LV_LABEL_LONG_SCROLL,
+    ScrollCircular = LV_LABEL_LONG_SCROLL_CIRCULAR,
+    Clip = LV_LABEL_LONG_CLIP,
+  };
+
   Label();
   explicit Label(Object* parent, Ownership ownership = Ownership::Default);
   explicit Label(Object& parent);
@@ -75,14 +86,13 @@ class Label : public Widget<Label> {
    * @brief Set the long mode behavior.
    * @param mode The long mode to set.
    */
-  Label& set_long_mode(lv_label_long_mode_t mode);
-  Label& set_long_mode(LabelLongMode mode);
+  Label& set_long_mode(LongMode mode);
 
   /**
    * @brief Get the long mode behavior.
    * @return The current long mode.
    */
-  lv_label_long_mode_t get_long_mode() const;
+  LongMode get_long_mode() const;
 
   /**
    * @brief Set the selection start index.

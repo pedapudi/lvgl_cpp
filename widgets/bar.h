@@ -28,6 +28,15 @@ class Observer;
 class Bar : public Widget<Bar> {
  public:
   /**
+   * @brief Bar display modes.
+   */
+  enum class Mode : uint8_t {
+    Normal = LV_BAR_MODE_NORMAL,
+    Symmetrical = LV_BAR_MODE_SYMMETRICAL,
+    Range = LV_BAR_MODE_RANGE,
+  };
+
+  /**
    * @brief Create a new Bar.
    * @param parent Parent object.
    */
@@ -75,10 +84,9 @@ class Bar : public Widget<Bar> {
 
   /**
    * @brief Set the mode of the bar.
-   * @param mode Bar mode (`LV_BAR_MODE_NORMAL` or `LV_BAR_MODE_RANGE`).
+   * @param mode Bar mode (Normal, Symmetrical, Range).
    */
-  Bar& set_mode(lv_bar_mode_t mode);
-  Bar& set_mode(BarMode mode);
+  Bar& set_mode(Mode mode);
 
   /**
    * @brief Set the orientation of the bar.
@@ -90,7 +98,7 @@ class Bar : public Widget<Bar> {
   int32_t get_start_value() const;
   int32_t get_min_value() const;
   int32_t get_max_value() const;
-  lv_bar_mode_t get_mode() const;
+  Mode get_mode() const;
   lv_bar_orientation_t get_orientation() const;
   bool is_symmetrical() const;
 

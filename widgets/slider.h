@@ -28,6 +28,15 @@ class Observer;
  */
 class Slider : public Bar {
  public:
+  /**
+   * @brief Slider display modes.
+   */
+  enum class Mode : uint8_t {
+    Normal = LV_SLIDER_MODE_NORMAL,
+    Symmetrical = LV_SLIDER_MODE_SYMMETRICAL,
+    Range = LV_SLIDER_MODE_RANGE,
+  };
+
   Slider();
   explicit Slider(Object* parent, Ownership ownership = Ownership::Default);
   explicit Slider(Object& parent);
@@ -50,8 +59,7 @@ class Slider : public Bar {
   Slider& set_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
   Slider& set_start_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
   Slider& set_range(int32_t min, int32_t max);
-  Slider& set_mode(lv_slider_mode_t mode);
-  Slider& set_mode(SliderMode mode);
+  Slider& set_mode(Mode mode);
 
   /**
    * @brief Set the value of the left knob (for range slider).

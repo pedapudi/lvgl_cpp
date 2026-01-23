@@ -50,17 +50,15 @@ std::string Label::get_text() const {
   return txt ? std::string(txt) : "";
 }
 
-Label& Label::set_long_mode(lv_label_long_mode_t mode) {
-  if (obj_) lv_label_set_long_mode(obj_, mode);
+Label& Label::set_long_mode(LongMode mode) {
+  if (obj_)
+    lv_label_set_long_mode(obj_, static_cast<lv_label_long_mode_t>(mode));
   return *this;
 }
 
-Label& Label::set_long_mode(LabelLongMode mode) {
-  return set_long_mode(static_cast<lv_label_long_mode_t>(mode));
-}
-
-lv_label_long_mode_t Label::get_long_mode() const {
-  return obj_ ? lv_label_get_long_mode(obj_) : LV_LABEL_LONG_MODE_WRAP;
+Label::LongMode Label::get_long_mode() const {
+  return obj_ ? static_cast<LongMode>(lv_label_get_long_mode(obj_))
+              : LongMode::Wrap;
 }
 
 Label& Label::set_selection_start(uint32_t index) {
