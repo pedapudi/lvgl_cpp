@@ -60,7 +60,7 @@ void test_button_1() {
 void test_label_1() {
   std::cout << "Testing Label Example 1..." << std::endl;
   lvgl::Label label1;
-  label1.set_long_mode(LV_LABEL_LONG_MODE_WRAP);
+  label1.set_long_mode(lvgl::Label::LongMode::Wrap);
   // Set recolor is not in V9 directly usually? Checking wrapper... wrapper has
   // it? If wrapper assumes V9, recolor might be different. Let's assume wrapper
   // matches internal LVGL version. lvgl_cpp wrapper should be checked. For now,
@@ -75,7 +75,7 @@ void test_label_1() {
   label1.align(lvgl::Align::Center, 0, -40);
 
   lvgl::Label label2;
-  label2.set_long_mode(LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
+  label2.set_long_mode(lvgl::Label::LongMode::ScrollCircular);
   label2.set_width(150);
   label2.set_text("It is a circularly scrolling text. ");
   label2.align(lvgl::Align::Center, 0, 40);

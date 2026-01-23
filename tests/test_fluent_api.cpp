@@ -62,7 +62,7 @@ void test_slider() {
   lvgl::Slider sl;  // Use default or specific
   sl.set_value(50)
       .set_range(0, 100)
-      .set_mode(lvgl::SliderMode::Normal)
+      .set_mode(lvgl::Slider::Mode::Normal)
       .set_left_value(10)
       .set_width(200);
   std::cout << "Slider fluent API passed." << std::endl;
@@ -84,7 +84,7 @@ void test_arc() {
   lvgl::Arc arc;
   arc.set_value(50)
       .set_range(0, 100)
-      .set_mode(LV_ARC_MODE_NORMAL)
+      .set_mode(lvgl::Arc::Mode::Normal)
       .set_rotation(180)
       .set_width(100);
   std::cout << "Arc fluent API passed." << std::endl;
@@ -94,7 +94,7 @@ void test_bar() {
   lvgl::Bar bar;
   bar.set_range(0, 200)
       .set_value(100)
-      .set_mode(LV_BAR_MODE_NORMAL)
+      .set_mode(lvgl::Bar::Mode::Normal)
       .set_orientation(LV_BAR_ORIENTATION_HORIZONTAL)
       .set_size(200, 20);
   std::cout << "Bar fluent API passed." << std::endl;

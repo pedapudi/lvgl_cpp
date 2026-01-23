@@ -61,7 +61,7 @@ int main() {
     label.set_text("Hello");
     std::cerr << "Label text set" << std::endl;
     label.set_text_align(lvgl::TextAlign::Center);
-    label.set_long_mode(lvgl::LabelLongMode::ScrollCircular);
+    label.set_long_mode(lvgl::Label::LongMode::ScrollCircular);
 
     assert(lv_obj_get_style_text_align(label.raw(), LV_PART_MAIN) ==
            LV_TEXT_ALIGN_CENTER);
@@ -118,7 +118,7 @@ int main() {
   {
     std::cerr << "Arc Start" << std::endl;
     lvgl::Arc arc(screen);
-    arc.set_mode(lvgl::ArcMode::Reverse);
+    arc.set_mode(lvgl::Arc::Mode::Reverse);
     assert(lv_arc_get_mode(arc.raw()) == LV_ARC_MODE_REVERSE);
     std::cerr << "Arc Done" << std::endl;
   }
@@ -126,7 +126,7 @@ int main() {
   {
     std::cerr << "Bar Start" << std::endl;
     lvgl::Bar bar(screen);
-    bar.set_mode(lvgl::BarMode::Range);
+    bar.set_mode(lvgl::Bar::Mode::Range);
     assert(lv_bar_get_mode(bar.raw()) == LV_BAR_MODE_RANGE);
     std::cerr << "Bar Done" << std::endl;
   }
@@ -134,7 +134,7 @@ int main() {
   {
     std::cerr << "Slider Start" << std::endl;
     lvgl::Slider slider(screen);
-    slider.set_mode(lvgl::SliderMode::Symmetrical);
+    slider.set_mode(lvgl::Slider::Mode::Symmetrical);
     // Note: Slider implementation validation depends on internal storage or
     // behavior, checking mode getter if available or just compilation.
     // lv_slider_get_mode doesn't exist in v8/v9 API directly usually, it shares
@@ -147,7 +147,7 @@ int main() {
     std::cerr << "Label Long Mode Start" << std::endl;
     lvgl::Label label(screen);
     std::cerr << "Label2 created" << std::endl;
-    label.set_long_mode(lvgl::LabelLongMode::Dot);
+    label.set_long_mode(lvgl::Label::LongMode::Dot);
     std::cerr << "Label2 set_mode" << std::endl;
     assert(lv_label_get_long_mode(label.raw()) == LV_LABEL_LONG_DOT);
     std::cerr << "Label Long Mode Done" << std::endl;
