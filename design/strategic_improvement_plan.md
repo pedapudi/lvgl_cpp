@@ -583,6 +583,13 @@ Button().set_state(LV_STATE_PRESSED);  // Auto-converts
 
 - Enums: +80-100 constants → +19-24% enum coverage
 
+> [!CAUTION]
+> **Design Conflict Alert**: The current proposal to centralize enums in `misc/enums.h` (Section 2.4) conflicts with the established design intent of placing constants close to their usage via class-scoped enums.
+> 
+> For example, `lvgl::Animation::Path::EaseOut()` provides a more idiomatic and discoverable API than a global `AnimPath::EaseOut`. 
+> 
+> **Action required**: Section 2.4 needs revision to prioritize class-scoped distributions over a monolithic header. The audit script must also be updated to ensure these patterns are correctly tracked.
+
 ---
 
 ### 2.5. Event system extension (P2: Nice to have)

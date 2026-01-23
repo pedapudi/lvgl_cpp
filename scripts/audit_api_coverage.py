@@ -204,16 +204,19 @@ def extract_c_functions(lvgl_path: Path) -> Tuple[Dict[str, Set[str]], Set[str]]
     return user_functions, internal_functions
 
 
-def scan_cpp_for_usage(cpp_path: Path) -> Tuple[Set[str], Set[str], Set[str]]:
+def scan_cpp_for_usage(cpp_path: Path, known_functions: Set[str]) -> Tuple[Set[str], Set[str], Set[str]]:
     """Scan lvgl_cpp for LVGL C function and enum usage."""
     user_calls: Set[str] = set()
     internal_calls: Set[str] = set()
     enum_usage: Set[str] = set()
     
+    # Pre-compile patterns
+    enum_patterns = [re.compile(rf'\b({re.escape(prefix)}[A-Z_0-9]+)\b') for prefix in ENUM_PREFIXES]
+    token_pattern = re.compile(r'\b(lv_\w+)\b')
+    internal_token_pattern = re.compile(r'\b(_lv_\w+)\b')
+    
     for source_file in list(cpp_path.rglob('*.cpp')) + list(cpp_path.rglob('*.h')):
-        if 'test' in str(source_file):
-            continue
-        if 'build' in str(source_file):
+        if any(skip in str(source_file) for skip in ['test', 'build', 'example', '.git']):
             continue
             
         try:
@@ -225,28 +228,36 @@ def scan_cpp_for_usage(cpp_path: Path) -> Tuple[Set[str], Set[str], Set[str]]:
         content = re.sub(r'//.*?$', '', content, flags=re.MULTILINE)
         content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
         
-        for prefix in USER_API_PREFIXES:
-            pattern = rf'\b({re.escape(prefix)}\w+)\s*\('
-            for match in re.finditer(pattern, content):
-                user_calls.add(match.group(1))
+        # 1. Scan for function calls AND callback usage using tokens
+        # This is O(Tokens) instead of O(Functions * FileSize)
+        for match in token_pattern.finditer(content):
+            token = match.group(1)
+            if token in known_functions:
+                user_calls.add(token)
         
-        for prefix in ENUM_PREFIXES:
-            pattern = rf'\b({re.escape(prefix)}[A-Z_0-9]+)\b'
-            for match in re.finditer(pattern, content):
-                enum_usage.add(match.group(1))
-        
-        internal_pattern = r'\b(_lv_\w+)\s*\('
-        for match in re.finditer(internal_pattern, content):
+        # 2. Scan for internal functions
+        for match in internal_token_pattern.finditer(content):
             internal_calls.add(match.group(1))
+        
+        # 3. Scan for enum usage
+        for pattern in enum_patterns:
+            for match in pattern.finditer(content):
+                enum_usage.add(match.group(1))
     
     return user_calls, internal_calls, enum_usage
 
 
 def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
     """Generate coverage report."""
-    user_api, internal_api = extract_c_functions(lvgl_path)
+    user_api_dict, internal_api = extract_c_functions(lvgl_path)
+    
+    # Flatten user_api for easier scanning
+    known_user_functions: Set[str] = set()
+    for funcs in user_api_dict.values():
+        known_user_functions.update(funcs)
+        
     enums = extract_enums(lvgl_path)
-    used_user_api, used_internal_api, used_enums = scan_cpp_for_usage(cpp_path)
+    used_user_api, used_internal_api, used_enums = scan_cpp_for_usage(cpp_path, known_user_functions)
     
     report = {
         'summary': {
@@ -268,7 +279,7 @@ def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
     
     # Function coverage per subsystem
     for prefix in USER_API_PREFIXES:
-        all_funcs = user_api[prefix]
+        all_funcs = user_api_dict[prefix]
         if not all_funcs:
             continue
         
