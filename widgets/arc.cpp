@@ -50,13 +50,9 @@ Arc& Arc::set_rotation(int32_t rotation) {
   return *this;
 }
 
-Arc& Arc::set_mode(lv_arc_mode_t type) {
-  if (obj_) lv_arc_set_mode(obj_, type);
+Arc& Arc::set_mode(Mode mode) {
+  if (obj_) lv_arc_set_mode(obj_, static_cast<lv_arc_mode_t>(mode));
   return *this;
-}
-
-Arc& Arc::set_mode(ArcMode mode) {
-  return set_mode(static_cast<lv_arc_mode_t>(mode));
 }
 
 Arc& Arc::set_value(int32_t value) {
@@ -115,8 +111,8 @@ int32_t Arc::get_max_value() const {
   return obj_ ? lv_arc_get_max_value(obj_) : 100;
 }
 
-lv_arc_mode_t Arc::get_mode() const {
-  return obj_ ? lv_arc_get_mode(obj_) : LV_ARC_MODE_NORMAL;
+Arc::Mode Arc::get_mode() const {
+  return obj_ ? static_cast<Mode>(lv_arc_get_mode(obj_)) : Mode::Normal;
 }
 
 int32_t Arc::get_rotation() const {

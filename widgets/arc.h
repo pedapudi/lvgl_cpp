@@ -25,6 +25,15 @@ class Observer;
 class Arc : public Widget<Arc> {
  public:
   /**
+   * @brief Arc display modes.
+   */
+  enum class Mode : uint8_t {
+    Normal = LV_ARC_MODE_NORMAL,
+    Symmetrical = LV_ARC_MODE_SYMMETRICAL,
+    Reverse = LV_ARC_MODE_REVERSE,
+  };
+
+  /**
    * @brief Create a Arc on the active screen.
    */
   Arc();
@@ -51,10 +60,9 @@ class Arc : public Widget<Arc> {
 
   /**
    * @brief Set the arc mode.
-   * @param type Mode (e.g., `LV_ARC_MODE_NORMAL`).
+   * @param mode Mode (Normal, Symmetrical, Reverse).
    */
-  Arc& set_mode(lv_arc_mode_t type);
-  Arc& set_mode(ArcMode mode);
+  Arc& set_mode(Mode mode);
 
   /**
    * @brief Set the current value.
@@ -97,7 +105,7 @@ class Arc : public Widget<Arc> {
   int32_t get_value() const;
   int32_t get_min_value() const;
   int32_t get_max_value() const;
-  lv_arc_mode_t get_mode() const;
+  Mode get_mode() const;
   int32_t get_rotation() const;
   int32_t get_knob_offset() const;
 

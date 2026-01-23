@@ -40,13 +40,9 @@ Bar& Bar::set_max_value(int32_t max) {
   return *this;
 }
 
-Bar& Bar::set_mode(lv_bar_mode_t mode) {
-  if (obj_) lv_bar_set_mode(obj_, mode);
+Bar& Bar::set_mode(Mode mode) {
+  if (obj_) lv_bar_set_mode(obj_, static_cast<lv_bar_mode_t>(mode));
   return *this;
-}
-
-Bar& Bar::set_mode(BarMode mode) {
-  return set_mode(static_cast<lv_bar_mode_t>(mode));
 }
 
 Bar& Bar::set_orientation(lv_bar_orientation_t orientation) {
@@ -68,8 +64,8 @@ int32_t Bar::get_max_value() const {
   return obj_ ? lv_bar_get_max_value(obj_) : 100;
 }
 
-lv_bar_mode_t Bar::get_mode() const {
-  return obj_ ? lv_bar_get_mode(obj_) : LV_BAR_MODE_NORMAL;
+Bar::Mode Bar::get_mode() const {
+  return obj_ ? static_cast<Mode>(lv_bar_get_mode(obj_)) : Mode::Normal;
 }
 
 lv_bar_orientation_t Bar::get_orientation() const {

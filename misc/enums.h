@@ -280,46 +280,8 @@ enum class GridAlign : uint8_t {
 };
 
 // ============================================================================
-// Widget Mode Enums
+// Widget Mode Enums (remaining - to be migrated to class-scoped in future)
 // ============================================================================
-
-/**
- * @brief Wrapper for lv_arc_mode_t.
- */
-enum class ArcMode : uint8_t {
-  Normal = LV_ARC_MODE_NORMAL,
-  Symmetrical = LV_ARC_MODE_SYMMETRICAL,
-  Reverse = LV_ARC_MODE_REVERSE,
-};
-
-/**
- * @brief Wrapper for lv_bar_mode_t.
- */
-enum class BarMode : uint8_t {
-  Normal = LV_BAR_MODE_NORMAL,
-  Symmetrical = LV_BAR_MODE_SYMMETRICAL,
-  Range = LV_BAR_MODE_RANGE,
-};
-
-/**
- * @brief Wrapper for lv_slider_mode_t.
- */
-enum class SliderMode : uint8_t {
-  Normal = LV_SLIDER_MODE_NORMAL,
-  Symmetrical = LV_SLIDER_MODE_SYMMETRICAL,
-  Range = LV_SLIDER_MODE_RANGE,
-};
-
-/**
- * @brief Wrapper for lv_label_long_mode_t.
- */
-enum class LabelLongMode : uint8_t {
-  Wrap = LV_LABEL_LONG_WRAP,
-  Dot = LV_LABEL_LONG_DOT,
-  Scroll = LV_LABEL_LONG_SCROLL,
-  ScrollCircular = LV_LABEL_LONG_SCROLL_CIRCULAR,
-  Clip = LV_LABEL_LONG_CLIP,
-};
 
 /**
  * @brief Wrapper for lv_keyboard_mode_t.
