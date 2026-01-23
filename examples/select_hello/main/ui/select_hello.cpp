@@ -17,6 +17,10 @@ void SelectHello::show_menu(lvgl::Display& display) {
   // This is a standard way to "clear" a screen before building a new UI.
   // Note: This invalidates any previous C++ widgets (like roller_) that were
   // children of this screen.
+
+  // Cancel any pending hint timer to prevent accessing deleted objects.
+  hint_timer_ = lvgl::Timer();
+
   scr.clean();
 
   in_menu_mode_ = true;
@@ -39,8 +43,10 @@ void SelectHello::show_menu(lvgl::Display& display) {
   // is focused via keypad/encoder. This results in a cleaner, border-less UI.
   roller_.set_border_width(0);
   roller_.set_outline_width(0);
-  roller_.set_border_width(0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
-  roller_.set_outline_width(0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
+  roller_.set_border_width(
+      0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
+  roller_.set_outline_width(
+      0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
 
   roller_.set_visible_row_count(2);
   roller_.set_width(120);
@@ -61,8 +67,8 @@ void SelectHello::show_menu(lvgl::Display& display) {
   // natively handles LV_KEY_UP/DOWN to scroll through options.
   roller_.add_event_cb(
       [this](lvgl::Event& e) {
-        uint32_t key = *e.get_param<uint32_t>();
-        if (key == static_cast<uint32_t>(lvgl::Key::Enter)) {
+        lvgl::Key key = *e.get_param<lvgl::Key>();
+        if (key == lvgl::Key::Enter) {
           ESP_LOGI("SelectHello", "ENTER pressed, selection: %lu",
                    (unsigned long)roller_.get_selected());
 
@@ -70,7 +76,8 @@ void SelectHello::show_menu(lvgl::Display& display) {
           pending_selection_ = roller_.get_selected();
 
           // Step 2: Use lvgl::Async::call to defer the screen transition.
-          lvgl::Async::call([this]() { this->load_hello_screen(this->pending_selection_); });
+          lvgl::Async::call(
+              [this]() { this->load_hello_screen(this->pending_selection_); });
         }
       },
       static_cast<lv_event_code_t>(lvgl::EventCode::Key));
@@ -97,7 +104,8 @@ void SelectHello::load_hello_screen(int index) {
   ESP_LOGI("SelectHello", "Loading hello screen: %s", text);
 
   if (display_) {
-    // CRITICAL: We wrap the active screen in a member variable (active_screen_).
+    // CRITICAL: We wrap the active screen in a member variable
+    // (active_screen_).
     active_screen_ = lvgl::Object(display_->get_screen_active());
 
     // Clean the screen for the new UI.
@@ -111,14 +119,19 @@ void SelectHello::load_hello_screen(int index) {
     back_hint.set_text("Press any key to go back")
         .set_text_font(lvgl::Font(&lv_font_unscii_8))
         .align(lvgl::Align::TopMid, 0, 2)
-        .add_flag(lvgl::ObjFlag::Hidden);
+        .add_flag(lvgl::ObjFlag::Hidden)
+        .set_width(display_->get_horizontal_resolution())
+        .set_long_mode(lvgl::Label::LongMode::ScrollCircular);
 
     // Release the C++ wrapper's ownership of the label.
     lv_obj_t* hint_obj = back_hint.release();
 
     // Show the hint text ONLY after the 2-second animation finishes.
-    lvgl::Timer::oneshot(
-        2100, [hint_obj]() { lvgl::Object(hint_obj).remove_flag(lvgl::ObjFlag::Hidden); });
+    // Use a member timer so it can be cancelled if the user navigates back.
+    hint_timer_ = lvgl::Timer::periodic(2100, [this, hint_obj](lvgl::Timer*) {
+      lvgl::Object(hint_obj).remove_flag(lvgl::ObjFlag::Hidden);
+      hint_timer_.pause();  // Stop after one execution
+    });
 
     // To capture "Back" key presses, we make the screen itself focusable.
     active_screen_.add_flag(lvgl::ObjFlag::Clickable);
