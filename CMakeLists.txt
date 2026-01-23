@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 set(SOURCES
     core/object.cpp
     core/event.cpp
-    core/style.cpp
     misc/color.cpp
+    misc/style.cpp
     font/font.cpp
     font/owned_font.cpp
     misc/file_system.cpp

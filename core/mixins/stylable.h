@@ -2,6 +2,7 @@
 
 #include "../../font/font.h"
 #include "../../misc/enums.h"
+#include "../../misc/style.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -15,10 +16,26 @@ class Stylable {
     return *static_cast<Derived*>(this);
   }
 
+  Derived& add_style(const Style& style, lv_style_selector_t selector = 0) {
+    return add_style(style.raw(), selector);
+  }
+
+  Derived& add_style(const Style& style, Part part) {
+    return add_style(style.raw(), static_cast<lv_style_selector_t>(part));
+  }
+
   Derived& remove_style(const lv_style_t* style,
                         lv_style_selector_t selector = 0) {
     lv_obj_remove_style(static_cast<Derived*>(this)->raw(), style, selector);
     return *static_cast<Derived*>(this);
+  }
+
+  Derived& remove_style(const Style& style, lv_style_selector_t selector = 0) {
+    return remove_style(style.raw(), selector);
+  }
+
+  Derived& remove_style(const Style& style, Part part) {
+    return remove_style(style.raw(), static_cast<lv_style_selector_t>(part));
   }
 
   Derived& remove_all_styles() {

@@ -3,10 +3,10 @@
 #include <vector>
 
 #include "../core/object.h"
-#include "../core/style.h"
 #include "../display/display.h"
 #include "../misc/color.h"
 #include "../misc/enums.h"
+#include "../misc/style.h"
 #include "../widgets/arc.h"
 #include "../widgets/bar.h"
 #include "../widgets/button.h"

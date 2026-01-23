@@ -1,8 +1,8 @@
 #include <cassert>
 #include <iostream>
 
-#include "../core/style.h"
 #include "../misc/color.h"
+#include "../misc/style.h"
 
 int main() {
   lv_init();

@@ -2,9 +2,9 @@
 
 #include <vector>
 
+#include "../misc/style.h"
 #include "event.h"
 #include "lvgl.h"
-#include "style.h"
 
 namespace lvgl {
 
