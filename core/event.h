@@ -51,6 +51,16 @@ class Event {
   }
 
   /**
+   * @brief Stop the event from propagating to parent objects.
+   */
+  void stop_bubbling();
+
+  /**
+   * @brief Stop further event handlers from being called for this event.
+   */
+  void stop_processing();
+
+  /**
    * @brief Get the raw LVGL event pointer.
    */
   lv_event_t* raw() const { return evt_; }

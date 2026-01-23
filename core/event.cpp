@@ -22,4 +22,8 @@ void* Event::get_user_data() const { return lv_event_get_user_data(evt_); }
 
 void* Event::get_param() const { return lv_event_get_param(evt_); }
 
+void Event::stop_bubbling() { lv_event_stop_bubbling(evt_); }
+
+void Event::stop_processing() { lv_event_stop_processing(evt_); }
+
 }  // namespace lvgl
