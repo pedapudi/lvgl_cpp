@@ -43,6 +43,46 @@ class ChartSeries {
   lv_chart_series_t* series_;
 };
 
+/**
+ * @brief Wrapper for a chart cursor.
+ */
+class ChartCursor {
+ public:
+  ChartCursor(Chart* chart, lv_chart_cursor_t* cursor)
+      : chart_(chart), cursor_(cursor) {}
+
+  /**
+   * @brief Set the cursor position using a point.
+   */
+  void set_pos(lv_point_t pos);
+
+  /**
+   * @brief Set the cursor X position.
+   */
+  void set_pos_x(int32_t x);
+
+  /**
+   * @brief Set the cursor Y position.
+   */
+  void set_pos_y(int32_t y);
+
+  /**
+   * @brief Set the cursor to a specific point on a series.
+   */
+  void set_point(ChartSeries& series, uint32_t point_id);
+
+  /**
+   * @brief Get the current cursor point position.
+   */
+  lv_point_t get_point() const;
+
+  lv_chart_cursor_t* raw() const { return cursor_; }
+
+ private:
+  Chart* chart_;
+  lv_chart_cursor_t* cursor_;
+};
+
 class Chart : public Widget<Chart> {
  public:
   /**
@@ -87,8 +127,14 @@ class Chart : public Widget<Chart> {
   Type get_type() const;
   uint32_t get_point_count() const;
 
+  // Series management
   ChartSeries add_series(lv_color_t color, Axis axis);
   void remove_series(ChartSeries series);
+
+  // Cursor management
+  ChartCursor add_cursor(lv_color_t color, lv_dir_t dir);
+  void remove_cursor(ChartCursor cursor);
+
   void refresh();
 };
 

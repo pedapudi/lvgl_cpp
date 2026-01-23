@@ -103,6 +103,27 @@ int32_t Scale::get_range_max_value() {
   return obj_ ? lv_scale_get_range_max_value(obj_) : 0;
 }
 
+// --- ScaleSection ---
+
+void ScaleSection::set_range(int32_t min, int32_t max) {
+  if (section_) {
+    lv_scale_section_set_range(section_, min, max);
+  }
+}
+
+void ScaleSection::set_style(lv_part_t part, lv_style_t* style) {
+  if (section_) {
+    lv_scale_section_set_style(section_, part, style);
+  }
+}
+
+ScaleSection Scale::add_section() {
+  if (obj_) {
+    return ScaleSection(this, lv_scale_add_section(obj_));
+  }
+  return ScaleSection(this, nullptr);
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_SCALE
