@@ -44,17 +44,17 @@ extern "C" void app_main(void) {
   SelectHello select_hello;
 
   sys.lock(-1);
+  sys.set_rotation(lvgl::Display::Rotation::ROT_180);
   if (auto* display = sys.get_display()) {
-    display->set_rotation(lvgl::Display::Rotation::ROT_180);
     select_hello.show_menu(*display);
 
     /**
      * Bind the Input Device to the UI Group.
      *
-     * In LVGL, navigation (like moving focus between buttons or scrolling a list)
-     * is managed through "Groups". An Input Device (in our case, the physical buttons
-     * wrapped by GpioInput) must be assigned to a Group so it knows which UI
-     * elements it should interact with.
+     * In LVGL, navigation (like moving focus between buttons or scrolling a
+     * list) is managed through "Groups". An Input Device (in our case, the
+     * physical buttons wrapped by GpioInput) must be assigned to a Group so it
+     * knows which UI elements it should interact with.
      *
      * How it works:
      * 1. GpioInput (Hardware Layer): Monitors the physical GPIO pins.

@@ -15,10 +15,10 @@ class GpioInput {
   lvgl::KeypadInput& get_input() { return input_; }
 
  private:
-  void read_cb(lv_indev_data_t* data);
+  void read_cb(lvgl::IndevData& data);
 
   Config config_;
   lvgl::KeypadInput input_;
-  uint32_t last_key_ = 0;
-  lv_indev_state_t last_state_ = LV_INDEV_STATE_RELEASED;
+  lvgl::Key last_key_ = lvgl::Key::Enter;
+  lvgl::IndevState last_state_ = lvgl::IndevState::Released;
 };

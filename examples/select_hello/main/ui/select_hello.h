@@ -51,13 +51,21 @@ class SelectHello {
    *
    * CRITICAL FOR BEGINNERS: In lvgl_cpp, a wrapper object (like lvgl::Object)
    * stores C++ callback closures. If you create a wrapper as a local variable
-   * in a function, it is destroyed when the function returns, and its destructor
-   * will UNREGISTER your callbacks from LVGL.
+   * in a function, it is destroyed when the function returns, and its
+   * destructor will UNREGISTER your callbacks from LVGL.
    *
    * By keeping this as a class member, we ensure the wrapper lives as long as
    * the SelectHello instance, keeping our "back" button handler active.
    */
   lvgl::Object active_screen_;
+
+  /**
+   * @brief Timer for showing the "back" hint after the animation.
+   *
+   * Stored as a member so it can be cancelled if the user navigates
+   * back before the timer fires, preventing access to deleted objects.
+   */
+  lvgl::Timer hint_timer_;
 
   /**
    * @brief Load the hello screen for a specific index.

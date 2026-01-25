@@ -20,7 +20,7 @@
 #include "lvgl_cpp/lvgl_cpp.h"
 
 class LvglPort {
-public:
+ public:
   struct Config {
     uint16_t h_res = 128;
     uint16_t v_res = 64;
@@ -30,7 +30,7 @@ public:
     uint32_t tick_period_ms = 5;
   };
 
-  explicit LvglPort(const Config &config);
+  explicit LvglPort(const Config& config);
   ~LvglPort() = default;
 
   void init(esp_lcd_panel_handle_t panel_handle,
@@ -38,16 +38,17 @@ public:
   bool lock(uint32_t timeout_ms = 0);
   void unlock();
 
-  lvgl::Display *get_display() { return display_.get(); }
+  void set_rotation(lvgl::Display::Rotation rotation);
 
-private:
-  void flush_cb(lvgl::Display *disp, const lv_area_t *area, uint8_t *px_map);
-  static bool
-  notify_flush_ready_trampoline(esp_lcd_panel_io_handle_t io_panel,
-                                esp_lcd_panel_io_event_data_t *edata,
-                                void *user_ctx);
-  static void tick_increment_trampoline(void *arg);
-  static void task_trampoline(void *arg);
+  lvgl::Display* get_display() { return display_.get(); }
+
+ private:
+  void flush_cb(lvgl::Display* disp, const lv_area_t* area, uint8_t* px_map);
+  static bool notify_flush_ready_trampoline(
+      esp_lcd_panel_io_handle_t io_panel, esp_lcd_panel_io_event_data_t* edata,
+      void* user_ctx);
+  static void tick_increment_trampoline(void* arg);
+  static void task_trampoline(void* arg);
 
   void task_loop();
 
