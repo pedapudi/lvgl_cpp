@@ -47,10 +47,11 @@ obj.style(Part::Main).bg_color(Red)
 ### 3.1. Removing Mixins
 The following mixins will be deprecated and eventually removed, replaced by Proxies:
 *   `core/mixins/layoutable.h` -> `LayoutProxy`
-*   `core/mixins/positionable.h` -> `Object` core (keep x, y, align fundamental) + `LayoutProxy`? 
-    *   *Decision*: `x`, `y`, `size` are fundamental enough to stay on `Object`, but specialized layout logic moves to proxy.
+*   `core/mixins/positionable.h` -> **Moved to Object Core** (Completed)
+    *   *Decision*: `x`, `y`, `size` are fundamental enough to stay on `Object` to avoid verbosity.
 *   `core/mixins/scrollable.h` -> `ScrollProxy`
-*   `core/mixins/stylable.h` -> `StyleProxy` (Factory remains in `Object` or lightweight `Stylable` mixin).
+*   `core/mixins/stylable.h` -> `StyleProxy` (Factory remains in `Object`).
+*   `core/mixins/event_source.h` -> **Moved to Object Core** (Completed).
 
 ### 3.2. Cleaning `Object`
 All `set_style_*`, `set_flex_*`, `set_grid_*`, `set_scroll_*` methods will be removed from `Object`'s public interface (or deprecated).
@@ -74,7 +75,8 @@ All `set_style_*`, `set_flex_*`, `set_grid_*`, `set_scroll_*` methods will be re
 ### Phase 4: Deprecation & Cleanup (Completed)
 - Mark old methods `[[deprecated]]`. -> Skipped, removed directly.
 - Update all examples and tests to use Proxies.
-- Legacy mixins (`Stylable`) removed from `core/mixins` and `Widget` inheritance.
+- Legacy mixins (`Stylable`, `Layoutable`, `Scrollable`) removed.
+- `Positionable`, `Sizable`, `EventSource` consolidated into `Object`.
 - Flat setters removed from `Object`.
 
 ## 5. Verification

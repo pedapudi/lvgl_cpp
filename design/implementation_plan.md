@@ -4,7 +4,7 @@ This document outlines the strategic roadmap to complete the modernization of `l
 
 ## Executive Summary
 
-The structural refactoring (mixins, CRTP widgets) is complete. The next phases focus on **Systemic Ergonomics** (Proxies), **Resource Safety** (RAII), and **API Completeness**.
+The structural refactoring (mixins, CRTP widgets) is **complete** (v0.3.0). The next phases focus on **Systemic Ergonomics** (Proxies), **Resource Safety** (RAII), and **API Completeness**.
 
 ## Phase 1: Systemic Proxies (The fluent interface)
 

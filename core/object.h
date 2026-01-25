@@ -103,6 +103,11 @@ class Object {
   explicit Object(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   /**
+   * @brief Functional event callback type.
+   */
+  using EventCallback = std::function<void(Event&)>;
+
+  /**
    * @brief Create a wrapper around an existing LVGL object
    * (Legacy/Convenience).
    * @param obj The LVGL object to wrap.
@@ -227,6 +232,118 @@ class Object {
    * Safe to call from callbacks to avoid use-after-free.
    */
   void delete_async();
+
+  // --- Geometric Properties ---
+
+  /**
+   * @brief Set the x coordinate of the object.
+   * @param x The x coordinate.
+   * @return Reference to this object.
+   */
+  Object& set_x(int32_t x);
+
+  /**
+   * @brief Set the y coordinate of the object.
+   * @param y The y coordinate.
+   * @return Reference to this object.
+   */
+  Object& set_y(int32_t y);
+
+  /**
+   * @brief Set the position of the object.
+   * @param x The x coordinate.
+   * @param y The y coordinate.
+   * @return Reference to this object.
+   */
+  Object& set_pos(int32_t x, int32_t y);
+
+  /**
+   * @brief Set the alignment of the object.
+   * @param align The alignment type.
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+
+  /**
+   * @brief Set the alignment of the object.
+   * @param align The alignment type (raw LVGL enum).
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+
+  /**
+   * @brief Align the object to another object.
+   * @param base The object to align to.
+   * @param align The alignment type.
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align_to(const Object& base, Align align, int32_t x_ofs = 0,
+                   int32_t y_ofs = 0);
+
+  /**
+   * @brief Align the object to another object.
+   * @param base The object to align to.
+   * @param align The alignment type (raw LVGL enum).
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
+                   int32_t y_ofs = 0);
+
+  /**
+   * @brief Center the object on its parent.
+   * @return Reference to this object.
+   */
+  Object& center();
+
+  /**
+   * @brief Get the x coordinate.
+   */
+  int32_t get_x() const;
+
+  /**
+   * @brief Get the y coordinate.
+   */
+  int32_t get_y() const;
+
+  /**
+   * @brief Set the width of the object.
+   * @param w The width.
+   * @return Reference to this object.
+   */
+  Object& set_width(int32_t w);
+
+  /**
+   * @brief Set the height of the object.
+   * @param h The height.
+   * @return Reference to this object.
+   */
+  Object& set_height(int32_t h);
+
+  /**
+   * @brief Set the size of the object.
+   * @param w The width.
+   * @param h The height.
+   * @return Reference to this object.
+   */
+  Object& set_size(int32_t w, int32_t h);
+
+  /**
+   * @brief Get the width of the object.
+   */
+  int32_t get_width() const;
+
+  /**
+   * @brief Get the height of the object.
+   */
+  int32_t get_height() const;
 
   // ... existing code ...
 
@@ -371,24 +488,51 @@ class Object {
   // --- Events ---
 
   /**
-   * @brief Functional event callback type.
-   */
-  using EventCallback = std::function<void(Event&)>;
-
-  /**
    * @brief Add a functional event callback.
    * Uses `std::function` to allow lambdas with captures.
    * @param event_code The event code to listen for (e.g., `LV_EVENT_CLICKED`).
    * @param callback The callable to execute.
+   * @return Reference to this object.
    */
-  void add_event_cb(lv_event_code_t event_code, EventCallback callback);
+  Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
 
   /**
    * @brief Add a functional event callback (Scoped Enum).
    * @param event_code The event code to listen for.
    * @param callback The callable to execute.
+   * @return Reference to this object.
    */
-  void add_event_cb(EventCode event_code, EventCallback callback);
+  Object& add_event_cb(EventCode event_code, EventCallback callback);
+
+  /**
+   * @brief Register a click event callback.
+   */
+  Object& on_click(EventCallback cb);
+
+  /**
+   * @brief Register a click event callback (Alias).
+   */
+  Object& on_clicked(EventCallback cb);
+
+  /**
+   * @brief Register a callback for all events.
+   */
+  Object& on_event(EventCallback cb);
+
+  /**
+   * @brief Register a pressed event callback.
+   */
+  Object& on_pressed(EventCallback cb);
+
+  /**
+   * @brief Register a released event callback.
+   */
+  Object& on_released(EventCallback cb);
+
+  /**
+   * @brief Register a long pressed event callback.
+   */
+  Object& on_long_pressed(EventCallback cb);
 
   // --- Styles ---
 
