@@ -138,6 +138,8 @@ class Style {
   Style& text_line_space(int32_t space);
   Style& text_align(TextAlign align);
   Style& text_align(lv_text_align_t align);
+  Style& text_decor(TextDecor decor);
+  Style& text_decor(lv_text_decor_t decor);
 
   // =========================================================================
   // Shadow

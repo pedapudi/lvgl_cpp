@@ -136,6 +136,20 @@ enum class TextAlign : uint8_t {
 };
 
 /**
+ * @brief Wrapper for lv_text_decor_t.
+ */
+enum class TextDecor : uint8_t {
+  None = LV_TEXT_DECOR_NONE,
+  Underline = LV_TEXT_DECOR_UNDERLINE,
+  Strikethrough = LV_TEXT_DECOR_STRIKETHROUGH,
+};
+
+inline TextDecor operator|(TextDecor lhs, TextDecor rhs) {
+  return static_cast<TextDecor>(static_cast<uint8_t>(lhs) |
+                                static_cast<uint8_t>(rhs));
+}
+
+/**
  * @brief Wrapper for lv_border_side_t.
  */
 enum class BorderSide : uint8_t {

@@ -213,6 +213,10 @@ else()
     target_link_libraries(test_tabview PRIVATE lvgl_cpp)
     add_test(NAME test_tabview COMMAND test_tabview)
 
+    add_executable(test_span tests/test_span.cpp)
+    target_link_libraries(test_span PRIVATE lvgl_cpp)
+    add_test(NAME test_span COMMAND test_span)
+
     
 
 add_executable(test_image tests/test_image.cpp widgets/image.cpp draw/image_descriptor.cpp core/object.cpp display/display.cpp)
