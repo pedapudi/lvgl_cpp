@@ -58,15 +58,19 @@
 Here is a complete example showing the "Hello World" of `lvgl_cpp` with a styled button and event handling.
 
 ```cpp
+#include <thread>
+#include <chrono>
 #include "lvgl.h"
 #include "lvgl_cpp/core/object.h"
+#include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/widgets/button.h"
 #include "lvgl_cpp/widgets/label.h"
+#include "lvgl_cpp/widgets/screen.h"
 #include "lvgl_cpp/misc/style.h"
 
 using namespace lvgl;
 
-void create_ui(Object& screen) {
+void create_ui(Screen& screen) {
     // 1. Create a Style using the Fluent Builder
     static Style btn_style; // Static to keep it alive (or use shared_ptr)
     btn_style.init()
@@ -81,7 +85,7 @@ void create_ui(Object& screen) {
     btn.set_size(150, 60)
        .center()
        .add_style(btn_style)
-       .add_flag(LV_OBJ_FLAG_CHECKABLE); // Type-safe flags
+       .add_flag(ObjFlag::Checkable); // Type-safe flags
 
     // 3. Add a Label to the Button
     Label label(&btn);
@@ -89,11 +93,11 @@ void create_ui(Object& screen) {
          .center();
 
     // 4. Handle Events with C++ Lambdas
-    btn.add_event_cb(LV_EVENT_CLICKED, [](Event event) {
+    btn.add_event_cb(EventCode::Clicked, [](Event event) {
         // 'event' is a C++ wrapper around lv_event_t
         auto target_btn = Button(event.get_target(), Ownership::Unmanaged);
         
-        if (target_btn.has_state(LV_STATE_CHECKED)) {
+        if (target_btn.has_state(State::Checked)) {
             printf("Button Checked!\n");
         } else {
             printf("Button Unchecked!\n");
@@ -104,20 +108,19 @@ void create_ui(Object& screen) {
 int main() {
     lv_init();
     
-    // System-specific display/input driver setup (standard LVGL C API)
-    lv_display_t* disp = lv_display_create(800, 480);
+    // Create default display using the C++ wrapper
+    auto disp = Display::create(800, 480);
     
-    // Create 'Screen' wrapper for the active screen
-    Object screen(lv_screen_active(), Ownership::Unmanaged);
+    // Get the active screen wrapper
+    auto screen = Screen::active();
     
     create_ui(screen);
 
     while (true) {
         lv_timer_handler();
-        usleep(5000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
-```
 
 ---
 
@@ -165,7 +168,6 @@ Full support for Encoder and Keypad navigation through `lvgl::Group`:
 lvgl::Group group = lvgl::Group::get_default();
 group.add_obj(btn1);
 group.add_obj(btn2);
-group.set_focus_cb([](lv_group_t* g) { ... });
 ```
 
 ---
