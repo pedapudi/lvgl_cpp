@@ -106,6 +106,12 @@ INTERNAL_PATTERNS = [
     r'_class_init$',
     r'_destructor$',
     r'_constructor$',
+    r'_class_',          # Widget class factory methods
+    r'_xml_',            # XML parser internal bindings
+    r'_init_draw_',      # Low-level draw descriptor init
+    r'_event_base',      # Internal event dispatch
+    r'_destruct$',       # Destructors
+    r'_cb$',             # Callback implementations (not setters)
 ]
 
 DRAW_INTERNAL_PATTERNS = [
@@ -130,6 +136,15 @@ def is_internal_function(func_name: str, header_path: str) -> bool:
     for pattern in DRAW_INTERNAL_PATTERNS:
         if re.search(pattern, func_name):
             return True
+            
+    # Specific internal handlers to exclude
+    if func_name in [
+        'lv_indev_scroll_handler',
+        'lv_indev_scroll_throw_handler',
+        'lv_timer_handler_run_in_period', # Internal helper
+        'lv_display_delete_refr_timer',   # Internal timer management
+    ]:
+        return True
     
     return False
 

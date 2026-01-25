@@ -28,10 +28,22 @@ public:
     lv_obj_t* raw() const { return obj_; }
     bool is_valid() const;
     
-    // Parenting operations (Always common)
-    void set_parent(Object& parent);
-    Object get_parent() const;
-    void delete_obj();
+    // Lifecycle
+    void delete_async();
+    
+    // Geometry (Consolidated from Positionable/Sizable)
+    Object& set_pos(int32_t x, int32_t y);
+    Object& set_size(int32_t w, int32_t h);
+    Object& align(Align align, ...);
+    
+    // Events (Consolidated from EventSource)
+    Object& add_event_cb(lv_event_code_t, EventCallback);
+    Object& on_click(EventCallback);
+    
+    // Proxies (Factories)
+    StyleProxy style();
+    LayoutProxy layout();
+    ScrollProxy scroll();
     
 protected:
     lv_obj_t* obj_ = nullptr;
@@ -45,33 +57,22 @@ The new base for all concrete widgets. It uses CRTP to allow fluent chaining to 
 ### Architecture
 ```cpp
 template <typename Derived>
-class Widget : public Object,
-               public Positionable<Derived>,
-               public Sizable<Derived>,
-               public Stylable<Derived>,
-               public Clickable<Derived>, // Optional? No, base widgets have events.
-               public EventSource<Derived> {
+class Widget : public Object {
 public:
     using Object::Object; // Inherit constructors
+    
+    // Fluent Proxies (Forward to Object, return Derived&)
+    Derived& set_pos(int32_t x, int32_t y) {
+        Object::set_pos(x, y);
+        return self();
+    }
     
     Derived& self() { return *static_cast<Derived*>(this); }
 };
 ```
 
-## 4. Mixins
-Located in `core/mixins/`.
-
-### `Positionable<T>`
-*   `T& x(int32_t)` / `int32_t x()`
-*   `T& y(int32_t)` / `int32_t y()`
-*   `T& pos(int32_t x, int32_t y)`
-*   `T& align(...)`
-*   `T& center()`
-
-### `Sizable<T>`
-*   `T& width(int32_t)` / `int32_t width()`
-*   `T& height(int32_t)` / `int32_t height()`
-*   `T& size(int32_t w, int32_t h)`
+## 4. Mixins (Consolidated)
+Former mixins (`Positionable`, `Sizable`, `EventSource`) have been consolidated into `Object` to reduce inheritance complexity. `Stylable`, `Layoutable`, and `Scrollable` have been replaced by the Proxy architecture.
 
 ## 5. Event system
 Refactoring `Event` to be purely a safe wrapper.
@@ -83,19 +84,12 @@ Reference type (does not own event).
 *   `T target<T>()` (safe cast)
 
 ### Callback registration
+### Callback registration
+Event registration is now built directly into `Object`.
+
 ```cpp
-template <typename Derived>
-struct EventSource {
-    Derived& on_event(lv_event_code_t code, std::function<void(Event)> cb) {
-        // Internal registration logic
-        return static_cast<Derived&>(*this);
-    }
-    
-    // Semantic Helpers
-    Derived& on_click(std::function<void(Event)> cb) {
-        return on_event(LV_EVENT_CLICKED, cb);
-    }
-};
+Object& obj = ...;
+obj.on_click([](Event& e){ ... });
 ```
 
 ## 6. Memory management policy

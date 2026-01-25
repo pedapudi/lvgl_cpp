@@ -322,6 +322,16 @@ Style& Style::text_align(lv_text_align_t align) {
   return *this;
 }
 
+Style& Style::text_decor(TextDecor decor) {
+  lv_style_set_text_decor(&style_, static_cast<lv_text_decor_t>(decor));
+  return *this;
+}
+
+Style& Style::text_decor(lv_text_decor_t decor) {
+  lv_style_set_text_decor(&style_, decor);
+  return *this;
+}
+
 // =========================================================================
 // Shadow
 // =========================================================================

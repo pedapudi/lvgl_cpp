@@ -213,6 +213,14 @@ else()
     target_link_libraries(test_tabview PRIVATE lvgl_cpp)
     add_test(NAME test_tabview COMMAND test_tabview)
 
+    add_executable(test_span tests/test_span.cpp)
+    target_link_libraries(test_span PRIVATE lvgl_cpp)
+    add_test(NAME test_span COMMAND test_span)
+
+    add_executable(test_api_hardening tests/test_api_hardening.cpp)
+    target_link_libraries(test_api_hardening PRIVATE lvgl_cpp)
+    add_test(NAME test_api_hardening COMMAND test_api_hardening)
+
     
 
 add_executable(test_image tests/test_image.cpp widgets/image.cpp draw/image_descriptor.cpp core/object.cpp display/display.cpp)
@@ -282,6 +290,22 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_timer tests/test_timer.cpp)
     target_link_libraries(test_timer PRIVATE lvgl_cpp)
     add_test(NAME test_timer COMMAND test_timer)
+
+    add_executable(test_style_proxy tests/test_style_proxy.cpp)
+    target_link_libraries(test_style_proxy PRIVATE lvgl_cpp)
+    add_test(NAME test_style_proxy COMMAND test_style_proxy)
+
+    add_executable(test_layout_proxy tests/test_layout_proxy.cpp)
+    target_link_libraries(test_layout_proxy PRIVATE lvgl_cpp)
+    add_test(NAME test_layout_proxy COMMAND test_layout_proxy)
+
+    add_executable(test_scroll_proxy tests/test_scroll_proxy.cpp)
+    target_link_libraries(test_scroll_proxy PRIVATE lvgl_cpp)
+    add_test(NAME test_scroll_proxy COMMAND test_scroll_proxy)
+
+    add_executable(test_scale tests/test_scale.cpp)
+    target_link_libraries(test_scale PRIVATE lvgl_cpp)
+    add_test(NAME test_scale COMMAND test_scale)
 
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)

@@ -20,6 +20,23 @@
  */
 namespace lvgl {
 
+class SpanGroup;
+
+class Span {
+ public:
+  Span(lv_span_t* span, SpanGroup* group);
+
+  Span& set_text(const char* text);
+  Span& set_style(const Style& style);
+  Span& style(const Style& style);  // Alias
+
+  lv_span_t* raw() const;
+
+ private:
+  lv_span_t* span_;
+  SpanGroup* group_;
+};
+
 class SpanGroup : public Widget<SpanGroup> {
  public:
   SpanGroup();
@@ -27,19 +44,22 @@ class SpanGroup : public Widget<SpanGroup> {
   explicit SpanGroup(Object& parent);
   explicit SpanGroup(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  lv_span_t* add_span();
-  void delete_span(lv_span_t* span);
-  SpanGroup& set_span_text(lv_span_t* span, const char* text);
-  SpanGroup& set_span_style(lv_span_t* span, const lv_style_t* style);
-  SpanGroup& set_align(lv_text_align_t align);
+  Span add_span();
+
+  // Legacy/Raw access
+  lv_span_t* add_span_raw();
+  void delete_span(Span& span);
+  void delete_span_raw(lv_span_t* span);
+
+  SpanGroup& set_align(TextAlign align);
   SpanGroup& set_overflow(lv_span_overflow_t overflow);
   SpanGroup& set_indent(int32_t indent);
-  SpanGroup& set_mode(lv_span_mode_t mode);
+  SpanGroup& set_mode(lv_span_mode_t mode);  // TODO: Enum
   SpanGroup& set_max_lines(int32_t lines);
 
-  lv_span_t* get_child(int32_t id);
+  Span get_child(int32_t id);
   uint32_t get_span_count();
-  lv_text_align_t get_align();
+  TextAlign get_align();
   lv_span_overflow_t get_overflow();
   int32_t get_indent();
   lv_span_mode_t get_mode();

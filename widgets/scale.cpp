@@ -13,8 +13,8 @@ Scale::Scale(Object& parent) : Scale(&parent) {}
 
 Scale::Scale(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
-Scale& Scale::set_mode(lv_scale_mode_t mode) {
-  if (obj_) lv_scale_set_mode(obj_, mode);
+Scale& Scale::set_mode(ScaleMode mode) {
+  if (obj_) lv_scale_set_mode(obj_, static_cast<lv_scale_mode_t>(mode));
   return *this;
 }
 
@@ -75,8 +75,9 @@ Scale& Scale::set_draw_ticks_on_top(bool en) {
   return *this;
 }
 
-lv_scale_mode_t Scale::get_mode() {
-  return obj_ ? lv_scale_get_mode(obj_) : LV_SCALE_MODE_HORIZONTAL_BOTTOM;
+ScaleMode Scale::get_mode() {
+  return obj_ ? static_cast<ScaleMode>(lv_scale_get_mode(obj_))
+              : ScaleMode::HorizontalBottom;
 }
 
 int32_t Scale::get_total_tick_count() {
@@ -108,6 +109,13 @@ int32_t Scale::get_range_max_value() {
 void ScaleSection::set_range(int32_t min, int32_t max) {
   if (section_) {
     lv_scale_section_set_range(section_, min, max);
+  }
+}
+
+void ScaleSection::set_style(Part part, Style& style) {
+  if (section_) {
+    lv_scale_section_set_style(section_, static_cast<lv_part_t>(part),
+                               style.raw());
   }
 }
 

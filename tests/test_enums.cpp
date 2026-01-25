@@ -27,8 +27,9 @@ int main() {
   {
     std::cout << "Testing Object properties..." << std::endl;
     lvgl::Object obj;
-    obj.set_scrollbar_mode(lvgl::ScrollbarMode::Active);
-    obj.set_scroll_snap_x(lvgl::ScrollSnap::Center);
+    obj.scroll().mode(lvgl::ScrollbarMode::Active);
+    obj.scroll().snap(lvgl::ScrollSnap::Center,
+                      lvgl::ScrollSnap::None);  // Partial snap set replacement
     obj.set_base_dir(lvgl::BaseDir::Rtl);
 
     assert(lv_obj_get_scrollbar_mode(obj.raw()) == LV_SCROLLBAR_MODE_ACTIVE);
@@ -101,10 +102,11 @@ int main() {
   {
     lvgl::Object obj(&screen);
     // Layout
-    obj.set_flex_flow(lvgl::FlexFlow::Row);
-    obj.set_flex_align(lvgl::FlexAlign::Center, lvgl::FlexAlign::SpaceEvenly,
-                       lvgl::FlexAlign::Start);
-    obj.set_scrollbar_mode(lvgl::ScrollbarMode::Auto);
+    obj.layout().flex_flow(lvgl::FlexFlow::Row);
+    obj.layout().flex_align(lvgl::FlexAlign::Center,
+                            lvgl::FlexAlign::SpaceEvenly,
+                            lvgl::FlexAlign::Start);
+    obj.scroll().mode(lvgl::ScrollbarMode::Auto);
 
     // Verify Layout
     assert(lv_obj_get_style_flex_flow(obj.raw(), LV_PART_MAIN) ==
@@ -206,7 +208,7 @@ int main() {
   {
     std::cerr << "ScrollSnap Enum Start" << std::endl;
     lvgl::Object obj(&screen);
-    obj.set_scroll_snap_y(lvgl::ScrollSnap::Center);
+    obj.scroll().snap(lvgl::ScrollSnap::None, lvgl::ScrollSnap::Center);
     assert(lv_obj_get_scroll_snap_y(obj.raw()) == LV_SCROLL_SNAP_CENTER);
     std::cerr << "ScrollSnap Enum Done" << std::endl;
   }
@@ -214,9 +216,7 @@ int main() {
   {
     std::cerr << "BlendMode Enum Start" << std::endl;
     lvgl::Button obj(screen);
-    obj.set_style_blend_mode(
-        lvgl::BlendMode::Additive,
-        static_cast<lv_style_selector_t>(lvgl::Part::Main));
+    obj.style().blend_mode(lvgl::BlendMode::Additive, lvgl::Part::Main);
     assert(lv_obj_get_style_blend_mode(obj.raw(), LV_PART_MAIN) ==
            LV_BLEND_MODE_ADDITIVE);
     std::cerr << "BlendMode Enum Done" << std::endl;
@@ -225,7 +225,7 @@ int main() {
   {
     std::cerr << "GridAlign Enum Start" << std::endl;
     lvgl::Object obj(&screen);
-    obj.set_grid_align(lvgl::GridAlign::Center, lvgl::GridAlign::End);
+    obj.layout().grid_align(lvgl::GridAlign::Center, lvgl::GridAlign::End);
     assert(lv_obj_get_style_grid_column_align(obj.raw(), LV_PART_MAIN) ==
            LV_GRID_ALIGN_CENTER);
     assert(lv_obj_get_style_grid_row_align(obj.raw(), LV_PART_MAIN) ==

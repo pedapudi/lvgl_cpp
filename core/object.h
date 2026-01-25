@@ -14,7 +14,10 @@
 
 #include "../misc/enums.h"
 #include "event.h"
+#include "layout_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
+#include "scroll_proxy.h"
+#include "style_proxy.h"
 
 /**
  * @file object.h
@@ -98,6 +101,11 @@ class Object {
    * parameters.
    */
   explicit Object(lv_obj_t* obj, Ownership ownership = Ownership::Default);
+
+  /**
+   * @brief Functional event callback type.
+   */
+  using EventCallback = std::function<void(Event&)>;
 
   /**
    * @brief Create a wrapper around an existing LVGL object
@@ -225,29 +233,167 @@ class Object {
    */
   void delete_async();
 
+  // --- Geometric Properties ---
+
+  /**
+   * @brief Set the x coordinate of the object.
+   * @param x The x coordinate.
+   * @return Reference to this object.
+   */
+  Object& set_x(int32_t x);
+
+  /**
+   * @brief Set the y coordinate of the object.
+   * @param y The y coordinate.
+   * @return Reference to this object.
+   */
+  Object& set_y(int32_t y);
+
+  /**
+   * @brief Set the position of the object.
+   * @param x The x coordinate.
+   * @param y The y coordinate.
+   * @return Reference to this object.
+   */
+  Object& set_pos(int32_t x, int32_t y);
+
+  /**
+   * @brief Set the alignment of the object.
+   * @param align The alignment type.
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+
+  /**
+   * @brief Set the alignment of the object.
+   * @param align The alignment type (raw LVGL enum).
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
+
+  /**
+   * @brief Align the object to another object.
+   * @param base The object to align to.
+   * @param align The alignment type.
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align_to(const Object& base, Align align, int32_t x_ofs = 0,
+                   int32_t y_ofs = 0);
+
+  /**
+   * @brief Align the object to another object.
+   * @param base The object to align to.
+   * @param align The alignment type (raw LVGL enum).
+   * @param x_ofs The x offset.
+   * @param y_ofs The y offset.
+   * @return Reference to this object.
+   */
+  Object& align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
+                   int32_t y_ofs = 0);
+
+  /**
+   * @brief Center the object on its parent.
+   * @return Reference to this object.
+   */
+  Object& center();
+
+  /**
+   * @brief Get the x coordinate.
+   */
+  int32_t get_x() const;
+
+  /**
+   * @brief Get the y coordinate.
+   */
+  int32_t get_y() const;
+
+  /**
+   * @brief Set the width of the object.
+   * @param w The width.
+   * @return Reference to this object.
+   */
+  Object& set_width(int32_t w);
+
+  /**
+   * @brief Set the height of the object.
+   * @param h The height.
+   * @return Reference to this object.
+   */
+  Object& set_height(int32_t h);
+
+  /**
+   * @brief Set the size of the object.
+   * @param w The width.
+   * @param h The height.
+   * @return Reference to this object.
+   */
+  Object& set_size(int32_t w, int32_t h);
+
+  /**
+   * @brief Get the width of the object.
+   */
+  int32_t get_width() const;
+
+  /**
+   * @brief Get the height of the object.
+   */
+  int32_t get_height() const;
+
+  // ... existing code ...
+
   // --- Layout and Scroll ---
 
   /**
-   * @brief Set the flex flow.
-   * @param flow The flex flow direction/wrap.
+   * @brief Get a layout proxy for setting layout properties.
+   * @return A LayoutProxy object supporting fluent method chaining.
    */
-  void set_flex_flow(FlexFlow flow);
+  LayoutProxy layout() { return LayoutProxy(obj_); }
 
   /**
-   * @brief Set the flex alignment.
-   * @param main_place Main axis alignment.
-   * @param cross_place Cross axis alignment.
-   * @param track_cross_place Cross axis alignment of the tracks.
+   * @brief Update the layout of the object.
    */
-  void set_flex_align(FlexAlign main_place, FlexAlign cross_place,
-                      FlexAlign track_cross_place);
+  void update_layout() {
+    if (obj_) lv_obj_update_layout(obj_);
+  }
 
   /**
-   * @brief Set the grid alignment.
-   * @param column_align Column alignment.
-   * @param row_align Row alignment.
+   * @brief Get a scroll proxy for scrolling operations.
+   * @return A ScrollProxy object supporting fluent method chaining.
    */
-  void set_grid_align(GridAlign column_align, GridAlign row_align);
+  ScrollProxy scroll() { return ScrollProxy(obj_); }
+
+  /**
+   * @brief Get a style proxy for setting local styles on this object.
+   * @param part The part to style (default: Main).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy style(Part part = Part::Main) {
+    return StyleProxy(obj_, static_cast<lv_style_selector_t>(part));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles for a specific state.
+   * @param state The state to style (e.g. State::Pressed).
+   * @return A StyleProxy object.
+   */
+  StyleProxy style(State state) {
+    return StyleProxy(obj_, static_cast<lv_style_selector_t>(state));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles on this object.
+   * @param selector The style selector (part | state).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy style(lv_style_selector_t selector) {
+    return StyleProxy(obj_, selector);
+  }
 
   // --- Flags & States ---
 
@@ -325,42 +471,6 @@ class Object {
 
   // --- Scroll ---
 
-  /**
-   * @brief Set the scrollbar mode.
-   * @param mode The mode (e.g. `ScrollbarMode::Auto`).
-   */
-  void set_scrollbar_mode(lv_scrollbar_mode_t mode);
-
-  /**
-   * @brief Set the scrollbar mode.
-   * @param mode The mode.
-   */
-  void set_scrollbar_mode(ScrollbarMode mode);
-
-  /**
-   * @brief Set the scroll snap in X direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_x(lv_scroll_snap_t snap);
-
-  /**
-   * @brief Set the scroll snap in X direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_x(ScrollSnap snap);
-
-  /**
-   * @brief Set the scroll snap in Y direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_y(lv_scroll_snap_t snap);
-
-  /**
-   * @brief Set the scroll snap in Y direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_y(ScrollSnap snap);
-
   // --- Other Properties ---
 
   /**
@@ -378,24 +488,51 @@ class Object {
   // --- Events ---
 
   /**
-   * @brief Functional event callback type.
-   */
-  using EventCallback = std::function<void(Event&)>;
-
-  /**
    * @brief Add a functional event callback.
    * Uses `std::function` to allow lambdas with captures.
    * @param event_code The event code to listen for (e.g., `LV_EVENT_CLICKED`).
    * @param callback The callable to execute.
+   * @return Reference to this object.
    */
-  void add_event_cb(lv_event_code_t event_code, EventCallback callback);
+  Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
 
   /**
    * @brief Add a functional event callback (Scoped Enum).
    * @param event_code The event code to listen for.
    * @param callback The callable to execute.
+   * @return Reference to this object.
    */
-  void add_event_cb(EventCode event_code, EventCallback callback);
+  Object& add_event_cb(EventCode event_code, EventCallback callback);
+
+  /**
+   * @brief Register a click event callback.
+   */
+  Object& on_click(EventCallback cb);
+
+  /**
+   * @brief Register a click event callback (Alias).
+   */
+  Object& on_clicked(EventCallback cb);
+
+  /**
+   * @brief Register a callback for all events.
+   */
+  Object& on_event(EventCallback cb);
+
+  /**
+   * @brief Register a pressed event callback.
+   */
+  Object& on_pressed(EventCallback cb);
+
+  /**
+   * @brief Register a released event callback.
+   */
+  Object& on_released(EventCallback cb);
+
+  /**
+   * @brief Register a long pressed event callback.
+   */
+  Object& on_long_pressed(EventCallback cb);
 
   // --- Styles ---
 
@@ -415,71 +552,7 @@ class Object {
    */
   void remove_style(Style* style, lv_style_selector_t selector = LV_PART_MAIN);
 
-  // Local style properties (common subset)
-
-  /**
-   * @brief Set the animation duration for state changes.
-   * @param value Duration in milliseconds.
-   * @param selector The part/state selector.
-   */
-  void set_style_anim_duration(uint32_t value,
-                               lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the text alignment.
-   * @param value The alignment (e.g. `LV_TEXT_ALIGN_CENTER`).
-   * @param selector The part/state selector.
-   */
-  void set_style_text_align(lv_text_align_t value,
-                            lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the text alignment.
-   * @param value The alignment.
-   * @param selector The part/state selector.
-   */
-  void set_style_text_align(TextAlign value,
-                            lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the background color.
-   * @param value The color.
-   * @param selector The part/state selector.
-   */
-  void set_style_bg_color(lv_color_t value,
-                          lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the background opacity.
-   * @param value The opacity (0..255 or `LV_OPA_...`).
-   * @param selector The part/state selector.
-   */
-  void set_style_bg_opa(lv_opa_t value,
-                        lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the opacity of image recoloring.
-   * @param value The opacity.
-   * @param selector The part/state selector.
-   */
-  void set_style_image_recolor_opa(lv_opa_t value,
-                                   lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the image recolor value.
-   * @param value The color to mix with the image.
-   * @param selector The part/state selector.
-   */
-  void set_style_image_recolor(lv_color_t value,
-                               lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the background image source.
-   * @param value Pointer to an `lv_image_dsc_t` or path string.
-   * @param selector The part/state selector.
-   */
-  void set_style_bg_image_src(const void* value,
-                              lv_style_selector_t selector = LV_PART_MAIN);
+  // Local style properties (legacy setters removed, use using style())
 
  protected:
   lv_obj_t* obj_ = nullptr;

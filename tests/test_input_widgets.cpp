@@ -90,12 +90,12 @@ void test_spinbox_1() {
   lvgl::Button btn_plus(screen);
   btn_plus.set_size(h, h);
   btn_plus.align_to(spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-  btn_plus.set_style_bg_image_src(LV_SYMBOL_PLUS, 0);
+  btn_plus.style().bg_image_src(LV_SYMBOL_PLUS);
 
   lvgl::Button btn_minus(screen);
   btn_minus.set_size(h, h);
   btn_minus.align_to(spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-  btn_minus.set_style_bg_image_src(LV_SYMBOL_MINUS, 0);
+  btn_minus.style().bg_image_src(LV_SYMBOL_MINUS);
 
   std::cout << "Spinbox Example 1 Passed" << std::endl;
 }
@@ -136,9 +136,9 @@ void test_roller_1() {
   roller2.set_visible_row_count(2);
   roller2.set_width(100);
   // roller2.add_style... (skipping style def for brevity, focusing on API)
-  roller2.set_style_text_align(LV_TEXT_ALIGN_LEFT, 0);
+  roller2.style().text_align(lvgl::TextAlign::Left);
   roller2.set_selected(2, LV_ANIM_OFF);
-  roller2.align(LV_ALIGN_LEFT_MID, 10, 0);
+  roller2.align(lvgl::Align::LeftMid, 10, 0);
 
   std::cout << "Roller Example 1 Passed" << std::endl;
 }
