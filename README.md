@@ -14,7 +14,7 @@
 | **Typing** | `void*` context pointers. Unsafe casts. | **Strongly Typed**. `Button`, `Label`, `Slider` classes. |
 | **Events** | `void event_cb(lv_event_t*)` with switches. | **Lambdas**: `btn.add_event_cb(..., [=](Event e) { ... })`. |
 | **Styles** | Verbose: `lv_style_set_bg_color(&style, ...)` | **Fluent**: `Style().bg_color(Red).radius(5)` |
-| **Safety** | "God Object" `lv_obj_t` has all API methods. | **CRTP Mixins**. Only exposing valid methods for each widget. |
+| **Safety** | "Monolithic Object" `lv_obj_t` has all API methods. | **CRTP Mixins**. Only exposing valid methods for each widget. |
 
 ---
 
@@ -135,7 +135,7 @@ The library prevents memory leaks by strictly defining who owns the LVGL object.
 
 ### 2. Widget Type Hierarchy
 
-We avoid the "God Object" anti-pattern. `lvgl::Object` is the base, but functionality is composed via **CRTP Mixins**:
+We avoid the "Monolithic Object" anti-pattern. `lvgl::Object` is the base, but functionality is composed via **CRTP Mixins**:
 
 *   **`Positionable<T>`**: `set_x`, `set_y`, `align`, `center`, `set_size`...
 *   **`Stylable<T>`**: `add_style`, `set_bg_color` (local), `set_border_width`...

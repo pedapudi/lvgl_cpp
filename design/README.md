@@ -6,7 +6,7 @@ This directory serves as the architectural knowledge base for `lvgl_cpp`.
 
 Fundamental design patterns and system-level components.
 
-*   **[Core/Object System](README.md)**: (This file) Overview of God Object avoidance, Mixins, and CRTP.
+*   **[Core/Object System](README.md)**: (This file) Overview of Monolithic Object avoidance, Mixins, and CRTP.
 *   **[Issue #61: Standardization](issue_61_standardization.md)**: The "One Constructor to Rule Them All" pattern for widgets.
 *   **[Callback Utilities](callback_utilities.md)**: Design of the `CallbackProxy` and `Event` functional wrappers.
 *   **[Style System](core/STYLES.md)**: Detailed design of the Fluent Style Builder API.
