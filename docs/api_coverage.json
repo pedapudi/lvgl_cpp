@@ -1,25 +1,24 @@
 {
   "summary": {
-    "total_user_api": 1529,
-    "wrapped": 673,
-    "not_wrapped": 856,
+    "total_user_api": 1460,
+    "wrapped": 661,
+    "not_wrapped": 799,
     "internal_api_violations": [],
     "total_enums": 423,
     "enums_used": 264,
-    "function_coverage_percent": 44.0,
+    "function_coverage_percent": 45.3,
     "enum_coverage_percent": 62.4
   },
   "subsystems": {
     "lv_timer": {
       "prefix": "lv_timer_",
-      "total": 22,
-      "wrapped_count": 13,
+      "total": 19,
+      "wrapped_count": 12,
       "wrapped": [
         "lv_timer_create",
         "lv_timer_delete",
         "lv_timer_enable",
         "lv_timer_get_user_data",
-        "lv_timer_handler_set_resume_cb",
         "lv_timer_pause",
         "lv_timer_ready",
         "lv_timer_reset",
@@ -36,15 +35,13 @@
         "lv_timer_get_paused",
         "lv_timer_get_time_until_next",
         "lv_timer_handler",
-        "lv_timer_handler_run_in_period",
-        "lv_timer_periodic_handler",
-        "lv_timer_set_cb"
+        "lv_timer_periodic_handler"
       ]
     },
     "lv_anim": {
       "prefix": "lv_anim_",
-      "total": 69,
-      "wrapped_count": 33,
+      "total": 62,
+      "wrapped_count": 28,
       "wrapped": [
         "lv_anim_init",
         "lv_anim_path_bounce",
@@ -54,13 +51,8 @@
         "lv_anim_path_linear",
         "lv_anim_path_overshoot",
         "lv_anim_path_step",
-        "lv_anim_set_completed_cb",
-        "lv_anim_set_custom_exec_cb",
         "lv_anim_set_delay",
-        "lv_anim_set_deleted_cb",
         "lv_anim_set_duration",
-        "lv_anim_set_exec_cb",
-        "lv_anim_set_path_cb",
         "lv_anim_set_repeat_count",
         "lv_anim_set_repeat_delay",
         "lv_anim_set_reverse_delay",
@@ -102,9 +94,7 @@
         "lv_anim_resume",
         "lv_anim_set_bezier3_param",
         "lv_anim_set_early_apply",
-        "lv_anim_set_get_value_cb",
         "lv_anim_set_reverse_time",
-        "lv_anim_set_start_cb",
         "lv_anim_speed",
         "lv_anim_speed_clamped",
         "lv_anim_speed_to_time",
@@ -121,10 +111,9 @@
     },
     "lv_obj": {
       "prefix": "lv_obj_",
-      "total": 505,
-      "wrapped_count": 90,
+      "total": 467,
+      "wrapped_count": 89,
       "wrapped": [
-        "lv_obj_add_event_cb",
         "lv_obj_add_flag",
         "lv_obj_add_state",
         "lv_obj_add_style",
@@ -232,14 +221,9 @@
         "lv_obj_calculate_ext_draw_size",
         "lv_obj_calculate_style_text_align",
         "lv_obj_check_type",
-        "lv_obj_class_create_obj",
-        "lv_obj_class_init_obj",
-        "lv_obj_class_property_get_id",
-        "lv_obj_delete_anim_completed_cb",
         "lv_obj_delete_delayed",
         "lv_obj_dump_tree",
         "lv_obj_enable_style_refresh",
-        "lv_obj_event_base",
         "lv_obj_fade_in",
         "lv_obj_fade_out",
         "lv_obj_find_by_id",
@@ -434,11 +418,6 @@
         "lv_obj_has_style_prop",
         "lv_obj_hit_test",
         "lv_obj_id_compare",
-        "lv_obj_init_draw_arc_dsc",
-        "lv_obj_init_draw_image_dsc",
-        "lv_obj_init_draw_label_dsc",
-        "lv_obj_init_draw_line_dsc",
-        "lv_obj_init_draw_rect_dsc",
         "lv_obj_invalidate",
         "lv_obj_invalidate_area",
         "lv_obj_is_editable",
@@ -459,7 +438,6 @@
         "lv_obj_refresh_self_size",
         "lv_obj_refresh_style",
         "lv_obj_remove_event",
-        "lv_obj_remove_event_cb",
         "lv_obj_remove_event_dsc",
         "lv_obj_remove_from_subject",
         "lv_obj_remove_local_style_prop",
@@ -604,44 +582,16 @@
         "lv_obj_transform_point_array",
         "lv_obj_tree_walk",
         "lv_obj_tree_walk_res_t",
-        "lv_obj_update_snap",
-        "lv_obj_xml_bind_flag_apply",
-        "lv_obj_xml_bind_flag_create",
-        "lv_obj_xml_bind_state_apply",
-        "lv_obj_xml_bind_state_create",
-        "lv_obj_xml_bind_style_apply",
-        "lv_obj_xml_bind_style_create",
-        "lv_obj_xml_event_cb_apply",
-        "lv_obj_xml_event_cb_create",
-        "lv_obj_xml_play_timeline_event_apply",
-        "lv_obj_xml_play_timeline_event_create",
-        "lv_obj_xml_remove_style_all_apply",
-        "lv_obj_xml_remove_style_all_create",
-        "lv_obj_xml_remove_style_apply",
-        "lv_obj_xml_remove_style_create",
-        "lv_obj_xml_screen_create_event_apply",
-        "lv_obj_xml_screen_create_event_create",
-        "lv_obj_xml_screen_load_event_apply",
-        "lv_obj_xml_screen_load_event_create",
-        "lv_obj_xml_style_apply",
-        "lv_obj_xml_style_create",
-        "lv_obj_xml_subject_increment_apply",
-        "lv_obj_xml_subject_increment_create",
-        "lv_obj_xml_subject_set_apply",
-        "lv_obj_xml_subject_set_create",
-        "lv_obj_xml_subject_toggle_apply",
-        "lv_obj_xml_subject_toggle_create"
+        "lv_obj_update_snap"
       ]
     },
     "lv_display": {
       "prefix": "lv_display_",
-      "total": 72,
-      "wrapped_count": 54,
+      "total": 68,
+      "wrapped_count": 50,
       "wrapped": [
-        "lv_display_add_event_cb",
         "lv_display_create",
         "lv_display_delete",
-        "lv_display_delete_refr_timer",
         "lv_display_enable_invalidation",
         "lv_display_flush_is_last",
         "lv_display_flush_ready",
@@ -680,8 +630,6 @@
         "lv_display_set_color_format",
         "lv_display_set_dpi",
         "lv_display_set_draw_buffers",
-        "lv_display_set_flush_cb",
-        "lv_display_set_flush_wait_cb",
         "lv_display_set_matrix_rotation",
         "lv_display_set_offset",
         "lv_display_set_physical_resolution",
@@ -716,8 +664,8 @@
     },
     "lv_indev": {
       "prefix": "lv_indev_",
-      "total": 67,
-      "wrapped_count": 21,
+      "total": 61,
+      "wrapped_count": 20,
       "wrapped": [
         "lv_indev_active",
         "lv_indev_create",
@@ -736,13 +684,11 @@
         "lv_indev_set_button_points",
         "lv_indev_set_cursor",
         "lv_indev_set_group",
-        "lv_indev_set_read_cb",
         "lv_indev_set_type",
         "lv_indev_set_user_data",
         "lv_indev_stop_processing"
       ],
       "not_wrapped": [
-        "lv_indev_add_event_cb",
         "lv_indev_gesture_detect_pinch",
         "lv_indev_gesture_detect_rotation",
         "lv_indev_gesture_detect_two_fingers_swipe",
@@ -761,18 +707,14 @@
         "lv_indev_get_mode",
         "lv_indev_get_next",
         "lv_indev_get_press_moved",
-        "lv_indev_get_read_cb",
         "lv_indev_get_read_timer",
         "lv_indev_get_short_click_streak",
         "lv_indev_get_vect",
-        "lv_indev_read_timer_cb",
         "lv_indev_recognizer_is_active",
         "lv_indev_remove_event",
         "lv_indev_remove_event_cb_with_user_data",
         "lv_indev_reset_long_press",
         "lv_indev_scroll_get_snap_dist",
-        "lv_indev_scroll_handler",
-        "lv_indev_scroll_throw_handler",
         "lv_indev_scroll_throw_predict",
         "lv_indev_search_obj",
         "lv_indev_send_event",
@@ -792,7 +734,7 @@
     },
     "lv_group": {
       "prefix": "lv_group_",
-      "total": 27,
+      "total": 23,
       "wrapped_count": 14,
       "wrapped": [
         "lv_group_add_obj",
@@ -813,15 +755,11 @@
       "not_wrapped": [
         "lv_group_by_index",
         "lv_group_get_count",
-        "lv_group_get_edge_cb",
         "lv_group_get_editing",
-        "lv_group_get_focus_cb",
         "lv_group_get_obj_by_index",
         "lv_group_get_obj_count",
         "lv_group_get_wrap",
         "lv_group_send_data",
-        "lv_group_set_edge_cb",
-        "lv_group_set_focus_cb",
         "lv_group_set_refocus_policy",
         "lv_group_swap_obj"
       ]
@@ -1305,7 +1243,7 @@
     },
     "lv_keyboard": {
       "prefix": "lv_keyboard_",
-      "total": 12,
+      "total": 11,
       "wrapped_count": 11,
       "wrapped": [
         "lv_keyboard_create",
@@ -1320,9 +1258,7 @@
         "lv_keyboard_set_popovers",
         "lv_keyboard_set_textarea"
       ],
-      "not_wrapped": [
-        "lv_keyboard_def_event_cb"
-      ]
+      "not_wrapped": []
     },
     "lv_calendar": {
       "prefix": "lv_calendar_",
@@ -1457,7 +1393,7 @@
     },
     "lv_image": {
       "prefix": "lv_image_",
-      "total": 60,
+      "total": 56,
       "wrapped_count": 27,
       "wrapped": [
         "lv_image_create",
@@ -1505,10 +1441,6 @@
         "lv_image_decoder_get_next",
         "lv_image_decoder_open",
         "lv_image_decoder_post_process",
-        "lv_image_decoder_set_close_cb",
-        "lv_image_decoder_set_get_area_cb",
-        "lv_image_decoder_set_info_cb",
-        "lv_image_decoder_set_open_cb",
         "lv_image_get_bitmap_map_src",
         "lv_image_get_transformed_height",
         "lv_image_get_transformed_width",
@@ -1739,7 +1671,7 @@
     },
     "lv_event": {
       "prefix": "lv_event_",
-      "total": 41,
+      "total": 39,
       "wrapped_count": 7,
       "wrapped": [
         "lv_event_get_code",
@@ -1753,9 +1685,7 @@
       "not_wrapped": [
         "lv_event_add",
         "lv_event_code_get_name",
-        "lv_event_dsc_get_cb",
         "lv_event_dsc_get_user_data",
-        "lv_event_free_user_data_cb",
         "lv_event_get_count",
         "lv_event_get_cover_area",
         "lv_event_get_current_target_obj",

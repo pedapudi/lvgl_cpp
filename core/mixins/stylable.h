@@ -3,6 +3,7 @@
 #include "../../font/font.h"
 #include "../../misc/enums.h"
 #include "../../misc/style.h"
+#include "../style_proxy.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -22,6 +23,35 @@ class Stylable {
 
   Derived& add_style(const Style& style, Part part) {
     return add_style(style.raw(), static_cast<lv_style_selector_t>(part));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles on this object.
+   * @param part The part to style (default: Main).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy<Derived> style(Part part = Part::Main) {
+    return StyleProxy<Derived>(static_cast<Derived*>(this),
+                               static_cast<lv_style_selector_t>(part));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles for a specific state.
+   * @param state The state to style (e.g. State::Pressed).
+   * @return A StyleProxy object.
+   */
+  StyleProxy<Derived> style(State state) {
+    return StyleProxy<Derived>(static_cast<Derived*>(this),
+                               static_cast<lv_style_selector_t>(state));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles on this object.
+   * @param selector The style selector (part | state).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy<Derived> style(lv_style_selector_t selector) {
+    return StyleProxy<Derived>(static_cast<Derived*>(this), selector);
   }
 
   Derived& remove_style(const lv_style_t* style,
