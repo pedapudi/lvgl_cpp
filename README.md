@@ -1,252 +1,192 @@
-# LVGL C++ wrapper (lvgl_cpp)
+# LVGL C++ Wrapper (`lvgl_cpp`)
 
-A modern, robust C++ wrapper for [LVGL (Light and Versatile Graphics Library)](https://lvgl.io/). This library provides a native C++ interface with RAII-style memory management, type-safe widgets, and functional event callbacks.
+> **A Modern, Type-Safe, Zero-Overhead C++20 Interface for LVGL 9**
 
-## Features
+`lvgl_cpp` transforms the [LVGL](https://lvgl.io/) C library into a distinctively modern C++ framework. It provides **RAII memory management**, **functional event callbacks**, and a **fluent API** while strictly maintaining the performance characteristics of the underlying C library suitable for embedded systems.
 
-*   **RAII Memory Management**: Widgets are automatically deleted when their parent is destroyed. Explicit ownership semantics ensure safety.
-*   **Type-Safe Wrappers**: Dedicated classes for LVGL widgets (`Button`, `Label`, `Slider`, etc.) inheriting from a base `Object`.
-*   **C++ API**: Use C++ patterns like `return Object` instead of `return lv_obj_t*`.
-*   **Functional Events**: transparently use `std::function` and lambdas for LVGL events.
-*   **Style Classes**: C++ wrapper for `lv_style_t`.
-*   **Observer Pattern**: C++ implementation of the LVGL property-observer system.
+---
 
-## Installation
+## 🚀 Why `lvgl_cpp`?
+
+| Feature | Raw C API (`lvgl`) | C++ Wrapper (`lvgl_cpp`) |
+| :--- | :--- | :--- |
+| **Memory** | Manual `lv_obj_del` / `free`. Prone to leaks. | **RAII**. Automatic destructor cleanup. |
+| **Typing** | `void*` context pointers. Unsafe casts. | **Strongly Typed**. `Button`, `Label`, `Slider` classes. |
+| **Events** | `void event_cb(lv_event_t*)` with switches. | **Lambdas**: `btn.add_event_cb(..., [=](Event e) { ... })`. |
+| **Styles** | Verbose: `lv_style_set_bg_color(&style, ...)` | **Fluent**: `Style().bg_color(Red).radius(5)` |
+| **Safety** | "Monolithic Object" `lv_obj_t` has all API methods. | **CRTP Mixins**. Only exposing valid methods for each widget. |
+
+---
+
+## 📦 Installation
+
+`lvgl_cpp` is designed to be added as a subdirectory in your CMake project alongside the main `lvgl` repository.
 
 ### Prerequisites
-*   LVGL v9.x
-*   CMake 3.10+
-*   C++20 compliant compiler
+
+*   **C++ Standard**: C++20 or later.
+*   **LVGL Version**: v9.0+.
+*   **Build System**: CMake 3.10+.
 
 ### Integration
-1.  Add `lvgl_cpp` to your project structure (alongside `lvgl`).
-2.  In your `CMakeLists.txt`:
 
-```cmake
-add_subdirectory(lvgl)      # Build LVGL Core
-add_subdirectory(lvgl_cpp)  # Build C++ Wrapper
+1.  Clone `lvgl` and `lvgl_cpp` into your project:
+    ```bash
+    git submodule add https://github.com/lvgl/lvgl.git components/lvgl
+    git submodule add https://github.com/pedapudi/lvgl_cpp.git components/lvgl_cpp
+    ```
 
-add_executable(my_app main.cc)
-target_link_libraries(my_app PRIVATE lvgl_cpp) # Links lvgl automatically
-```
+2.  Add to your `CMakeLists.txt`:
+    ```cmake
+    cmake_minimum_required(VERSION 3.10)
+    project(my_gui_app)
 
-### Directory Structure
-```
-project/
-├── CMakeLists.txt
-├── main.cc
-├── lvgl/           # Official LVGL repository
-└── lvgl_cpp/       # This library
-```
+    set(CMAKE_CXX_STANDARD 20)
 
-## Getting started
+    # Add LVGL and the C++ Wrapper
+    add_subdirectory(components/lvgl)
+    add_subdirectory(components/lvgl_cpp)
 
-### Initialization
-Initialize LVGL and create a display driver as usual (C API is still useful for system init).
+    add_executable(main main.cpp)
+    target_link_libraries(main PRIVATE lvgl_cpp)
+    ```
+
+---
+
+## 🏁 Getting Started
+
+Here is a complete example showing the "Hello World" of `lvgl_cpp` with a styled button and event handling.
 
 ```cpp
+#include <thread>
+#include <chrono>
 #include "lvgl.h"
 #include "lvgl_cpp/core/object.h"
+#include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/widgets/button.h"
 #include "lvgl_cpp/widgets/label.h"
+#include "lvgl_cpp/widgets/screen.h"
+#include "lvgl_cpp/misc/style.h"
+
+using namespace lvgl;
+
+void create_ui(Screen& screen) {
+    // 1. Create a Style using the Fluent Builder
+    static Style btn_style; // Static to keep it alive (or use shared_ptr)
+    btn_style.init()
+             .bg_color(Palette::Blue)
+             .radius(8)
+             .border_width(2)
+             .border_color(Palette::Cyan)
+             .shadow_width(10);
+
+    // 2. Create a Button
+    Button btn(&screen);
+    btn.set_size(150, 60)
+       .center()
+       .add_style(btn_style)
+       .add_flag(ObjFlag::Checkable); // Type-safe flags
+
+    // 3. Add a Label to the Button
+    Label label(&btn);
+    label.set_text("Click Me!")
+         .center();
+
+    // 4. Handle Events with C++ Lambdas
+    btn.add_event_cb(EventCode::Clicked, [](Event event) {
+        // 'event' is a C++ wrapper around lv_event_t
+        auto target_btn = Button(event.get_target(), Ownership::Unmanaged);
+        
+        if (target_btn.has_state(State::Checked)) {
+            printf("Button Checked!\n");
+        } else {
+            printf("Button Unchecked!\n");
+        }
+    });
+}
 
 int main() {
     lv_init();
-    lv_display_create(800, 480); // Create default display
-
-    // Create a screen (Object with no parent)
-    lvgl::Object screen; 
     
-    // Create a button on the screen
-    lvgl::Button btn(&screen);
-    btn.set_size(100, 50).center();
+    // Create default display using the C++ wrapper
+    auto disp = Display::create(800, 480);
     
-    // Create a label on the button
-    lvgl::Label label(&btn, "Click Me");
-    label.center();
+    // Get the active screen wrapper
+    auto screen = Screen::active();
+    
+    create_ui(screen);
 
-    // Event handling
-    btn.add_event_cb(LV_EVENT_CLICKED, [](lv_event_t* e) {
-        printf("Button clicked!\n");
-    });
-
-    while(1) {
+    while (true) {
         lv_timer_handler();
-        usleep(5000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
-```
 
-## Architecture and memory management
+---
 
-The wrapper tracks ownership to prevent memory leaks and double-frees.
+## 🧠 Architecture & Concepts
 
-### Ownership model
-The wrapper uses an `Ownership` enum to define lifecycle management:
+### 1. Ownership Model (RAII)
 
-1.  **Managed** (`Ownership::Managed`):
-    *   The C++ wrapper *owns* the underlying `lv_obj_t`.
-    *   When the C++ object goes out of scope, it **deletes** the LVGL object.
-    *   *Usage*: Standard for local objects: `lvgl::Button btn(screen, lvgl::Ownership::Managed);` (or implicit via parent constructor).
+The library prevents memory leaks by strictly defining who owns the LVGL object.
 
-2.  **Unmanaged** (`Ownership::Unmanaged`):
-    *   The C++ wrapper acts as a weak reference or "view".
-    *   Destruction of the C++ wrapper **does NOT** delete the LVGL object.
-    *   *Usage*: Wrappers around existing objects: `lvgl::Button btn(raw_ptr, lvgl::Ownership::Unmanaged);`
+| Policy | Enum Value | Description | Use Case |
+| :--- | :--- | :--- | :--- |
+| **Managed** | `Ownership::Managed` | The C++ object **owns** the underlying `lv_obj_t`. When the C++ object destructor runs, it calls `lv_obj_del`. | Creating new widgets locally (e.g., `Button btn(&screen)`). |
+| **Unmanaged** | `Ownership::Unmanaged` | The C++ object is a **weak view**. Destruction does NOT delete the LVGL object. | Wrapping existing pointers (e.g., `screen`, `event.get_target()`). |
+| **Default** | `Ownership::Default` | Auto-detects based on constructor. | `Button(&parent)` → **Managed**. `Button(ptr)` → **Unmanaged**. |
 
-3.  **Default** (`Ownership::Default`):
-    *   Intelligently selects the policy based on the constructor:
-        *   **New Child** (`Button(parent)`): Defaults to **Managed**.
-        *   **Wrapper** (`Button(ptr)`): Defaults to **Unmanaged**.
+### 2. Widget Type Hierarchy
 
-### The problem of "Parent Deletion" vs "RAII"
-LVGL deletes children when a parent is deleted. The C++ wrapper handles this gracefully.
-*   If a parent `screen` is deleted, it deletes its children in LVGL logic.
-*   If you hold a C++ `Button btn(&screen)` wrapper, and `screen` is deleted first, `btn`'s underlying object is destroyed.
-*   The `Object` class installs an `LV_EVENT_DELETE` hook. When the underlying object is deleted (by parent), the C++ wrapper marks its internal pointer as `nullptr`.
-*   When the `btn` wrapper destructor runs later, it sees `nullptr` and does nothing. **Safe.**
+We avoid the "Monolithic Object" anti-pattern. `lvgl::Object` is the base, but functionality is composed via **CRTP Mixins**:
 
-## Usage guide
+*   **`Positionable<T>`**: `set_x`, `set_y`, `align`, `center`, `set_size`...
+*   **`Stylable<T>`**: `add_style`, `set_bg_color` (local), `set_border_width`...
+*   **`Scrollable<T>`**: `scroll_to`, `set_scrollbar_mode`...
 
-### Widgets
-All core widgets are supported in `lvgl_cpp/widgets/`.
-*   Standard naming: `lv_button_create` -> `lvgl::Button`.
-*   Constructors:
-    *   `Button()`: Create with default parent (active screen).
-    *   `Button(Object* parent)`: Create as child of parent.
-    *   `Button(lv_obj_t* obj)`: Wrap existing object.
-*   **Convenience Constructors**:
-    *   `Label(parent, "Text")`
-    *   `Checkbox(parent, "Label")`
-    *   `Slider(parent, min, max)`
+This means `lvgl::Object` only exposes generic methods. To use button-specific features, you must use `lvgl::Button`.
 
-### Fluent API
-Setters return a reference to the object, enabling method chaining. Common `Object` methods like `set_width` and `align` are shadowed to return the specific widget type.
+### 3. The Style Builder
+
+LVGL v9 styles are powerful but verbose in C. `lvgl_cpp` simplifies this with a fluent builder:
 
 ```cpp
-lvgl::Button btn(&screen);
-btn.set_size(100, 50)
-   .align(LV_ALIGN_CENTER)
-   .add_state(LV_STATE_CHECKED);
-
-lvgl::Label label(&btn, "Click Me");
-label.set_long_mode(LV_LABEL_LONG_SCROLL_CIRCULAR)
-     .center();
+// Create and initialize in one chain
+Style style = Style()
+    .bg_color(Color(0xFF0000))
+    .bg_opa(Opacity::Cover)
+    .text_font(&lv_font_montserrat_14)
+    .pad_all(10)
+    .transition(&trans_desc);
 ```
 
-### Return types
-Methods that create children return specific C++ wrappers by value (move semantics) rather than generic `Object`s.
-```cpp
-// TabView::add_tab returns a TabPage wrapper
-lvgl::TabPage tab = tabview.add_tab("Settings");
+### 4. Input & Groups
 
-// Menu::page_create returns a MenuPage wrapper
-lvgl::MenuPage page = menu.page_create("Main");
-
-// TileView::add_tile returns a Tile wrapper
-lvgl::Tile tile = tileview.add_tile(0, 0, LV_DIR_BOTTOM);
-
-// List::add_button returns a Button wrapper
-lvgl::Button btn = list.add_button(LV_SYMBOL_OK, "Apply");
-```
-
-### Events
-Use safe C++ lambdas. Closures are automatically managed.
-```cpp
-btn.add_event_cb(LV_EVENT_CLICKED, [=](lv_event_t* e) {
-    auto code = lv_event_get_code(e);
-    // ... logic
-});
-```
-
-### Timers
-Use the `lvgl::Timer` class for periodic tasks.
-```cpp
-#include "lvgl_cpp/misc/timer.h"
-
-// Create a timer that runs every 500ms
-lvgl::Timer timer(500, [](lvgl::Timer* t) {
-    printf("Tick!\n");
-});
-```
-
-### Animation
-Use the `lvgl::Animation` builder for complex animations.
-```cpp
-#include "lvgl_cpp/misc/animation.h"
-
-lvgl::Animation anim;
-anim.set_var(btn.raw())
-    .set_values(0, 100)
-    .set_duration(1000)
-    .set_exec_cb([](void* var, int32_t v) {
-        lv_obj_set_x((lv_obj_t*)var, v);
-    })
-    .start();
-```
-
-### Styles
-```cpp
-#include "lvgl_cpp/core/style.h"
-
-lvgl::Style style;
-style.init();
-style.set_bg_color(lv_palette_main(LV_PALETTE_BLUE));
-style.set_radius(10);
-
-btn.add_style(style, LV_PART_MAIN);
-```
-
-## Observer pattern
-
-LVGL C++ provides a robust wrapper around the Observer pattern.
-
-### Subjects
-Subjects hold state (Int, String, Pointer, Color) and notify observers on change.
-```cpp
-lvgl::IntSubject speed(0);
-speed.set(100);
-```
-
-### Widget binding
-Widgets can bind their properties to a Subject. The binding returns an `Observer` object that enforces RAII (Resource Acquisition Is Initialization). **You must keep the Observer object alive** to maintain the binding.
+Full support for Encoder and Keypad navigation through `lvgl::Group`:
 
 ```cpp
-lvgl::Slider slider(lv_screen_active());
-// The binding persists only as long as 'obs' exists.
-lvgl::Observer obs = slider.bind_value(speed);
-
-// If you ignore the return value, the observer is destroyed immediately!
-// [[nodiscard]] will warn you about this.
-// slider.bind_value(speed); // WARNING: Binding immediately removed
+lvgl::Group group = lvgl::Group::get_default();
+group.add_obj(btn1);
+group.add_obj(btn2);
 ```
 
-### Manual observers
-You can add custom observers to any subject.
-```cpp
-auto obs = speed.add_observer([](lv_observer_t*, lv_subject_t* s) {
-    printf("Speed changed: %d\n", lv_subject_get_int(s));
-}, nullptr);
-```
+---
 
-### Memory management
-- **Subjects**: Must outlive their Observers.
-- **Observers**: When an `Observer` C++ object goes out of scope, it automatically unsubscribes from the subject (if it owns the subscription).
+## 📚 Documentation
 
-### Helper utilities
-- **FileSystem**: `lvgl_cpp/misc/file_system.h` provides `File` and `Directory` classes.
-- **Color**: `lvgl_cpp/misc/color.h` provides a `Color` class with mixing/darkening/lightening support.
+The `design/` directory contains detailed architectural decision records (ADRs) and plans:
 
-## API reference
-The API is fully documented in the header files.
-- **Core**: `lvgl_cpp/core/` (Object, Group, Style, Observer)
-- **Widgets**: `lvgl_cpp/widgets/` (All widgets)
-- **Misc**: `lvgl_cpp/misc/` (Timer, Animation, FS, Color)
+*   **[Roadmap](design/ROADMAP_V2.md)**: Current status and future phases.
+*   **[Strategic Plan](design/strategic_improvement_plan.md)**: Deep dive into API coverage goals.
+*   **[Memory Analysis](design/memory_analysis.md)**: Performance overhead study.
+*   **[Widget Standardization](design/issue_61_standardization.md)**: Constructor patterns.
 
-## Contributing
-The library is structured into `core` (Object, Style, Observer) and `widgets`.
-To add a new widget:
-1.  Create `widgets/my_widget.h` inheriting `Object`.
-2.  Implement constructors: `MyWidget()`, `MyWidget(Object*)`, `MyWidget(lv_obj_t*)`.
-3.  Wrap specific API methods.
+---
 
+## 🛠️ Contributing
+
+1.  **Code Style**: 2-space indentation, Google C++ Style Guide.
+2.  **Naming**: `snake_case` for methods/variables, `PascalCase` for classes.
+3.  **Tests**: All new features must include unit tests in `tests/`.
+
+License: [MIT](LICENSE)

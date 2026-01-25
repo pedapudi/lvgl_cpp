@@ -14,7 +14,9 @@
 
 #include "../misc/enums.h"
 #include "event.h"
+#include "layout_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
+#include "scroll_proxy.h"
 
 /**
  * @file object.h
@@ -225,13 +227,35 @@ class Object {
    */
   void delete_async();
 
+  // ... existing code ...
+
   // --- Layout and Scroll ---
+
+  /**
+   * @brief Get a layout proxy for setting layout properties.
+   * @return A LayoutProxy object supporting fluent method chaining.
+   */
+  LayoutProxy layout() { return LayoutProxy(obj_); }
+
+  /**
+   * @brief Get a scroll proxy for scrolling operations.
+   * @return A ScrollProxy object supporting fluent method chaining.
+   */
+  ScrollProxy scroll() { return ScrollProxy(obj_); }
+
+  /**
+   * @brief Get a layout proxy for setting layout properties (const).
+   * Note: LVGL layout setters usually require non-const object, so this might
+   * be limited. For now, we return a proxy that holds a non-const pointer if we
+   * are const? Actually, set functions modify the object, so they can't be
+   * called on const Object. We skip const overload for now.
+   */
 
   /**
    * @brief Set the flex flow.
    * @param flow The flex flow direction/wrap.
+   * @deprecated Use layout().flex_flow(flow) instead.
    */
-  void set_flex_flow(FlexFlow flow);
 
   /**
    * @brief Set the flex alignment.
@@ -239,15 +263,12 @@ class Object {
    * @param cross_place Cross axis alignment.
    * @param track_cross_place Cross axis alignment of the tracks.
    */
-  void set_flex_align(FlexAlign main_place, FlexAlign cross_place,
-                      FlexAlign track_cross_place);
 
   /**
    * @brief Set the grid alignment.
    * @param column_align Column alignment.
    * @param row_align Row alignment.
    */
-  void set_grid_align(GridAlign column_align, GridAlign row_align);
 
   // --- Flags & States ---
 
@@ -324,42 +345,6 @@ class Object {
   bool has_state(lv_state_t state) const;
 
   // --- Scroll ---
-
-  /**
-   * @brief Set the scrollbar mode.
-   * @param mode The mode (e.g. `ScrollbarMode::Auto`).
-   */
-  void set_scrollbar_mode(lv_scrollbar_mode_t mode);
-
-  /**
-   * @brief Set the scrollbar mode.
-   * @param mode The mode.
-   */
-  void set_scrollbar_mode(ScrollbarMode mode);
-
-  /**
-   * @brief Set the scroll snap in X direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_x(lv_scroll_snap_t snap);
-
-  /**
-   * @brief Set the scroll snap in X direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_x(ScrollSnap snap);
-
-  /**
-   * @brief Set the scroll snap in Y direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_y(lv_scroll_snap_t snap);
-
-  /**
-   * @brief Set the scroll snap in Y direction.
-   * @param snap The snap type.
-   */
-  void set_scroll_snap_y(ScrollSnap snap);
 
   // --- Other Properties ---
 

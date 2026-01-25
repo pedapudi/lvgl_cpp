@@ -27,13 +27,27 @@ This document covers complex widgets that don't fit into simple Input/Output cat
 
 ### 2.3. Chart (`Chart`)
 *   **Base**: `Widget<Chart>`
+*   **Proxies**:
+    *   `ChartSeries`: Wraps `lv_chart_series_t`. Created via `add_series()`.
+    *   `ChartCursor`: Wraps `lv_chart_cursor_t`. Created via `add_cursor()`.
 *   **Methods**:
-    *   `Chart& type(lv_chart_type_t)`
+    *   `Chart& type(Type)`
     *   `Chart& point_count(uint16_t)`
-    *   `Series add_series(Color c, Axis axis)`
-    *   `Chart& set_next_value(Series& s, int32_t v)`
+    *   `ChartSeries add_series(Color c, Axis axis)`
+    *   `ChartCursor add_cursor(Color c, Dir dir)`
+    *   `Chart& set_next_value(ChartSeries& s, int32_t v)`
 
-### 2.4. Roller (`Roller`)
+### 2.4. Scale (`Scale`)
+*   **Base**: `Widget<Scale>`
+*   **Proxies**:
+    *   `ScaleSection`: Wraps `lv_scale_section_t`. Created via `add_section()`.
+*   **Methods**:
+    *   `Scale& set_range(int32_t min, int32_t max)`
+    *   `Scale& set_mode(lv_scale_mode_t mode)`
+    *   `ScaleSection add_section()`
+    *   `ScaleSection& set_range(int32_t min, int32_t max)`
+
+### 2.5. Roller (`Roller`)
 *   **Base**: `Widget<Roller>`
 *   **Methods**:
     *   `Roller& options(const char* opts, lv_roller_mode_t mode)`
@@ -41,7 +55,7 @@ This document covers complex widgets that don't fit into simple Input/Output cat
     *   `uint16_t get_selected()`
     *   `std::string get_selected_str()`
 
-### 2.5. Dropdown (`Dropdown`)
+### 2.6. Dropdown (`Dropdown`)
 *   **Base**: `Widget<Dropdown>`
 *   **Methods**:
     *   `Dropdown& options(const char* opts)`
@@ -49,3 +63,4 @@ This document covers complex widgets that don't fit into simple Input/Output cat
     *   `Dropdown& selected(uint16_t sel)`
     *   `uint16_t get_selected()`
     *   `std::string get_selected_str()`
+

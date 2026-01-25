@@ -2,7 +2,6 @@
 
 #include "lvgl.h"  // IWYU pragma: export
 #include "mixins/event_source.h"
-#include "mixins/layoutable.h"
 #include "mixins/positionable.h"
 #include "mixins/sizable.h"
 #include "mixins/stylable.h"
@@ -22,8 +21,7 @@ class Widget : public Object,
                public Positionable<Derived>,
                public Sizable<Derived>,
                public Stylable<Derived>,
-               public EventSource<Derived>,
-               public Layoutable<Derived> {
+               public EventSource<Derived> {
  public:
   // Inherit constructors from Object
   // Explicitly forward constructors to ensure they are inherited by derived
@@ -139,17 +137,6 @@ class Widget : public Object,
   }
   Derived& on_long_pressed(typename EventSource<Derived>::EventCallback cb) {
     return EventSource<Derived>::on_long_pressed(cb);
-  }
-
-  // --- Layoutable Forwarding ---
-  Derived& layout(const Flex& flex) {
-    return Layoutable<Derived>::layout(flex);
-  }
-  Derived& set_grid_cell(lv_grid_align_t x_align, uint8_t col_pos,
-                         uint8_t col_span, lv_grid_align_t y_align,
-                         uint8_t row_pos, uint8_t row_span) {
-    return Layoutable<Derived>::set_grid_cell(x_align, col_pos, col_span,
-                                              y_align, row_pos, row_span);
   }
 
   /**
