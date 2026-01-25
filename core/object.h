@@ -17,6 +17,7 @@
 #include "layout_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
 #include "scroll_proxy.h"
+#include "style_proxy.h"
 
 /**
  * @file object.h
@@ -238,10 +239,44 @@ class Object {
   LayoutProxy layout() { return LayoutProxy(obj_); }
 
   /**
+   * @brief Update the layout of the object.
+   */
+  void update_layout() {
+    if (obj_) lv_obj_update_layout(obj_);
+  }
+
+  /**
    * @brief Get a scroll proxy for scrolling operations.
    * @return A ScrollProxy object supporting fluent method chaining.
    */
   ScrollProxy scroll() { return ScrollProxy(obj_); }
+
+  /**
+   * @brief Get a style proxy for setting local styles on this object.
+   * @param part The part to style (default: Main).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy style(Part part = Part::Main) {
+    return StyleProxy(obj_, static_cast<lv_style_selector_t>(part));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles for a specific state.
+   * @param state The state to style (e.g. State::Pressed).
+   * @return A StyleProxy object.
+   */
+  StyleProxy style(State state) {
+    return StyleProxy(obj_, static_cast<lv_style_selector_t>(state));
+  }
+
+  /**
+   * @brief Get a style proxy for setting local styles on this object.
+   * @param selector The style selector (part | state).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy style(lv_style_selector_t selector) {
+    return StyleProxy(obj_, selector);
+  }
 
   /**
    * @brief Get a layout proxy for setting layout properties (const).
@@ -400,71 +435,7 @@ class Object {
    */
   void remove_style(Style* style, lv_style_selector_t selector = LV_PART_MAIN);
 
-  // Local style properties (common subset)
-
-  /**
-   * @brief Set the animation duration for state changes.
-   * @param value Duration in milliseconds.
-   * @param selector The part/state selector.
-   */
-  void set_style_anim_duration(uint32_t value,
-                               lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the text alignment.
-   * @param value The alignment (e.g. `LV_TEXT_ALIGN_CENTER`).
-   * @param selector The part/state selector.
-   */
-  void set_style_text_align(lv_text_align_t value,
-                            lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the text alignment.
-   * @param value The alignment.
-   * @param selector The part/state selector.
-   */
-  void set_style_text_align(TextAlign value,
-                            lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the background color.
-   * @param value The color.
-   * @param selector The part/state selector.
-   */
-  void set_style_bg_color(lv_color_t value,
-                          lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the background opacity.
-   * @param value The opacity (0..255 or `LV_OPA_...`).
-   * @param selector The part/state selector.
-   */
-  void set_style_bg_opa(lv_opa_t value,
-                        lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the opacity of image recoloring.
-   * @param value The opacity.
-   * @param selector The part/state selector.
-   */
-  void set_style_image_recolor_opa(lv_opa_t value,
-                                   lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the image recolor value.
-   * @param value The color to mix with the image.
-   * @param selector The part/state selector.
-   */
-  void set_style_image_recolor(lv_color_t value,
-                               lv_style_selector_t selector = LV_PART_MAIN);
-
-  /**
-   * @brief Set the background image source.
-   * @param value Pointer to an `lv_image_dsc_t` or path string.
-   * @param selector The part/state selector.
-   */
-  void set_style_bg_image_src(const void* value,
-                              lv_style_selector_t selector = LV_PART_MAIN);
+  // Local style properties (legacy setters removed, use using style())
 
  protected:
   lv_obj_t* obj_ = nullptr;

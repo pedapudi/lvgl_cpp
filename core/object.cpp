@@ -250,45 +250,6 @@ void Object::remove_style(Style* style, lv_style_selector_t selector) {
   if (obj_) lv_obj_remove_style(obj_, style ? style->raw() : nullptr, selector);
 }
 
-void Object::set_style_anim_duration(uint32_t value,
-                                     lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_anim_duration(obj_, value, selector);
-}
-
-void Object::set_style_text_align(lv_text_align_t value,
-                                  lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_text_align(obj_, value, selector);
-}
-
-void Object::set_style_text_align(TextAlign value,
-                                  lv_style_selector_t selector) {
-  set_style_text_align(static_cast<lv_text_align_t>(value), selector);
-}
-
-void Object::set_style_bg_color(lv_color_t value,
-                                lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_bg_color(obj_, value, selector);
-}
-
-void Object::set_style_bg_opa(lv_opa_t value, lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_bg_opa(obj_, value, selector);
-}
-
-void Object::set_style_image_recolor_opa(lv_opa_t value,
-                                         lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_image_recolor_opa(obj_, value, selector);
-}
-
-void Object::set_style_image_recolor(lv_color_t value,
-                                     lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_image_recolor(obj_, value, selector);
-}
-
-void Object::set_style_bg_image_src(const void* value,
-                                    lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_bg_image_src(obj_, value, selector);
-}
-
 // --- Layout & Scroll ---
 
 }  // namespace lvgl

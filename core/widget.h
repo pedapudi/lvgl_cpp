@@ -1,10 +1,11 @@
 #pragma once
 
+#include "event.h"
 #include "lvgl.h"  // IWYU pragma: export
+#include "lvgl.h"
 #include "mixins/event_source.h"
 #include "mixins/positionable.h"
-#include "mixins/sizable.h"
-#include "mixins/stylable.h"
+#include "mixins/sizable.h"  // Keep this include as Sizable is still used in the class body
 #include "object.h"
 
 namespace lvgl {
@@ -18,12 +19,11 @@ namespace lvgl {
  */
 template <typename Derived>
 class Widget : public Object,
+               public EventSource<Derived>,
                public Positionable<Derived>,
-               public Sizable<Derived>,
-               public Stylable<Derived>,
-               public EventSource<Derived> {
+               public Sizable<Derived> {  // Sizable is still inherited
  public:
-  // Inherit constructors from Object
+  using Object::Object;  // Inherit constructors
   // Explicitly forward constructors to ensure they are inherited by derived
   // classes (Double 'using' inheritance is not standard compliant for
   // constructors)
@@ -67,19 +67,6 @@ class Widget : public Object,
   }
   int32_t get_width() const { return Sizable<Derived>::get_width(); }
   int32_t get_height() const { return Sizable<Derived>::get_height(); }
-
-  // --- Stylable Forwarding ---
-  Derived& add_style(const lv_style_t* style,
-                     lv_style_selector_t selector = 0) {
-    return Stylable<Derived>::add_style(style, selector);
-  }
-  Derived& remove_style(const lv_style_t* style,
-                        lv_style_selector_t selector = 0) {
-    return Stylable<Derived>::remove_style(style, selector);
-  }
-  Derived& remove_all_styles() {
-    return Stylable<Derived>::remove_all_styles();
-  }
 
   // --- Object Lifecycle Forwarding (Fluent) ---
   Derived& add_flag(lv_obj_flag_t f) {

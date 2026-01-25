@@ -216,9 +216,7 @@ int main() {
   {
     std::cerr << "BlendMode Enum Start" << std::endl;
     lvgl::Button obj(screen);
-    obj.set_style_blend_mode(
-        lvgl::BlendMode::Additive,
-        static_cast<lv_style_selector_t>(lvgl::Part::Main));
+    obj.style().blend_mode(lvgl::BlendMode::Additive, lvgl::Part::Main);
     assert(lv_obj_get_style_blend_mode(obj.raw(), LV_PART_MAIN) ==
            LV_BLEND_MODE_ADDITIVE);
     std::cerr << "BlendMode Enum Done" << std::endl;
