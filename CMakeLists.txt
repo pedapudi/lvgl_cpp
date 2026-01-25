@@ -217,6 +217,10 @@ else()
     target_link_libraries(test_span PRIVATE lvgl_cpp)
     add_test(NAME test_span COMMAND test_span)
 
+    add_executable(test_api_hardening tests/test_api_hardening.cpp)
+    target_link_libraries(test_api_hardening PRIVATE lvgl_cpp)
+    add_test(NAME test_api_hardening COMMAND test_api_hardening)
+
     
 
 add_executable(test_image tests/test_image.cpp widgets/image.cpp draw/image_descriptor.cpp core/object.cpp display/display.cpp)
