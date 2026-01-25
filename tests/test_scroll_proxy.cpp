@@ -18,7 +18,7 @@ void test_scroll_proxy() {
 
   // Test ScrollProxy API
   container.scroll()
-      .to(10, 20, LV_ANIM_OFF)
+      .to(10, 20, lvgl::AnimEnable::Off)
       .mode(lvgl::ScrollbarMode::On)
       .snap(lvgl::ScrollSnap::Start, lvgl::ScrollSnap::End)
       .dir(lvgl::Dir::Ver);
