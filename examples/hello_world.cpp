@@ -1,56 +1,59 @@
+#include <unistd.h>
+
 #include <iostream>
 
 #include "../lvgl_cpp.h"
 
 using namespace lvgl;
 
-void my_event_cb(lv_event_t* e) { std::cout << "Button clicked!" << std::endl; }
-
 int main() {
-  // Initialize LVGL (mocking the init call as we might not link against full
-  // LVGL here)
   lv_init();
 
-  // Create a screen
-  Object screen;
+  // Create a display (required for screen creation)
+  // Display display = Display::create(800, 480);
 
-  // Create a button
-  Button btn(&screen);
-  btn.set_size(100, 50);
-  btn.align(LV_ALIGN_CENTER, 0, 0);
+  // Get active screen
+  Screen screen = Screen::active();
 
-  // Add callback
-  btn.add_event_cb(LV_EVENT_CLICKED, [](lv_event_t* e) {
-    std::cout << "Lambda clicked!" << std::endl;
+  // Create a button with fluent method chaining
+  Button btn(screen);
+  btn.set_size(120, 50)
+      .align(Align::Center, 0, 0)
+      .style()
+      .bg_color(Color::from_hex(0x00AABB))
+      .radius(10)
+      .shadow_width(20);
+
+  // Add type-safe C++ callback
+  btn.add_event_cb(EventCode::Clicked, [](Event e) {
+    std::cout << "Lambda clicked! Target: " << e.get_target().raw()
+              << std::endl;
   });
 
   // Create a label
-  Label label(&btn);
-  label.set_text("Hello C++");
-  label.align(LV_ALIGN_CENTER, 0, 0);
+  Label label(btn);
+  label.set_text("Hello C++").center();
 
   // Create a slider
-  Slider slider(&screen);
-  slider.set_size(200, 20);
-  slider.align(LV_ALIGN_BOTTOM_MID, 0, -20);
-  slider.set_range(0, 100);
-  slider.set_value(50, LV_ANIM_OFF);
+  Slider slider(screen);
+  slider.set_size(200, 20)
+      .align(Align::BottomMid, 0, -20)
+      .set_range(0, 100)
+      .set_value(50, AnimEnable::Off);
 
-  std::cout << "Setup complete." << std::endl;
-
-  // Simulation loop (dummy)
-  // while(1) { lv_timer_handler(); usleep(5000); }
+  std::cout << "Setup complete. Objects created." << std::endl;
 
   // Chart demo
-  Chart chart(&screen);
-  chart.set_size(100, 100);
-  chart.align(LV_ALIGN_TOP_RIGHT, -10, 10);
+  Chart chart(screen);
+  chart.set_size(100, 100)
+      .align(Align::TopRight, -10, 10)
+      .style()
+      .bg_color(Color::from_hex(0x222222))
+      .border_width(0);
 
   // Calendar
-  Calendar cal(&screen);
-  cal.set_size(200, 200);
-  cal.center();
-  cal.add_flag(LV_OBJ_FLAG_HIDDEN);  // Hide it for now
+  Calendar cal(screen);
+  cal.set_size(200, 200).center().add_flag(ObjFlag::Hidden);
 
   return 0;
 }

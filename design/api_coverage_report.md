@@ -72,12 +72,13 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `lv_keyboard` | 91.7% (11/12) |
 | `lv_table` | 82.4% (14/17) |
 | `lv_display` | 75.0% (54/72) |
+| `lv_scale` | 95.0% (32/34) |
 
 ### Medium coverage (25-75%)
 
 | Subsystem | Coverage | Change |
 |-----------|----------|--------|
-| `lv_scale` | 67.6% (23/34) | ⬆️ (+9) |
+
 | `lv_label` | 61.9% (13/21) | - |
 | `lv_timer` | 59.1% (13/22) | - |
 | `lv_chart` | 54.8% (23/42) | ⬆️ (+7) |
@@ -86,7 +87,7 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `lv_calendar` | 50.0% (11/22) | - |
 | `lv_anim` | 47.8% (33/69) | ⬆️ |
 | `lv_image` | 45.0% (27/60) | - |
-| `lv_style` | 36.3% (53/146)| ⬆️ (+47) |
+| `lv_style` | 85.0% (124/146)| ⬆️ (+71) |
 | `lv_indev` | 31.3% (21/67) | - |
 
 ### Low coverage (<25%)
@@ -131,6 +132,7 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `LV_OPA` | 76.5% (13/17) |
 | `LV_DISPLAY` | 75.0% (6/8) |
 | `LV_ARC` | 75.0% (3/4) |
+| `LV_SCALE` | 100% (15/15) |
 
 ### Medium/low coverage
 
@@ -145,7 +147,7 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `LV_LABEL` | 38.9% (7/18) |
 | `LV_TEXT` | 28.6% (4/14) |
 | `LV_INDEV` | 25.9% (7/27) |
-| `LV_SCALE` | 6.7% (1/15) |
+
 | `LV_ANIM` | 6.1% (2/33) |
 
 ### Not used

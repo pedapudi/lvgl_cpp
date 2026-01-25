@@ -38,6 +38,11 @@ class ScaleSection {
   /**
    * @brief Set the style for a specific part of this section.
    */
+  void set_style(Part part, Style& style);
+
+  /**
+   * @brief Set the style for a specific part of this section (Raw).
+   */
   void set_style(lv_part_t part, lv_style_t* style);
 
   lv_scale_section_t* raw() const { return section_; }
@@ -54,7 +59,7 @@ class Scale : public Widget<Scale> {
   explicit Scale(Object& parent);
   explicit Scale(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  Scale& set_mode(lv_scale_mode_t mode);
+  Scale& set_mode(ScaleMode mode);
   Scale& set_total_tick_count(uint32_t total_tick_count);
   Scale& set_major_tick_every(uint32_t major_tick_every);
   Scale& set_label_show(bool show_label);
@@ -68,7 +73,7 @@ class Scale : public Widget<Scale> {
   Scale& set_post_draw(bool en);
   Scale& set_draw_ticks_on_top(bool en);
 
-  lv_scale_mode_t get_mode();
+  ScaleMode get_mode();
   int32_t get_total_tick_count();
   int32_t get_major_tick_every();
   bool get_label_show();

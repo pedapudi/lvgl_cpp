@@ -295,6 +295,10 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_scroll_proxy PRIVATE lvgl_cpp)
     add_test(NAME test_scroll_proxy COMMAND test_scroll_proxy)
 
+    add_executable(test_scale tests/test_scale.cpp)
+    target_link_libraries(test_scale PRIVATE lvgl_cpp)
+    add_test(NAME test_scale COMMAND test_scale)
+
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
     add_test(NAME test_header_integrity 

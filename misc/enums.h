@@ -298,6 +298,22 @@ enum class KeyboardMode : uint8_t {
 };
 
 // ============================================================================
+// Scale Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_scale_mode_t.
+ */
+enum class ScaleMode : uint8_t {
+  HorizontalTop = LV_SCALE_MODE_HORIZONTAL_TOP,
+  HorizontalBottom = LV_SCALE_MODE_HORIZONTAL_BOTTOM,
+  VerticalLeft = LV_SCALE_MODE_VERTICAL_LEFT,
+  VerticalRight = LV_SCALE_MODE_VERTICAL_RIGHT,
+  RoundInner = LV_SCALE_MODE_ROUND_INNER,
+  RoundOuter = LV_SCALE_MODE_ROUND_OUTER,
+};
+
+// ============================================================================
 // Scroll Enums
 // ============================================================================
 

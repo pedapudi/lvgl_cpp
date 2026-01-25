@@ -142,6 +142,26 @@ void test_full_coverage() {
   std::cout << "PASS: Full API coverage verification." << std::endl;
 }
 
+void test_transforms() {
+  std::cout << "Testing Transforms..." << std::endl;
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Object obj(&screen);
+
+  obj.style()
+      .transform_rotation(900)  // 90.0 deg
+      .transform_scale(384)     // 1.5x (256 = 1.0)
+      .transform_pivot_x(50)
+      .transform_pivot_y(50);
+
+  lv_obj_t* o = obj.raw();
+  assert(lv_obj_get_style_transform_rotation(o, LV_PART_MAIN) == 900);
+  assert(lv_obj_get_style_transform_scale_x(o, LV_PART_MAIN) == 384);
+  assert(lv_obj_get_style_transform_scale_y(o, LV_PART_MAIN) == 384);
+  assert(lv_obj_get_style_transform_pivot_x(o, LV_PART_MAIN) == 50);
+
+  std::cout << "PASS: Transforms verified." << std::endl;
+}
+
 int main() {
   lv_init();
   lvgl::Display display = lvgl::Display::create(800, 480);
@@ -149,6 +169,7 @@ int main() {
   test_fluent_chain();
   test_selector_usage();
   test_full_coverage();
+  test_transforms();
 
   std::cout << "All tests passed!" << std::endl;
   return 0;

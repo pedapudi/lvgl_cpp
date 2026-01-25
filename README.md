@@ -13,7 +13,7 @@
 | **Memory** | Manual `lv_obj_del` / `free`. Prone to leaks. | **RAII**. Automatic destructor cleanup. |
 | **Typing** | `void*` context pointers. Unsafe casts. | **Strongly Typed**. `Button`, `Label`, `Slider` classes. |
 | **Events** | `void event_cb(lv_event_t*)` with switches. | **Lambdas**: `btn.add_event_cb(..., [=](Event e) { ... })`. |
-| **Styles** | Verbose: `lv_style_set_bg_color(&style, ...)` | **Fluent**: `style().bg_color(Red).radius(5)` |
+| **Styles** | Verbose: `lv_style_set_bg_color(&style, ...)` | **Fluent**: `style().bg_color(Red).transform_scale(256)` |
 | **Safety** | "Monolithic Object" `lv_obj_t` has all API methods. | **CRTP Mixins**. Only exposing valid methods for each widget. |
 
 ---

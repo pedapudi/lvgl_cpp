@@ -368,8 +368,55 @@ class StyleProxy {
     return *this;
   }
 
+  /**
+   * @brief Enable/disable clip corner (overflow: hidden).
+   */
   StyleProxy& clip_corner(bool value) {
     lv_obj_set_style_clip_corner(obj_, value, selector_);
+    return *this;
+  }
+
+  // =========================================================================
+  // Transform & Transitions
+  // =========================================================================
+
+  /**
+   * @brief Set the rotation of the object.
+   * @param value Rotation in 0.1 degree units (e.g. 900 for 90 degrees).
+   */
+  StyleProxy& transform_rotation(int32_t value) {
+    lv_obj_set_style_transform_rotation(obj_, value, selector_);
+    return *this;
+  }
+
+  StyleProxy& transform_scale_x(int32_t value) {
+    lv_obj_set_style_transform_scale_x(obj_, value, selector_);
+    return *this;
+  }
+
+  StyleProxy& transform_scale_y(int32_t value) {
+    lv_obj_set_style_transform_scale_y(obj_, value, selector_);
+    return *this;
+  }
+
+  StyleProxy& transform_scale(int32_t value) {
+    lv_obj_set_style_transform_scale_x(obj_, value, selector_);
+    lv_obj_set_style_transform_scale_y(obj_, value, selector_);
+    return *this;
+  }
+
+  StyleProxy& transform_pivot_x(int32_t value) {
+    lv_obj_set_style_transform_pivot_x(obj_, value, selector_);
+    return *this;
+  }
+
+  StyleProxy& transform_pivot_y(int32_t value) {
+    lv_obj_set_style_transform_pivot_y(obj_, value, selector_);
+    return *this;
+  }
+
+  StyleProxy& transition(const lv_style_transition_dsc_t* value) {
+    lv_obj_set_style_transition(obj_, value, selector_);
     return *this;
   }
 
