@@ -10,7 +10,8 @@ using namespace lvgl;
 
 void test_obj_flags() {
   std::cout << "Testing ObjFlag enum..." << std::endl;
-  Object obj;
+  Object parent(lv_screen_active(), Object::Ownership::Unmanaged);
+  Object obj(&parent);
 
   // Test adding flag
   obj.add_flag(ObjFlag::Hidden);
@@ -26,11 +27,10 @@ void test_obj_flags() {
   // Our enum has bitwise operators defined in enums.h? Let's check.
   // ObjFlag has operator| defined.
 
-  // obj.add_flag(ObjFlag::Clickable | ObjFlag::Checkable);
-  // Object::add_flag overload takes ObjFlag.
-  // Let's verify if bitwise works.
-
+  // Test bitwise ops
+  std::cout << "Testing bitwise flags..." << std::endl;
   obj.add_flag(ObjFlag::Clickable | ObjFlag::Checkable);
+
   assert(obj.has_flag(ObjFlag::Clickable));
   assert(obj.has_flag(ObjFlag::Checkable));
 
@@ -66,7 +66,7 @@ void test_input_api() {
 
 int main() {
   lv_init();
-  Display::create(800, 480);  // Ensure display exists
+  auto disp = Display::create(800, 480);  // Ensure display exists and persists
 
   test_obj_flags();
   test_display_layers();
