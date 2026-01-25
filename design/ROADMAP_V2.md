@@ -1,7 +1,7 @@
 # lvgl_cpp Refactoring Roadmap v2.0
 
 ## 1. Executive Summary
-The primary goal of the v0.2.0 refactoring—standardizing the widget architecture and eliminating "God Object" inheritance—is **100% complete**. Every widget now inherits from the CRTP `Widget<T>` template and utilizes shared mixins for core functionality (Position, Size, Style, Events).
+The primary goal of the v0.2.0 refactoring—standardizing the widget architecture and eliminating "Monolithic Object" inheritance—is **100% complete**. Every widget now inherits from the CRTP `Widget<T>` template and utilizes shared mixins for core functionality (Position, Size, Style, Events).
 
 The focus now shifts from **Structural Migration** to **Behavioral idiomaticness** and **System Management**.
 
