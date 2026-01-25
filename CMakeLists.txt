@@ -283,6 +283,18 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_timer PRIVATE lvgl_cpp)
     add_test(NAME test_timer COMMAND test_timer)
 
+    add_executable(test_style_proxy tests/test_style_proxy.cpp)
+    target_link_libraries(test_style_proxy PRIVATE lvgl_cpp)
+    add_test(NAME test_style_proxy COMMAND test_style_proxy)
+
+    add_executable(test_layout_proxy tests/test_layout_proxy.cpp)
+    target_link_libraries(test_layout_proxy PRIVATE lvgl_cpp)
+    add_test(NAME test_layout_proxy COMMAND test_layout_proxy)
+
+    add_executable(test_scroll_proxy tests/test_scroll_proxy.cpp)
+    target_link_libraries(test_scroll_proxy PRIVATE lvgl_cpp)
+    add_test(NAME test_scroll_proxy COMMAND test_scroll_proxy)
+
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
     add_test(NAME test_header_integrity 

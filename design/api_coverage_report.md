@@ -20,7 +20,10 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 **Excluded from coverage**:
 - Functions starting with `_lv_` (internal)
 - Functions in `*_private.h` headers
-- Low-level draw primitives (`lv_draw_sw_*`, `lv_draw_buf_*`)
+- Low-level draw primitives (`lv_draw_sw_*`, `lv_draw_buf_*`, `*_init_draw_*`)
+- XML parser bindings (`*_xml_*`)
+- Widget class implementation details (`*_class_*`)
+- Internal event and handler functions
 
 ### Internal API compliance
 
@@ -31,7 +34,9 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 
 | Category | Total | Used | Coverage |
 |----------|-------|------|----------|
-| **Functions** | 1,529 | 673 | **44.0%** |
+| Category | Total | Used | Coverage |
+|----------|-------|------|----------|
+| **Functions** | 1,460 | 661 | **45.3%** |
 | **Enums and Constants** | 423 | 264 | **62.4%** |
 
 ## Function coverage

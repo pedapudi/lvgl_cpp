@@ -207,30 +207,6 @@ bool Object::has_state(lv_state_t state) const {
 
 // --- Scroll ---
 
-void Object::set_scrollbar_mode(lv_scrollbar_mode_t mode) {
-  if (obj_) lv_obj_set_scrollbar_mode(obj_, mode);
-}
-
-void Object::set_scrollbar_mode(ScrollbarMode mode) {
-  set_scrollbar_mode(static_cast<lv_scrollbar_mode_t>(mode));
-}
-
-void Object::set_scroll_snap_x(lv_scroll_snap_t snap) {
-  if (obj_) lv_obj_set_scroll_snap_x(obj_, snap);
-}
-
-void Object::set_scroll_snap_x(ScrollSnap snap) {
-  set_scroll_snap_x(static_cast<lv_scroll_snap_t>(snap));
-}
-
-void Object::set_scroll_snap_y(lv_scroll_snap_t snap) {
-  if (obj_) lv_obj_set_scroll_snap_y(obj_, snap);
-}
-
-void Object::set_scroll_snap_y(ScrollSnap snap) {
-  set_scroll_snap_y(static_cast<lv_scroll_snap_t>(snap));
-}
-
 // --- Other Properties ---
 
 void Object::set_base_dir(lv_base_dir_t dir) {
@@ -314,25 +290,5 @@ void Object::set_style_bg_image_src(const void* value,
 }
 
 // --- Layout & Scroll ---
-
-void Object::set_flex_flow(FlexFlow flow) {
-  if (obj_) lv_obj_set_flex_flow(obj_, static_cast<lv_flex_flow_t>(flow));
-}
-
-void Object::set_flex_align(FlexAlign main_place, FlexAlign cross_place,
-                            FlexAlign track_cross_place) {
-  if (obj_) {
-    lv_obj_set_flex_align(obj_, static_cast<lv_flex_align_t>(main_place),
-                          static_cast<lv_flex_align_t>(cross_place),
-                          static_cast<lv_flex_align_t>(track_cross_place));
-  }
-}
-
-void Object::set_grid_align(GridAlign column_align, GridAlign row_align) {
-  if (obj_) {
-    lv_obj_set_grid_align(obj_, static_cast<lv_grid_align_t>(column_align),
-                          static_cast<lv_grid_align_t>(row_align));
-  }
-}
 
 }  // namespace lvgl
