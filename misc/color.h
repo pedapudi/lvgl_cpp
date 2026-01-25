@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "enums.h"
 #include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
@@ -16,6 +17,7 @@ class Color {
   Color();
   Color(lv_color_t c);
   Color(uint8_t r, uint8_t g, uint8_t b);
+  Color(Palette p);
   Color(uint32_t hex);  // 0xRRGGBB
 
   // Implicit conversion to lv_color_t

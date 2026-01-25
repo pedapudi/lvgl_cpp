@@ -71,7 +71,7 @@ void test_label_1() {
       "the lines to the center "
       "and wrap long text automatically.");
   label1.set_width(150);
-  label1.set_style_text_align(LV_TEXT_ALIGN_CENTER, 0);
+  label1.style().text_align(lvgl::TextAlign::Center);
   label1.align(lvgl::Align::Center, 0, -40);
 
   lvgl::Label label2;
@@ -100,7 +100,7 @@ void test_slider_1() {
   slider.center();
 
   // slider.add_event_cb(slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
-  slider.set_style_anim_duration(2000, 0);
+  slider.style().anim_time(2000);
 
   lvgl::Label label(screen);
 
@@ -203,8 +203,8 @@ void test_image_1() {
   img2.align_to(img1, lvgl::Align::OutBottomMid, 0, 20);
 
   // Test API for opacity/recolor from Example 2
-  img2.set_style_image_recolor_opa(LV_OPA_50, 0);
-  img2.set_style_image_recolor(lv_palette_main(LV_PALETTE_BLUE), 0);
+  img2.style().image_recolor_opa(lvgl::Opacity::Opa50);
+  img2.style().image_recolor(lv_palette_main(LV_PALETTE_BLUE));
 
   std::cout << "Image Example 1 Passed" << std::endl;
 }

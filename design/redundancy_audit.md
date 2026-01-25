@@ -32,19 +32,19 @@ Currently, **both** patterns are implemented simultaneously, leading to:
 *   **Detail**:
     *   `Object` does not currently implement `set_x` / `set_y` directly in the header (good!), but relies on `Widget` inheriting `Positionable`.
     *   However, `Object` *does* logically own the position.
-*   **Status**: **MODERATE**. Less duplication, but `Widget` defines tons of forwarding methods (lines 43-72 in `widget.h`) just to expose Mixin methods on the specific derived type.
+*   **Status**: **RESOLVED**.
 *   **Resolution**:
-    *   Keep basic `x`, `y`, `width`, `height` on `Object` (fundamental).
-    *   Move complex alignment (`align`, `align_to`, `center`) to `PositionProxy` (or keep on Object if frequent enough).
-    *   *Recommendation*: Keep fundamental setters on `Object` to avoid verbosity for common tasks, but remove the Mixin architecture to delete the forwarding boilerplate.
+    *   `x`, `y`, `width`, `height`, `align`, `align_to`, `center` moved to `Object` core.
+    *   Mixins (`Positionable`, `Sizable`) deleted.
+    *   `Widget` forwarding boilerplate deleted.
 
 ### 2.4. Events
 *   **Conflict**: `core/object.h` vs `core/mixins/event_source.h`.
 *   **Detail**:
     *   `Object` implements the real `add_event_cb`.
     *   `EventSource` provides sugar (`on_click`).
-*   **Status**: **LOW**. Mostly convenient sugar, but adds template weight.
-*   **Resolution**: Fold simple sugar into `Object` or an `EventProxy` if it grows complex.
+*   **Status**: **RESOLVED**.
+*   **Resolution**: `EventSource` mixin deleted. Convenience methods (`on_click`, etc.) moved directly to `Object`.
 
 ### 2.5. Scrolling
 *   **Conflict**: `core/object.h` vs (Missing) `scrollable.h`.

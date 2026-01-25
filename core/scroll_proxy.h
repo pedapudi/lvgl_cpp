@@ -21,8 +21,8 @@ class ScrollProxy {
    * @param y Y coordinate.
    * @param anim_en Animation enable/disable.
    */
-  ScrollProxy& to(int32_t x, int32_t y, lv_anim_enable_t anim_en) {
-    lv_obj_scroll_to(obj_, x, y, anim_en);
+  ScrollProxy& to(int32_t x, int32_t y, AnimEnable anim_en) {
+    lv_obj_scroll_to(obj_, x, y, static_cast<lv_anim_enable_t>(anim_en));
     return *this;
   }
 
@@ -31,8 +31,8 @@ class ScrollProxy {
    * @param x X coordinate.
    * @param anim_en Animation enable/disable.
    */
-  ScrollProxy& to_x(int32_t x, lv_anim_enable_t anim_en) {
-    lv_obj_scroll_to_x(obj_, x, anim_en);
+  ScrollProxy& to_x(int32_t x, AnimEnable anim_en) {
+    lv_obj_scroll_to_x(obj_, x, static_cast<lv_anim_enable_t>(anim_en));
     return *this;
   }
 
@@ -41,8 +41,8 @@ class ScrollProxy {
    * @param y Y coordinate.
    * @param anim_en Animation enable/disable.
    */
-  ScrollProxy& to_y(int32_t y, lv_anim_enable_t anim_en) {
-    lv_obj_scroll_to_y(obj_, y, anim_en);
+  ScrollProxy& to_y(int32_t y, AnimEnable anim_en) {
+    lv_obj_scroll_to_y(obj_, y, static_cast<lv_anim_enable_t>(anim_en));
     return *this;
   }
 
@@ -52,8 +52,8 @@ class ScrollProxy {
    * @param dy Change in Y.
    * @param anim_en Animation enable/disable.
    */
-  ScrollProxy& by(int32_t dx, int32_t dy, lv_anim_enable_t anim_en) {
-    lv_obj_scroll_by(obj_, dx, dy, anim_en);
+  ScrollProxy& by(int32_t dx, int32_t dy, AnimEnable anim_en) {
+    lv_obj_scroll_by(obj_, dx, dy, static_cast<lv_anim_enable_t>(anim_en));
     return *this;
   }
 
@@ -61,8 +61,8 @@ class ScrollProxy {
    * @brief Scroll the object into view.
    * @param anim_en Animation enable/disable.
    */
-  ScrollProxy& to_view(lv_anim_enable_t anim_en) {
-    lv_obj_scroll_to_view(obj_, anim_en);
+  ScrollProxy& to_view(AnimEnable anim_en) {
+    lv_obj_scroll_to_view(obj_, static_cast<lv_anim_enable_t>(anim_en));
     return *this;
   }
 

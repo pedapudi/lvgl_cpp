@@ -1,10 +1,11 @@
 #pragma once
 
+#include "event.h"
 #include "lvgl.h"  // IWYU pragma: export
+#include "lvgl.h"
 #include "mixins/event_source.h"
 #include "mixins/positionable.h"
-#include "mixins/sizable.h"
-#include "mixins/stylable.h"
+#include "mixins/sizable.h"  // Keep this include as Sizable is still used in the class body
 #include "object.h"
 
 namespace lvgl {
@@ -17,16 +18,10 @@ namespace lvgl {
  * @tparam Derived The concrete widget class (e.g., Button, Label).
  */
 template <typename Derived>
-class Widget : public Object,
-               public Positionable<Derived>,
-               public Sizable<Derived>,
-               public Stylable<Derived>,
-               public EventSource<Derived> {
+class Widget : public Object {
  public:
-  // Inherit constructors from Object
-  // Explicitly forward constructors to ensure they are inherited by derived
-  // classes (Double 'using' inheritance is not standard compliant for
-  // constructors)
+  using Object::Object;  // Inherit constructors
+
   Widget() : Object() {}
 
   explicit Widget(Object* parent, Ownership ownership = Ownership::Default)
@@ -38,105 +33,149 @@ class Widget : public Object,
   explicit Widget(lv_obj_t* obj, Ownership ownership = Ownership::Default)
       : Object(obj, ownership) {}
 
-  // --- Positionable Forwarding ---
-  Derived& set_x(int32_t value) { return Positionable<Derived>::set_x(value); }
-  Derived& set_y(int32_t value) { return Positionable<Derived>::set_y(value); }
+  // --- Geometric Properties (Fluent Proxies) ---
+
+  Derived& set_x(int32_t value) {
+    Object::set_x(value);
+    return self();
+  }
+
+  Derived& set_y(int32_t value) {
+    Object::set_y(value);
+    return self();
+  }
+
   Derived& set_pos(int32_t x, int32_t y) {
-    return Positionable<Derived>::set_pos(x, y);
+    Object::set_pos(x, y);
+    return self();
   }
+
   Derived& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
-    return Positionable<Derived>::align(align, x_ofs, y_ofs);
+    Object::align(align, x_ofs, y_ofs);
+    return self();
   }
+
   Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
-    return Positionable<Derived>::align(align, x_ofs, y_ofs);
+    Object::align(align, x_ofs, y_ofs);
+    return self();
   }
 
-  Derived& center() { return Positionable<Derived>::center(); }
-  int32_t get_x() const { return Positionable<Derived>::get_x(); }
-  int32_t get_y() const { return Positionable<Derived>::get_y(); }
+  Derived& align_to(const Object& base, Align align, int32_t x_ofs = 0,
+                    int32_t y_ofs = 0) {
+    Object::align_to(base, align, x_ofs, y_ofs);
+    return self();
+  }
 
-  // --- Sizable Forwarding ---
+  Derived& align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
+                    int32_t y_ofs = 0) {
+    Object::align_to(base, align, x_ofs, y_ofs);
+    return self();
+  }
+
+  Derived& center() {
+    Object::center();
+    return self();
+  }
+
+  // --- Sizable Properties (Fluent Proxies) ---
+
   Derived& set_width(int32_t value) {
-    return Sizable<Derived>::set_width(value);
+    Object::set_width(value);
+    return self();
   }
+
   Derived& set_height(int32_t value) {
-    return Sizable<Derived>::set_height(value);
+    Object::set_height(value);
+    return self();
   }
+
   Derived& set_size(int32_t width, int32_t height) {
-    return Sizable<Derived>::set_size(width, height);
-  }
-  int32_t get_width() const { return Sizable<Derived>::get_width(); }
-  int32_t get_height() const { return Sizable<Derived>::get_height(); }
-
-  // --- Stylable Forwarding ---
-  Derived& add_style(const lv_style_t* style,
-                     lv_style_selector_t selector = 0) {
-    return Stylable<Derived>::add_style(style, selector);
-  }
-  Derived& remove_style(const lv_style_t* style,
-                        lv_style_selector_t selector = 0) {
-    return Stylable<Derived>::remove_style(style, selector);
-  }
-  Derived& remove_all_styles() {
-    return Stylable<Derived>::remove_all_styles();
+    Object::set_size(width, height);
+    return self();
   }
 
-  // --- Object Lifecycle Forwarding (Fluent) ---
+  // --- Object Lifecycle (Fluent Proxies) ---
+
   Derived& add_flag(lv_obj_flag_t f) {
     Object::add_flag(f);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& remove_flag(lv_obj_flag_t f) {
-    Object::remove_flag(f);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& add_flag(ObjFlag f) {
-    Object::add_flag(f);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& remove_flag(ObjFlag f) {
-    Object::remove_flag(f);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& add_state(State state) {
-    Object::add_state(state);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& remove_state(State state) {
-    Object::remove_state(state);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& add_state(lv_state_t state) {
-    Object::add_state(state);
-    return *static_cast<Derived*>(this);
-  }
-  Derived& remove_state(lv_state_t state) {
-    Object::remove_state(state);
-    return *static_cast<Derived*>(this);
+    return self();
   }
 
-  // --- EventSource Forwarding ---
-  Derived& add_event_cb(typename EventSource<Derived>::EventCallback cb,
-                        lv_event_code_t filter) {
-    return EventSource<Derived>::add_event_cb(cb, filter);
+  Derived& remove_flag(lv_obj_flag_t f) {
+    Object::remove_flag(f);
+    return self();
   }
-  Derived& on_click(typename EventSource<Derived>::EventCallback cb) {
-    return EventSource<Derived>::on_click(cb);
+
+  Derived& add_flag(ObjFlag f) {
+    Object::add_flag(f);
+    return self();
   }
-  Derived& on_event(typename EventSource<Derived>::EventCallback cb) {
-    return EventSource<Derived>::on_event(cb);
+
+  Derived& remove_flag(ObjFlag f) {
+    Object::remove_flag(f);
+    return self();
   }
-  Derived& on_clicked(typename EventSource<Derived>::EventCallback cb) {
-    return EventSource<Derived>::on_clicked(cb);
+
+  Derived& add_state(State state) {
+    Object::add_state(state);
+    return self();
   }
-  Derived& on_pressed(typename EventSource<Derived>::EventCallback cb) {
-    return EventSource<Derived>::on_pressed(cb);
+
+  Derived& remove_state(State state) {
+    Object::remove_state(state);
+    return self();
   }
-  Derived& on_released(typename EventSource<Derived>::EventCallback cb) {
-    return EventSource<Derived>::on_released(cb);
+
+  Derived& add_state(lv_state_t state) {
+    Object::add_state(state);
+    return self();
   }
-  Derived& on_long_pressed(typename EventSource<Derived>::EventCallback cb) {
-    return EventSource<Derived>::on_long_pressed(cb);
+
+  Derived& remove_state(lv_state_t state) {
+    Object::remove_state(state);
+    return self();
+  }
+
+  // --- Events (Fluent Proxies) ---
+
+  Derived& add_event_cb(lv_event_code_t event_code, EventCallback callback) {
+    Object::add_event_cb(event_code, std::move(callback));
+    return self();
+  }
+
+  Derived& add_event_cb(EventCode event_code, EventCallback callback) {
+    Object::add_event_cb(event_code, std::move(callback));
+    return self();
+  }
+
+  Derived& on_click(EventCallback cb) {
+    Object::on_click(std::move(cb));
+    return self();
+  }
+
+  Derived& on_event(EventCallback cb) {
+    Object::on_event(std::move(cb));
+    return self();
+  }
+
+  Derived& on_clicked(EventCallback cb) {
+    Object::on_clicked(std::move(cb));
+    return self();
+  }
+
+  Derived& on_pressed(EventCallback cb) {
+    Object::on_pressed(std::move(cb));
+    return self();
+  }
+
+  Derived& on_released(EventCallback cb) {
+    Object::on_released(std::move(cb));
+    return self();
+  }
+
+  Derived& on_long_pressed(EventCallback cb) {
+    Object::on_long_pressed(std::move(cb));
+    return self();
   }
 
   /**

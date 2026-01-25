@@ -63,8 +63,8 @@ class TableCell {
 ## 5. Status and Tracking
 | Feature | Status | Tracking |
 | :--- | :--- | :--- |
-| Scoped Enums | ✅ 90% | issue/enums |
+| Scoped Enums | ✅ COMPLETE | issue/enums |
 | ChartSeries | ✅ COMPLETE | test/chart_table |
 | TableCell | ✅ COMPLETE | test/chart_table |
 | Animation RAII | 🚧 IN PROGRESS | issue/animations |
-| Style Proxies | 💤 BACKLOG | |
+| Style Proxies | 🚧 IN PROGRESS | |

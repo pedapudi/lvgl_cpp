@@ -1,5 +1,6 @@
 #include "object.h"
 
+#include <cstdio>
 #include <vector>
 
 #include "../misc/style.h"
@@ -143,6 +144,86 @@ void Object::delete_async() {
   }
 }
 
+// --- Geometric Properties ---
+
+Object& Object::set_x(int32_t x) {
+  if (obj_) lv_obj_set_x(obj_, x);
+  return *this;
+}
+
+Object& Object::set_y(int32_t y) {
+  if (obj_) lv_obj_set_y(obj_, y);
+  return *this;
+}
+
+Object& Object::set_pos(int32_t x, int32_t y) {
+  if (obj_) lv_obj_set_pos(obj_, x, y);
+  return *this;
+}
+
+Object& Object::align(Align align, int32_t x_ofs, int32_t y_ofs) {
+  if (obj_) {
+    lv_obj_set_align(obj_, static_cast<lv_align_t>(align));
+    lv_obj_set_pos(obj_, x_ofs, y_ofs);
+  }
+  return *this;
+}
+
+Object& Object::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
+  if (obj_) {
+    lv_obj_set_align(obj_, align);
+    lv_obj_set_pos(obj_, x_ofs, y_ofs);
+  }
+  return *this;
+}
+
+Object& Object::align_to(const Object& base, Align align, int32_t x_ofs,
+                         int32_t y_ofs) {
+  if (obj_ && base.raw()) {
+    lv_obj_align_to(obj_, base.raw(), static_cast<lv_align_t>(align), x_ofs,
+                    y_ofs);
+  }
+  return *this;
+}
+
+Object& Object::align_to(const Object& base, lv_align_t align, int32_t x_ofs,
+                         int32_t y_ofs) {
+  if (obj_ && base.raw()) {
+    lv_obj_align_to(obj_, base.raw(), align, x_ofs, y_ofs);
+  }
+  return *this;
+}
+
+Object& Object::center() {
+  if (obj_) lv_obj_center(obj_);
+  return *this;
+}
+
+int32_t Object::get_x() const { return obj_ ? lv_obj_get_x(obj_) : 0; }
+
+int32_t Object::get_y() const { return obj_ ? lv_obj_get_y(obj_) : 0; }
+
+Object& Object::set_width(int32_t w) {
+  if (obj_) lv_obj_set_width(obj_, w);
+  return *this;
+}
+
+Object& Object::set_height(int32_t h) {
+  if (obj_) lv_obj_set_height(obj_, h);
+  return *this;
+}
+
+Object& Object::set_size(int32_t w, int32_t h) {
+  if (obj_) lv_obj_set_size(obj_, w, h);
+  return *this;
+}
+
+int32_t Object::get_width() const { return obj_ ? lv_obj_get_width(obj_) : 0; }
+
+int32_t Object::get_height() const {
+  return obj_ ? lv_obj_get_height(obj_) : 0;
+}
+
 void Object::install_delete_hook() {
   fprintf(stderr, "Install hook: obj=%p, wrapper=%p\n", obj_, this);
   lv_obj_add_event_cb(obj_, on_delete_event, LV_EVENT_DELETE, this);
@@ -227,17 +308,44 @@ void Object::event_proxy(lv_event_t* e) {
   }
 }
 
-void Object::add_event_cb(lv_event_code_t event_code, EventCallback callback) {
-  if (!obj_) return;
+Object& Object::add_event_cb(lv_event_code_t event_code,
+                             EventCallback callback) {
+  if (!obj_) return *this;
   auto node = std::make_unique<CallbackNode>();
   node->event_code = event_code;
   node->callback = std::move(callback);
   lv_obj_add_event_cb(obj_, event_proxy, event_code, node.get());
   callback_nodes_.push_back(std::move(node));
+  return *this;
 }
 
-void Object::add_event_cb(EventCode event_code, EventCallback callback) {
-  add_event_cb(static_cast<lv_event_code_t>(event_code), std::move(callback));
+Object& Object::add_event_cb(EventCode event_code, EventCallback callback) {
+  return add_event_cb(static_cast<lv_event_code_t>(event_code),
+                      std::move(callback));
+}
+
+Object& Object::on_click(EventCallback cb) {
+  return add_event_cb(LV_EVENT_CLICKED, std::move(cb));
+}
+
+Object& Object::on_clicked(EventCallback cb) {
+  return add_event_cb(LV_EVENT_CLICKED, std::move(cb));
+}
+
+Object& Object::on_event(EventCallback cb) {
+  return add_event_cb(LV_EVENT_ALL, std::move(cb));
+}
+
+Object& Object::on_pressed(EventCallback cb) {
+  return add_event_cb(LV_EVENT_PRESSED, std::move(cb));
+}
+
+Object& Object::on_released(EventCallback cb) {
+  return add_event_cb(LV_EVENT_RELEASED, std::move(cb));
+}
+
+Object& Object::on_long_pressed(EventCallback cb) {
+  return add_event_cb(LV_EVENT_LONG_PRESSED, std::move(cb));
 }
 
 // --- Styles ---
@@ -248,45 +356,6 @@ void Object::add_style(Style& style, lv_style_selector_t selector) {
 
 void Object::remove_style(Style* style, lv_style_selector_t selector) {
   if (obj_) lv_obj_remove_style(obj_, style ? style->raw() : nullptr, selector);
-}
-
-void Object::set_style_anim_duration(uint32_t value,
-                                     lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_anim_duration(obj_, value, selector);
-}
-
-void Object::set_style_text_align(lv_text_align_t value,
-                                  lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_text_align(obj_, value, selector);
-}
-
-void Object::set_style_text_align(TextAlign value,
-                                  lv_style_selector_t selector) {
-  set_style_text_align(static_cast<lv_text_align_t>(value), selector);
-}
-
-void Object::set_style_bg_color(lv_color_t value,
-                                lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_bg_color(obj_, value, selector);
-}
-
-void Object::set_style_bg_opa(lv_opa_t value, lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_bg_opa(obj_, value, selector);
-}
-
-void Object::set_style_image_recolor_opa(lv_opa_t value,
-                                         lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_image_recolor_opa(obj_, value, selector);
-}
-
-void Object::set_style_image_recolor(lv_color_t value,
-                                     lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_image_recolor(obj_, value, selector);
-}
-
-void Object::set_style_bg_image_src(const void* value,
-                                    lv_style_selector_t selector) {
-  if (obj_) lv_obj_set_style_bg_image_src(obj_, value, selector);
 }
 
 // --- Layout & Scroll ---

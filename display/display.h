@@ -94,6 +94,25 @@ class Display {
   lv_obj_t* get_layer_sys();
   lv_obj_t* get_layer_bottom();
 
+  Object screen_active() {
+    return Object(get_screen_active(), Object::Ownership::Unmanaged);
+  }
+  Object screen_prev() {
+    return Object(get_screen_prev(), Object::Ownership::Unmanaged);
+  }
+  Object screen_loading() {
+    return Object(get_screen_loading(), Object::Ownership::Unmanaged);
+  }
+  Object layer_top() {
+    return Object(get_layer_top(), Object::Ownership::Unmanaged);
+  }
+  Object layer_sys() {
+    return Object(get_layer_sys(), Object::Ownership::Unmanaged);
+  }
+  Object layer_bottom() {
+    return Object(get_layer_bottom(), Object::Ownership::Unmanaged);
+  }
+
   void load_screen(Object& scr);
   void load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
                         uint32_t time, uint32_t delay, bool auto_del);

@@ -47,19 +47,20 @@ obj.style(Part::Main).bg_color(Red)
 ### 3.1. Removing Mixins
 The following mixins will be deprecated and eventually removed, replaced by Proxies:
 *   `core/mixins/layoutable.h` -> `LayoutProxy`
-*   `core/mixins/positionable.h` -> `Object` core (keep x, y, align fundamental) + `LayoutProxy`? 
-    *   *Decision*: `x`, `y`, `size` are fundamental enough to stay on `Object`, but specialized layout logic moves to proxy.
+*   `core/mixins/positionable.h` -> **Moved to Object Core** (Completed)
+    *   *Decision*: `x`, `y`, `size` are fundamental enough to stay on `Object` to avoid verbosity.
 *   `core/mixins/scrollable.h` -> `ScrollProxy`
-*   `core/mixins/stylable.h` -> `StyleProxy` (Factory remains in `Object` or lightweight `Stylable` mixin).
+*   `core/mixins/stylable.h` -> `StyleProxy` (Factory remains in `Object`).
+*   `core/mixins/event_source.h` -> **Moved to Object Core** (Completed).
 
 ### 3.2. Cleaning `Object`
 All `set_style_*`, `set_flex_*`, `set_grid_*`, `set_scroll_*` methods will be removed from `Object`'s public interface (or deprecated).
 
 ## 4. Implementation Plan
 
-### Phase 1: Style Proxy (In Progress)
-- **Status**: Prototyped. Verification underway.
-- **Action**: Complete implementation of all style properties.
+### Phase 1: Style Proxy (Completed)
+- **Status**: Implemented and verified.
+- **Action**: All style properties accessible via `style()`.
 
 ### Phase 2: Layout Proxy
 - **New Class**: `core/layout_proxy.h`
@@ -71,10 +72,12 @@ All `set_style_*`, `set_flex_*`, `set_grid_*`, `set_scroll_*` methods will be re
 - **Methods**: `to()`, `by()`, `mode()`, `snap()`.
 - **Integration**: `Object::scroll()` returns `ScrollProxy`.
 
-### Phase 4: Deprecation & Cleanup
-- Mark old methods `[[deprecated]]`.
+### Phase 4: Deprecation & Cleanup (Completed)
+- Mark old methods `[[deprecated]]`. -> Skipped, removed directly.
 - Update all examples and tests to use Proxies.
-- Remove deprecated methods in v1.0.
+- Legacy mixins (`Stylable`, `Layoutable`, `Scrollable`) removed.
+- `Positionable`, `Sizable`, `EventSource` consolidated into `Object`.
+- Flat setters removed from `Object`.
 
 ## 5. Verification
 Each Proxy will have a dedicated test suite verifying:

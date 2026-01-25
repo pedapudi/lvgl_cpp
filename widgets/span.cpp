@@ -4,6 +4,31 @@
 
 namespace lvgl {
 
+// ============================================================================
+// Span Proxy Implementation
+// ============================================================================
+
+Span::Span(lv_span_t* span, SpanGroup* group) : span_(span), group_(group) {}
+
+Span& Span::set_text(const char* text) {
+  if (group_->raw()) lv_spangroup_set_span_text(group_->raw(), span_, text);
+  return *this;
+}
+
+Span& Span::set_style(const Style& style) {
+  if (group_->raw())
+    lv_spangroup_set_span_style(group_->raw(), span_, style.raw());
+  return *this;
+}
+
+Span& Span::style(const Style& style) { return set_style(style); }
+
+lv_span_t* Span::raw() const { return span_; }
+
+// ============================================================================
+// SpanGroup Implementation
+// ============================================================================
+
 SpanGroup::SpanGroup()
     : SpanGroup(static_cast<Object*>(nullptr), Ownership::Managed) {}
 
@@ -16,26 +41,25 @@ SpanGroup::SpanGroup(Object& parent) : SpanGroup(&parent) {}
 SpanGroup::SpanGroup(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
 
-lv_span_t* SpanGroup::add_span() {
+Span SpanGroup::add_span() {
+  lv_span_t* span = obj_ ? lv_spangroup_add_span(obj_) : nullptr;
+  return Span(span, this);
+}
+
+lv_span_t* SpanGroup::add_span_raw() {
   return obj_ ? lv_spangroup_add_span(obj_) : nullptr;
 }
 
-void SpanGroup::delete_span(lv_span_t* span) {
+void SpanGroup::delete_span(Span& span) {
+  if (obj_) lv_spangroup_delete_span(obj_, span.raw());
+}
+
+void SpanGroup::delete_span_raw(lv_span_t* span) {
   if (obj_) lv_spangroup_delete_span(obj_, span);
 }
 
-SpanGroup& SpanGroup::set_span_text(lv_span_t* span, const char* text) {
-  if (obj_) lv_spangroup_set_span_text(obj_, span, text);
-  return *this;
-}
-
-SpanGroup& SpanGroup::set_span_style(lv_span_t* span, const lv_style_t* style) {
-  if (obj_) lv_spangroup_set_span_style(obj_, span, style);
-  return *this;
-}
-
-SpanGroup& SpanGroup::set_align(lv_text_align_t align) {
-  if (obj_) lv_spangroup_set_align(obj_, align);
+SpanGroup& SpanGroup::set_align(TextAlign align) {
+  if (obj_) lv_spangroup_set_align(obj_, static_cast<lv_text_align_t>(align));
   return *this;
 }
 
@@ -59,16 +83,18 @@ SpanGroup& SpanGroup::set_max_lines(int32_t lines) {
   return *this;
 }
 
-lv_span_t* SpanGroup::get_child(int32_t id) {
-  return obj_ ? lv_spangroup_get_child(obj_, id) : nullptr;
+Span SpanGroup::get_child(int32_t id) {
+  lv_span_t* span = obj_ ? lv_spangroup_get_child(obj_, id) : nullptr;
+  return Span(span, this);
 }
 
 uint32_t SpanGroup::get_span_count() {
   return obj_ ? lv_spangroup_get_span_count(obj_) : 0;
 }
 
-lv_text_align_t SpanGroup::get_align() {
-  return obj_ ? lv_spangroup_get_align(obj_) : LV_TEXT_ALIGN_LEFT;
+TextAlign SpanGroup::get_align() {
+  return obj_ ? static_cast<TextAlign>(lv_spangroup_get_align(obj_))
+              : TextAlign::Left;
 }
 
 lv_span_overflow_t SpanGroup::get_overflow() {

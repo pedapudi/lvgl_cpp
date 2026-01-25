@@ -73,11 +73,48 @@ void test_timer_clear_resume() {
   }
 }
 
+void test_timer_raii() {
+  std::cout << "Testing Timer RAII..." << std::endl;
+  int counter = 0;
+  {
+    lvgl::Timer t =
+        lvgl::Timer::periodic(10, [&counter](lvgl::Timer*) { counter++; });
+    // Run for a bit
+    for (int i = 0; i < 5; ++i) {
+      lv_tick_inc(10);
+      lv_timer_handler();
+    }
+  }
+  // t is destroyed here.
+
+  int value_at_destruction = counter;
+  if (value_at_destruction == 0) {
+    std::cerr << "FAIL: Timer didn't run." << std::endl;
+    exit(1);
+  }
+
+  // Run for a bit more
+  for (int i = 0; i < 5; ++i) {
+    lv_tick_inc(10);
+    lv_timer_handler();
+  }
+
+  if (counter == value_at_destruction) {
+    std::cout << "PASS: Timer stopped after destruction (Val=" << counter << ")"
+              << std::endl;
+  } else {
+    std::cerr << "FAIL: Timer continued running after destruction! (Val="
+              << counter << ")" << std::endl;
+    exit(1);
+  }
+}
+
 int main() {
   lv_init();
 
   test_timer_resume();
   test_timer_clear_resume();
+  test_timer_raii();
 
   std::cout << "\nAll Timer tests passed!" << std::endl;
   return 0;

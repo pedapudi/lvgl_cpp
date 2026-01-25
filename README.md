@@ -13,7 +13,7 @@
 | **Memory** | Manual `lv_obj_del` / `free`. Prone to leaks. | **RAII**. Automatic destructor cleanup. |
 | **Typing** | `void*` context pointers. Unsafe casts. | **Strongly Typed**. `Button`, `Label`, `Slider` classes. |
 | **Events** | `void event_cb(lv_event_t*)` with switches. | **Lambdas**: `btn.add_event_cb(..., [=](Event e) { ... })`. |
-| **Styles** | Verbose: `lv_style_set_bg_color(&style, ...)` | **Fluent**: `Style().bg_color(Red).radius(5)` |
+| **Styles** | Verbose: `lv_style_set_bg_color(&style, ...)` | **Fluent**: `style().bg_color(Red).transform_scale(256)` |
 | **Safety** | "Monolithic Object" `lv_obj_t` has all API methods. | **CRTP Mixins**. Only exposing valid methods for each widget. |
 
 ---
@@ -84,8 +84,9 @@ void create_ui(Screen& screen) {
     Button btn(&screen);
     btn.set_size(150, 60)
        .center()
-       .add_style(btn_style)
-       .add_flag(ObjFlag::Checkable); // Type-safe flags
+       .add_style(btn_style) // Shared style
+       .style().bg_color(Palette::Red); // Local style override
+    btn.add_flag(ObjFlag::Checkable); // Type-safe flags
 
     // 3. Add a Label to the Button
     Label label(&btn);
@@ -141,8 +142,8 @@ The library prevents memory leaks by strictly defining who owns the LVGL object.
 We avoid the "Monolithic Object" anti-pattern. `lvgl::Object` is the base, but functionality is composed via **CRTP Mixins**:
 
 *   **`Positionable<T>`**: `set_x`, `set_y`, `align`, `center`, `set_size`...
-*   **`Stylable<T>`**: `add_style`, `set_bg_color` (local), `set_border_width`...
 *   **`Scrollable<T>`**: `scroll_to`, `set_scrollbar_mode`...
+*   **Generic Styling**: `obj.style()` returns a **StyleProxy** for fluent local styling (`bg_color`, `border_width`...) without bloating the main class.
 
 This means `lvgl::Object` only exposes generic methods. To use button-specific features, you must use `lvgl::Button`.
 

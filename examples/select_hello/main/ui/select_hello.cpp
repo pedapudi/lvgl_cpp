@@ -49,9 +49,9 @@ void SelectHello::show_menu(lvgl::Display& display) {
 
   // Create a Label at the bottom to hint at navigation buttons
   hint_label_ = lvgl::Label(&scr);
-  hint_label_.set_text("Next     Select")
-      .set_text_font(lvgl::Font(&lv_font_unscii_8))
-      .align(lvgl::Align::BottomMid, 0, -2);
+  hint_label_.set_text("Next     Select");
+  hint_label_.style().text_font(lvgl::Font(&lv_font_unscii_8));
+  hint_label_.align(lvgl::Align::BottomMid, 0, -2);
 
   // Input Handling: Add the roller to the group so it can receive key events.
   group_.remove_all_objs();
@@ -111,8 +111,9 @@ void SelectHello::load_hello_screen(int index) {
 
     // Create a "Back" hint at the top of the screen.
     lvgl::Label back_hint(&active_screen_);
-    back_hint.set_text("Press any key to go back")
-        .align(lvgl::Align::TopMid, 0, 2)
+    back_hint.set_text("Press any key to go back");
+    back_hint.style().text_font(lvgl::Font(&lv_font_unscii_8));
+    back_hint.align(lvgl::Align::TopMid, 0, 2)
         .add_flag(lvgl::ObjFlag::Hidden)
         .set_width(display_->get_horizontal_resolution());
 

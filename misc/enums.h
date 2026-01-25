@@ -136,6 +136,20 @@ enum class TextAlign : uint8_t {
 };
 
 /**
+ * @brief Wrapper for lv_text_decor_t.
+ */
+enum class TextDecor : uint8_t {
+  None = LV_TEXT_DECOR_NONE,
+  Underline = LV_TEXT_DECOR_UNDERLINE,
+  Strikethrough = LV_TEXT_DECOR_STRIKETHROUGH,
+};
+
+inline TextDecor operator|(TextDecor lhs, TextDecor rhs) {
+  return static_cast<TextDecor>(static_cast<uint8_t>(lhs) |
+                                static_cast<uint8_t>(rhs));
+}
+
+/**
  * @brief Wrapper for lv_border_side_t.
  */
 enum class BorderSide : uint8_t {
@@ -295,6 +309,22 @@ enum class KeyboardMode : uint8_t {
   UserMode2 = LV_KEYBOARD_MODE_USER_2,
   UserMode3 = LV_KEYBOARD_MODE_USER_3,
   UserMode4 = LV_KEYBOARD_MODE_USER_4,
+};
+
+// ============================================================================
+// Scale Enums
+// ============================================================================
+
+/**
+ * @brief Wrapper for lv_scale_mode_t.
+ */
+enum class ScaleMode : uint8_t {
+  HorizontalTop = LV_SCALE_MODE_HORIZONTAL_TOP,
+  HorizontalBottom = LV_SCALE_MODE_HORIZONTAL_BOTTOM,
+  VerticalLeft = LV_SCALE_MODE_VERTICAL_LEFT,
+  VerticalRight = LV_SCALE_MODE_VERTICAL_RIGHT,
+  RoundInner = LV_SCALE_MODE_ROUND_INNER,
+  RoundOuter = LV_SCALE_MODE_ROUND_OUTER,
 };
 
 // ============================================================================

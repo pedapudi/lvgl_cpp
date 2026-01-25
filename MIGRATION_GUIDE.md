@@ -51,6 +51,32 @@ btn.set_size(100, 50)
    .center()
    .add_flag(LV_OBJ_FLAG_CHECKABLE);
 ```
+```cpp
+lvgl::Button btn;
+btn.set_size(100, 50)
+   .center()
+   .add_flag(LV_OBJ_FLAG_CHECKABLE);
+```
+
+### 4. Styles: Fluent Proxy API
+The `Stylable` mixin (flat setters like `set_style_bg_color`) has been replaced with a `style()` proxy factory.
+
+**Old Code:**
+```cpp
+btn.set_style_bg_color(Color::Red, LV_PART_MAIN);
+btn.set_style_radius(5, 0);
+```
+
+**New Code:**
+```cpp
+btn.style()
+   .bg_color(Color::Red)
+   .radius(5);
+
+// Specific state
+btn.style(State::Pressed)
+   .bg_color(Color::Blue);
+```
 
 ## Creating custom widgets
 Inherit from `lvgl::Widget<MyWidget>` to get all mixins for free.

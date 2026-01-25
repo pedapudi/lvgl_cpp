@@ -6,6 +6,8 @@ Color::Color() : color_{0, 0, 0} {}  // Default black
 Color::Color(lv_color_t c) : color_(c) {}
 Color::Color(uint8_t r, uint8_t g, uint8_t b)
     : color_(lv_color_make(r, g, b)) {}
+Color::Color(Palette p)
+    : color_(lv_palette_main(static_cast<lv_palette_t>(p))) {}
 Color::Color(uint32_t hex) : color_(lv_color_hex(hex)) {}
 
 Color Color::white() { return Color(lv_color_white()); }
