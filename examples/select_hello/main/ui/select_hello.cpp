@@ -32,21 +32,16 @@ void SelectHello::show_menu(lvgl::Display& display) {
 
   // Use the small 8px font for the 128x64 SSD1306 display.
   // We set it for both the normal part and the selected part.
-  roller_.set_text_font(lvgl::Font(&lv_font_unscii_8))
-      .set_text_font(lvgl::Font(&lv_font_unscii_8),
-                     static_cast<lv_style_selector_t>(lvgl::Part::Selected));
+  roller_.style().text_font(lvgl::Font(&lv_font_unscii_8));
+  roller_.style(lvgl::Part::Selected).text_font(lvgl::Font(&lv_font_unscii_8));
 
   // Set the background opacity to cover (100%) to ensure it's not transparent.
-  roller_.set_bg_opa(lvgl::Opacity::Cover);
+  roller_.style().bg_opa(lvgl::Opacity::Cover);
 
   // Remove the border and outline that LVGL automatically adds when a widget
   // is focused via keypad/encoder. This results in a cleaner, border-less UI.
-  roller_.set_border_width(0);
-  roller_.set_outline_width(0);
-  roller_.set_border_width(
-      0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
-  roller_.set_outline_width(
-      0, static_cast<lv_style_selector_t>(lvgl::State::FocusKey));
+  roller_.style().border_width(0).outline_width(0);
+  roller_.style(lvgl::State::FocusKey).border_width(0).outline_width(0);
 
   roller_.set_visible_row_count(2);
   roller_.set_width(120);
@@ -117,11 +112,12 @@ void SelectHello::load_hello_screen(int index) {
     // Create a "Back" hint at the top of the screen.
     lvgl::Label back_hint(&active_screen_);
     back_hint.set_text("Press any key to go back")
-        .set_text_font(lvgl::Font(&lv_font_unscii_8))
         .align(lvgl::Align::TopMid, 0, 2)
         .add_flag(lvgl::ObjFlag::Hidden)
-        .set_width(display_->get_horizontal_resolution())
-        .set_long_mode(lvgl::Label::LongMode::ScrollCircular);
+        .set_width(display_->get_horizontal_resolution());
+
+    back_hint.style().text_font(lvgl::Font(&lv_font_unscii_8));
+    back_hint.set_long_mode(lvgl::Label::LongMode::ScrollCircular);
 
     // Release the C++ wrapper's ownership of the label.
     lv_obj_t* hint_obj = back_hint.release();

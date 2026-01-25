@@ -10,7 +10,7 @@ void HelloWorld::load(lvgl::Display& display, const std::string& text) {
   lvgl::Label label(&scr);
   label.set_long_mode(lvgl::Label::LongMode::ScrollCircular);
   label.set_text(text);
-  label.set_width(display.get_horizontal_resolution());
+  label.style().width(display.get_horizontal_resolution());
   label.align(lvgl::Align::BottomMid, 0, 0);
 
   // Animation

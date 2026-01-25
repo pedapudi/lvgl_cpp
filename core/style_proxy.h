@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../misc/enums.h"
-#include "../../misc/style.h"  // For color types etc
+#include "../misc/enums.h"
+#include "../misc/style.h"  // For color types etc
 #include "lvgl.h"
 
 namespace lvgl {
