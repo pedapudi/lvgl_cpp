@@ -278,33 +278,6 @@ class Object {
     return StyleProxy(obj_, selector);
   }
 
-  /**
-   * @brief Get a layout proxy for setting layout properties (const).
-   * Note: LVGL layout setters usually require non-const object, so this might
-   * be limited. For now, we return a proxy that holds a non-const pointer if we
-   * are const? Actually, set functions modify the object, so they can't be
-   * called on const Object. We skip const overload for now.
-   */
-
-  /**
-   * @brief Set the flex flow.
-   * @param flow The flex flow direction/wrap.
-   * @deprecated Use layout().flex_flow(flow) instead.
-   */
-
-  /**
-   * @brief Set the flex alignment.
-   * @param main_place Main axis alignment.
-   * @param cross_place Cross axis alignment.
-   * @param track_cross_place Cross axis alignment of the tracks.
-   */
-
-  /**
-   * @brief Set the grid alignment.
-   * @param column_align Column alignment.
-   * @param row_align Row alignment.
-   */
-
   // --- Flags & States ---
 
   /**
