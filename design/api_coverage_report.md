@@ -71,33 +71,30 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `lv_label` | 85.7% (18/21) |
 | `lv_table` | 82.4% (14/17) |
 | `lv_display` | 75.0% (51/68) |
-| `lv_scale` | 95.0% (32/34) |
 
 ### Medium coverage (25-75%)
 
 | Subsystem | Coverage | Change |
 |-----------|----------|--------|
-
-| `lv_label` | 61.9% (13/21) | - |
 | `lv_timer` | 68.4% (13/19) | - |
-| `lv_chart` | 54.8% (23/42) | ⬆️ (+7) |
-| `lv_group` | 60.9% (14/23) | ⬆️ (+1) |
-| `lv_fs` | 51.4% (19/37) | - |
-| `lv_calendar` | 50.0% (11/22) | - |
-| `lv_anim` | 48.4% (30/62) | ⬆️ |
-| `lv_image` | 50.0% (28/56) | - |
+| `lv_scale` | 67.6% (23/34) | - |
 | `lv_style` | 64.4% (94/146) | ⬆️ (+71) |
+| `lv_group` | 60.9% (14/23) | ⬆️ (+1) |
+| `lv_chart` | 54.8% (23/42) | ⬆️ (+7) |
+| `lv_fs` | 51.4% (19/37) | - |
 | `lv_indev` | 50.8% (31/61) | ⬆️ (+19%) |
+| `lv_calendar` | 50.0% (11/22) | - |
+| `lv_image` | 50.0% (28/56) | - |
+| `lv_anim` | 48.4% (30/62) | ⬆️ |
+| `lv_obj` | 30.4% (142/467) | ⬆️ |
 
 ### Low coverage (<25%)
 
 | Subsystem | Coverage | Notes |
 |-----------|----------|-------|
 | `lv_slider` | 23.5% (4/17) | Uses `lv_bar_*` |
-| `lv_display` | 95.0% | ⬆️ (+20%) |
-| `lv_indev` | 85.0% | ⬆️ (+54%) |
-| `lv_obj` | 18.0% (93/505) | ⬆️ (+3) |
-| `lv_event` | 17.1% (7/41) | ⬆️ (+2) |
+| `lv_color` | 22.0% (11/50) | - |
+| `lv_event` | 17.9% (7/39) | - |
 | `lv_font` | 8.3% (2/24) | - |
 
 ### Not wrapped
