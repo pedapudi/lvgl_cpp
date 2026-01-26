@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 set(SOURCES
     core/object.cpp
     core/event.cpp
+    core/event_proxy.cpp
+    core/group_proxy.cpp
     misc/color.cpp
     misc/style.cpp
     font/font.cpp
@@ -277,9 +279,14 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_vector PRIVATE lvgl_cpp)
     add_test(NAME test_vector COMMAND test_vector)
 
-    add_executable(test_api_expansion tests/test_api_expansion.cpp)
+    add_executable(test_api_expansion    tests/test_api_expansion.cpp
+)
     target_link_libraries(test_api_expansion PRIVATE lvgl_cpp)
     add_test(NAME test_api_expansion COMMAND test_api_expansion)
+
+    add_executable(test_obj_proxies tests/test_obj_proxies.cpp)
+    target_link_libraries(test_obj_proxies PRIVATE lvgl_cpp)
+    add_test(NAME test_obj_proxies COMMAND test_obj_proxies)
 
     add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp font/font.cpp)
     target_link_libraries(test_fluent_styles PRIVATE lvgl_cpp)

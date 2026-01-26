@@ -11,12 +11,16 @@
 
 #include <functional>
 #include <memory>
+#include <vector>
 
 #include "../misc/enums.h"
 #include "event.h"
+#include "event_proxy.h"
+#include "group_proxy.h"
 #include "layout_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
 #include "scroll_proxy.h"
+#include "state_proxy.h"
 #include "style_proxy.h"
 
 /**
@@ -399,34 +403,52 @@ class Object {
    * @brief Get a scroll proxy for scrolling operations.
    * @return A ScrollProxy object supporting fluent method chaining.
    */
-  ScrollProxy scroll() { return ScrollProxy(obj_); }
-
-  /**
-   * @brief Get a style proxy for setting local styles on this object.
-   * @param part The part to style (default: Main).
-   * @return A StyleProxy object supporting fluent method chaining.
-   */
-  StyleProxy style(Part part = Part::Main) {
-    return StyleProxy(obj_, static_cast<lv_style_selector_t>(part));
-  }
-
-  /**
-   * @brief Get a style proxy for setting local styles for a specific state.
-   * @param state The state to style (e.g. State::Pressed).
-   * @return A StyleProxy object.
-   */
-  StyleProxy style(State state) {
-    return StyleProxy(obj_, static_cast<lv_style_selector_t>(state));
-  }
-
-  /**
-   * @brief Get a style proxy for setting local styles on this object.
-   * @param selector The style selector (part | state).
-   * @return A StyleProxy object supporting fluent method chaining.
-   */
   StyleProxy style(lv_style_selector_t selector) {
     return StyleProxy(obj_, selector);
   }
+
+  // --- Events ---
+
+  /**
+   * @brief Get an event proxy for managing events on this object.
+   * @return An EventProxy object supporting fluent method chaining.
+   */
+  EventProxy event();
+
+  /**
+   * @brief Get a state proxy for managing widget states.
+   * @return A StateProxy object supporting fluent method chaining.
+   */
+  StateProxy state();
+
+  /**
+   * @brief Get a group proxy for managing navigation groups.
+   * @return A GroupProxy object supporting fluent method chaining.
+   */
+  GroupProxy group();
+
+  /**
+   * @brief Manually send an event to this object.
+   * @param code The event code.
+   * @param param Optional parameter for the event.
+   */
+  void send_event(lv_event_code_t code, void* param = nullptr) {
+    if (obj_) lv_obj_send_event(obj_, code, param);
+  }
+
+  /**
+   * @brief Add an event callback (Internal/Generic).
+   * @param event_code The event code.
+   * @param callback The callable to execute.
+   * @return Reference to this object.
+   * @note Usually accessed via event().add_cb()
+   */
+  Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
+
+  /**
+   * @brief Remove all event callbacks from this object.
+   */
+  void remove_all_event_cbs();
 
   // --- Flags & States ---
 
@@ -466,42 +488,6 @@ class Object {
    */
   bool has_flag(ObjFlag f) const;
 
-  /**
-   * @brief Add a state to the object.
-   * @param state The state to add (e.g., `State::Pressed`).
-   */
-  void add_state(State state);
-
-  /**
-   * @brief Remove a state from the object.
-   * @param state The state to remove.
-   */
-  void remove_state(State state);
-
-  /**
-   * @brief Check if a state is active.
-   * @param state The state to check.
-   */
-  bool has_state(State state) const;
-
-  /**
-   * @brief Add a state to the object (Legacy overload).
-   * @param state The state to add.
-   */
-  void add_state(lv_state_t state);
-
-  /**
-   * @brief Remove a state from the object (Legacy overload).
-   * @param state The state to remove.
-   */
-  void remove_state(lv_state_t state);
-
-  /**
-   * @brief Check if a state is active (Legacy overload).
-   * @param state The state to check.
-   */
-  bool has_state(lv_state_t state) const;
-
   // --- Scroll ---
 
   // --- Other Properties ---
@@ -517,55 +503,6 @@ class Object {
    * @param dir The direction.
    */
   void set_base_dir(BaseDir dir);
-
-  // --- Events ---
-
-  /**
-   * @brief Add a functional event callback.
-   * Uses `std::function` to allow lambdas with captures.
-   * @param event_code The event code to listen for (e.g., `LV_EVENT_CLICKED`).
-   * @param callback The callable to execute.
-   * @return Reference to this object.
-   */
-  Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
-
-  /**
-   * @brief Add a functional event callback (Scoped Enum).
-   * @param event_code The event code to listen for.
-   * @param callback The callable to execute.
-   * @return Reference to this object.
-   */
-  Object& add_event_cb(EventCode event_code, EventCallback callback);
-
-  /**
-   * @brief Register a click event callback.
-   */
-  Object& on_click(EventCallback cb);
-
-  /**
-   * @brief Register a click event callback (Alias).
-   */
-  Object& on_clicked(EventCallback cb);
-
-  /**
-   * @brief Register a callback for all events.
-   */
-  Object& on_event(EventCallback cb);
-
-  /**
-   * @brief Register a pressed event callback.
-   */
-  Object& on_pressed(EventCallback cb);
-
-  /**
-   * @brief Register a released event callback.
-   */
-  Object& on_released(EventCallback cb);
-
-  /**
-   * @brief Register a long pressed event callback.
-   */
-  Object& on_long_pressed(EventCallback cb);
 
   // --- Styles ---
 
