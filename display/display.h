@@ -25,6 +25,7 @@ class Display {
   void delete_display();
 
   static Display* get_default();
+  static void set_default(Display* disp);
   static Display* get_next(Display* prev);
 
   // Resolution & Physical

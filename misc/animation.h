@@ -13,6 +13,33 @@
 namespace lvgl {
 
 class AnimationTimeline;
+class Animation;
+
+/**
+ * @brief A handle to a running animation.
+ *
+ * This handle is returned by Animation::start() and allows checking if
+ * the animation is still running or stopping it mid-flight.
+ */
+class AnimationHandle {
+ public:
+  AnimationHandle() = default;
+  AnimationHandle(void* var, lv_anim_exec_xcb_t exec_cb);
+
+  /**
+   * @brief Check if the animation is currently running.
+   */
+  bool is_running() const;
+
+  /**
+   * @brief Stop the animation (delete it from the LVGL task list).
+   */
+  void stop();
+
+ private:
+  void* var_ = nullptr;
+  lv_anim_exec_xcb_t exec_cb_ = nullptr;
+};
 
 class Animation {
   friend class AnimationTimeline;
@@ -197,7 +224,20 @@ class Animation {
    */
   Animation& set_playback_delay(uint32_t delay);
 
-  void start();
+  AnimationHandle start();
+
+  /**
+   * @brief Stop any animation running for a variable and execution callback.
+   * @param var The variable/object.
+   * @param exec_cb The execution callback.
+   */
+  static void stop(void* var, lv_anim_exec_xcb_t exec_cb);
+
+  /**
+   * @brief Stop all animations for an object.
+   * @param object The object wrapper.
+   */
+  static void stop(const Object& object);
 
  private:
   lv_anim_t anim_;

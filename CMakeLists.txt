@@ -54,6 +54,8 @@ set(SOURCES
     misc/animation.cpp
     misc/async.cpp
     misc/log.cpp
+    misc/theme.cpp
+    misc/vector.cpp
 )
 
 if(IDF_TARGET)

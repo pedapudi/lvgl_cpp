@@ -39,6 +39,7 @@ class InputDevice {
   void set_read_cb(std::function<void(lv_indev_data_t*)> cb);
   void set_read_cb(std::function<void(IndevData&)> cb);
   void set_type(lv_indev_type_t type);
+  void set_cursor(Object& cursor);
 
   // Methods
   IndevType get_type() const;

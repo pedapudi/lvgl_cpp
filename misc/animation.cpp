@@ -5,6 +5,20 @@
 
 namespace lvgl {
 
+AnimationHandle::AnimationHandle(void* var, lv_anim_exec_xcb_t exec_cb)
+    : var_(var), exec_cb_(exec_cb) {}
+
+bool AnimationHandle::is_running() const {
+  if (!var_) return false;
+  return lv_anim_get(var_, exec_cb_) != nullptr;
+}
+
+void AnimationHandle::stop() {
+  if (var_) {
+    lv_anim_delete(var_, exec_cb_);
+  }
+}
+
 Animation::Animation() { lv_anim_init(&anim_); }
 
 Animation::~Animation() {
@@ -181,7 +195,7 @@ Animation& Animation::set_deleted_cb(std::function<void()> cb) {
   return *this;
 }
 
-void Animation::start() {
+AnimationHandle Animation::start() {
   if (user_data_) {
     // Clone the callback data for this specific animation instance
     // detailed ownership management requires heap alloc that will be freed by
@@ -201,6 +215,13 @@ void Animation::start() {
     }
   }
   lv_anim_start(&anim_);
+  return AnimationHandle(anim_.var, anim_.exec_cb);
 }
+
+void Animation::stop(void* var, lv_anim_exec_xcb_t exec_cb) {
+  lv_anim_delete(var, exec_cb);
+}
+
+void Animation::stop(const Object& object) { stop(object.raw(), nullptr); }
 
 }  // namespace lvgl

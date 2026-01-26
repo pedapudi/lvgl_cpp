@@ -60,6 +60,12 @@ Display* Display::get_default() {
   return &instance;
 }
 
+void Display::set_default(Display* disp) {
+  if (disp && disp->raw()) {
+    lv_display_set_default(disp->raw());
+  }
+}
+
 Display* Display::get_next(Display* prev) {
   // Not implemented for generic iteration returning pointers.
   // Use raw lvgl functions if needed until a better iterator is designed.

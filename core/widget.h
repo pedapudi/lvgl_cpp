@@ -3,9 +3,6 @@
 #include "event.h"
 #include "lvgl.h"  // IWYU pragma: export
 #include "lvgl.h"
-#include "mixins/event_source.h"
-#include "mixins/positionable.h"
-#include "mixins/sizable.h"  // Keep this include as Sizable is still used in the class body
 #include "object.h"
 
 namespace lvgl {

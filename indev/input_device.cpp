@@ -104,6 +104,10 @@ void InputDevice::set_type(lv_indev_type_t type) {
   if (indev_) lv_indev_set_type(indev_, type);
 }
 
+void InputDevice::set_cursor(Object& cursor) {
+  if (indev_) lv_indev_set_cursor(indev_, cursor.raw());
+}
+
 // ... wrapped methods ...
 
 IndevType InputDevice::get_type() const {
