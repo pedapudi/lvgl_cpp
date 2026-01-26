@@ -11,19 +11,44 @@ namespace lvgl {
 Span::Span(lv_span_t* span, SpanGroup* group) : span_(span), group_(group) {}
 
 Span& Span::set_text(const char* text) {
-  if (group_->raw()) lv_spangroup_set_span_text(group_->raw(), span_, text);
+  if (span_) lv_span_set_text(span_, text);
+  return *this;
+}
+
+Span& Span::set_text_static(const char* text) {
+  if (span_) lv_span_set_text_static(span_, text);
+  return *this;
+}
+
+Span& Span::set_text_fmt(const char* fmt, ...) {
+  if (span_) {
+    va_list args;
+    va_start(args, fmt);
+    char buf[256];  // Temporary buffer for formatting
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    lv_span_set_text(span_, buf);
+    va_end(args);
+  }
   return *this;
 }
 
 Span& Span::set_style(const Style& style) {
-  if (group_->raw())
+  if (group_->raw() && span_)
     lv_spangroup_set_span_style(group_->raw(), span_, style.raw());
   return *this;
 }
 
 Span& Span::style(const Style& style) { return set_style(style); }
 
+const char* Span::get_text() const {
+  return span_ ? lv_span_get_text(span_) : nullptr;
+}
+
 lv_span_t* Span::raw() const { return span_; }
+
+void Span::refresh() {
+  if (group_) group_->refresh();
+}
 
 // ============================================================================
 // SpanGroup Implementation
@@ -46,16 +71,8 @@ Span SpanGroup::add_span() {
   return Span(span, this);
 }
 
-lv_span_t* SpanGroup::add_span_raw() {
-  return obj_ ? lv_spangroup_add_span(obj_) : nullptr;
-}
-
 void SpanGroup::delete_span(Span& span) {
   if (obj_) lv_spangroup_delete_span(obj_, span.raw());
-}
-
-void SpanGroup::delete_span_raw(lv_span_t* span) {
-  if (obj_) lv_spangroup_delete_span(obj_, span);
 }
 
 SpanGroup& SpanGroup::set_align(TextAlign align) {
@@ -88,29 +105,33 @@ Span SpanGroup::get_child(int32_t id) {
   return Span(span, this);
 }
 
-uint32_t SpanGroup::get_span_count() {
+uint32_t SpanGroup::get_span_count() const {
   return obj_ ? lv_spangroup_get_span_count(obj_) : 0;
 }
 
-TextAlign SpanGroup::get_align() {
+TextAlign SpanGroup::get_align() const {
   return obj_ ? static_cast<TextAlign>(lv_spangroup_get_align(obj_))
               : TextAlign::Left;
 }
 
-lv_span_overflow_t SpanGroup::get_overflow() {
+lv_span_overflow_t SpanGroup::get_overflow() const {
   return obj_ ? lv_spangroup_get_overflow(obj_) : LV_SPAN_OVERFLOW_CLIP;
 }
 
-int32_t SpanGroup::get_indent() {
+int32_t SpanGroup::get_indent() const {
   return obj_ ? lv_spangroup_get_indent(obj_) : 0;
 }
 
-lv_span_mode_t SpanGroup::get_mode() {
+lv_span_mode_t SpanGroup::get_mode() const {
   return obj_ ? lv_spangroup_get_mode(obj_) : LV_SPAN_MODE_FIXED;
 }
 
-int32_t SpanGroup::get_max_lines() {
+int32_t SpanGroup::get_max_lines() const {
   return obj_ ? lv_spangroup_get_max_lines(obj_) : -1;
+}
+
+int32_t SpanGroup::get_max_line_height() const {
+  return obj_ ? lv_spangroup_get_max_line_height(obj_) : 0;
 }
 
 void SpanGroup::refresh() {

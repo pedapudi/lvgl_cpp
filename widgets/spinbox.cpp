@@ -117,12 +117,13 @@ Spinbox& Spinbox::align(lvgl::Align align, int32_t x_ofs, int32_t y_ofs) {
   Widget::align(align, x_ofs, y_ofs);
   return *this;
 }
-Spinbox& Spinbox::add_state(lvgl::State state) {
-  Object::add_state(state);
+Spinbox& Spinbox::add_state(State state) {
+  this->state().add(state);
   return *this;
 }
-Spinbox& Spinbox::remove_state(lvgl::State state) {
-  Object::remove_state(state);
+
+Spinbox& Spinbox::remove_state(State state) {
+  this->state().remove(state);
   return *this;
 }
 Spinbox& Spinbox::add_flag(lv_obj_flag_t flag) {

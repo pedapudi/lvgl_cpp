@@ -114,64 +114,64 @@ class Widget : public Object {
   }
 
   Derived& add_state(State state) {
-    Object::add_state(state);
+    Object::state().add(state);
     return self();
   }
 
   Derived& remove_state(State state) {
-    Object::remove_state(state);
+    Object::state().remove(state);
     return self();
   }
 
   Derived& add_state(lv_state_t state) {
-    Object::add_state(state);
+    if (obj_) lv_obj_add_state(obj_, state);
     return self();
   }
 
   Derived& remove_state(lv_state_t state) {
-    Object::remove_state(state);
+    if (obj_) lv_obj_remove_state(obj_, state);
     return self();
   }
 
   // --- Events (Fluent Proxies) ---
 
   Derived& add_event_cb(lv_event_code_t event_code, EventCallback callback) {
-    Object::add_event_cb(event_code, std::move(callback));
+    Object::event().add_cb(event_code, std::move(callback));
     return self();
   }
 
   Derived& add_event_cb(EventCode event_code, EventCallback callback) {
-    Object::add_event_cb(event_code, std::move(callback));
+    Object::event().add_cb(event_code, std::move(callback));
     return self();
   }
 
   Derived& on_click(EventCallback cb) {
-    Object::on_click(std::move(cb));
+    Object::event().on_clicked(std::move(cb));
     return self();
   }
 
   Derived& on_event(EventCallback cb) {
-    Object::on_event(std::move(cb));
+    Object::event().on_all(std::move(cb));
     return self();
   }
 
   Derived& on_clicked(EventCallback cb) {
-    Object::on_clicked(std::move(cb));
+    Object::event().on_clicked(std::move(cb));
     return self();
   }
 
   Derived& on_pressed(EventCallback cb) {
-    Object::on_pressed(std::move(cb));
+    Object::event().on_pressed(std::move(cb));
     return self();
   }
 
   Derived& on_released(EventCallback cb) {
-    Object::on_released(std::move(cb));
+    Object::event().on_released(std::move(cb));
     return self();
   }
 
   Derived& on_long_pressed(EventCallback cb) {
-    Object::on_long_pressed(std::move(cb));
+    Object::event().on_long_pressed(std::move(cb));
     return self();
   }
 

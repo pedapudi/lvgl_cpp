@@ -262,30 +262,6 @@ bool Object::has_flag(ObjFlag f) const {
   return has_flag(static_cast<lv_obj_flag_t>(f));
 }
 
-void Object::add_state(State state) {
-  if (obj_) lv_obj_add_state(obj_, static_cast<lv_state_t>(state));
-}
-
-void Object::remove_state(State state) {
-  if (obj_) lv_obj_remove_state(obj_, static_cast<lv_state_t>(state));
-}
-
-bool Object::has_state(State state) const {
-  return obj_ ? lv_obj_has_state(obj_, static_cast<lv_state_t>(state)) : false;
-}
-
-void Object::add_state(lv_state_t state) {
-  if (obj_) lv_obj_add_state(obj_, state);
-}
-
-void Object::remove_state(lv_state_t state) {
-  if (obj_) lv_obj_remove_state(obj_, state);
-}
-
-bool Object::has_state(lv_state_t state) const {
-  return obj_ ? lv_obj_has_state(obj_, state) : false;
-}
-
 // --- Layout Shortcuts ---
 
 Object& Object::set_flex_flow(lv_flex_flow_t flow) {
@@ -420,34 +396,19 @@ Object& Object::add_event_cb(lv_event_code_t event_code,
   return *this;
 }
 
-Object& Object::add_event_cb(EventCode event_code, EventCallback callback) {
-  return add_event_cb(static_cast<lv_event_code_t>(event_code),
-                      std::move(callback));
+void Object::remove_all_event_cbs() {
+  if (!obj_) return;
+  for (auto& node : callback_nodes_) {
+    lv_obj_remove_event_cb_with_user_data(obj_, event_proxy, node.get());
+  }
+  callback_nodes_.clear();
 }
 
-Object& Object::on_click(EventCallback cb) {
-  return add_event_cb(LV_EVENT_CLICKED, std::move(cb));
-}
+EventProxy Object::event() { return EventProxy(this); }
 
-Object& Object::on_clicked(EventCallback cb) {
-  return add_event_cb(LV_EVENT_CLICKED, std::move(cb));
-}
+StateProxy Object::state() { return StateProxy(obj_); }
 
-Object& Object::on_event(EventCallback cb) {
-  return add_event_cb(LV_EVENT_ALL, std::move(cb));
-}
-
-Object& Object::on_pressed(EventCallback cb) {
-  return add_event_cb(LV_EVENT_PRESSED, std::move(cb));
-}
-
-Object& Object::on_released(EventCallback cb) {
-  return add_event_cb(LV_EVENT_RELEASED, std::move(cb));
-}
-
-Object& Object::on_long_pressed(EventCallback cb) {
-  return add_event_cb(LV_EVENT_LONG_PRESSED, std::move(cb));
-}
+GroupProxy Object::group() { return GroupProxy(obj_); }
 
 // --- Styles ---
 
