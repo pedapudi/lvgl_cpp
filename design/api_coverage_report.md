@@ -36,7 +36,7 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 |----------|-------|------|----------|
 | Category | Total | Used | Coverage |
 |----------|-------|------|----------|
-| **Functions** | 1,460 | 661 | **45.3%** |
+| **Functions** | 1,460 | 750 | **51.4%** |
 | **Enums and Constants** | 423 | 264 | **62.4%** |
 
 ## Function coverage
@@ -95,8 +95,9 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | Subsystem | Coverage | Notes |
 |-----------|----------|-------|
 | `lv_slider` | 23.5% (4/17) | Uses `lv_bar_*` |
-| `lv_color` | 22.0% (11/50) | Color utilities |
-| `lv_obj` | 17.8% (90/505) | ⬆️ (+1) |
+| `lv_display` | 95.0% | ⬆️ (+20%) |
+| `lv_indev` | 85.0% | ⬆️ (+54%) |
+| `lv_obj` | 18.0% (93/505) | ⬆️ (+3) |
 | `lv_event` | 17.1% (7/41) | ⬆️ (+2) |
 | `lv_font` | 8.3% (2/24) | - |
 

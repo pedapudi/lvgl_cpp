@@ -171,6 +171,12 @@ group.add_obj(btn1);
 group.add_obj(btn2);
 ```
 
+### 5. Advanced Features (New in v0.2)
+
+-   **Lottie Animations**: Render vector animations using `lvgl::Lottie`.
+-   **Vector Graphics**: Direct drawing API via `lvgl::VectorDraw` and `lvgl::VectorPath` (ThorVG).
+-   **System Abstractions**: `Display` management, `InputDevice` configuration (cursors), and `Theme` application.
+
 ---
 
 ## 📚 Documentation
@@ -178,6 +184,7 @@ group.add_obj(btn2);
 The `design/` directory contains detailed architectural decision records (ADRs) and plans:
 
 *   **[Roadmap](design/ROADMAP_V2.md)**: Current status and future phases.
+*   **[API Coverage Plan](design/api_coverage_plan.md)**: Verified feature matrix.
 *   **[Strategic Plan](design/strategic_improvement_plan.md)**: Deep dive into API coverage goals.
 *   **[Memory Analysis](design/memory_analysis.md)**: Performance overhead study.
 *   **[Widget Standardization](design/issue_61_standardization.md)**: Constructor patterns.
