@@ -1,24 +1,25 @@
 {
   "summary": {
     "total_user_api": 1460,
-    "wrapped": 768,
-    "not_wrapped": 692,
+    "wrapped": 776,
+    "not_wrapped": 684,
     "internal_api_violations": [],
     "total_enums": 423,
-    "enums_used": 273,
-    "function_coverage_percent": 52.6,
-    "enum_coverage_percent": 64.5
+    "enums_used": 275,
+    "function_coverage_percent": 53.2,
+    "enum_coverage_percent": 65.0
   },
   "subsystems": {
     "lv_timer": {
       "prefix": "lv_timer_",
       "total": 19,
-      "wrapped_count": 12,
+      "wrapped_count": 13,
       "wrapped": [
         "lv_timer_create",
         "lv_timer_delete",
         "lv_timer_enable",
         "lv_timer_get_user_data",
+        "lv_timer_handler",
         "lv_timer_pause",
         "lv_timer_ready",
         "lv_timer_reset",
@@ -34,7 +35,6 @@
         "lv_timer_get_next",
         "lv_timer_get_paused",
         "lv_timer_get_time_until_next",
-        "lv_timer_handler",
         "lv_timer_periodic_handler"
       ]
     },
@@ -665,27 +665,32 @@
     "lv_indev": {
       "prefix": "lv_indev_",
       "total": 61,
-      "wrapped_count": 26,
+      "wrapped_count": 31,
       "wrapped": [
         "lv_indev_active",
         "lv_indev_create",
         "lv_indev_delete",
         "lv_indev_enable",
+        "lv_indev_get_display",
         "lv_indev_get_gesture_dir",
         "lv_indev_get_key",
         "lv_indev_get_mode",
         "lv_indev_get_point",
+        "lv_indev_get_read_timer",
         "lv_indev_get_scroll_dir",
         "lv_indev_get_scroll_obj",
+        "lv_indev_get_short_click_streak",
         "lv_indev_get_state",
         "lv_indev_get_type",
         "lv_indev_get_user_data",
         "lv_indev_get_vect",
         "lv_indev_read",
         "lv_indev_reset",
+        "lv_indev_reset_long_press",
         "lv_indev_set_button_points",
         "lv_indev_set_cursor",
         "lv_indev_set_group",
+        "lv_indev_set_long_press_repeat_time",
         "lv_indev_set_long_press_time",
         "lv_indev_set_mode",
         "lv_indev_set_scroll_limit",
@@ -703,7 +708,6 @@
         "lv_indev_gesture_recognizers_update",
         "lv_indev_get_active_obj",
         "lv_indev_get_cursor",
-        "lv_indev_get_display",
         "lv_indev_get_driver_data",
         "lv_indev_get_event_count",
         "lv_indev_get_event_dsc",
@@ -712,12 +716,9 @@
         "lv_indev_get_group",
         "lv_indev_get_next",
         "lv_indev_get_press_moved",
-        "lv_indev_get_read_timer",
-        "lv_indev_get_short_click_streak",
         "lv_indev_recognizer_is_active",
         "lv_indev_remove_event",
         "lv_indev_remove_event_cb_with_user_data",
-        "lv_indev_reset_long_press",
         "lv_indev_scroll_get_snap_dist",
         "lv_indev_scroll_throw_predict",
         "lv_indev_search_obj",
@@ -725,7 +726,6 @@
         "lv_indev_set_display",
         "lv_indev_set_driver_data",
         "lv_indev_set_gesture_data",
-        "lv_indev_set_long_press_repeat_time",
         "lv_indev_set_pinch_down_threshold",
         "lv_indev_set_pinch_up_threshold",
         "lv_indev_set_rotation_rad_threshold",
@@ -922,10 +922,11 @@
     "lv_label": {
       "prefix": "lv_label_",
       "total": 21,
-      "wrapped_count": 16,
+      "wrapped_count": 18,
       "wrapped": [
         "lv_label_bind_text",
         "lv_label_create",
+        "lv_label_cut_text",
         "lv_label_get_letter_on",
         "lv_label_get_letter_pos",
         "lv_label_get_long_mode",
@@ -933,6 +934,7 @@
         "lv_label_get_text",
         "lv_label_get_text_selection_end",
         "lv_label_get_text_selection_start",
+        "lv_label_ins_text",
         "lv_label_is_char_under_pos",
         "lv_label_set_long_mode",
         "lv_label_set_recolor",
@@ -942,8 +944,6 @@
         "lv_label_set_text_vfmt"
       ],
       "not_wrapped": [
-        "lv_label_cut_text",
-        "lv_label_ins_text",
         "lv_label_set_text_fmt",
         "lv_label_set_text_static",
         "lv_label_set_translation_tag"
@@ -2438,8 +2438,10 @@
     "LV_INDEV": {
       "prefix": "LV_INDEV_",
       "total": 27,
-      "used_count": 8,
+      "used_count": 10,
       "used": [
+        "LV_INDEV_GESTURE_CNT",
+        "LV_INDEV_GESTURE_NONE",
         "LV_INDEV_MODE_NONE",
         "LV_INDEV_STATE_PRESSED",
         "LV_INDEV_STATE_RELEASED",
@@ -2450,9 +2452,7 @@
         "LV_INDEV_TYPE_POINTER"
       ],
       "not_used": [
-        "LV_INDEV_GESTURE_CNT",
         "LV_INDEV_GESTURE_H",
-        "LV_INDEV_GESTURE_NONE",
         "LV_INDEV_GESTURE_PINCH",
         "LV_INDEV_GESTURE_ROTATE",
         "LV_INDEV_GESTURE_SCROLL",

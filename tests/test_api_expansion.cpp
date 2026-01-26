@@ -48,11 +48,15 @@ void test_style_expansion() {
 
 void test_object_layout() {
   std::cout << "Testing Object Layout..." << std::endl;
-  lvgl::Object obj;
+  lvgl::Object screen;
+  lvgl::Object obj(&screen);
 
+  // Test flex container properties
   obj.set_flex_flow(LV_FLEX_FLOW_COLUMN);
   obj.set_flex_align(LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START,
                      LV_FLEX_ALIGN_END);
+
+  // Test flex item properties (requires parent)
   obj.set_flex_grow(2);
 
   assert(lv_obj_get_style_flex_flow(obj.raw(), LV_PART_MAIN) ==

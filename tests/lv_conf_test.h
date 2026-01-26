@@ -59,6 +59,11 @@
 #define LV_USE_LED 1
 #define LV_USE_IMAGEBUTTON 1
 #define LV_USE_SPINNER 1
+#define LV_USE_LOTTIE 1
+#define LV_USE_THORVG_INTERNAL 1
+#define LV_USE_VECTOR_GRAPHIC 1
+#define LV_USE_THORVG_EXTERNAL 0
+#define LV_USE_MATRIX 1
 
 // Filesystem
 #define LV_USE_FS_STDIO 1

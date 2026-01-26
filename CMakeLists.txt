@@ -46,6 +46,7 @@ set(SOURCES
     widgets/image_button.cpp
     widgets/spinner.cpp
     widgets/screen.cpp
+    widgets/lottie.cpp
     
     core/group.cpp
     display/display.cpp
@@ -267,6 +268,14 @@ add_test(NAME test_menu COMMAND test_menu)
     add_test(NAME test_geometry COMMAND test_geometry)
     add_test(NAME test_screen COMMAND test_screen)
     add_test(NAME test_input_device COMMAND test_input_device)
+
+    add_executable(test_lottie tests/test_lottie.cpp)
+    target_link_libraries(test_lottie PRIVATE lvgl_cpp)
+    add_test(NAME test_lottie COMMAND test_lottie)
+
+    add_executable(test_vector tests/test_vector.cpp)
+    target_link_libraries(test_vector PRIVATE lvgl_cpp)
+    add_test(NAME test_vector COMMAND test_vector)
 
     add_executable(test_api_expansion tests/test_api_expansion.cpp)
     target_link_libraries(test_api_expansion PRIVATE lvgl_cpp)

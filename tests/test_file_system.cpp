@@ -84,6 +84,36 @@ void test_filesystem_write_read() {
       exit(1);
     }
   }
+
+  // Test Utility functions
+  {
+    if (lvgl::FileSystem::exists(path)) {
+      std::cout << "PASS: FileSystem::exists(path) works." << std::endl;
+    } else {
+      std::cerr << "FAIL: FileSystem::exists(path) failed for existing file."
+                << std::endl;
+      exit(1);
+    }
+
+    uint32_t size = lvgl::FileSystem::get_size(path);
+    if (size > 0) {
+      std::cout << "PASS: FileSystem::get_size(path) returns " << size << "."
+                << std::endl;
+    } else {
+      std::cerr << "FAIL: FileSystem::get_size(path) returned 0." << std::endl;
+      exit(1);
+    }
+
+    if (!lvgl::FileSystem::exists("A:missing_file.txt")) {
+      std::cout
+          << "PASS: FileSystem::exists() correctly identifies missing file."
+          << std::endl;
+    } else {
+      std::cerr << "FAIL: FileSystem::exists() incorrectly found missing file."
+                << std::endl;
+      exit(1);
+    }
+  }
 }
 
 void test_directory() {

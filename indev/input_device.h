@@ -3,11 +3,14 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
+#include <vector>
 
 #include "indev_data.h"
 // #include "../core/group.h"   // Removed: cleanup
 #include "../core/object.h"  // IWYU pragma: export
-#include "../misc/enums.h"   // For IndevType, IndevState
+#include "../display/display.h"
+#include "../misc/enums.h"  // For IndevType, IndevState
 #include "../misc/geometry.h"
 #include "lvgl.h"  // IWYU pragma: export
 
@@ -16,6 +19,11 @@ namespace lvgl {
 class InputDevice {
  public:
   // Constructors & Destructor
+  struct EventCallbackData {
+    std::function<void(lv_event_t*)> cb;
+    InputDevice* instance;
+  };
+
   InputDevice();  // Default constructor (inactive)
   explicit InputDevice(lv_indev_t* indev, bool owned = false);
   virtual ~InputDevice();
@@ -43,11 +51,17 @@ class InputDevice {
   void set_mode(lv_indev_mode_t mode);
   void set_cursor(Object& cursor);
   void set_long_press_time(uint16_t time);
+  void set_long_press_repeat_time(uint16_t time);
   void set_scroll_limit(uint8_t limit);
+
+  // Events
+  void add_event_cb(std::function<void(lv_event_t*)> cb,
+                    lv_event_code_t filter = LV_EVENT_ALL);
 
   // Methods
   IndevType get_type() const;
   void reset(Object* obj);
+  void reset_long_press();
   void stop_processing();
   void enable(bool en);
   void wait_release();
@@ -61,8 +75,11 @@ class InputDevice {
   Point get_vect() const;
   lv_dir_t get_gesture_dir();
   uint32_t get_key();
+  uint8_t get_short_click_streak() const;
   lv_dir_t get_scroll_dir();
   lv_obj_t* get_scroll_obj();
+  lv_timer_t* get_read_timer();
+  lv_display_t* get_display();
 
   lv_indev_t* raw() const { return indev_; }
 
@@ -74,6 +91,7 @@ class InputDevice {
   bool owned_ = false;
   std::function<void(lv_indev_data_t*)> read_cb_raw_;
   std::function<void(IndevData&)> read_cb_;
+  std::vector<std::unique_ptr<EventCallbackData>> event_callbacks_;
 };
 
 }  // namespace lvgl

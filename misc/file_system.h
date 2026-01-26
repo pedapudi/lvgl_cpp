@@ -179,6 +179,20 @@ class FileSystem {
                                const std::string& part);
 
   /**
+   * @brief Check if a file or directory exists.
+   * @param path The path to check.
+   * @return true if it exists.
+   */
+  static bool exists(const std::string& path);
+
+  /**
+   * @brief Get the size of a file at the given path.
+   * @param path The path to the file.
+   * @return File size in bytes, or 0 if not found/error.
+   */
+  static uint32_t get_size(const std::string& path);
+
+  /**
    * @brief Check if a driver is ready.
    * @param letter The driver letter.
    * @return true if ready.
