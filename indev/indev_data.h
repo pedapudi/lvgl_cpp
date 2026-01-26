@@ -104,6 +104,57 @@ class IndevData {
   bool continue_reading() const { return data_->continue_reading; }
 
   /**
+   * @brief Set the timestamp of the event.
+   */
+  IndevData& set_timestamp(uint32_t timestamp) {
+    data_->timestamp = timestamp;
+    return *this;
+  }
+
+  /**
+   * @brief Get the timestamp of the event.
+   */
+  uint32_t get_timestamp() const { return data_->timestamp; }
+
+  /**
+   * @brief Set gesture type for a specific gesture index.
+   */
+  IndevData& set_gesture_type(lv_indev_gesture_type_t gesture,
+                              lv_indev_gesture_type_t type) {
+    if (gesture < LV_INDEV_GESTURE_CNT) {
+      data_->gesture_type[gesture] = type;
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Get gesture type for a specific gesture index.
+   */
+  lv_indev_gesture_type_t get_gesture_type(
+      lv_indev_gesture_type_t gesture) const {
+    return (gesture < LV_INDEV_GESTURE_CNT) ? data_->gesture_type[gesture]
+                                            : LV_INDEV_GESTURE_NONE;
+  }
+
+  /**
+   * @brief Set gesture data for a specific gesture index.
+   */
+  IndevData& set_gesture_data(lv_indev_gesture_type_t gesture, void* data) {
+    if (gesture < LV_INDEV_GESTURE_CNT) {
+      data_->gesture_data[gesture] = data;
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Get gesture data for a specific gesture index.
+   */
+  void* get_gesture_data(lv_indev_gesture_type_t gesture) const {
+    return (gesture < LV_INDEV_GESTURE_CNT) ? data_->gesture_data[gesture]
+                                            : nullptr;
+  }
+
+  /**
    * @brief Get the raw LVGL indev data pointer.
    */
   lv_indev_data_t* raw() const { return data_; }

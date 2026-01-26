@@ -52,12 +52,15 @@ classDiagram
     class InputDevice {
         +lv_indev_t* raw()
         +set_read_cb(function)
+        +add_event_cb(function, filter)
+        +set_long_press_repeat_time(uint16_t)
+        +reset_long_press()
+        +stop_processing()
         +enable(bool)
         +get_state()
     }
     class PointerInput {
         +set_cursor(Object)
-        +set_range(w, h)
         +get_point()
     }
     class KeypadInput {
@@ -96,15 +99,34 @@ The wrapper handles the static C trampoline internally. You can pass a C++ lambd
 
 ```cpp
 auto touch = PointerInput::create();
-touch.set_read_cb([](lv_indev_data_t* data) {
+touch.set_read_cb([](IndevData& data) {
     if (MyHardware::is_pressed()) {
-        data->state = LV_INDEV_STATE_PRESSED;
-        data->point.x = MyHardware::get_x();
-        data->point.y = MyHardware::get_y();
+        data.set_state(IndevState::Pressed)
+            .set_point(MyHardware::get_x(), MyHardware::get_y());
     } else {
-        data->state = LV_INDEV_STATE_RELEASED;
+        data.set_state(IndevState::Released);
     }
 });
+```
+
+#### Event Handling
+LVGL 9 introduces event callbacks for input devices. The C++ wrapper provides a consistent interface via `add_event_cb`.
+
+```cpp
+auto touch = PointerInput::create();
+touch.add_event_cb([](lv_event_t* e) {
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED) {
+        // Handle click event
+    }
+});
+```
+
+#### Enhanced Configuration
+V9-specific configurations like long press repeat time and click streak tracking are exposed directly.
+
+```cpp
+touch.set_long_press_repeat_time(200);
+uint8_t streak = touch.get_short_click_streak();
 ```
 
 #### RAII Ownership

@@ -19,7 +19,12 @@ void AnimationHandle::stop() {
   }
 }
 
-Animation::Animation() { lv_anim_init(&anim_); }
+Animation::Animation() {
+  ptr_ = &anim_;
+  lv_anim_init(ptr_);
+}
+
+Animation::Animation(lv_anim_t* anim) : ptr_(anim) {}
 
 Animation::~Animation() {
   // nothing to clean up for stack-based anim struct
@@ -37,7 +42,7 @@ Animation::Animation(void* var, int32_t start_val, int32_t end_val,
 Animation::Animation(const Object& object) : Animation() { set_var(object); }
 
 Animation& Animation::set_var(void* var) {
-  lv_anim_set_var(&anim_, var);
+  lv_anim_set_var(ptr_, var);
   return *this;
 }
 
@@ -47,47 +52,47 @@ Animation& Animation::set_var(const Object& object) {
 }
 
 Animation& Animation::set_exec_cb(lv_anim_exec_xcb_t exec_cb) {
-  lv_anim_set_exec_cb(&anim_, exec_cb);
+  lv_anim_set_exec_cb(ptr_, exec_cb);
   return *this;
 }
 
 Animation& Animation::set_duration(uint32_t duration) {
-  lv_anim_set_duration(&anim_, duration);
+  lv_anim_set_duration(ptr_, duration);
   return *this;
 }
 
 Animation& Animation::set_delay(uint32_t delay) {
-  lv_anim_set_delay(&anim_, delay);
+  lv_anim_set_delay(ptr_, delay);
   return *this;
 }
 
 Animation& Animation::set_values(int32_t start, int32_t end) {
-  lv_anim_set_values(&anim_, start, end);
+  lv_anim_set_values(ptr_, start, end);
   return *this;
 }
 
 Animation& Animation::set_path_cb(lv_anim_path_cb_t path_cb) {
-  lv_anim_set_path_cb(&anim_, path_cb);
+  lv_anim_set_path_cb(ptr_, path_cb);
   return *this;
 }
 
 Animation& Animation::set_repeat_count(uint32_t cnt) {
-  lv_anim_set_repeat_count(&anim_, cnt);
+  lv_anim_set_repeat_count(ptr_, cnt);
   return *this;
 }
 
 Animation& Animation::set_repeat_delay(uint32_t delay) {
-  lv_anim_set_repeat_delay(&anim_, delay);
+  lv_anim_set_repeat_delay(ptr_, delay);
   return *this;
 }
 
 Animation& Animation::set_playback_duration(uint32_t duration) {
-  lv_anim_set_reverse_duration(&anim_, duration);
+  lv_anim_set_reverse_duration(ptr_, duration);
   return *this;
 }
 
 Animation& Animation::set_playback_delay(uint32_t delay) {
-  lv_anim_set_reverse_delay(&anim_, delay);
+  lv_anim_set_reverse_delay(ptr_, delay);
   return *this;
 }
 
@@ -201,21 +206,21 @@ AnimationHandle Animation::start() {
     // detailed ownership management requires heap alloc that will be freed by
     // deleted_cb
     CallbackData* runtime_data = new CallbackData(*user_data_);
-    lv_anim_set_user_data(&anim_, runtime_data);
-    lv_anim_set_deleted_cb(&anim_, deleted_cb_proxy);
+    lv_anim_set_user_data(ptr_, runtime_data);
+    lv_anim_set_deleted_cb(ptr_, deleted_cb_proxy);
 
     if (user_data_->exec_cb) {
-      lv_anim_set_custom_exec_cb(&anim_, exec_cb_proxy);
+      lv_anim_set_custom_exec_cb(ptr_, exec_cb_proxy);
     }
     if (user_data_->path_cb) {
-      lv_anim_set_path_cb(&anim_, path_cb_proxy);
+      lv_anim_set_path_cb(ptr_, path_cb_proxy);
     }
     if (user_data_->completed_cb) {
-      lv_anim_set_completed_cb(&anim_, completed_cb_proxy);
+      lv_anim_set_completed_cb(ptr_, completed_cb_proxy);
     }
   }
-  lv_anim_start(&anim_);
-  return AnimationHandle(anim_.var, anim_.exec_cb);
+  lv_anim_start(ptr_);
+  return AnimationHandle(ptr_->var, ptr_->exec_cb);
 }
 
 void Animation::stop(void* var, lv_anim_exec_xcb_t exec_cb) {

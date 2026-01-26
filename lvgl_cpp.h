@@ -69,6 +69,12 @@
 #if LV_USE_MENU
 #include "widgets/menu.h"  // IWYU pragma: export
 #endif
+#if LV_USE_LOTTIE
+#include "widgets/lottie.h"  // IWYU pragma: export
+#endif
+#if LV_USE_VECTOR_GRAPHIC
+#include "misc/vector.h"  // IWYU pragma: export
+#endif
 #if LV_USE_MSGBOX
 #include "widgets/msgbox.h"  // IWYU pragma: export
 #endif

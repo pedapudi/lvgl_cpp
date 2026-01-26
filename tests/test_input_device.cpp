@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+#include "../display/display.h"
 #include "../indev/button_input.h"
 #include "../indev/encoder_input.h"
 #include "../indev/keypad_input.h"
@@ -12,7 +13,10 @@
 static bool callback_called = false;
 static int callback_count = 0;
 
-void setup() { lv_init(); }
+void setup() {
+  lv_init();
+  lvgl::Display::create(800, 480);
+}
 
 void test_pointer_creation() {
   std::cout << "Testing PointerInput creation..." << std::endl;
@@ -84,12 +88,41 @@ void test_subclasses() {
   std::cout << "Subclasses test passed." << std::endl;
 }
 
+void test_enhancements() {
+  std::cout << "Testing v9 Enhancements..." << std::endl;
+  auto ptr = lvgl::PointerInput::create();
+
+  // Test configuration methods
+  ptr.set_long_press_repeat_time(500);
+  ptr.reset_long_press();
+
+  // Test timer/display accessors
+  assert(ptr.get_read_timer() != nullptr);
+  assert(ptr.get_display() != nullptr);
+
+  // Test event handling
+  static bool event_called = false;
+  ptr.add_event_cb(
+      [](lv_event_t* e) {
+        event_called = true;
+        lvgl::InputDevice::wrap(lv_event_get_indev(e)).stop_processing();
+      },
+      LV_EVENT_PRESSED);
+
+  // Send a mock event to verify the callback
+  lv_indev_send_event(ptr.raw(), LV_EVENT_PRESSED, nullptr);
+  assert(event_called == true);
+
+  std::cout << "v9 Enhancements passed." << std::endl;
+}
+
 int main() {
   setup();
 
   test_pointer_creation();
   test_callback_dispatch();
   test_subclasses();
+  test_enhancements();
 
   std::cout << "All Input Device tests passed!" << std::endl;
   return 0;

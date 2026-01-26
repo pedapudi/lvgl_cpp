@@ -177,6 +177,19 @@ std::string FileSystem::join_path(const std::string& base,
 
 bool FileSystem::is_ready(char letter) { return lv_fs_is_ready(letter); }
 
+bool FileSystem::exists(const std::string& path) {
+  uint32_t size = 0;
+  return lv_fs_path_get_size(path.c_str(), &size) == LV_FS_RES_OK;
+}
+
+uint32_t FileSystem::get_size(const std::string& path) {
+  uint32_t size = 0;
+  if (lv_fs_path_get_size(path.c_str(), &size) != LV_FS_RES_OK) {
+    return 0;
+  }
+  return size;
+}
+
 std::vector<uint8_t> File::load_to_buffer(const std::string& path) {
   uint32_t size = 0;
   if (lv_fs_path_get_size(path.c_str(), &size) != LV_FS_RES_OK) {

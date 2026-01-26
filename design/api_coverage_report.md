@@ -34,10 +34,8 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 
 | Category | Total | Used | Coverage |
 |----------|-------|------|----------|
-| Category | Total | Used | Coverage |
-|----------|-------|------|----------|
-| **Functions** | 1,460 | 750 | **51.4%** |
-| **Enums and Constants** | 423 | 264 | **62.4%** |
+| **Functions** | 1,460 | 776 | **53.2%** |
+| **Enums and Constants** | 423 | 275 | **65.0%** |
 
 ## Function coverage
 
@@ -69,9 +67,10 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `lv_spinbox` | 95.0% (19/20) |
 | `lv_arc` | 92.9% (26/28) |
 | `lv_canvas` | 92.9% (13/14) |
-| `lv_keyboard` | 91.7% (11/12) |
+| `lv_keyboard` | 100% (11/11) |
+| `lv_label` | 85.7% (18/21) |
 | `lv_table` | 82.4% (14/17) |
-| `lv_display` | 75.0% (54/72) |
+| `lv_display` | 75.0% (51/68) |
 | `lv_scale` | 95.0% (32/34) |
 
 ### Medium coverage (25-75%)
@@ -80,15 +79,15 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 |-----------|----------|--------|
 
 | `lv_label` | 61.9% (13/21) | - |
-| `lv_timer` | 59.1% (13/22) | - |
+| `lv_timer` | 68.4% (13/19) | - |
 | `lv_chart` | 54.8% (23/42) | ⬆️ (+7) |
-| `lv_group` | 51.9% (14/27) | ⬆️ (+1) |
+| `lv_group` | 60.9% (14/23) | ⬆️ (+1) |
 | `lv_fs` | 51.4% (19/37) | - |
 | `lv_calendar` | 50.0% (11/22) | - |
-| `lv_anim` | 47.8% (33/69) | ⬆️ |
-| `lv_image` | 45.0% (27/60) | - |
-| `lv_style` | 85.0% (124/146)| ⬆️ (+71) |
-| `lv_indev` | 31.3% (21/67) | - |
+| `lv_anim` | 48.4% (30/62) | ⬆️ |
+| `lv_image` | 50.0% (28/56) | - |
+| `lv_style` | 64.4% (94/146) | ⬆️ (+71) |
+| `lv_indev` | 50.8% (31/61) | ⬆️ (+19%) |
 
 ### Low coverage (<25%)
 

@@ -66,6 +66,13 @@ class Animation {
    */
   explicit Animation(const Object& object);
 
+  /**
+   * @brief Construct an animation wrapping an existing C animation.
+   * Note: The wrapper does NOT take ownership (will not delete/free).
+   * @param anim Pointer to the existing lv_anim_t.
+   */
+  explicit Animation(lv_anim_t* anim);
+
   ~Animation();
 
   // Builder pattern
@@ -240,8 +247,6 @@ class Animation {
   static void stop(const Object& object);
 
  private:
-  lv_anim_t anim_;
-
   // Internal closure data to bridge C callbacks to C++ std::function
   struct CallbackData {
     ExecCallback exec_cb;
@@ -256,6 +261,10 @@ class Animation {
   static int32_t path_cb_proxy(const lv_anim_t* a);
   static void completed_cb_proxy(lv_anim_t* a);
   static void deleted_cb_proxy(lv_anim_t* a);
+
+  lv_anim_t anim_;
+  lv_anim_t* ptr_ = &anim_;  // Pointer to the active animation struct (either
+                             // anim_ or external)
 };
 
 }  // namespace lvgl

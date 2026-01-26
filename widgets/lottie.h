@@ -2,56 +2,67 @@
 #define LVGL_CPP_WIDGETS_LOTTIE_H_
 
 #include "../core/widget.h"
-#include "lvgl.h"
 
+// Guard for Lottie usage
 #if LV_USE_LOTTIE
+
+#include "../../lvgl/src/widgets/lottie/lv_lottie.h"
+#include "../misc/animation.h"
 
 namespace lvgl {
 
+/**
+ * @brief Lottie animation widget.
+ * Wraps lv_lottie object.
+ */
 class Lottie : public Widget<Lottie> {
  public:
-  Lottie();
-  explicit Lottie(Object* parent, Ownership ownership = Ownership::Default);
-  explicit Lottie(Object& parent);
-  explicit Lottie(lv_obj_t* obj, Ownership ownership = Ownership::Default);
-
-  /**
-   * @brief Set a buffer for the animation. It also defines the size of the
-   * animation.
-   * @param w width of the animation and buffer
-   * @param h height of the animation and buffer
-   * @param buf a static buffer with `width x height x 4` byte size
-   */
-  Lottie& set_buffer(int32_t w, int32_t h, void* buf);
-
-  /**
-   * @brief Set a draw buffer for the animation. It also defines the size of the
-   * animation.
-   * @param draw_buf an initialized draw buffer with ARGB8888 color format
-   */
-  Lottie& set_draw_buf(lv_draw_buf_t* draw_buf);
+  using Widget::Widget;
 
   /**
    * @brief Set the source for the animation as an array.
-   * @param src the lottie animation converted to a null terminated array
-   * @param src_size size of the source array in bytes
+   * @param src Pointer to the data (Lottie JSON converted to array).
+   * @param src_size Size of the array in bytes.
    */
-  Lottie& set_src_data(const void* src, size_t src_size);
+  void set_src(const void* src, size_t src_size);
 
   /**
-   * @brief Set the source for the animation as a path.
-   * @param src path to a json file
+   * @brief Set the source for the animation as a file path.
+   * @param path Path to the JSON file.
    */
-  Lottie& set_src_file(const char* src);
+  void set_src(const char* path);
 
   /**
-   * @brief Get the underlying LVGL animation object.
-   * @return Handle to the internal lv_anim_t
+   * @brief Set a buffer for the animation.
+   * Defines the size of the animation and provides a rendering buffer.
+   * @param w Width.
+   * @param h Height.
+   * @param buf Pointer to static buffer (w * h * 4 bytes).
    */
-  lv_anim_t* get_anim();
+  void set_buffer(int32_t w, int32_t h, void* buf);
+
+  /**
+   * @brief Set a draw buffer for the animation.
+   * @param draw_buf Initialized draw buffer (ARGB8888).
+   */
+  void set_draw_buf(lv_draw_buf_t* draw_buf);
+
+  /**
+   * @brief Get the underlying animation controller.
+   * @return A C++ Animation wrapper for the internal lv_anim_t.
+   */
+  Animation anim();
+
+  /**
+   * @brief Create a Lottie widget.
+   * @param parent The parent object.
+   * @return A Lottie object.
+   */
+  static Lottie create(Object& parent);
 };
 
 }  // namespace lvgl
 
 #endif  // LV_USE_LOTTIE
+
 #endif  // LVGL_CPP_WIDGETS_LOTTIE_H_

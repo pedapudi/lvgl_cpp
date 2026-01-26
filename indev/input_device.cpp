@@ -10,6 +10,14 @@ static void cpp_read_cb_trampoline(lv_indev_t* indev, lv_indev_data_t* data) {
   }
 }
 
+static void indev_event_cb_proxy(lv_event_t* e) {
+  auto* data =
+      static_cast<InputDevice::EventCallbackData*>(lv_event_get_user_data(e));
+  if (data && data->cb) {
+    data->cb(e);
+  }
+}
+
 InputDevice::InputDevice() : indev_(nullptr), owned_(false) {}
 
 InputDevice::InputDevice(lv_indev_t* indev, bool owned)
@@ -116,8 +124,22 @@ void InputDevice::set_long_press_time(uint16_t time) {
   if (indev_) lv_indev_set_long_press_time(indev_, time);
 }
 
+void InputDevice::set_long_press_repeat_time(uint16_t time) {
+  if (indev_) lv_indev_set_long_press_repeat_time(indev_, time);
+}
+
 void InputDevice::set_scroll_limit(uint8_t limit) {
   if (indev_) lv_indev_set_scroll_limit(indev_, limit);
+}
+
+void InputDevice::add_event_cb(std::function<void(lv_event_t*)> cb,
+                               lv_event_code_t filter) {
+  if (!indev_) return;
+  auto data = std::make_unique<EventCallbackData>();
+  data->cb = cb;
+  data->instance = this;
+  lv_indev_add_event_cb(indev_, indev_event_cb_proxy, filter, data.get());
+  event_callbacks_.push_back(std::move(data));
 }
 
 // ... wrapped methods ...
@@ -129,6 +151,10 @@ IndevType InputDevice::get_type() const {
 
 void InputDevice::reset(Object* obj) {
   if (indev_) lv_indev_reset(indev_, obj ? obj->raw() : nullptr);
+}
+
+void InputDevice::reset_long_press() {
+  if (indev_) lv_indev_reset_long_press(indev_);
 }
 
 void InputDevice::stop_processing() {
@@ -180,6 +206,18 @@ lv_dir_t InputDevice::get_scroll_dir() {
 
 lv_obj_t* InputDevice::get_scroll_obj() {
   return indev_ ? lv_indev_get_scroll_obj(indev_) : nullptr;
+}
+
+uint8_t InputDevice::get_short_click_streak() const {
+  return indev_ ? lv_indev_get_short_click_streak(indev_) : 0;
+}
+
+lv_timer_t* InputDevice::get_read_timer() {
+  return indev_ ? lv_indev_get_read_timer(indev_) : nullptr;
+}
+
+lv_display_t* InputDevice::get_display() {
+  return indev_ ? lv_indev_get_display(indev_) : nullptr;
 }
 
 }  // namespace lvgl

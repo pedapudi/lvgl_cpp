@@ -4,37 +4,33 @@
 
 namespace lvgl {
 
-Lottie::Lottie() : Lottie(static_cast<Object*>(nullptr), Ownership::Managed) {}
-
-Lottie::Lottie(Object* parent, Ownership ownership)
-    : Widget(lv_lottie_create(parent ? parent->raw() : nullptr), ownership) {}
-
-Lottie::Lottie(Object& parent) : Lottie(&parent) {}
-
-Lottie::Lottie(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
-
-Lottie& Lottie::set_buffer(int32_t w, int32_t h, void* buf) {
-  if (obj_) lv_lottie_set_buffer(obj_, w, h, buf);
-  return *this;
+Lottie Lottie::create(Object& parent) {
+  lv_obj_t* obj = lv_lottie_create(parent.raw());
+  return Lottie(obj, Ownership::Managed);
 }
 
-Lottie& Lottie::set_draw_buf(lv_draw_buf_t* draw_buf) {
-  if (obj_) lv_lottie_set_draw_buf(obj_, draw_buf);
-  return *this;
+void Lottie::set_src(const void* src, size_t src_size) {
+  lv_lottie_set_src_data(raw(), src, src_size);
 }
 
-Lottie& Lottie::set_src_data(const void* src, size_t src_size) {
-  if (obj_) lv_lottie_set_src_data(obj_, src, src_size);
-  return *this;
+void Lottie::set_src(const char* path) { lv_lottie_set_src_file(raw(), path); }
+
+void Lottie::set_buffer(int32_t w, int32_t h, void* buf) {
+  lv_lottie_set_buffer(raw(), w, h, buf);
 }
 
-Lottie& Lottie::set_src_file(const char* src) {
-  if (obj_) lv_lottie_set_src_file(obj_, src);
-  return *this;
+void Lottie::set_draw_buf(lv_draw_buf_t* draw_buf) {
+  lv_lottie_set_draw_buf(raw(), draw_buf);
 }
 
-lv_anim_t* Lottie::get_anim() {
-  return obj_ ? lv_lottie_get_anim(obj_) : nullptr;
+Animation Lottie::anim() {
+  lv_anim_t* a = lv_lottie_get_anim(raw());
+  // Animation wrapper doesn't own the lv_anim_t pointer here,
+  // as it belongs to the Lottie widget text.
+  // Ideally, Animation wrapper should handle non-owning pointers too.
+  // Checking Animation ctor... Assumes explicit control.
+  // For now, we return a wrapped animation. Be careful about lifetime.
+  return Animation(a);
 }
 
 }  // namespace lvgl

@@ -1,4 +1,4 @@
-# Research Report: LVGL Filesystem in C++
+# Design Document: LVGL Filesystem in C++
 
 **Tracking Issue:** #40
 
@@ -23,17 +23,22 @@ This report outlines the design for a C++ `FileSystem` module that provides:
 - **Directories**: Opened with `lv_fs_dir_open`, must be closed with `lv_fs_dir_close`.
 - **Error Handling**: Functions return `lv_fs_res_t` enum.
 
-## 2. Existing `lvgl_cpp` Implementation
+## 2. Implementation Overview
 
-An existing wrapper was found in `misc/file_system.h`. It covers the core functionality (`File` and `Directory` classes with RAII) effectively.
+The `lvgl_cpp` wrapper in `misc/file_system.h` provides a robust, type-safe interface for file and directory operations.
 
 ### 2.1 Current Capabilities
 -   **RAII**: Class destructors automatically close handles.
 -   **Move Semantics**: Properly implemented to prevent double-free.
 -   **Core I/O**: Read, Write, Seek, Tell supported.
 
-### 2.2 Missing Features
-The current implementation lacks wrappers for several useful `lv_fs` utility functions:
+### 2.2 Implemented Utilities
+The `FileSystem` class provides static utility methods for path-level operations:
+- **`exists(path)`**: Checks if a file or directory exists using `lv_fs_path_get_size`.
+- **`get_size(path)`**: Retrieves the size of a file.
+
+### 2.3 Planned Features (Future)
+The following utilities are identified for future expansion:
 -   `lv_fs_get_letters`: Enumerate available drive letters.
 -   **Path Utilities**: `lv_fs_up` (parent dir), `lv_fs_get_last` (filename), `lv_fs_path_join`.
 -   **Extension Helper**: `lv_fs_get_ext`.
@@ -46,10 +51,12 @@ The `lv_fsdrv` module (standard drivers) acts as the backend.
 -   **Configuration**: Drivers are typically enabled via `lv_conf.h` (e.g., `LV_USE_FS_STDIO 1`).
 -   **Recommendation**: The C++ library should likely distinct itself from *driver configuration* but clearly document that drivers must be active.
 
-## 4. Recommendations
+## 4. Verification
 
-1.  **Add Unit Tests**: No tests were found for `file_system.h`. We should add `tests/test_file_system.cpp` that mocks a driver or uses the STDIO driver (letter 'P'/'S' usually) to verify file operations.
-2.  **Add Utility Wrappers**: Add a `FileSystem` namespace or static class to expose:
+1.  **Unit Tests**: Verified via `tests/test_file_system.cpp`.
+    *   Tests covering `File` READ/WRITE/SEEK operations.
+    *   Tests covering `FileSystem::exists()` and `FileSystem::get_size()`.
+2.  **RAII Validation**: Confirmed that handles are closed correctly on destruction.
     *   `static std::string get_extension(const std::string& path);`
     *   `static std::string get_filename(const std::string& path);`
     *   `static std::string join_path(const std::string& base, const std::string& part);`
