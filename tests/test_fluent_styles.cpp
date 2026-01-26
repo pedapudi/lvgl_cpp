@@ -20,13 +20,14 @@ int main() {
     lvgl::Button btn;
     btn.set_size(100, 50)
         .center()
-        .set_bg_color(lv_color_hex(0xFF0000))
-        .set_bg_opa(LV_OPA_50)
-        .set_border_width(5)
-        .set_border_color(lv_color_hex(0x00FF00))
-        .set_radius(10)
-        .set_outline_width(2)
-        .set_text_color(lv_color_hex(0x0000FF));
+        .style()
+        .bg_color(lv_color_hex(0xFF0000))
+        .bg_opa(lvgl::Opacity::Opa50)
+        .border_width(5)
+        .border_color(lv_color_hex(0x00FF00))
+        .radius(10)
+        .outline_width(2)
+        .text_color(lv_color_hex(0x0000FF));
 
     // Verify properties
     lv_obj_t* obj = btn.raw();
@@ -64,7 +65,7 @@ int main() {
 
     // Font (Standardization validaton)
     if (lvgl::Font::montserrat_14().is_valid()) {
-      btn.set_text_font(lvgl::Font::montserrat_14());
+      btn.style().text_font(lvgl::Font::montserrat_14());
       const lv_font_t* font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
       assert(font == lvgl::Font::montserrat_14().raw());
     }

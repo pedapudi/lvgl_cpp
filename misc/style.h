@@ -61,6 +61,16 @@ class Style {
   Style& bg_opa(lv_opa_t opa);
   Style& bg_grad_color(Color color);
   Style& bg_grad_dir(lv_grad_dir_t dir);
+  Style& bg_grad_stop(int32_t value);
+  Style& bg_main_stop(int32_t value);
+  Style& bg_image_src(const void* src);
+  Style& bg_image_opa(Opacity opa);
+  Style& bg_image_opa(lv_opa_t opa);
+  Style& bg_image_recolor(Color color);
+  Style& bg_image_recolor(lv_color_t color);
+  Style& bg_image_recolor_opa(Opacity opa);
+  Style& bg_image_recolor_opa(lv_opa_t opa);
+  Style& bg_image_tiled(bool tiled);
 
   // =========================================================================
   // Border
@@ -73,6 +83,7 @@ class Style {
   Style& border_opa(lv_opa_t opa);
   Style& border_side(BorderSide side);
   Style& border_side(lv_border_side_t side);
+  Style& border_post(bool post);
 
   // =========================================================================
   // Outline
@@ -142,6 +153,71 @@ class Style {
   Style& text_decor(lv_text_decor_t decor);
 
   // =========================================================================
+  // Image
+  // =========================================================================
+
+  Style& image_opa(Opacity opa);
+  Style& image_opa(lv_opa_t opa);
+  Style& image_recolor(Color color);
+  Style& image_recolor(lv_color_t color);
+  Style& image_recolor_opa(Opacity opa);
+  Style& image_recolor_opa(lv_opa_t opa);
+
+  // =========================================================================
+  // Line
+  // =========================================================================
+
+  Style& line_width(int32_t width);
+  Style& line_dash_width(int32_t width);
+  Style& line_dash_gap(int32_t gap);
+  Style& line_rounded(bool rounded);
+  Style& line_color(Color color);
+  Style& line_color(lv_color_t color);
+  Style& line_opa(Opacity opa);
+  Style& line_opa(lv_opa_t opa);
+
+  // =========================================================================
+  // Arc
+  // =========================================================================
+
+  Style& arc_width(int32_t width);
+  Style& arc_rounded(bool rounded);
+  Style& arc_color(Color color);
+  Style& arc_color(lv_color_t color);
+  Style& arc_opa(Opacity opa);
+  Style& arc_opa(lv_opa_t opa);
+  Style& arc_image_src(const void* src);
+
+  // =========================================================================
+  // Animation
+  // =========================================================================
+
+  Style& anim_time(uint32_t time);
+  Style& anim_duration(uint32_t duration);
+  Style& transition(const lv_style_transition_dsc_t* dsc);
+
+  // =========================================================================
+  // Layout (Flex/Grid)
+  // =========================================================================
+
+  Style& flex_flow(lv_flex_flow_t flow);
+  Style& flex_main_place(lv_flex_align_t place);
+  Style& flex_cross_place(lv_flex_align_t place);
+  Style& flex_track_place(lv_flex_align_t place);
+  Style& flex_grow(uint8_t grow);
+
+  Style& grid_row_dsc_array(const int32_t* dsc);
+  Style& grid_column_dsc_array(const int32_t* dsc);
+  Style& grid_row_align(lv_grid_align_t align);
+  Style& grid_column_align(lv_grid_align_t align);
+  Style& grid_cell_column_pos(int32_t pos);
+  Style& grid_cell_column_span(int32_t span);
+  Style& grid_cell_row_pos(int32_t pos);
+  Style& grid_cell_row_span(int32_t span);
+  Style& grid_cell_x_align(lv_grid_align_t align);
+  Style& grid_cell_y_align(lv_grid_align_t align);
+
+  // =========================================================================
   // Shadow
   // =========================================================================
 
@@ -162,6 +238,7 @@ class Style {
   Style& opa(lv_opa_t opa);
   Style& blend_mode(BlendMode mode);
   Style& blend_mode(lv_blend_mode_t mode);
+  Style& base_dir(lv_base_dir_t dir);
 
   // =========================================================================
   // Raw access

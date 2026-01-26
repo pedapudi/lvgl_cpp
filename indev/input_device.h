@@ -8,7 +8,8 @@
 // #include "../core/group.h"   // Removed: cleanup
 #include "../core/object.h"  // IWYU pragma: export
 #include "../misc/enums.h"   // For IndevType, IndevState
-#include "lvgl.h"            // IWYU pragma: export
+#include "../misc/geometry.h"
+#include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
@@ -39,18 +40,25 @@ class InputDevice {
   void set_read_cb(std::function<void(lv_indev_data_t*)> cb);
   void set_read_cb(std::function<void(IndevData&)> cb);
   void set_type(lv_indev_type_t type);
+  void set_mode(lv_indev_mode_t mode);
   void set_cursor(Object& cursor);
+  void set_long_press_time(uint16_t time);
+  void set_scroll_limit(uint8_t limit);
 
   // Methods
   IndevType get_type() const;
   void reset(Object* obj);
   void stop_processing();
   void enable(bool en);
+  void wait_release();
   void read();  // Manual trigger
+
+  lv_indev_mode_t get_mode() const;
 
   // Data Access
   IndevState get_state() const;
   void get_point(lv_point_t* point);
+  Point get_vect() const;
   lv_dir_t get_gesture_dir();
   uint32_t get_key();
   lv_dir_t get_scroll_dir();

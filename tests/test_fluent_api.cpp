@@ -204,7 +204,7 @@ void test_scale() {
       .set_total_tick_count(11)
       .set_major_tick_every(5)
       .set_label_show(true)
-      .set_mode(LV_SCALE_MODE_HORIZONTAL_BOTTOM)
+      .set_mode(lvgl::ScaleMode::HorizontalBottom)
       .set_width(200);
   std::cout << "Scale fluent API passed." << std::endl;
 }
@@ -268,7 +268,7 @@ void test_msgbox() {
 
 void test_span() {
   lvgl::SpanGroup spangroup;
-  spangroup.set_align(LV_TEXT_ALIGN_CENTER)
+  spangroup.set_align(lvgl::TextAlign::Center)
       .set_overflow(LV_SPAN_OVERFLOW_ELLIPSIS)
       .set_indent(10)
       .set_width(200);

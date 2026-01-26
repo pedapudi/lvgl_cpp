@@ -33,7 +33,7 @@ void run_cycle() {
     btn->set_pos(i * 10, i * 10);
 
     // Add callback to exercise EventSource leak path
-    btn->add_event_cb([](lvgl::Event&) {}, LV_EVENT_CLICKED);
+    btn->add_event_cb(LV_EVENT_CLICKED, [](lvgl::Event&) {});
 
     buttons.push_back(std::move(btn));
   }

@@ -345,6 +345,39 @@ class Object {
    */
   int32_t get_height() const;
 
+  // --- Layout Shortcuts ---
+
+  Object& set_flex_flow(lv_flex_flow_t flow);
+  Object& set_flex_align(lv_flex_align_t main_place,
+                         lv_flex_align_t cross_place,
+                         lv_flex_align_t track_place);
+  Object& set_flex_grow(uint8_t grow);
+
+  Object& set_grid_dsc_array(const int32_t* col_dsc, const int32_t* row_dsc);
+  Object& set_grid_align(lv_grid_align_t column_align,
+                         lv_grid_align_t row_align);
+  Object& set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
+                        int32_t col_span, lv_grid_align_t row_align,
+                        int32_t row_pos, int32_t row_span);
+
+  // --- Scroll ---
+
+  Object& scroll_to_view(lv_anim_enable_t anim_en);
+  Object& scroll_to_view_recursive(lv_anim_enable_t anim_en);
+  Object& scroll_by(int32_t x, int32_t y, lv_anim_enable_t anim_en);
+  Object& scroll_to(int32_t x, int32_t y, lv_anim_enable_t anim_en);
+  int32_t get_scroll_x() const;
+  int32_t get_scroll_y() const;
+  int32_t get_scroll_top() const;
+  int32_t get_scroll_bottom() const;
+  int32_t get_scroll_left() const;
+  int32_t get_scroll_right() const;
+
+  int32_t get_content_width() const;
+  int32_t get_content_height() const;
+  int32_t get_self_width() const;
+  int32_t get_self_height() const;
+
   // ... existing code ...
 
   // --- Layout and Scroll ---

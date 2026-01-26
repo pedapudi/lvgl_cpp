@@ -286,7 +286,108 @@ bool Object::has_state(lv_state_t state) const {
   return obj_ ? lv_obj_has_state(obj_, state) : false;
 }
 
+// --- Layout Shortcuts ---
+
+Object& Object::set_flex_flow(lv_flex_flow_t flow) {
+  if (obj_) lv_obj_set_flex_flow(obj_, flow);
+  return *this;
+}
+
+Object& Object::set_flex_align(lv_flex_align_t main_place,
+                               lv_flex_align_t cross_place,
+                               lv_flex_align_t track_place) {
+  if (obj_) lv_obj_set_flex_align(obj_, main_place, cross_place, track_place);
+  return *this;
+}
+
+Object& Object::set_flex_grow(uint8_t grow) {
+  if (obj_) lv_obj_set_flex_grow(obj_, grow);
+  return *this;
+}
+
+Object& Object::set_grid_dsc_array(const int32_t* col_dsc,
+                                   const int32_t* row_dsc) {
+  if (obj_) lv_obj_set_grid_dsc_array(obj_, col_dsc, row_dsc);
+  return *this;
+}
+
+Object& Object::set_grid_align(lv_grid_align_t column_align,
+                               lv_grid_align_t row_align) {
+  if (obj_) lv_obj_set_grid_align(obj_, column_align, row_align);
+  return *this;
+}
+
+Object& Object::set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
+                              int32_t col_span, lv_grid_align_t row_align,
+                              int32_t row_pos, int32_t row_span) {
+  if (obj_) {
+    lv_obj_set_grid_cell(obj_, column_align, col_pos, col_span, row_align,
+                         row_pos, row_span);
+  }
+  return *this;
+}
+
 // --- Scroll ---
+
+Object& Object::scroll_to_view(lv_anim_enable_t anim_en) {
+  if (obj_) lv_obj_scroll_to_view(obj_, anim_en);
+  return *this;
+}
+
+Object& Object::scroll_to_view_recursive(lv_anim_enable_t anim_en) {
+  if (obj_) lv_obj_scroll_to_view_recursive(obj_, anim_en);
+  return *this;
+}
+
+Object& Object::scroll_by(int32_t x, int32_t y, lv_anim_enable_t anim_en) {
+  if (obj_) lv_obj_scroll_by(obj_, x, y, anim_en);
+  return *this;
+}
+
+Object& Object::scroll_to(int32_t x, int32_t y, lv_anim_enable_t anim_en) {
+  if (obj_) lv_obj_scroll_to(obj_, x, y, anim_en);
+  return *this;
+}
+
+int32_t Object::get_scroll_x() const {
+  return obj_ ? lv_obj_get_scroll_x(obj_) : 0;
+}
+
+int32_t Object::get_scroll_y() const {
+  return obj_ ? lv_obj_get_scroll_y(obj_) : 0;
+}
+
+int32_t Object::get_scroll_top() const {
+  return obj_ ? lv_obj_get_scroll_top(obj_) : 0;
+}
+
+int32_t Object::get_scroll_bottom() const {
+  return obj_ ? lv_obj_get_scroll_bottom(obj_) : 0;
+}
+
+int32_t Object::get_scroll_left() const {
+  return obj_ ? lv_obj_get_scroll_left(obj_) : 0;
+}
+
+int32_t Object::get_scroll_right() const {
+  return obj_ ? lv_obj_get_scroll_right(obj_) : 0;
+}
+
+int32_t Object::get_content_width() const {
+  return obj_ ? lv_obj_get_content_width(obj_) : 0;
+}
+
+int32_t Object::get_content_height() const {
+  return obj_ ? lv_obj_get_content_height(obj_) : 0;
+}
+
+int32_t Object::get_self_width() const {
+  return obj_ ? lv_obj_get_self_width(obj_) : 0;
+}
+
+int32_t Object::get_self_height() const {
+  return obj_ ? lv_obj_get_self_height(obj_) : 0;
+}
 
 // --- Other Properties ---
 

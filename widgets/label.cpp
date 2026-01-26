@@ -86,8 +86,36 @@ Label& Label::set_recolor(bool en) {
   return *this;
 }
 
+Label& Label::ins_text(uint32_t pos, const char* txt) {
+  if (obj_) lv_label_ins_text(obj_, pos, txt);
+  return *this;
+}
+
+Label& Label::cut_text(uint32_t pos, uint32_t cnt) {
+  if (obj_) lv_label_cut_text(obj_, pos, cnt);
+  return *this;
+}
+
 bool Label::get_recolor() const {
   return obj_ ? lv_label_get_recolor(obj_) : false;
+}
+
+uint32_t Label::get_letter_on(const Point& point_in) const {
+  return obj_ ? lv_label_get_letter_on(
+                    obj_, const_cast<lv_point_t*>(point_in.raw()), false)
+              : LV_LABEL_TEXT_SELECTION_OFF;
+}
+
+bool Label::is_char_under_pos(const Point& pos) const {
+  return obj_ ? lv_label_is_char_under_pos(obj_,
+                                           const_cast<lv_point_t*>(pos.raw()))
+              : false;
+}
+
+Point Label::get_letter_pos(uint32_t char_id) const {
+  lv_point_t p = {0, 0};
+  if (obj_) lv_label_get_letter_pos(obj_, char_id, &p);
+  return Point(p);
 }
 
 Observer Label::bind_text(Subject& subject, const char* fmt) {

@@ -92,7 +92,7 @@ void test_scale_1() {
   Object screen = get_screen();
   Scale scale(screen);
   scale.set_size(LV_PCT(80), 100);
-  scale.set_mode(LV_SCALE_MODE_HORIZONTAL_BOTTOM);
+  scale.set_mode(lvgl::ScaleMode::HorizontalBottom);
   scale.center();
   scale.set_total_tick_count(31);
   scale.set_major_tick_every(5);
@@ -138,11 +138,11 @@ void test_spangroup_1() {
   spans.set_height(LV_SIZE_CONTENT);
   spans.center();
 
-  lv_span_t* span = spans.add_span();
-  spans.set_span_text(span, "China is a beautiful country.");
+  lvgl::Span span = spans.add_span();
+  span.set_text("China is a beautiful country.");
 
-  span = spans.add_span();
-  spans.set_span_text(span, "good good study, day day up.");
+  lvgl::Span span2 = spans.add_span();
+  span2.set_text("good good study, day day up.");
 
   spans.refresh();
 

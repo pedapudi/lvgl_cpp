@@ -108,6 +108,18 @@ void InputDevice::set_cursor(Object& cursor) {
   if (indev_) lv_indev_set_cursor(indev_, cursor.raw());
 }
 
+void InputDevice::set_mode(lv_indev_mode_t mode) {
+  if (indev_) lv_indev_set_mode(indev_, mode);
+}
+
+void InputDevice::set_long_press_time(uint16_t time) {
+  if (indev_) lv_indev_set_long_press_time(indev_, time);
+}
+
+void InputDevice::set_scroll_limit(uint8_t limit) {
+  if (indev_) lv_indev_set_scroll_limit(indev_, limit);
+}
+
 // ... wrapped methods ...
 
 IndevType InputDevice::get_type() const {
@@ -131,6 +143,14 @@ void InputDevice::read() {
   if (indev_) lv_indev_read(indev_);
 }
 
+void InputDevice::wait_release() {
+  if (indev_) lv_indev_wait_release(indev_);
+}
+
+lv_indev_mode_t InputDevice::get_mode() const {
+  return indev_ ? lv_indev_get_mode(indev_) : LV_INDEV_MODE_NONE;
+}
+
 IndevState InputDevice::get_state() const {
   return indev_ ? static_cast<IndevState>(lv_indev_get_state(indev_))
                 : IndevState::Released;
@@ -138,6 +158,12 @@ IndevState InputDevice::get_state() const {
 
 void InputDevice::get_point(lv_point_t* point) {
   if (indev_) lv_indev_get_point(indev_, point);
+}
+
+Point InputDevice::get_vect() const {
+  lv_point_t p = {0, 0};
+  if (indev_) lv_indev_get_vect(indev_, &p);
+  return Point(p);
 }
 
 lv_dir_t InputDevice::get_gesture_dir() {

@@ -43,11 +43,9 @@ int main(void) {
 
     // Add lambda callback (capturing nothing to keep it small, but
     // std::function allocates anyway) Correct signature: lvgl::Event&
-    btn->add_event_cb(
-        [](lvgl::Event&) {
-          // No-op
-        },
-        LV_EVENT_CLICKED);
+    btn->add_event_cb(LV_EVENT_CLICKED, [](lvgl::Event&) {
+      // No-op
+    });
 
     objects.push_back(std::move(btn));
   }

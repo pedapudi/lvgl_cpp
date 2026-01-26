@@ -5,7 +5,8 @@
 #include <string>
 
 #include "../core/widget.h"  // IWYU pragma: export
-#include "lvgl.h"            // IWYU pragma: export
+#include "../misc/geometry.h"
+#include "lvgl.h"  // IWYU pragma: export
 
 #if LV_USE_LABEL
 /**
@@ -77,6 +78,20 @@ class Label : public Widget<Label> {
   Label& set_text_fmt(const char* fmt, ...);
 
   /**
+   * @brief Insert text at a position.
+   * @param pos The position index.
+   * @param txt The text to insert.
+   */
+  Label& ins_text(uint32_t pos, const char* txt);
+
+  /**
+   * @brief Cut text from a position.
+   * @param pos The position index.
+   * @param cnt The number of characters to cut.
+   */
+  Label& cut_text(uint32_t pos, uint32_t cnt);
+
+  /**
    * @brief Get the text of the label.
    * @return The text.
    */
@@ -129,6 +144,27 @@ class Label : public Widget<Label> {
    * @return true if enabled.
    */
   bool get_recolor() const;
+
+  /**
+   * @brief Get the index of the letter at a point.
+   * @param point_in The point relative to the label.
+   * @return The index of the letter.
+   */
+  uint32_t get_letter_on(const Point& point_in) const;
+
+  /**
+   * @brief Check if a character is under a point.
+   * @param pos The point relative to the label.
+   * @return true if a character is under the point.
+   */
+  bool is_char_under_pos(const Point& pos) const;
+
+  /**
+   * @brief Get the position of a letter by index.
+   * @param char_id The index of the letter.
+   * @return The position of the letter (relative to the label).
+   */
+  Point get_letter_pos(uint32_t char_id) const;
 
   /**
    * @brief Bind the label's text to a subject (Int, String, Pointer).

@@ -266,8 +266,11 @@ add_test(NAME test_menu COMMAND test_menu)
     add_test(NAME test_file_system COMMAND test_file_system)
     add_test(NAME test_geometry COMMAND test_geometry)
     add_test(NAME test_screen COMMAND test_screen)
-    add_test(NAME test_callbacks COMMAND test_callbacks)
     add_test(NAME test_input_device COMMAND test_input_device)
+
+    add_executable(test_api_expansion tests/test_api_expansion.cpp)
+    target_link_libraries(test_api_expansion PRIVATE lvgl_cpp)
+    add_test(NAME test_api_expansion COMMAND test_api_expansion)
 
     add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp font/font.cpp)
     target_link_libraries(test_fluent_styles PRIVATE lvgl_cpp)

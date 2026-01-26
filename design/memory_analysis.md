@@ -4,8 +4,8 @@
 
 ## Executive Summary
 
-The `lvgl_cpp` wrapper introduces a **Fixed Overhead** of ~48 bytes per widget and a **Variable Overhead** of ~80+ bytes per callback. 
-**CRITICAL ARCHITECTURAL FLAW**: The current `EventSource` mixin creates a **Systemic Memory Leak** due to undefined ownership semantics. The C++ wrapper allocates callback objects that the underlying C `lv_obj_t` cannot own, and the C++ `Object` host carries no reference to them. This is not just a bug; it is a failure of the ownership model.
+The `lvgl_cpp` wrapper introduces a **Fixed Overhead** of ~24 bytes per widget (for the `callback_nodes_` vector) and a **Variable Overhead** of ~40 bytes per callback.
+**STATUS: RESOLVED**. The previously identified "Systemic Memory Leak" (Issue #67) has been fixed in v0.3.0. The `Object` class now fully owns all registered event callbacks using a `std::vector<std::unique_ptr<CallbackNode>>` container, ensuring RAII compliance.
 
 ## 1. Static analysis: Base overhead
 
@@ -53,14 +53,15 @@ All state is stored in the underlying C `lv_obj_t`. The C++ class is purely a be
 
 ---
 
-## 3. Architectural Defect: Ambiguous Ownership Transfer
+3. Resolved: Ownership Transfer
 
-### The Root Cause
-The `Widget<T>` architecture conflates **Behavioral Extension** (Mixin) with **State Management**.
-- `EventSource<T>` creates heap-allocated `EventCallbackWrapper` instances.
-- It passes a raw pointer to `lv_obj_add_event_cb` (C layer).
-- The C layer is "Opaque": it holds `void* user_data` but has no destructor callback to free it.
-- The C++ `Object` base class *has* a mechanism for this (`callback_nodes_`), but `EventSource` bypasses it to avoid coupling.
+### The Fix (v0.3.0)
+The standard `Object` class now includes a `std::vector<std::unique_ptr<CallbackNode>> callback_nodes_` member.
+- **Ownership**: The C++ `Object` wrapper owns the closures.
+- **Lifecycle**: When the C++ wrapper is destroyed, the vector is cleared, destroying all lambdas.
+- **Safety**: The C callback wrapper (`event_proxy`) handles the bridging.
+
+**Result:** "Orphaned State" is eliminated.
 
 **Result:** we have "Orphaned State"—memory that is owned by no one.
 

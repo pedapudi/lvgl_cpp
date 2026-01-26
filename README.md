@@ -1,4 +1,4 @@
-# LVGL C++ Wrapper (`lvgl_cpp`)
+# LVGL C++ wrapper (`lvgl_cpp`)
 
 > **A Modern, Type-Safe, C++20 Interface for LVGL 9**
 
@@ -58,8 +58,7 @@
 Here is a complete example showing the "Hello World" of `lvgl_cpp` with a styled button and event handling.
 
 ```cpp
-#include <thread>
-#include <chrono>
+#include <unistd.h>
 #include "lvgl.h"
 #include "lvgl_cpp/core/object.h"
 #include "lvgl_cpp/display/display.h"
@@ -67,6 +66,7 @@ Here is a complete example showing the "Hello World" of `lvgl_cpp` with a styled
 #include "lvgl_cpp/widgets/label.h"
 #include "lvgl_cpp/widgets/screen.h"
 #include "lvgl_cpp/misc/style.h"
+#include "lvgl_cpp/misc/timer.h"
 
 using namespace lvgl;
 
@@ -118,10 +118,11 @@ int main() {
     create_ui(screen);
 
     while (true) {
-        lv_timer_handler();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        uint32_t time_till_next = Timer::handler();
+        usleep(5 * 1000);
     }
 }
+```
 
 ---
 
@@ -129,7 +130,6 @@ int main() {
 
 ### 1. Ownership Model (RAII)
 ...
-License: [Apache-2.0](LICENSE)
 
 The library prevents memory leaks by strictly defining who owns the LVGL object.
 
@@ -141,11 +141,13 @@ The library prevents memory leaks by strictly defining who owns the LVGL object.
 
 ### 2. Widget Type Hierarchy
 
-We avoid the "Monolithic Object" anti-pattern. `lvgl::Object` is the base, but functionality is composed via **CRTP Mixins**:
+We avoid the "Monolithic Object" anti-pattern. `lvgl::Object` is the base, but functionality is exposed via **Systemic Proxies**:
 
-*   **`Positionable<T>`**: `set_x`, `set_y`, `align`, `center`, `set_size`...
-*   **`Scrollable<T>`**: `scroll_to`, `set_scrollbar_mode`...
-*   **Generic Styling**: `obj.style()` returns a **StyleProxy** for fluent local styling (`bg_color`, `border_width`...) without bloating the main class.
+*   **`style()`**: Returns a `StyleProxy` for fluent local styling.
+*   **`scroll()`**: Returns a `ScrollProxy` for scrolling operations.
+*   **`layout()`**: Returns a `LayoutProxy` for flex/grid configuration.
+
+This means `lvgl::Object` remains lightweight. To use button-specific features, you must use `lvgl::Button`.
 
 This means `lvgl::Object` only exposes generic methods. To use button-specific features, you must use `lvgl::Button`.
 
@@ -189,6 +191,7 @@ The `design/` directory contains detailed architectural decision records (ADRs) 
 *   **[API Coverage Plan](design/api_coverage_plan.md)**: Verified feature matrix.
 *   **[Strategic Plan](design/strategic_improvement_plan.md)**: Deep dive into API coverage goals.
 *   **[Memory Analysis](design/memory_analysis.md)**: Performance overhead study.
+    *   *Result*: ~24 bytes overhead per C++ wrapper. No leaks (RAII).
 *   **[Widget Standardization](design/issue_61_standardization.md)**: Constructor patterns.
 
 ---
@@ -199,4 +202,4 @@ The `design/` directory contains detailed architectural decision records (ADRs) 
 2.  **Naming**: `snake_case` for methods/variables, `PascalCase` for classes.
 3.  **Tests**: All new features must include unit tests in `tests/`.
 
-License: [MIT](LICENSE)
+License: [Apache-2.0](LICENSE)

@@ -42,9 +42,10 @@ int main() {
     std::cout << "Testing Button styles..." << std::endl;
     lvgl::Button btn(screen);
     btn.set_size(100, 50)
-        .set_bg_opa(lvgl::Opacity::Cover)
-        .set_border_opa(lvgl::Opacity::Opa50)
-        .set_border_side(lvgl::BorderSide::Bottom);
+        .style()
+        .bg_opa(lvgl::Opacity::Cover)
+        .border_opa(lvgl::Opacity::Opa50)
+        .border_side(lvgl::BorderSide::Bottom);
     std::cerr << "Button styled" << std::endl;
 
     // Verify
@@ -61,7 +62,7 @@ int main() {
     lvgl::Label label(screen);
     label.set_text("Hello");
     std::cerr << "Label text set" << std::endl;
-    label.set_text_align(lvgl::TextAlign::Center);
+    label.style().text_align(lvgl::TextAlign::Center);
     label.set_long_mode(lvgl::Label::LongMode::ScrollCircular);
 
     assert(lv_obj_get_style_text_align(label.raw(), LV_PART_MAIN) ==
@@ -197,7 +198,7 @@ int main() {
   {
     std::cerr << "Align Enum Start" << std::endl;
     lvgl::Button obj(screen);
-    obj.set_bg_opa(lvgl::Opacity::Cover);  // Use fluent Stylable method
+    obj.style().bg_opa(lvgl::Opacity::Cover);  // Use fluent Stylable method
     obj.set_size(100, 100);
     obj.align(lvgl::Align::Center);
     // Rough check of position, assuming parent is sizeable
@@ -216,7 +217,7 @@ int main() {
   {
     std::cerr << "BlendMode Enum Start" << std::endl;
     lvgl::Button obj(screen);
-    obj.style().blend_mode(lvgl::BlendMode::Additive, lvgl::Part::Main);
+    obj.style().blend_mode(lvgl::BlendMode::Additive);
     assert(lv_obj_get_style_blend_mode(obj.raw(), LV_PART_MAIN) ==
            LV_BLEND_MODE_ADDITIVE);
     std::cerr << "BlendMode Enum Done" << std::endl;

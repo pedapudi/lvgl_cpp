@@ -62,12 +62,10 @@ int main(void) {
 
         // Add a lambda with capture to exercise std::function allocation
         CaptureState state;
-        btn.add_event_cb(
-            [state](lvgl::Event& e) {
-              (void)state;
-              (void)e;
-            },
-            LV_EVENT_CLICKED);
+        btn.add_event_cb(LV_EVENT_CLICKED, [state](lvgl::Event& e) {
+          (void)state;
+          (void)e;
+        });
 
         objects.push_back(std::move(btn));
 

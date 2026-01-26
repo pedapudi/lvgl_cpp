@@ -63,7 +63,7 @@ Dropdown& Dropdown::set_selected_highlight(bool en) {
 }
 
 Dropdown& Dropdown::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  return add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
 }
 
 lv_obj_t* Dropdown::get_list() {

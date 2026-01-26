@@ -101,7 +101,7 @@ void Table::get_selected_cell(uint32_t* row, uint32_t* col) {
 }
 
 Table& Table::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
   return *this;
 }
 

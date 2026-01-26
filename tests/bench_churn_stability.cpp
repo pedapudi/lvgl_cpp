@@ -29,7 +29,7 @@ void run_cycle() {
     auto btn = std::make_unique<lvgl::Button>(screen.get());
     btn->set_pos(i * 10, i * 10);
     // Add event callback (potential leak source if not cleaned)
-    btn->add_event_cb([](lvgl::Event&) {}, LV_EVENT_CLICKED);
+    btn->add_event_cb(LV_EVENT_CLICKED, [](lvgl::Event&) {});
     buttons.push_back(std::move(btn));
   }
 

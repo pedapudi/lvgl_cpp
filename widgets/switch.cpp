@@ -23,7 +23,7 @@ lv_switch_orientation_t Switch::get_orientation() const {
 }
 
 Switch& Switch::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  return add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  return add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
 }
 
 }  // namespace lvgl

@@ -188,7 +188,7 @@ void Textarea::cursor_up() {
 }
 
 Textarea& Textarea::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
   return *this;
 }
 

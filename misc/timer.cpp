@@ -74,6 +74,8 @@ Timer Timer::periodic(uint32_t period, TimerCallback cb) {
   return Timer(period, cb);
 }
 
+uint32_t Timer::handler() { return lv_timer_handler(); }
+
 void Timer::set_period(uint32_t period) {
   if (timer_) lv_timer_set_period(timer_, period);
 }

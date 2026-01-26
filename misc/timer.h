@@ -39,6 +39,12 @@ class Timer {
   static Timer periodic(uint32_t period, TimerCallback cb);
 
   /**
+   * @brief Call the LVGL timer handler.
+   * @return The time until the next timer needs to run, in milliseconds.
+   */
+  static uint32_t handler();
+
+  /**
    * @brief Set the timer period.
    * @param period Period in milliseconds.
    */

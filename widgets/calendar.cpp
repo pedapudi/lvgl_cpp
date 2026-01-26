@@ -73,7 +73,7 @@ lv_obj_t* Calendar::create_dropdown_header() {
 }
 
 Calendar& Calendar::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(cb, LV_EVENT_VALUE_CHANGED);
+  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
   return *this;
 }
 
