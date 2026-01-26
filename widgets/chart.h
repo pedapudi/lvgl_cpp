@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "../core/widget.h"  // IWYU pragma: export
+#include "../misc/color.h"   // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_CHART
@@ -33,7 +34,7 @@ class ChartSeries {
   void set_next_value(int32_t value);
   void set_next_value2(int32_t x_value, int32_t y_value);
   void set_all_values(int32_t value);
-  void set_color(lv_color_t color);
+  void set_color(Color color);
   void set_value_by_id(uint32_t id, int32_t value);
 
   lv_chart_series_t* raw() const { return series_; }
@@ -128,11 +129,11 @@ class Chart : public Widget<Chart> {
   uint32_t get_point_count() const;
 
   // Series management
-  ChartSeries add_series(lv_color_t color, Axis axis);
+  ChartSeries add_series(Color color, Axis axis);
   void remove_series(ChartSeries series);
 
   // Cursor management
-  ChartCursor add_cursor(lv_color_t color, lv_dir_t dir);
+  ChartCursor add_cursor(Color color, lv_dir_t dir);
   void remove_cursor(ChartCursor cursor);
 
   void refresh();

@@ -1,5 +1,7 @@
 #include "led.h"
 
+#include "../misc/color.h"
+
 #if LV_USE_LED
 
 namespace lvgl {
@@ -13,7 +15,7 @@ Led::Led(Object& parent) : Led(&parent) {}
 
 Led::Led(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
-Led& Led::set_color(lv_color_t color) {
+Led& Led::set_color(Color color) {
   if (obj_) lv_led_set_color(obj_, color);
   return *this;
 }

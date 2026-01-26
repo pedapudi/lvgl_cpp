@@ -1,5 +1,7 @@
 #include "chart.h"
 
+#include "../misc/color.h"
+
 #if LV_USE_CHART
 
 namespace lvgl {
@@ -24,7 +26,7 @@ void ChartSeries::set_all_values(int32_t value) {
   }
 }
 
-void ChartSeries::set_color(lv_color_t color) {
+void ChartSeries::set_color(Color color) {
   if (chart_ && chart_->raw() && series_) {
     lv_chart_set_series_color(chart_->raw(), series_, color);
   }
@@ -83,7 +85,7 @@ uint32_t Chart::get_point_count() const {
   return obj_ ? lv_chart_get_point_count(obj_) : 0;
 }
 
-ChartSeries Chart::add_series(lv_color_t color, Axis axis) {
+ChartSeries Chart::add_series(Color color, Axis axis) {
   if (obj_) {
     return ChartSeries(
         this,
@@ -135,7 +137,7 @@ lv_point_t ChartCursor::get_point() const {
   return {0, 0};
 }
 
-ChartCursor Chart::add_cursor(lv_color_t color, lv_dir_t dir) {
+ChartCursor Chart::add_cursor(Color color, lv_dir_t dir) {
   if (obj_) {
     return ChartCursor(this, lv_chart_add_cursor(obj_, color, dir));
   }

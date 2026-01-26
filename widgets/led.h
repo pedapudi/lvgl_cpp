@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "../core/widget.h"  // IWYU pragma: export
+#include "../misc/color.h"   // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
 #if LV_USE_LED
@@ -34,7 +35,7 @@ class Led : public Widget<Led> {
    */
   explicit Led(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  Led& set_color(lv_color_t color);
+  Led& set_color(Color color);
   Led& set_brightness(uint8_t bright);
   Led& on();
   Led& off();

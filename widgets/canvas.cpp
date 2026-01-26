@@ -1,5 +1,8 @@
 #include "canvas.h"
 
+#include "../misc/color.h"
+#include "lvgl.h"
+
 #if LV_USE_CANVAS
 
 namespace lvgl {
@@ -24,7 +27,7 @@ Canvas& Canvas::set_draw_buf(lv_draw_buf_t* draw_buf) {
   return *this;
 }
 
-Canvas& Canvas::set_px(int32_t x, int32_t y, lv_color_t color, lv_opa_t opa) {
+Canvas& Canvas::set_px(int32_t x, int32_t y, Color color, lv_opa_t opa) {
   if (obj_) lv_canvas_set_px(obj_, x, y, color, opa);
   return *this;
 }
@@ -111,7 +114,7 @@ void Canvas::copy_buf(const lv_area_t* canvas_area, lv_draw_buf_t* dest_buf,
   if (obj_) lv_canvas_copy_buf(obj_, canvas_area, dest_buf, dest_area);
 }
 
-void Canvas::fill_bg(lv_color_t color, lv_opa_t opa) {
+void Canvas::fill_bg(Color color, lv_opa_t opa) {
   if (obj_) lv_canvas_fill_bg(obj_, color, opa);
 }
 
@@ -172,6 +175,91 @@ bool Canvas::get_antialias() {
 
 lv_image_align_t Canvas::get_inner_align() {
   return obj_ ? lv_image_get_inner_align(obj_) : LV_IMAGE_ALIGN_DEFAULT;
+}
+
+Canvas& Canvas::draw_rect(int32_t x, int32_t y, int32_t w, int32_t h,
+                          const lv_draw_rect_dsc_t& dsc) {
+  if (obj_) {
+    lv_layer_t layer;
+    lv_canvas_init_layer(obj_, &layer);
+    lv_area_t coords;
+    lv_area_set(&coords, x, y, x + w - 1, y + h - 1);
+    lv_draw_rect(&layer, &dsc, &coords);
+    lv_canvas_finish_layer(obj_, &layer);
+  }
+  return *this;
+}
+
+Canvas& Canvas::draw_text(int32_t x, int32_t y, int32_t max_w,
+                          const lv_draw_label_dsc_t& dsc, const char* txt) {
+  if (obj_) {
+    lv_layer_t layer;
+    lv_canvas_init_layer(obj_, &layer);
+    lv_area_t coords;
+    // Set a large height for the bounding box; clipping will handle it.
+    lv_area_set(&coords, x, y, x + max_w - 1, y + 32767);
+    lv_draw_label_dsc_t dsc_copy = dsc;
+    dsc_copy.text = txt;
+    lv_draw_label(&layer, &dsc_copy, &coords);
+    lv_canvas_finish_layer(obj_, &layer);
+  }
+  return *this;
+}
+
+Canvas& Canvas::draw_line(const lv_point_precise_t points[], uint32_t point_cnt,
+                          const lv_draw_line_dsc_t& dsc) {
+  if (obj_ && point_cnt >= 2) {
+    lv_layer_t layer;
+    lv_canvas_init_layer(obj_, &layer);
+    lv_draw_line_dsc_t dsc_copy = dsc;
+    dsc_copy.p1 = points[0];
+    dsc_copy.p2 = points[1];
+    lv_draw_line(&layer, &dsc_copy);
+    // Note: LVGL v9 lv_draw_line only takes 2 points.
+    // For multiple segments, we would need a loop.
+    for (uint32_t i = 1; i < point_cnt - 1; ++i) {
+      dsc_copy.p1 = points[i];
+      dsc_copy.p2 = points[i + 1];
+      lv_draw_line(&layer, &dsc_copy);
+    }
+    lv_canvas_finish_layer(obj_, &layer);
+  }
+  return *this;
+}
+
+Canvas& Canvas::draw_image(int32_t x, int32_t y, const lv_draw_image_dsc_t& dsc,
+                           const void* src) {
+  if (obj_) {
+    lv_layer_t layer;
+    lv_canvas_init_layer(obj_, &layer);
+    lv_image_header_t header;
+    if (lv_image_decoder_get_info(src, &header) == LV_RESULT_OK) {
+      lv_area_t coords;
+      lv_area_set(&coords, x, y, x + header.w - 1, y + header.h - 1);
+      lv_draw_image_dsc_t dsc_copy = dsc;
+      dsc_copy.src = src;
+      lv_draw_image(&layer, &dsc_copy, &coords);
+    }
+    lv_canvas_finish_layer(obj_, &layer);
+  }
+  return *this;
+}
+
+Canvas& Canvas::draw_arc(int32_t x, int32_t y, uint16_t r, int32_t start_angle,
+                         int32_t end_angle, const lv_draw_arc_dsc_t& dsc) {
+  if (obj_) {
+    lv_layer_t layer;
+    lv_canvas_init_layer(obj_, &layer);
+    lv_draw_arc_dsc_t dsc_copy = dsc;
+    dsc_copy.center.x = x;
+    dsc_copy.center.y = y;
+    dsc_copy.radius = r;
+    dsc_copy.start_angle = start_angle;
+    dsc_copy.end_angle = end_angle;
+    lv_draw_arc(&layer, &dsc_copy);
+    lv_canvas_finish_layer(obj_, &layer);
+  }
+  return *this;
 }
 
 }  // namespace lvgl
