@@ -145,8 +145,8 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `LV_GRID` | 63.6% (7/11) |
 | `LV_BAR` | 57.1% (4/7) |
 | `LV_SLIDER` | 42.9% (3/7) |
-| `LV_LABEL` | 38.9% (7/18) |
-| `LV_TEXT` | 28.6% (4/14) |
+| `LV_TEXT` | 50.0% (7/14) |
+| `LV_LABEL` | 33.3% (6/18) |
 | `LV_INDEV` | 25.9% (7/27) |
 
 | `LV_ANIM` | 6.1% (2/33) |

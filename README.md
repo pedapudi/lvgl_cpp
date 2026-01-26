@@ -1,6 +1,6 @@
 # LVGL C++ Wrapper (`lvgl_cpp`)
 
-> **A Modern, Type-Safe, Zero-Overhead C++20 Interface for LVGL 9**
+> **A Modern, Type-Safe, C++20 Interface for LVGL 9**
 
 `lvgl_cpp` transforms the [LVGL](https://lvgl.io/) C library into a distinctively modern C++ framework. It provides **RAII memory management**, **functional event callbacks**, and a **fluent API** while strictly maintaining the performance characteristics of the underlying C library suitable for embedded systems.
 
@@ -125,9 +125,11 @@ int main() {
 
 ---
 
-## 🧠 Architecture & Concepts
+## Architecture & Concepts
 
 ### 1. Ownership Model (RAII)
+...
+License: [Apache-2.0](LICENSE)
 
 The library prevents memory leaks by strictly defining who owns the LVGL object.
 
