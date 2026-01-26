@@ -34,8 +34,8 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 
 | Category | Total | Used | Coverage |
 |----------|-------|------|----------|
-| **Functions** | 1,460 | 776 | **53.2%** |
-| **Enums and Constants** | 423 | 275 | **65.0%** |
+| **Functions** | 1,836 | 949 | **51.7%** |
+| **Enums and Constants** | 859 | 289 | **33.6%** |
 
 ## Function coverage
 
@@ -85,23 +85,28 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `lv_indev` | 50.8% (31/61) | ⬆️ (+19%) |
 | `lv_calendar` | 50.0% (11/22) | - |
 | `lv_image` | 50.0% (28/56) | - |
+| `lv_anim_timeline` | 52.6% (10/19) | ⬆️ (Detected) |
 | `lv_anim` | 48.4% (30/62) | ⬆️ |
-| `lv_obj` | 30.4% (142/467) | ⬆️ |
+| `lv_span` | 42.9% (3/7) | ⬆️ (New Phase 4) |
+| `lv_obj` | 30.8% (144/467) | ⬆️ (+2) |
 
 ### Low coverage (<25%)
 
-| Subsystem | Coverage | Notes |
-|-----------|----------|-------|
 | `lv_slider` | 23.5% (4/17) | Uses `lv_bar_*` |
+| `lv_draw` | 21.0% (47/224) | High-level drawing API |
 | `lv_color` | 22.0% (11/50) | - |
 | `lv_event` | 17.9% (7/39) | - |
+| `lv_image_button` | 12.5% (1/8) | - |
 | `lv_font` | 8.3% (2/24) | - |
+| `lv_observer` | 5.6% (1/18) | Core v9 feature |
+| `lv_subject` | 8.3% (1/12) | Core v9 feature |
+| `lv_buttonmatrix` | 10.3% (4/39) | - |
+| `lv_imagebutton` | 9.1% (1/11) | - |
 
 ### Not wrapped
 
 | Subsystem | Note |
 |-----------|------|
-| `lv_span` | Widget not implemented |
 | `lv_flex` | Only `lv_flex_init` (system function) |
 | `lv_grid` | Only system-level functions |
 
@@ -127,9 +132,9 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `LV_PART` | 90.0% (9/10) |
 | `LV_FLEX` | 77.8% (14/18) |
 | `LV_OPA` | 76.5% (13/17) |
-| `LV_DISPLAY` | 75.0% (6/8) |
+| `LV_DISPLAY` | 62.5% (5/8) |
 | `LV_ARC` | 75.0% (3/4) |
-| `LV_SCALE` | 100% (15/15) |
+| `LV_SCALE` | 40.0% (6/15) |
 
 ### Medium/low coverage
 
@@ -143,7 +148,7 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 | `LV_SLIDER` | 42.9% (3/7) |
 | `LV_TEXT` | 50.0% (7/14) |
 | `LV_LABEL` | 33.3% (6/18) |
-| `LV_INDEV` | 25.9% (7/27) |
+| `LV_INDEV` | 37.0% (10/27) |
 
 | `LV_ANIM` | 6.1% (2/33) |
 

@@ -24,6 +24,7 @@ from typing import Dict, List, Set, Tuple
 USER_API_PREFIXES = [
     'lv_timer_',
     'lv_anim_',
+    'lv_anim_timeline_',
     'lv_obj_',
     'lv_display_',
     'lv_indev_',
@@ -48,10 +49,12 @@ USER_API_PREFIXES = [
     'lv_spinbox_',
     'lv_canvas_',
     'lv_image_',
+    'lv_imagebutton_',
     'lv_led_',
     'lv_line_',
     'lv_list_',
     'lv_span_',
+    'lv_spangroup_',
     'lv_scale_',
     'lv_tabview_',
     'lv_tileview_',
@@ -64,6 +67,17 @@ USER_API_PREFIXES = [
     'lv_font_',
     'lv_color_',
     'lv_palette_',
+    'lv_animimg_',
+    'lv_buttonmatrix_',
+    'lv_imagebutton_',
+    'lv_spinner_',
+    'lv_lottie_',
+    'lv_vector_',
+    'lv_observer_',
+    'lv_subject_',
+    'lv_screen_',
+    'lv_draw_',
+    'lv_layer_',
 ]
 
 # Enum prefixes to track (LV_* constants)
@@ -96,6 +110,15 @@ ENUM_PREFIXES = [
     'LV_SCALE_',
     'LV_INDEV_',
     'LV_DISPLAY_',
+    'LV_BUTTONMATRIX_',
+    'LV_IMAGEBUTTON_',
+    'LV_SPAN_',
+    'LV_IMAGE_',
+    'LV_LOTTIE_',
+    'LV_VECTOR_',
+    'LV_SUBJECT_',
+    'LV_OBJ_',
+    'LV_STYLE_',
 ]
 
 # Internal/private API patterns
@@ -116,8 +139,6 @@ INTERNAL_PATTERNS = [
 
 DRAW_INTERNAL_PATTERNS = [
     r'^lv_draw_sw_',
-    r'^lv_draw_buf_',
-    r'^lv_draw_task_',
 ]
 
 
@@ -158,6 +179,8 @@ def extract_enums(lvgl_path: Path) -> Dict[str, Set[str]]:
             continue
         if 'test' in str(header).lower():
             continue
+        if 'api_map' in str(header).lower():
+            continue
             
         try:
             with open(header, 'r', errors='ignore') as f:
@@ -188,6 +211,8 @@ def extract_c_functions(lvgl_path: Path) -> Tuple[Dict[str, Set[str]], Set[str]]
     
     for header in lvgl_path.rglob('*.h'):
         if 'test' in str(header).lower() or 'example' in str(header).lower():
+            continue
+        if 'api_map' in str(header).lower():
             continue
             
         try:

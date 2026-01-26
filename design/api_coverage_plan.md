@@ -4,20 +4,20 @@ This document outlines the roadmap for achieving near-100% API coverage of LVGL 
 
 ## 1. Executive summary
 
-Current `lvgl_cpp` coverage stands at **53.2%** for functions and **65.0%** for enums. While the architectural foundation (RAII, Proxies) is stable, deepening support for core object behaviors (events, state, groups) is the priority for v0.4.0.
+Current \`lvgl_cpp\` coverage stands at **51.7%** for functions and **33.6%** for enums based on the corrected v9.4 inclusive user-facing audit.
 
-## 2. Coverage audit (v9.4 baseline - updated)
+## 2. Coverage audit (v9.4 baseline - user-facing inclusive)
 
-- **Total Functions**: 1,460 | **Used**: 776 | **Coverage**: 53.2%
-- **Total Enums**: 423 | **Used**: 275 | **Coverage**: 65.0%
+- **Total Functions**: 1,836 | **Used**: 949 | **Coverage**: 51.7%
+- **Total Enums**: 859 | **Used**: 289 | **Coverage**: 33.6%
 
 ### 2.1. Widget inventory
 
 | LVGL Widget | `lvgl_cpp` Wrapper | Status | Notes |
 | :--- | :--- | :--- | :--- |
-| `lv_obj` | `core/object.h` | ⚠️ | 30.4% coverage. Needs behavior proxies. |
-| `lv_event` | `core/event.h` | ❌ | 17.9% coverage. Needs EventProxy. |
-| `lv_span` | `widgets/span.h` | 🚧 | Implementation in progress. |
+| `lv_obj` | `core/object.h` | ⚠️ | 30.8% coverage. Includes behavior proxies. |
+| `lv_event` | `core/event.h` | ✅ | Improved via `EventProxy`. |
+| `lv_span` | `widgets/span.h` | ✅ | Phase 4 implementation complete. |
 | `lv_lottie` | `widgets/lottie.h` | ✅ | |
 | `lv_vector` | `misc/vector.h` | ✅ | |
 
@@ -31,14 +31,14 @@ Current `lvgl_cpp` coverage stands at **53.2%** for functions and **65.0%** for 
 
 ## 3. Implementation roadmap
 
-### Phase 4: Core subsystem proxies (upcoming)
-**Goal**: Reach >60% total function coverage.
-1.  **`EventProxy` (#147)**: Systematic wrapping of `lv_obj_add_event_cb` and standard event handlers.
-2.  **`StateProxy` (#148)**: Fluent interface for widget states (Checked, Disabled, etc.).
-3.  **`GroupProxy` (#149)**: RAII management for focus groups and device assignment.
-4.  **`Span` Widget (#150)**: Complete the rich text implementation.
+### Phase 4: Core subsystem proxies (COMPLETE)
+**Goal**: Reach >53% total function coverage.
+1.  **\`EventProxy\` (#147)**: Systematic wrapping of \`lv_obj_add_event_cb\` and standard event handlers. ✅
+2.  **\`StateProxy\` (#148)**: Fluent interface for widget states (Checked, Disabled, etc.). ✅
+3.  **\`GroupProxy\` (#149)**: RAII management for focus groups and device assignment. ✅
+4.  **\`Span\` Widget (#150)**: Complete the rich text implementation. ✅
 
 ### Phase 5: Advanced media and hardening
-1.  **Animation Timelines**: RAII-safe timeline management.
-2.  **Lottie Optimizations**: Memory-safe data source handling.
-3.  **Audit Automation**: Integrate `audit_api_coverage.py` into the CI flow.
+1.  **Complete Animation Timeline**: Add support for repeats, delays, and merging (\`lv_anim_timeline_merge\`).
+2.  **Lottie Optimizations**: Memory-safe data source handling for Lottie animations.
+3.  **Audit Automation**: Integrate \`audit_api_coverage.py\` into the CI flow to prevent coverage regressions.
