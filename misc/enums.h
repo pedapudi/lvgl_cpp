@@ -409,6 +409,22 @@ enum class Key : uint8_t {
   End = LV_KEY_END,
 };
 
+/**
+ * @brief Wrapper for lv_obj_point_transform_flag_t.
+ */
+enum class PointTransformFlag : uint8_t {
+  None = LV_OBJ_POINT_TRANSFORM_FLAG_NONE,
+  Recursive = LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE,
+  Inverse = LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE,
+  InverseRecursive = LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE_RECURSIVE,
+};
+
+inline PointTransformFlag operator|(PointTransformFlag lhs,
+                                    PointTransformFlag rhs) {
+  return static_cast<PointTransformFlag>(static_cast<uint8_t>(lhs) |
+                                         static_cast<uint8_t>(rhs));
+}
+
 // ============================================================================
 // Input Device Enums
 // ============================================================================
@@ -531,6 +547,15 @@ enum class AnimEnable : uint8_t {
 enum class Result : uint8_t {
   Invalid = LV_RESULT_INVALID,
   Ok = LV_RESULT_OK,
+};
+
+/**
+ * @brief Wrapper for lv_layer_type_t.
+ */
+enum class LayerType : uint8_t {
+  None = LV_LAYER_TYPE_NONE,
+  Simple = LV_LAYER_TYPE_SIMPLE,
+  Transform = LV_LAYER_TYPE_TRANSFORM,
 };
 
 }  // namespace lvgl

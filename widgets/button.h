@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_WIDGETS_BUTTON_H_
 #define LVGL_CPP_WIDGETS_BUTTON_H_
 
+#include "../core/traits.h"
 #include "../core/widget.h"  // IWYU pragma: export
 #include "lvgl.h"            // IWYU pragma: export
 
@@ -23,6 +24,11 @@
  */
 
 namespace lvgl {
+class Button;
+template <>
+struct class_traits<Button> {
+  static const lv_obj_class_t* get() { return &lv_button_class; }
+};
 
 /**
  * @brief Wrapper for lv_button.

@@ -6,6 +6,7 @@
 #include "color.h"
 #include "enums.h"
 #include "lvgl.h"
+#include "style_base.h"
 
 namespace lvgl {
 
@@ -16,22 +17,8 @@ class Font;
  *
  * The Style class provides a fluent API for defining LVGL styles. It owns
  * the underlying lv_style_t and automatically initializes it on construction.
- *
- * ## Usage
- *
- * ```cpp
- * auto style = lvgl::Style()
- *     .bg_color(lvgl::Color::from_hex(0xFF0000))
- *     .bg_opa(lvgl::Opacity::Cover)
- *     .radius(10)
- *     .border_width(2)
- *     .border_color(lvgl::Color::from_hex(0x0000FF))
- *     .pad_all(10);
- *
- * button.add_style(style, lvgl::Part::Main);
- * ```
  */
-class Style {
+class Style : public StyleBase<Style> {
  public:
   /**
    * @brief Construct and initialize an empty style.
@@ -52,195 +39,6 @@ class Style {
   Style& operator=(Style&& other) noexcept;
 
   // =========================================================================
-  // Background
-  // =========================================================================
-
-  Style& bg_color(Color color);
-  Style& bg_color(lv_color_t color);
-  Style& bg_opa(Opacity opa);
-  Style& bg_opa(lv_opa_t opa);
-  Style& bg_grad_color(Color color);
-  Style& bg_grad_dir(lv_grad_dir_t dir);
-  Style& bg_grad_stop(int32_t value);
-  Style& bg_main_stop(int32_t value);
-  Style& bg_image_src(const void* src);
-  Style& bg_image_opa(Opacity opa);
-  Style& bg_image_opa(lv_opa_t opa);
-  Style& bg_image_recolor(Color color);
-  Style& bg_image_recolor(lv_color_t color);
-  Style& bg_image_recolor_opa(Opacity opa);
-  Style& bg_image_recolor_opa(lv_opa_t opa);
-  Style& bg_image_tiled(bool tiled);
-
-  // =========================================================================
-  // Border
-  // =========================================================================
-
-  Style& border_color(Color color);
-  Style& border_color(lv_color_t color);
-  Style& border_width(int32_t width);
-  Style& border_opa(Opacity opa);
-  Style& border_opa(lv_opa_t opa);
-  Style& border_side(BorderSide side);
-  Style& border_side(lv_border_side_t side);
-  Style& border_post(bool post);
-
-  // =========================================================================
-  // Outline
-  // =========================================================================
-
-  Style& outline_color(Color color);
-  Style& outline_color(lv_color_t color);
-  Style& outline_width(int32_t width);
-  Style& outline_opa(Opacity opa);
-  Style& outline_opa(lv_opa_t opa);
-  Style& outline_pad(int32_t pad);
-
-  // =========================================================================
-  // Padding
-  // =========================================================================
-
-  Style& pad_all(int32_t pad);
-  Style& pad_hor(int32_t pad);
-  Style& pad_ver(int32_t pad);
-  Style& pad_left(int32_t pad);
-  Style& pad_right(int32_t pad);
-  Style& pad_top(int32_t pad);
-  Style& pad_bottom(int32_t pad);
-  Style& pad_gap(int32_t gap);
-  Style& pad_row(int32_t pad);
-  Style& pad_column(int32_t pad);
-
-  // =========================================================================
-  // Size
-  // =========================================================================
-
-  Style& width(int32_t value);
-  Style& min_width(int32_t value);
-  Style& max_width(int32_t value);
-  Style& height(int32_t value);
-  Style& min_height(int32_t value);
-  Style& max_height(int32_t value);
-
-  // =========================================================================
-  // Geometry
-  // =========================================================================
-
-  Style& radius(int32_t radius);
-  Style& clip_corner(bool clip);
-  Style& transform_width(int32_t value);
-  Style& transform_height(int32_t value);
-  Style& translate_x(int32_t value);
-  Style& translate_y(int32_t value);
-  Style& transform_scale_x(int32_t value);
-  Style& transform_scale_y(int32_t value);
-  Style& transform_rotation(int32_t value);
-
-  // =========================================================================
-  // Text
-  // =========================================================================
-
-  Style& text_color(Color color);
-  Style& text_color(lv_color_t color);
-  Style& text_opa(Opacity opa);
-  Style& text_opa(lv_opa_t opa);
-  Style& text_font(const lv_font_t* font);
-  Style& text_letter_space(int32_t space);
-  Style& text_line_space(int32_t space);
-  Style& text_align(TextAlign align);
-  Style& text_align(lv_text_align_t align);
-  Style& text_decor(TextDecor decor);
-  Style& text_decor(lv_text_decor_t decor);
-
-  // =========================================================================
-  // Image
-  // =========================================================================
-
-  Style& image_opa(Opacity opa);
-  Style& image_opa(lv_opa_t opa);
-  Style& image_recolor(Color color);
-  Style& image_recolor(lv_color_t color);
-  Style& image_recolor_opa(Opacity opa);
-  Style& image_recolor_opa(lv_opa_t opa);
-
-  // =========================================================================
-  // Line
-  // =========================================================================
-
-  Style& line_width(int32_t width);
-  Style& line_dash_width(int32_t width);
-  Style& line_dash_gap(int32_t gap);
-  Style& line_rounded(bool rounded);
-  Style& line_color(Color color);
-  Style& line_color(lv_color_t color);
-  Style& line_opa(Opacity opa);
-  Style& line_opa(lv_opa_t opa);
-
-  // =========================================================================
-  // Arc
-  // =========================================================================
-
-  Style& arc_width(int32_t width);
-  Style& arc_rounded(bool rounded);
-  Style& arc_color(Color color);
-  Style& arc_color(lv_color_t color);
-  Style& arc_opa(Opacity opa);
-  Style& arc_opa(lv_opa_t opa);
-  Style& arc_image_src(const void* src);
-
-  // =========================================================================
-  // Animation
-  // =========================================================================
-
-  Style& anim_time(uint32_t time);
-  Style& anim_duration(uint32_t duration);
-  Style& transition(const lv_style_transition_dsc_t* dsc);
-
-  // =========================================================================
-  // Layout (Flex/Grid)
-  // =========================================================================
-
-  Style& flex_flow(lv_flex_flow_t flow);
-  Style& flex_main_place(lv_flex_align_t place);
-  Style& flex_cross_place(lv_flex_align_t place);
-  Style& flex_track_place(lv_flex_align_t place);
-  Style& flex_grow(uint8_t grow);
-
-  Style& grid_row_dsc_array(const int32_t* dsc);
-  Style& grid_column_dsc_array(const int32_t* dsc);
-  Style& grid_row_align(lv_grid_align_t align);
-  Style& grid_column_align(lv_grid_align_t align);
-  Style& grid_cell_column_pos(int32_t pos);
-  Style& grid_cell_column_span(int32_t span);
-  Style& grid_cell_row_pos(int32_t pos);
-  Style& grid_cell_row_span(int32_t span);
-  Style& grid_cell_x_align(lv_grid_align_t align);
-  Style& grid_cell_y_align(lv_grid_align_t align);
-
-  // =========================================================================
-  // Shadow
-  // =========================================================================
-
-  Style& shadow_color(Color color);
-  Style& shadow_color(lv_color_t color);
-  Style& shadow_opa(Opacity opa);
-  Style& shadow_opa(lv_opa_t opa);
-  Style& shadow_width(int32_t width);
-  Style& shadow_offset_x(int32_t offset);
-  Style& shadow_offset_y(int32_t offset);
-  Style& shadow_spread(int32_t spread);
-
-  // =========================================================================
-  // Miscellaneous
-  // =========================================================================
-
-  Style& opa(Opacity opa);
-  Style& opa(lv_opa_t opa);
-  Style& blend_mode(BlendMode mode);
-  Style& blend_mode(lv_blend_mode_t mode);
-  Style& base_dir(lv_base_dir_t dir);
-
-  // =========================================================================
   // Raw access
   // =========================================================================
 
@@ -255,6 +53,196 @@ class Style {
   const lv_style_t* raw() const;
 
  private:
+  friend class StyleBase<Style>;
+
+  // Internal setters called by StyleBase
+  void set_bg_color(lv_color_t v) { lv_style_set_bg_color(&style_, v); }
+  void set_bg_opa(lv_opa_t v) { lv_style_set_bg_opa(&style_, v); }
+  void set_bg_grad_color(lv_color_t v) {
+    lv_style_set_bg_grad_color(&style_, v);
+  }
+  void set_bg_grad_dir(lv_grad_dir_t v) {
+    lv_style_set_bg_grad_dir(&style_, v);
+  }
+  void set_bg_grad_stop(int32_t v) { lv_style_set_bg_grad_stop(&style_, v); }
+  void set_bg_main_stop(int32_t v) { lv_style_set_bg_main_stop(&style_, v); }
+  void set_bg_image_src(const void* v) {
+    lv_style_set_bg_image_src(&style_, v);
+  }
+  void set_bg_image_opa(lv_opa_t v) { lv_style_set_bg_image_opa(&style_, v); }
+  void set_bg_image_recolor(lv_color_t v) {
+    lv_style_set_bg_image_recolor(&style_, v);
+  }
+  void set_bg_image_recolor_opa(lv_opa_t v) {
+    lv_style_set_bg_image_recolor_opa(&style_, v);
+  }
+  void set_bg_image_tiled(bool v) { lv_style_set_bg_image_tiled(&style_, v); }
+
+  void set_border_color(lv_color_t v) { lv_style_set_border_color(&style_, v); }
+  void set_border_width(int32_t v) { lv_style_set_border_width(&style_, v); }
+  void set_border_opa(lv_opa_t v) { lv_style_set_border_opa(&style_, v); }
+  void set_border_side(lv_border_side_t v) {
+    lv_style_set_border_side(&style_, v);
+  }
+  void set_border_post(bool v) { lv_style_set_border_post(&style_, v); }
+
+  void set_outline_color(lv_color_t v) {
+    lv_style_set_outline_color(&style_, v);
+  }
+  void set_outline_width(int32_t v) { lv_style_set_outline_width(&style_, v); }
+  void set_outline_opa(lv_opa_t v) { lv_style_set_outline_opa(&style_, v); }
+  void set_outline_pad(int32_t v) { lv_style_set_outline_pad(&style_, v); }
+
+  void set_shadow_width(int32_t v) { lv_style_set_shadow_width(&style_, v); }
+  void set_shadow_color(lv_color_t v) { lv_style_set_shadow_color(&style_, v); }
+  void set_shadow_opa(lv_opa_t v) { lv_style_set_shadow_opa(&style_, v); }
+  void set_shadow_offset_x(int32_t v) {
+    lv_style_set_shadow_offset_x(&style_, v);
+  }
+  void set_shadow_offset_y(int32_t v) {
+    lv_style_set_shadow_offset_y(&style_, v);
+  }
+  void set_shadow_spread(int32_t v) { lv_style_set_shadow_spread(&style_, v); }
+
+  void set_pad_all(int32_t v) { lv_style_set_pad_all(&style_, v); }
+  void set_pad_hor(int32_t v) { lv_style_set_pad_hor(&style_, v); }
+  void set_pad_ver(int32_t v) { lv_style_set_pad_ver(&style_, v); }
+  void set_pad_left(int32_t v) { lv_style_set_pad_left(&style_, v); }
+  void set_pad_right(int32_t v) { lv_style_set_pad_right(&style_, v); }
+  void set_pad_top(int32_t v) { lv_style_set_pad_top(&style_, v); }
+  void set_pad_bottom(int32_t v) { lv_style_set_pad_bottom(&style_, v); }
+  void set_pad_row(int32_t v) { lv_style_set_pad_row(&style_, v); }
+  void set_pad_column(int32_t v) { lv_style_set_pad_column(&style_, v); }
+  void set_pad_gap(int32_t v) { lv_style_set_pad_gap(&style_, v); }
+
+  void set_width(int32_t v) { lv_style_set_width(&style_, v); }
+  void set_min_width(int32_t v) { lv_style_set_min_width(&style_, v); }
+  void set_max_width(int32_t v) { lv_style_set_max_width(&style_, v); }
+  void set_height(int32_t v) { lv_style_set_height(&style_, v); }
+  void set_min_height(int32_t v) { lv_style_set_min_height(&style_, v); }
+  void set_max_height(int32_t v) { lv_style_set_max_height(&style_, v); }
+
+  void set_radius(int32_t v) { lv_style_set_radius(&style_, v); }
+  void set_clip_corner(bool v) { lv_style_set_clip_corner(&style_, v); }
+  void set_transform_width(int32_t v) {
+    lv_style_set_transform_width(&style_, v);
+  }
+  void set_transform_height(int32_t v) {
+    lv_style_set_transform_height(&style_, v);
+  }
+  void set_translate_x(int32_t v) { lv_style_set_translate_x(&style_, v); }
+  void set_translate_y(int32_t v) { lv_style_set_translate_y(&style_, v); }
+  void set_transform_scale_x(int32_t v) {
+    lv_style_set_transform_scale_x(&style_, v);
+  }
+  void set_transform_scale_y(int32_t v) {
+    lv_style_set_transform_scale_y(&style_, v);
+  }
+  void set_transform_rotation(int32_t v) {
+    lv_style_set_transform_rotation(&style_, v);
+  }
+  void set_transform_pivot_x(int32_t v) {
+    lv_style_set_transform_pivot_x(&style_, v);
+  }
+  void set_transform_pivot_y(int32_t v) {
+    lv_style_set_transform_pivot_y(&style_, v);
+  }
+
+  void set_text_color(lv_color_t v) { lv_style_set_text_color(&style_, v); }
+  void set_text_opa(lv_opa_t v) { lv_style_set_text_opa(&style_, v); }
+  void set_text_font(const lv_font_t* v) { lv_style_set_text_font(&style_, v); }
+  void set_text_letter_space(int32_t v) {
+    lv_style_set_text_letter_space(&style_, v);
+  }
+  void set_text_line_space(int32_t v) {
+    lv_style_set_text_line_space(&style_, v);
+  }
+  void set_text_align(lv_text_align_t v) {
+    lv_style_set_text_align(&style_, v);
+  }
+  void set_text_decor(lv_text_decor_t v) {
+    lv_style_set_text_decor(&style_, v);
+  }
+
+  void set_image_opa(lv_opa_t v) { lv_style_set_image_opa(&style_, v); }
+  void set_image_recolor(lv_color_t v) {
+    lv_style_set_image_recolor(&style_, v);
+  }
+  void set_image_recolor_opa(lv_opa_t v) {
+    lv_style_set_image_recolor_opa(&style_, v);
+  }
+
+  void set_line_width(int32_t v) { lv_style_set_line_width(&style_, v); }
+  void set_line_dash_width(int32_t v) {
+    lv_style_set_line_dash_width(&style_, v);
+  }
+  void set_line_dash_gap(int32_t v) { lv_style_set_line_dash_gap(&style_, v); }
+  void set_line_rounded(bool v) { lv_style_set_line_rounded(&style_, v); }
+  void set_line_color(lv_color_t v) { lv_style_set_line_color(&style_, v); }
+  void set_line_opa(lv_opa_t v) { lv_style_set_line_opa(&style_, v); }
+
+  void set_arc_width(int32_t v) { lv_style_set_arc_width(&style_, v); }
+  void set_arc_rounded(bool v) { lv_style_set_arc_rounded(&style_, v); }
+  void set_arc_color(lv_color_t v) { lv_style_set_arc_color(&style_, v); }
+  void set_arc_opa(lv_opa_t v) { lv_style_set_arc_opa(&style_, v); }
+  void set_arc_image_src(const void* v) {
+    lv_style_set_arc_image_src(&style_, v);
+  }
+
+  void set_anim_duration(uint32_t v) { lv_style_set_anim_duration(&style_, v); }
+  void set_transition(const lv_style_transition_dsc_t* v) {
+    lv_style_set_transition(&style_, v);
+  }
+
+  void set_flex_flow(lv_flex_flow_t v) { lv_style_set_flex_flow(&style_, v); }
+  void set_flex_main_place(lv_flex_align_t v) {
+    lv_style_set_flex_main_place(&style_, v);
+  }
+  void set_flex_cross_place(lv_flex_align_t v) {
+    lv_style_set_flex_cross_place(&style_, v);
+  }
+  void set_flex_track_place(lv_flex_align_t v) {
+    lv_style_set_flex_track_place(&style_, v);
+  }
+  void set_flex_grow(uint8_t v) { lv_style_set_flex_grow(&style_, v); }
+
+  void set_grid_row_dsc_array(const int32_t* v) {
+    lv_style_set_grid_row_dsc_array(&style_, v);
+  }
+  void set_grid_column_dsc_array(const int32_t* v) {
+    lv_style_set_grid_column_dsc_array(&style_, v);
+  }
+  void set_grid_row_align(lv_grid_align_t v) {
+    lv_style_set_grid_row_align(&style_, v);
+  }
+  void set_grid_column_align(lv_grid_align_t v) {
+    lv_style_set_grid_column_align(&style_, v);
+  }
+  void set_grid_cell_column_pos(int32_t v) {
+    lv_style_set_grid_cell_column_pos(&style_, v);
+  }
+  void set_grid_cell_column_span(int32_t v) {
+    lv_style_set_grid_cell_column_span(&style_, v);
+  }
+  void set_grid_cell_row_pos(int32_t v) {
+    lv_style_set_grid_cell_row_pos(&style_, v);
+  }
+  void set_grid_cell_row_span(int32_t v) {
+    lv_style_set_grid_cell_row_span(&style_, v);
+  }
+  void set_grid_cell_x_align(lv_grid_align_t v) {
+    lv_style_set_grid_cell_x_align(&style_, v);
+  }
+  void set_grid_cell_y_align(lv_grid_align_t v) {
+    lv_style_set_grid_cell_y_align(&style_, v);
+  }
+
+  void set_opa(lv_opa_t v) { lv_style_set_opa(&style_, v); }
+  void set_blend_mode(lv_blend_mode_t v) {
+    lv_style_set_blend_mode(&style_, v);
+  }
+  void set_base_dir(lv_base_dir_t v) { lv_style_set_base_dir(&style_, v); }
+
   lv_style_t style_;
   bool initialized_ = false;
 };

@@ -162,8 +162,11 @@ else()
     add_executable(test_ownership tests/test_ownership.cpp)
     target_link_libraries(test_ownership PRIVATE lvgl_cpp)
 
-    add_executable(test_animation tests/test_animation.cpp)
-    target_link_libraries(test_animation PRIVATE lvgl_cpp)
+    add_executable(test_style_reconciliation tests/test_style_reconciliation.cpp)
+target_link_libraries(test_style_reconciliation PRIVATE lvgl_cpp)
+
+add_executable(test_issue_161 tests/test_issue_161.cpp)
+target_link_libraries(test_issue_161 PRIVATE lvgl_cpp)
 
     add_executable(test_fluent_api tests/test_fluent_api.cpp)
     target_link_libraries(test_fluent_api PRIVATE lvgl_cpp)
@@ -336,6 +339,14 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_scale tests/test_scale.cpp)
     target_link_libraries(test_scale PRIVATE lvgl_cpp)
     add_test(NAME test_scale COMMAND test_scale)
+
+    add_executable(test_constants tests/test_constants.cpp)
+    target_link_libraries(test_constants PRIVATE lvgl_cpp)
+    add_test(NAME test_constants COMMAND test_constants)
+
+    add_executable(test_cast tests/test_cast.cpp)
+    target_link_libraries(test_cast PRIVATE lvgl_cpp)
+    add_test(NAME test_cast COMMAND test_cast)
 
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)

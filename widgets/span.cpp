@@ -1,6 +1,7 @@
 #include "span.h"
 
 #if LV_USE_SPAN
+#include "../misc/style.h"
 
 namespace lvgl {
 

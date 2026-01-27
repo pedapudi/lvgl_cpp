@@ -1,6 +1,7 @@
 #include "scale.h"
 
 #if LV_USE_SCALE
+#include "../misc/style.h"
 
 namespace lvgl {
 

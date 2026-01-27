@@ -403,8 +403,29 @@ class Object {
    * @brief Get a scroll proxy for scrolling operations.
    * @return A ScrollProxy object supporting fluent method chaining.
    */
-  StyleProxy style(lv_style_selector_t selector) {
+  ScrollProxy scroll() { return ScrollProxy(obj_); }
+
+  /**
+   * @brief Get a style proxy for setting style properties.
+   * @param selector The part/state selector (default LV_PART_MAIN).
+   * @return A StyleProxy object supporting fluent method chaining.
+   */
+  StyleProxy style(lv_style_selector_t selector = LV_PART_MAIN) {
     return StyleProxy(obj_, selector);
+  }
+
+  /**
+   * @brief Get a style proxy for a specific state.
+   */
+  StyleProxy style(State s) {
+    return style(static_cast<lv_style_selector_t>(s));
+  }
+
+  /**
+   * @brief Get a style proxy for a specific part.
+   */
+  StyleProxy style(Part p) {
+    return style(static_cast<lv_style_selector_t>(p));
   }
 
   // --- Events ---
@@ -444,6 +465,10 @@ class Object {
    * @note Usually accessed via event().add_cb()
    */
   Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
+  Object& add_event_cb(EventCode event_code, EventCallback callback) {
+    return add_event_cb(static_cast<lv_event_code_t>(event_code),
+                        std::move(callback));
+  }
 
   /**
    * @brief Remove all event callbacks from this object.
@@ -481,6 +506,42 @@ class Object {
    * @param f The flag to remove.
    */
   void remove_flag(ObjFlag f);
+
+  /**
+   * @brief Add a state to the object.
+   * @param s The state to add.
+   */
+  void add_state(lv_state_t s);
+
+  /**
+   * @brief Add a state to the object.
+   * @param s The state to add.
+   */
+  void add_state(State s);
+
+  /**
+   * @brief Remove a state from the object.
+   * @param s The state to remove.
+   */
+  void remove_state(lv_state_t s);
+
+  /**
+   * @brief Remove a state from the object.
+   * @param s The state to remove.
+   */
+  void remove_state(State s);
+
+  /**
+   * @brief Check if a state is set.
+   * @param s The state to check.
+   */
+  bool has_state(lv_state_t s) const;
+
+  /**
+   * @brief Check if a state is set.
+   * @param s The state to check.
+   */
+  bool has_state(State s) const;
 
   /**
    * @brief Check if a flag is set.
