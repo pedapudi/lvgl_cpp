@@ -25,18 +25,6 @@ inline int32_t Percent(int32_t x) { return LV_PCT(x); }
 }  // namespace Size
 
 /**
- * @brief Namespace for coordinate-related constants.
- */
-namespace Coord {
-
-/**
- * @brief Maximum coordinate value.
- */
-static constexpr int32_t Max = LV_COORD_MAX;
-
-}  // namespace Coord
-
-/**
  * @brief Namespace for radius-related constants.
  */
 namespace Radius {

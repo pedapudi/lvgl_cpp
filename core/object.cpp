@@ -302,12 +302,6 @@ Object& Object::set_flex_grow(uint8_t grow) {
   return *this;
 }
 
-Object& Object::set_grid_dsc_array(const int32_t* col_dsc,
-                                   const int32_t* row_dsc) {
-  if (obj_) lv_obj_set_grid_dsc_array(obj_, col_dsc, row_dsc);
-  return *this;
-}
-
 Object& Object::set_grid_dsc_array(const GridLayout& grid) {
   if (obj_) {
     lv_obj_set_grid_dsc_array(obj_, grid.col_dsc(), grid.row_dsc());
@@ -377,6 +371,22 @@ int32_t Object::get_scroll_right() const {
   return obj_ ? lv_obj_get_scroll_right(obj_) : 0;
 }
 
+lv_scrollbar_mode_t Object::get_scrollbar_mode() const {
+  return obj_ ? lv_obj_get_scrollbar_mode(obj_) : LV_SCROLLBAR_MODE_OFF;
+}
+
+lv_dir_t Object::get_scroll_dir() const {
+  return obj_ ? lv_obj_get_scroll_dir(obj_) : LV_DIR_NONE;
+}
+
+lv_scroll_snap_t Object::get_scroll_snap_x() const {
+  return obj_ ? lv_obj_get_scroll_snap_x(obj_) : LV_SCROLL_SNAP_NONE;
+}
+
+lv_scroll_snap_t Object::get_scroll_snap_y() const {
+  return obj_ ? lv_obj_get_scroll_snap_y(obj_) : LV_SCROLL_SNAP_NONE;
+}
+
 int32_t Object::get_content_width() const {
   return obj_ ? lv_obj_get_content_width(obj_) : 0;
 }
@@ -391,6 +401,74 @@ int32_t Object::get_self_width() const {
 
 int32_t Object::get_self_height() const {
   return obj_ ? lv_obj_get_self_height(obj_) : 0;
+}
+
+Area Object::get_coords() const {
+  Area a;
+  if (obj_) lv_obj_get_coords(obj_, a.raw());
+  return a;
+}
+
+Area Object::get_content_coords() const {
+  Area a;
+  if (obj_) lv_obj_get_content_coords(obj_, a.raw());
+  return a;
+}
+
+Area Object::get_click_area() const {
+  Area a;
+  if (obj_) lv_obj_get_click_area(obj_, a.raw());
+  return a;
+}
+
+Point Object::transform_point(const Point& p, bool recursive,
+                              bool inverse) const {
+  Point res = p;
+  if (obj_) {
+    lv_obj_point_transform_flag_t flags = LV_OBJ_POINT_TRANSFORM_FLAG_NONE;
+    if (recursive)
+      flags = static_cast<lv_obj_point_transform_flag_t>(
+          flags | LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE);
+    if (inverse)
+      flags = static_cast<lv_obj_point_transform_flag_t>(
+          flags | LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE);
+    lv_obj_transform_point(obj_, res.raw(), flags);
+  }
+  return res;
+}
+
+Area Object::get_transformed_area(const Area& area, bool recursive,
+                                  bool inverse) const {
+  Area res = area;
+  if (obj_) {
+    lv_obj_point_transform_flag_t flags = LV_OBJ_POINT_TRANSFORM_FLAG_NONE;
+    if (recursive)
+      flags = static_cast<lv_obj_point_transform_flag_t>(
+          flags | LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE);
+    if (inverse)
+      flags = static_cast<lv_obj_point_transform_flag_t>(
+          flags | LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE);
+    lv_obj_get_transformed_area(obj_, res.raw(), flags);
+  }
+  return res;
+}
+
+void Object::invalidate_area(const Area& area) {
+  if (obj_) lv_obj_invalidate_area(obj_, area.raw());
+}
+
+bool Object::is_area_visible(const Area& area) const {
+  if (!obj_) return false;
+  lv_area_t copy = area;
+  return lv_obj_area_is_visible(obj_, &copy);
+}
+
+void Object::refresh_ext_draw_size() {
+  if (obj_) lv_obj_refresh_ext_draw_size(obj_);
+}
+
+void Object::redraw(lv_layer_t* layer) {
+  if (obj_) lv_obj_redraw(layer, obj_);
 }
 
 // --- Other Properties ---
@@ -437,6 +515,10 @@ EventProxy Object::event() { return EventProxy(this); }
 StateProxy Object::state() { return StateProxy(obj_); }
 
 GroupProxy Object::group() { return GroupProxy(obj_); }
+
+InteractionProxy Object::interaction() { return InteractionProxy(obj_); }
+
+TreeProxy Object::tree() { return TreeProxy(obj_); }
 
 // --- Styles ---
 

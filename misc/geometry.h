@@ -26,6 +26,8 @@ class Coord {
 
   static Coord pct(lv_coord_t x) { return Coord(LV_PCT(x)); }
 
+  static constexpr int32_t Max = LV_COORD_MAX;
+
  private:
   lv_coord_t val_;
 };

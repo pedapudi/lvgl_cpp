@@ -11,6 +11,8 @@ set(SOURCES
     font/owned_font.cpp
     misc/file_system.cpp
     core/observer.cpp
+    core/interaction_proxy.cpp
+    core/tree_proxy.cpp
 )
 
 set(DRAW_SOURCES
@@ -299,6 +301,10 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_obj_proxies tests/test_obj_proxies.cpp)
     target_link_libraries(test_obj_proxies PRIVATE lvgl_cpp)
     add_test(NAME test_obj_proxies COMMAND test_obj_proxies)
+
+    add_executable(test_core_api_phase9 tests/test_core_api_phase9.cpp)
+    target_link_libraries(test_core_api_phase9 PRIVATE lvgl_cpp)
+    add_test(NAME test_core_api_phase9 COMMAND test_core_api_phase9)
 
     add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp font/font.cpp)
     target_link_libraries(test_fluent_styles PRIVATE lvgl_cpp)

@@ -14,15 +14,18 @@
 #include <vector>
 
 #include "../misc/enums.h"
+#include "../misc/geometry.h"
 #include "event.h"
 #include "event_proxy.h"
 #include "group_proxy.h"
+#include "interaction_proxy.h"
 #include "layout_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
 #include "scroll_proxy.h"
 #include "state_proxy.h"
 #include "style_proxy.h"
 #include "traits.h"
+#include "tree_proxy.h"
 
 /**
  * @file object.h
@@ -199,11 +202,27 @@ class Object {
    */
   Object get_child(int32_t index) const;
 
+  template <typename T>
+  Object get_child(int32_t index) const {
+    if (!obj_) return Object((lv_obj_t*)nullptr);
+    return Object(lv_obj_get_child_by_type(obj_, index, class_traits<T>::get()),
+                  Ownership::Unmanaged);
+  }
+
   /**
    * @brief Get the number of children.
    * @return The child count.
    */
   uint32_t get_child_count() const;
+
+  /**
+   * @brief Get child count of a specific class.
+   */
+  template <typename T>
+  uint32_t get_child_count() const {
+    if (!obj_) return 0;
+    return lv_obj_get_child_count_by_type(obj_, class_traits<T>::get());
+  }
 
   /**
    * @brief Set the parent of this object.
@@ -389,6 +408,52 @@ class Object {
    */
   int32_t get_height() const;
 
+  /**
+   * @brief Get valid absolute coordinates on screen.
+   */
+  Area get_coords() const;
+
+  /**
+   * @brief Get coordinates of content area (minus padding).
+   */
+  Area get_content_coords() const;
+
+  /**
+   * @brief Get the area responsive to input.
+   */
+  Area get_click_area() const;
+
+  /**
+   * @brief Transform a point based on object's zoom/angle.
+   */
+  Point transform_point(const Point& p, bool recursive, bool inverse) const;
+
+  /**
+   * @brief Get area after transformation.
+   */
+  Area get_transformed_area(const Area& area, bool recursive,
+                            bool inverse) const;
+
+  /**
+   * @brief Invalidate a specific area of the object.
+   */
+  void invalidate_area(const Area& area);
+
+  /**
+   * @brief Check if an area is visible on screen.
+   */
+  bool is_area_visible(const Area& area) const;
+
+  /**
+   * @brief Notify LVGL that extra draw size (shadow/outline) changed.
+   */
+  void refresh_ext_draw_size();
+
+  /**
+   * @brief Force immediate redraw (Expert API).
+   */
+  void redraw(lv_layer_t* layer);
+
   // --- Layout Shortcuts ---
 
   Object& set_flex_flow(lv_flex_flow_t flow);
@@ -426,6 +491,11 @@ class Object {
   int32_t get_scroll_bottom() const;
   int32_t get_scroll_left() const;
   int32_t get_scroll_right() const;
+
+  lv_scrollbar_mode_t get_scrollbar_mode() const;
+  lv_dir_t get_scroll_dir() const;
+  lv_scroll_snap_t get_scroll_snap_x() const;
+  lv_scroll_snap_t get_scroll_snap_y() const;
 
   int32_t get_content_width() const;
   int32_t get_content_height() const;
@@ -497,6 +567,18 @@ class Object {
    * @return A GroupProxy object supporting fluent method chaining.
    */
   GroupProxy group();
+
+  /**
+   * @brief Get an interaction proxy for input and hit-testing operations.
+   * @return An InteractionProxy object.
+   */
+  InteractionProxy interaction();
+
+  /**
+   * @brief Get a tree proxy for hierarchy operations.
+   * @return A TreeProxy object.
+   */
+  TreeProxy tree();
 
   /**
    * @brief Manually send an event to this object.
