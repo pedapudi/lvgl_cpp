@@ -21,3 +21,4 @@ valgrind_output*.txt
 
 # Agent Configuration
 .agent/
+!.agent/skills/
