@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/bench_fragmentation_c.dir/link.d CMakeFiles/bench_fragmentation_c.dir/tests/bench_fragmentation.c.o -o bench_fragmentation_c  lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a

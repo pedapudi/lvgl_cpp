@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/test_ownership.dir/link.d CMakeFiles/test_ownership.dir/tests/test_ownership.cpp.o -o test_ownership  liblvgl_cpp.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a

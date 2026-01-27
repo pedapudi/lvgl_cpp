@@ -1,0 +1,73 @@
+lvgl_build/CMakeFiles/lvgl.dir/src/misc/lv_utils.c.o: \
+ /home/sunil/git/lvgl/lvgl/src/misc/lv_utils.c /usr/include/stdc-predef.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/lv_utils.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../lv_conf_internal.h \
+ /home/sunil/git/lvgl/lvgl_cpp/tests/lv_conf_test.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/include/features.h /usr/include/features-time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/bits/timesize.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/long-double.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/include/x86_64-linux-gnu/bits/types.h \
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+ /usr/include/x86_64-linux-gnu/bits/time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stddef.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stdbool.h \
+ /usr/include/inttypes.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stdarg.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/lv_draw_buf.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_area.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/../lv_conf_internal.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_math.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_color.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_assert.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_log.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/../stdlib/lv_mem.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/../stdlib/../lv_conf_internal.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/../stdlib/lv_string.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/../stdlib/../misc/lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_palette.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_color.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../misc/lv_color_op.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../stdlib/lv_string.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/lv_image_dsc.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/../draw/../lv_conf_internal.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/lv_fs.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/lv_cache.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/../lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/lv_cache_entry.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/lv_cache_class.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/lv_cache_lru_rb.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../lv_cache_private.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_os_private.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../../osal/../lv_conf_internal.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_os.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../../osal/../misc/lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_linux.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/../../../osal/lv_os_none.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/lv_cache_lru_ll.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/class/lv_cache_sc_da.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/instance/lv_cache_instance.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/instance/lv_image_header_cache.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/instance/../../lv_types.h \
+ /home/sunil/git/lvgl/lvgl/src/misc/cache/instance/lv_image_cache.h
