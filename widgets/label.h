@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 
+#include "../core/traits.h"
 #include "../core/widget.h"  // IWYU pragma: export
 #include "../misc/geometry.h"
 #include "lvgl.h"  // IWYU pragma: export
@@ -21,6 +22,12 @@
  * ```
  */
 namespace lvgl {
+class Label;
+template <>
+struct class_traits<Label> {
+  static const lv_obj_class_t* get() { return &lv_label_class; }
+};
+
 class Subject;
 class Observer;
 

@@ -217,7 +217,7 @@ int main() {
   {
     std::cerr << "BlendMode Enum Start" << std::endl;
     lvgl::Button obj(screen);
-    obj.style().blend_mode(lvgl::BlendMode::Additive);
+    obj.style(LV_PART_MAIN).blend_mode(lvgl::BlendMode::Additive);
     assert(lv_obj_get_style_blend_mode(obj.raw(), LV_PART_MAIN) ==
            LV_BLEND_MODE_ADDITIVE);
     std::cerr << "BlendMode Enum Done" << std::endl;
@@ -242,6 +242,17 @@ int main() {
     std::cerr << "Dir Enum Done" << std::endl;
   }
 
-  std::cerr << "[SUCCESS] Scoped Enums validated." << std::endl;
+  // Test PointTransformFlag
+  lvgl::PointTransformFlag pt_flag =
+      lvgl::PointTransformFlag::Recursive | lvgl::PointTransformFlag::Inverse;
+  assert(static_cast<uint8_t>(pt_flag) ==
+         (LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE |
+          LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE));
+
+  // Test LayerType
+  lvgl::LayerType lt = lvgl::LayerType::Transform;
+  assert(static_cast<uint8_t>(lt) == LV_LAYER_TYPE_TRANSFORM);
+
+  std::cout << "[SUCCESS] Enums expanded and validated." << std::endl;
   return 0;
 }

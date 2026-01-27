@@ -262,6 +262,26 @@ bool Object::has_flag(ObjFlag f) const {
   return has_flag(static_cast<lv_obj_flag_t>(f));
 }
 
+void Object::add_state(lv_state_t s) {
+  if (obj_) lv_obj_add_state(obj_, s);
+}
+
+void Object::add_state(State s) { add_state(static_cast<lv_state_t>(s)); }
+
+void Object::remove_state(lv_state_t s) {
+  if (obj_) lv_obj_remove_state(obj_, s);
+}
+
+void Object::remove_state(State s) { remove_state(static_cast<lv_state_t>(s)); }
+
+bool Object::has_state(lv_state_t s) const {
+  return obj_ ? lv_obj_has_state(obj_, s) : false;
+}
+
+bool Object::has_state(State s) const {
+  return has_state(static_cast<lv_state_t>(s));
+}
+
 // --- Layout Shortcuts ---
 
 Object& Object::set_flex_flow(lv_flex_flow_t flow) {
