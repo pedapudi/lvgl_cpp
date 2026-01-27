@@ -11,11 +11,19 @@ set(SOURCES
     font/owned_font.cpp
     misc/file_system.cpp
     core/observer.cpp
-    draw/image_decoder.cpp
+)
+
+set(DRAW_SOURCES
     draw/draw.cpp
+    draw/draw_buf.cpp
     draw/draw_task.cpp
+    draw/image_decoder.cpp
     draw/image_descriptor.cpp
-    
+)
+
+list(APPEND SOURCES ${DRAW_SOURCES})
+
+set(WIDGET_SOURCES
     widgets/button.cpp
     widgets/label.cpp
     widgets/bar.cpp
@@ -60,6 +68,7 @@ set(SOURCES
     misc/theme.cpp
     misc/vector.cpp
 )
+list(APPEND SOURCES ${WIDGET_SOURCES})
 
 if(IDF_TARGET)
     idf_component_register(SRCS ${SOURCES}

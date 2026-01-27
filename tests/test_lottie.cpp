@@ -14,21 +14,18 @@ void test_lottie_creation() {
   // Test Create
   lvgl::Lottie lottie = lvgl::Lottie::create(screen);
 
-  // Test Buffer Setting (mock buffer)
-  static uint32_t buf[100 * 100];
-  lottie.set_buffer(100, 100, buf);
+  // Test Buffer Setting with DrawBuf
+  lvgl::DrawBuf db(100, 100);
+  lottie.set_draw_buf(db);
 
-  // Test Src Setting (mock data)
-  // Note: In a real test, this would need valid JSON data to not crash LVGL if
-  // it parses immediately. lv_lottie_set_src_data usually parses. We might skip
-  // specific src tests if we don't have valid Lottie data handy. However, we
-  // can check basic API existence.
+  // Test Auto-Buffer Create
+  lvgl::Lottie lottie2 = lvgl::Lottie::create(screen, 128, 128);
 
-  // Test Anim Access
-  // lvgl::Animation anim = lottie.anim(); // This might return null if no src
-  // is set.
+  if (lottie2.raw()) {
+    std::cout << "Lottie auto-buffer creation passed." << std::endl;
+  }
 
-  std::cout << "Lottie creation passed." << std::endl;
+  std::cout << "Lottie basic tests passed." << std::endl;
 #else
   std::cout << "Lottie disabled, skipping test." << std::endl;
 #endif

@@ -70,6 +70,18 @@ void AnimationTimeline::set_reverse(bool reverse) {
   if (timeline_) lv_anim_timeline_set_reverse(timeline_, reverse);
 }
 
+void AnimationTimeline::set_delay(uint32_t delay) {
+  if (timeline_) lv_anim_timeline_set_delay(timeline_, delay);
+}
+
+void AnimationTimeline::set_repeat_count(uint32_t count) {
+  if (timeline_) lv_anim_timeline_set_repeat_count(timeline_, count);
+}
+
+void AnimationTimeline::set_repeat_delay(uint32_t delay) {
+  if (timeline_) lv_anim_timeline_set_repeat_delay(timeline_, delay);
+}
+
 void AnimationTimeline::set_progress(uint16_t progress) {
   if (timeline_) lv_anim_timeline_set_progress(timeline_, progress);
 }
@@ -84,9 +96,31 @@ bool AnimationTimeline::get_reverse() const {
   return false;
 }
 
+uint32_t AnimationTimeline::get_delay() const {
+  if (timeline_) return lv_anim_timeline_get_delay(timeline_);
+  return 0;
+}
+
 uint16_t AnimationTimeline::get_progress() const {
   if (timeline_) return lv_anim_timeline_get_progress(timeline_);
   return 0;
+}
+
+uint32_t AnimationTimeline::get_repeat_count() const {
+  if (timeline_) return lv_anim_timeline_get_repeat_count(timeline_);
+  return 0;
+}
+
+uint32_t AnimationTimeline::get_repeat_delay() const {
+  if (timeline_) return lv_anim_timeline_get_repeat_delay(timeline_);
+  return 0;
+}
+
+void AnimationTimeline::merge(const AnimationTimeline& other,
+                              int32_t extra_delay) {
+  if (timeline_ && other.timeline_) {
+    lv_anim_timeline_merge(timeline_, other.timeline_, extra_delay);
+  }
 }
 
 }  // namespace lvgl

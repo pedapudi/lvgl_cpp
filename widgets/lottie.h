@@ -7,6 +7,7 @@
 #if LV_USE_LOTTIE
 
 #include "../../lvgl/src/widgets/lottie/lv_lottie.h"
+#include "../draw/draw.h"
 #include "../misc/animation.h"
 
 namespace lvgl {
@@ -48,6 +49,12 @@ class Lottie : public Widget<Lottie> {
   void set_draw_buf(lv_draw_buf_t* draw_buf);
 
   /**
+   * @brief Set a draw buffer for the animation (RAII version).
+   * @param draw_buf The DrawBuf wrapper.
+   */
+  void set_draw_buf(const DrawBuf& draw_buf);
+
+  /**
    * @brief Get the underlying animation controller.
    * @return A C++ Animation wrapper for the internal lv_anim_t.
    */
@@ -59,6 +66,15 @@ class Lottie : public Widget<Lottie> {
    * @return A Lottie object.
    */
   static Lottie create(Object& parent);
+
+  /**
+   * @brief Create a Lottie widget and automatically allocate a draw buffer.
+   * @param parent The parent object.
+   * @param w Width of the animation.
+   * @param h Height of the animation.
+   * @return A Lottie object.
+   */
+  static Lottie create(Object& parent, int32_t w, int32_t h);
 };
 
 }  // namespace lvgl
