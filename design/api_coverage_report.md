@@ -34,7 +34,7 @@ The audit scans all lvgl_cpp source files (`.h` and `.cpp`) for actual usage of:
 
 | Category | Total | Used | Coverage |
 |----------|-------|------|----------|
-| **Functions** | 1,836 | 949 | **51.7%** |
+| **Functions** | 1,836 | 968 | **52.7%** |
 | **Enums and Constants** | 859 | 289 | **33.6%** |
 
 ## Function coverage

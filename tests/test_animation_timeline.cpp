@@ -87,9 +87,60 @@ void test_timeline_basic() {
   }
 }
 
+void test_timeline_advanced() {
+  std::cout << "Testing Timeline Advanced (delay, repeat, merge)..."
+            << std::endl;
+
+  lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+  lvgl::Button btn1(screen);
+
+  {
+    lvgl::AnimationTimeline timeline;
+    timeline.set_delay(500);
+    timeline.set_repeat_count(2);
+    timeline.set_repeat_delay(100);
+
+    if (timeline.get_delay() == 500 && timeline.get_repeat_count() == 2 &&
+        timeline.get_repeat_delay() == 100) {
+      std::cout << "PASS: Setting/getting delay and repeat works." << std::endl;
+    } else {
+      std::cerr << "FAIL: Delay or repeat mismatch." << std::endl;
+      exit(1);
+    }
+  }
+
+  {
+    lvgl::AnimationTimeline t1;
+    lvgl::AnimationTimeline t2;
+
+    lvgl::Animation a1(btn1);
+    a1.set_values(0, 100).set_duration(100).set_exec_cb(
+        static_cast<lvgl::Animation::ExecCallback>(
+            [](void* var, int32_t val) {}));
+
+    t1.add(a1, 0);
+    t2.add(a1, 100);
+
+    uint32_t pt1 = t1.get_playtime();
+    t1.merge(t2, 50);
+
+    // pt1 was 100. t2 adds an anim starting at 100 with duration 100 -> 200.
+    // + extra_delay 50 -> 250.
+    if (t1.get_playtime() == 250) {
+      std::cout << "PASS: Timeline merge works." << std::endl;
+    } else {
+      std::cerr << "FAIL: Merged playtime mismatch: " << t1.get_playtime()
+                << " (expected 250)." << std::endl;
+      exit(1);
+    }
+  }
+}
+
 int main() {
   lv_init();
   lvgl::Display display = lvgl::Display::create(800, 480);
   test_timeline_basic();
+  test_timeline_advanced();
+  std::cout << "All AnimationTimeline tests passed!" << std::endl;
   return 0;
 }
