@@ -39,6 +39,12 @@ Current \`lvgl_cpp\` coverage stands at **51.7%** for functions and **33.6%** fo
 4.  **\`Span\` Widget (#150)**: Complete the rich text implementation. ✅
 
 ### Phase 5: Advanced media and hardening
-1.  **Complete Animation Timeline**: Add support for repeats, delays, and merging (\`lv_anim_timeline_merge\`).
+1.  **Complete Animation Timeline**: Add support for repeats, delays, and merging (`lv_anim_timeline_merge`).
 2.  **Lottie Optimizations**: Memory-safe data source handling for Lottie animations.
-3.  **Audit Automation**: Integrate \`audit_api_coverage.py\` into the CI flow to prevent coverage regressions.
+3.  **Audit Automation**: Integrate `audit_api_coverage.py` into the CI flow to prevent coverage regressions.
+
+### Phase 9: Core Usage API Expansion (#163) (PLANNED)
+**Goal**: Increase `lv_obj` function coverage to >80%.
+1.  **Proxies**: Introduce `InteractionProxy` and `TreeProxy` to modularize object API.
+2.  **Types**: standardize `Area` and `Point` usage.
+3.  **Features**: Implement missing scrolling getters, coordinate transforms, and tree swapping.

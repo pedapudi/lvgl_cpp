@@ -16,10 +16,21 @@ Widgets with internal state or complex handle management (Charts, Tables) lack e
 - **Gap (Table)**: Cell manipulation requires repeated row/column coordinate passing instead of fluent cell proxies.
 - **Impact**: Verbose code and increased potential for use-after-free or double-free errors when managing external handles.
 
-### 2.3. Animation and Timer RAII
-The current animation system is a partial wrapper.
-- **Gap**: Animation timelines and safe C++ callback (lambda) cleanup.
-- **Impact**: Memory leaks if animations are deleted before callbacks are cleared.
+### 2.4. Core Object API Coverage
+The automated API audit revealed low coverage for the core `lv_obj` class (~37% wrapped). A manual review against `lvgl/src/core/*.h` identifies the following specific functional gaps that must be addressed in `lvgl_cpp/core/object.h`:
+
+- **Scrolling Configuration** (`lv_obj_scroll.h`)
+    - *Missing*: `lv_obj_set_scrollbar_mode`, `lv_obj_set_scroll_dir`, `lv_obj_set_scroll_snap_x/y`.
+    - *Impact*: Inability to hide scrollbars or lock scroll axes (e.g., vertical-only lists).
+- **Coordinate Systems** (`lv_obj_pos.h`)
+    - *Missing*: `lv_obj_get_coords` (absolute screen coordinates), `lv_obj_get_content_coords`, `lv_obj_transform_point`.
+    - *Impact*: Critical for implementing custom drag-drop, collision detection, or advanced animations.
+- **Interaction & Drawing** (`lv_obj_draw.h`, `lv_obj.h`)
+    - *Missing*: `lv_obj_set_ext_click_area`, `lv_obj_refresh_ext_draw_size`, `lv_obj_hit_test`.
+    - *Impact*: Cannot expand touch areas for small buttons; custom drawing updates may be clipped.
+- **Advanced Tree Operations** (`lv_obj_tree.h`)
+    - *Missing*: `lv_obj_swap` (z-order swap), `lv_obj_get_index`.
+    - *Impact*: Dynamic reordering of widgets (e.g., bringing a focused card to front) is difficult.
 
 ## 3. Remediation Plan
 
@@ -33,6 +44,10 @@ The current animation system is a partial wrapper.
 
 ### Phase 3: Event System Hardening
 - **Refactor**: Ensure all widgets (Arc, Slider, Switch, Checkbox, Textarea) have standardized `on_value_changed`, `on_clicked` callbacks that utilize the safe `Event` wrapper.
+
+### Phase 4: Core Coverage (In Progress)
+- **Object**: Systematically wrap missing `lv_obj_*` functions.
+- **Animation**: Verify RAII compliance for lambda callbacks.
 
 ## 4. Implementation Details (Remediation)
 
@@ -67,4 +82,7 @@ class TableCell {
 | ChartSeries | ✅ COMPLETE | test/chart_table |
 | TableCell | ✅ COMPLETE | test/chart_table |
 | Animation RAII | 🚧 IN PROGRESS | issue/animations |
-| Style Proxies | 🚧 IN PROGRESS | |
+| Style Proxies | ✅ COMPLETE | style_proxy.h |
+| Layout Helpers | ✅ COMPLETE | misc/layout.h |
+| Object Introspection | ✅ COMPLETE | core/object.h |
+| Core Object API | ⚠️ LOW COVERAGE | 37% Wrapped |

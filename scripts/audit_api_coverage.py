@@ -135,6 +135,11 @@ INTERNAL_PATTERNS = [
     r'_event_base',      # Internal event dispatch
     r'_destruct$',       # Destructors
     r'_cb$',             # Callback implementations (not setters)
+    r'_style_init',      # Internal style initialization
+    r'_style_deinit',    # Internal style deinitialization
+    r'_obj_init',        # Internal object initialization
+    r'_obj_deinit',      # Internal object deinitialization
+    r'_delete_anim',     # Internal animation cleanup
 ]
 
 DRAW_INTERNAL_PATTERNS = [
