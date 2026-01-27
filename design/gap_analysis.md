@@ -85,4 +85,5 @@ class TableCell {
 | Style Proxies | ✅ COMPLETE | style_proxy.h |
 | Layout Helpers | ✅ COMPLETE | misc/layout.h |
 | Object Introspection | ✅ COMPLETE | core/object.h |
-| Core Object API | 🚧 PHASE 9 COMPLETE | 50%+ Wrapped |
+| Core Object API | Phase 9 | ✅ COMPLETE |
+| High Coverage (<100%) | Phase 10 | 🚧 IN PROGRESS |
