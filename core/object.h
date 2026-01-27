@@ -22,6 +22,7 @@
 #include "scroll_proxy.h"
 #include "state_proxy.h"
 #include "style_proxy.h"
+#include "traits.h"
 
 /**
  * @file object.h
@@ -67,6 +68,7 @@
 
 namespace lvgl {
 
+class GridLayout;
 class Style;  // Forward declaration
 class Event;  // Forward declaration
 
@@ -237,6 +239,44 @@ class Object {
    */
   void delete_async();
 
+  /**
+   * @brief Invalidate the object, causing it to be redrawn.
+   */
+  void invalidate() {
+    if (obj_) lv_obj_invalidate(obj_);
+  }
+
+  /**
+   * @brief Check if the object is visible.
+   * @return true if the object is visible, false otherwise.
+   */
+  bool is_visible() const { return obj_ ? lv_obj_is_visible(obj_) : false; }
+
+  /**
+   * @brief Get the current state of the object.
+   * @return The LVGL state flags.
+   */
+  lv_state_t get_state() const {
+    return obj_ ? lv_obj_get_state(obj_) : LV_STATE_ANY;
+  }
+
+  /**
+   * @brief Get the screen this object belongs to.
+   * @return An unmanaged Object wrapper for the screen.
+   */
+  Object get_screen() const {
+    return obj_ ? Object(lv_obj_get_screen(obj_), Ownership::Unmanaged)
+                : Object(static_cast<lv_obj_t*>(nullptr), Ownership::Unmanaged);
+  }
+
+  /**
+   * @brief Get the display this object belongs to.
+   * @return The raw LVGL display pointer.
+   */
+  lv_display_t* get_display() const {
+    return obj_ ? lv_obj_get_display(obj_) : nullptr;
+  }
+
   // --- Geometric Properties ---
 
   /**
@@ -357,7 +397,17 @@ class Object {
                          lv_flex_align_t track_place);
   Object& set_flex_grow(uint8_t grow);
 
-  Object& set_grid_dsc_array(const int32_t* col_dsc, const int32_t* row_dsc);
+  /**
+   * @brief Set the grid descriptor arrays.
+   * @param grid The GridLayout object containing descriptor arrays.
+   * @return Reference to this object.
+   *
+   * @warning The `grid` object (or at least its internal vectors) MUST stay
+   * alive as long as the LVGL object uses this layout. LVGL stores raw pointers
+   * to the descriptor arrays, so if the `GridLayout` object is destroyed (e.g.
+   * if it's a temporary), the layout will reference invalid memory.
+   */
+  Object& set_grid_dsc_array(const GridLayout& grid);
   Object& set_grid_align(lv_grid_align_t column_align,
                          lv_grid_align_t row_align);
   Object& set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
@@ -548,6 +598,16 @@ class Object {
    * @param f The flag to check.
    */
   bool has_flag(ObjFlag f) const;
+
+  /**
+   * @brief Check if the object is an instance of a specific widget class.
+   * @tparam T The widget class (e.g., Button, Label).
+   * @return true if the object is of class T.
+   */
+  template <typename T>
+  bool has_class() const {
+    return obj_ ? lv_obj_has_class(obj_, class_traits<T>::get()) : false;
+  }
 
   // --- Scroll ---
 

@@ -348,6 +348,14 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_cast PRIVATE lvgl_cpp)
     add_test(NAME test_cast COMMAND test_cast)
 
+    add_executable(test_layout tests/test_layout.cpp)
+    target_link_libraries(test_layout PRIVATE lvgl_cpp)
+    add_test(NAME test_layout COMMAND test_layout)
+
+    add_executable(test_coverage_sweep tests/test_coverage_sweep.cpp)
+    target_link_libraries(test_coverage_sweep PRIVATE lvgl_cpp)
+    add_test(NAME test_coverage_sweep COMMAND test_coverage_sweep)
+
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
     add_test(NAME test_header_integrity 

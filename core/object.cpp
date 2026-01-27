@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <vector>
 
+#include "../misc/layout.h"
 #include "../misc/style.h"
 #include "event.h"
 #include "lvgl.h"
@@ -304,6 +305,13 @@ Object& Object::set_flex_grow(uint8_t grow) {
 Object& Object::set_grid_dsc_array(const int32_t* col_dsc,
                                    const int32_t* row_dsc) {
   if (obj_) lv_obj_set_grid_dsc_array(obj_, col_dsc, row_dsc);
+  return *this;
+}
+
+Object& Object::set_grid_dsc_array(const GridLayout& grid) {
+  if (obj_) {
+    lv_obj_set_grid_dsc_array(obj_, grid.col_dsc(), grid.row_dsc());
+  }
   return *this;
 }
 
