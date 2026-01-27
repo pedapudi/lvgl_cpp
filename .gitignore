@@ -1,5 +1,11 @@
 build/
 build_asan/
+lvgl_build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+test_*
 *.o
 *.a
 *.so

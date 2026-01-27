@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/bench_widgets.dir/link.d CMakeFiles/bench_widgets.dir/tests/bench_widgets.cpp.o -o bench_widgets  liblvgl_cpp.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a

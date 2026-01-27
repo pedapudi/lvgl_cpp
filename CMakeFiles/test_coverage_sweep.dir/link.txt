@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/test_coverage_sweep.dir/link.d CMakeFiles/test_coverage_sweep.dir/tests/test_coverage_sweep.cpp.o -o test_coverage_sweep  liblvgl_cpp.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a lvgl_build/lib/liblvgl.a lvgl_build/lib/liblvgl_examples.a lvgl_build/lib/liblvgl_demos.a
