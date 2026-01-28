@@ -48,39 +48,39 @@ class Timer {
    * @brief Set the timer period.
    * @param period Period in milliseconds.
    */
-  void set_period(uint32_t period);
+  Timer& set_period(uint32_t period);
 
   /**
    * @brief Set the timer callback.
    * @param cb The callback function.
    */
-  void set_cb(TimerCallback cb);
+  Timer& set_cb(TimerCallback cb);
 
   /**
    * @brief Mark the timer as ready to run immediately.
    */
-  void ready();
+  Timer& ready();
 
   /**
    * @brief Pause the timer.
    */
-  void pause();
+  Timer& pause();
 
   /**
    * @brief Resume the timer.
    */
-  void resume();
+  Timer& resume();
 
   /**
    * @brief Reset the timer (start counting from 0).
    */
-  void reset();
+  Timer& reset();
 
   /**
    * @brief Set the number of repetitions.
    * @param repeat_count Number of repeats (-1 for infinite).
    */
-  void set_repeat_count(int32_t repeat_count);
+  Timer& set_repeat_count(int32_t repeat_count);
 
   /**
    * @brief Enable or disable the timer.
