@@ -32,6 +32,16 @@ void test_scroll_proxy() {
   assert(lv_obj_get_scroll_dir(container.raw()) == LV_DIR_VER);
 
   std::cout << "PASS: Scroll Proxy basic functions." << std::endl;
+
+  // Test getters (from Phase 9)
+  assert(static_cast<lvgl::ScrollbarMode>(container.get_scrollbar_mode()) ==
+         lvgl::ScrollbarMode::On);
+  assert(static_cast<lvgl::Dir>(container.get_scroll_dir()) == lvgl::Dir::Ver);
+  assert(static_cast<lvgl::ScrollSnap>(container.get_scroll_snap_x()) ==
+         lvgl::ScrollSnap::Start);
+  assert(static_cast<lvgl::ScrollSnap>(container.get_scroll_snap_y()) ==
+         lvgl::ScrollSnap::End);
+  std::cout << "PASS: Scroll getters." << std::endl;
 }
 
 int main() {

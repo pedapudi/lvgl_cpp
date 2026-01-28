@@ -112,6 +112,18 @@ class AnimationTimeline {
   void merge(const AnimationTimeline& other, int32_t extra_delay = 0);
 
   /**
+   * @brief Set user data.
+   * @param user_data The user data to set.
+   */
+  void set_user_data(void* user_data);
+
+  /**
+   * @brief Get user data.
+   * @return The user data.
+   */
+  void* get_user_data() const;
+
+  /**
    * @brief Access the underlying C struct.
    */
   lv_anim_timeline_t* raw() const { return timeline_; }

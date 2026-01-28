@@ -3,13 +3,13 @@
 #include <cstdint>
 
 #include "../draw/image_descriptor.h"
+#include "../font/font.h"
 #include "color.h"
 #include "enums.h"
 #include "lvgl.h"
 
 namespace lvgl {
 
-class Font;
 class ImageDescriptor;
 
 /**
@@ -338,6 +338,10 @@ class StyleBase {
   }
   Derived& text_font(const lv_font_t* font) {
     self().set_text_font(font);
+    return self();
+  }
+  Derived& text_font(const Font& font) {
+    self().set_text_font(font.raw());
     return self();
   }
   Derived& text_letter_space(int32_t space) {

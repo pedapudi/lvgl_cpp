@@ -65,6 +65,7 @@ set(WIDGET_SOURCES
     indev/input_device.cpp
     misc/timer.cpp
     misc/animation.cpp
+    misc/animation_timeline.cpp
     misc/async.cpp
     misc/log.cpp
     misc/theme.cpp
@@ -302,9 +303,6 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_obj_proxies PRIVATE lvgl_cpp)
     add_test(NAME test_obj_proxies COMMAND test_obj_proxies)
 
-    add_executable(test_core_api_phase9 tests/test_core_api_phase9.cpp)
-    target_link_libraries(test_core_api_phase9 PRIVATE lvgl_cpp)
-    add_test(NAME test_core_api_phase9 COMMAND test_core_api_phase9)
 
     add_executable(test_fluent_styles tests/test_fluent_styles.cpp widgets/button.cpp core/object.cpp misc/timer.cpp display/display.cpp font/font.cpp)
     target_link_libraries(test_fluent_styles PRIVATE lvgl_cpp)
@@ -361,6 +359,7 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_coverage_sweep tests/test_coverage_sweep.cpp)
     target_link_libraries(test_coverage_sweep PRIVATE lvgl_cpp)
     add_test(NAME test_coverage_sweep COMMAND test_coverage_sweep)
+
 
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)

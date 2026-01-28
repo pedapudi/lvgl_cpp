@@ -112,19 +112,39 @@ class Subject {
   [[nodiscard]] class Observer* add_observer(ObserverCallback cb);
 
   /**
-   * @brief Add a C++ observer callback.
+   * @brief Add a C++ observer callback tied to an object.
+   * @param obj The object to bind to.
    * @param cb The callback function.
    * @return A pointer to the newly created Observer.
    */
-  // Note: We need a forward declaration or a robust way to handle std::function
-  // without heavy includes if possible, but <functional> is standard.
-  // doing this in the implementation or a specific method.
-  // For now, let's stick to the C-style callback as a base, and maybe a C++
-  // one.
+  [[nodiscard]] class Observer* add_observer_obj(Object& obj,
+                                                 ObserverCallback cb);
 
  protected:
   Subject();  // abstract
   lv_subject_t subject_;
+};
+
+// ... existing code ...
+
+class StringSubject : public Subject {
+ public:
+  explicit StringSubject(const std::string& value, size_t buf_size = 128);
+  ~StringSubject();
+
+  void set(const std::string& value);
+  const char* get();
+  const char* get_previous();
+
+  /**
+   * @brief Set the value using a printf-style format string.
+   * @param fmt Format string.
+   */
+  void set_formatted(const char* fmt, ...);
+
+ private:
+  std::vector<char> buf_;
+  std::vector<char> prev_buf_;
 };
 
 /**
@@ -158,20 +178,6 @@ class FloatSubject : public Subject {
   void set_range(float min, float max);
 };
 #endif  // LV_USE_FLOAT
-
-class StringSubject : public Subject {
- public:
-  explicit StringSubject(const std::string& value, size_t buf_size = 128);
-  ~StringSubject();
-
-  void set(const std::string& value);
-  const char* get();
-  const char* get_previous();
-
- private:
-  std::vector<char> buf_;
-  std::vector<char> prev_buf_;
-};
 
 class PointerSubject : public Subject {
  public:
@@ -226,6 +232,7 @@ class GroupSubject : public Subject {
 
 class Observer {
  public:
+  friend class Subject;
   /**
    * @brief Create an observer for a specific subject with a C++ callback.
    * @param subject The subject to observe.

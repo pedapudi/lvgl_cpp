@@ -140,6 +140,55 @@ Observer* Subject::add_observer(ObserverCallback cb) {
   return new Observer(*this, cb);
 }
 
+Observer* Subject::add_observer_obj(Object& obj, ObserverCallback cb) {
+  // We construct a partially initialized observer, then fill it.
+  // Requires friend access or public setters (we'll add friend in header).
+  auto* wrapper = new Observer(nullptr, true);
+  wrapper->callback_ = cb;
+  wrapper->obs_ = lv_subject_add_observer_obj(&subject_, observer_cb_shim,
+                                              obj.raw(), wrapper);
+  return wrapper;
+}
+
+// ...
+
+void StringSubject::set_formatted(const char* fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  // vsnprintf into buffer?
+  // LVGL has lv_subject_set_string_fmt? No?
+  // Check coverage/headers.
+  // The design said `lv_subject_snprintf` -> `set_formatted`.
+  // Wait, `lv_subject_snprintf` is not standard?
+  // Is it `lv_subject_set_text_fmt`?
+  // No, `lv_subject` has no fmt setter natively usually.
+  // But `design/phase_10`... said "Missing: lv_subject_snprintf".
+  // If it's in the C API, we assume it exists.
+  // Coverage report listed it.
+  // So we use `lv_subject_snprintf`? Or `lv_snprintf` on subject?
+  // Likely `lv_subject_snprintf`?
+  // Actually, I don't see `lv_subject_snprintf` in typical docs.
+  // But if the user says so...
+  // Let's check the grep output for `subject`.
+  // I haven't grepped subject.
+  // Assuming `lv_subject_snprintf` exists per the user's coverage report
+  // reference. Wait, coverage report might be hallucinating or referring to
+  // something else? "lv_subject_snprintf" sounds like a utility. Let's assume
+  // it works like this: `lv_subject_snprintf(&subj, fmt, ...)`? No that's odd.
+  // Maybe `lv_subject_set_char_arr_fmt`?
+  // Let's verify with a quick `grep` if possible?
+  // I'll trust the design plan I created based on the user's coverage file.
+  // Coverage file said "lv_subject_snprintf" is missing.
+  // Okay, standard `lv_subject` doesn't usually have formatted set.
+  // Maybe it was `lv_label_set_text_fmt`? No, that's label.
+  // I will implement using `vsnprintf` + `set`.
+
+  char buf[256];
+  lv_vsnprintf(buf, sizeof(buf), fmt, args);
+  set(buf);
+  va_end(args);
+}
+
 // IntSubject
 
 IntSubject::IntSubject(int32_t value) { lv_subject_init_int(&subject_, value); }

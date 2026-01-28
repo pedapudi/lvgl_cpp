@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 
+#include "../font/font.h"
 #include "../widgets/button.h"
 #include "lvgl.h"
 

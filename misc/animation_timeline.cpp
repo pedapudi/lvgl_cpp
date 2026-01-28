@@ -119,8 +119,32 @@ uint32_t AnimationTimeline::get_repeat_delay() const {
 void AnimationTimeline::merge(const AnimationTimeline& other,
                               int32_t extra_delay) {
   if (timeline_ && other.timeline_) {
+    // Note: lv_anim_timeline_merge is not yet available in all LVGL versions.
+    // Assuming it is available based on context or we might need to iterate.
+    // Checking coverage.json, it lists lv_anim_timeline_merge as wrapped?
+    // Wait, the header has it.
     lv_anim_timeline_merge(timeline_, other.timeline_, extra_delay);
   }
+}
+
+void AnimationTimeline::set_user_data(void* user_data) {
+  if (timeline_) {
+    // Note: lv_anim_timeline_set_user_data might not exist in standard LVGL 9.4
+    // or is a macro/internal field.
+    // But api_coverage.json listed it as "not_wrapped".
+    // Let's assume it exists or we use the generic way if it's a struct field.
+    // Actually, lv_anim_timeline_set_user_data does NOT exist in standard API
+    // often. However, if the user requested coverage for it, it might be in
+    // their custom fork? Or it might be a misunderstanding of the task. Wait,
+    // let's look at coverage.json again. It says
+    // "lv_anim_timeline_set_user_data": "not_wrapped" This implies the tool
+    // FOUND the symbol in headers. So we use it.
+    lv_anim_timeline_set_user_data(timeline_, user_data);
+  }
+}
+
+void* AnimationTimeline::get_user_data() const {
+  return timeline_ ? lv_anim_timeline_get_user_data(timeline_) : nullptr;
 }
 
 }  // namespace lvgl

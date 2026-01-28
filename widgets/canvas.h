@@ -83,6 +83,16 @@ class Canvas : public Widget<Canvas> {
                      const void* src);
   Canvas& draw_arc(int32_t x, int32_t y, uint16_t r, int32_t start_angle,
                    int32_t end_angle, const lv_draw_arc_dsc_t& dsc);
+
+  /**
+   * @brief Get the buffer size needed for a canvas.
+   * @param w Width in pixels.
+   * @param h Height in pixels.
+   * @param bpp Bits per pixel.
+   * @param stride Stride in bytes.
+   * @return Size in bytes.
+   */
+  static size_t get_buf_size(int32_t w, int32_t h, uint8_t bpp, uint8_t stride);
 };
 
 }  // namespace lvgl

@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_MISC_CONSTANTS_H_
 #define LVGL_CPP_MISC_CONSTANTS_H_
 
+#include "geometry.h"
 #include "lvgl.h"
 
 namespace lvgl {
