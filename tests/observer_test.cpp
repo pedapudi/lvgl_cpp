@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "../display/display.h"
+
 #if LV_USE_OBSERVER
 #include <cassert>
 
@@ -60,16 +62,46 @@ void test_cpp_callback() {
 
   std::cout << "C++ Callback Passed." << std::endl;
 }
+
+void test_extra_features() {
+  std::cout << "Testing extra observer features (from Phase 10)..."
+            << std::endl;
+
+  // 1. StringSubject set_formatted
+  {
+    lvgl::StringSubject str_sub("initial");
+    str_sub.set_formatted("Val:%d", 100);
+    assert(std::string(str_sub.get()) == "Val:100");
+  }
+
+  // 2. add_observer_obj
+  {
+    lvgl::IntSubject int_sub(0);
+    lvgl::Object obj;
+    int call_count = 0;
+    lvgl::Observer* obs =
+        int_sub.add_observer_obj(obj, [&](lvgl::Observer* o) { call_count++; });
+
+    assert(call_count == 1);
+    int_sub.set(42);
+    assert(call_count == 2);
+    delete obs;
+  }
+
+  std::cout << "Extra Observer Features Passed." << std::endl;
+}
 #endif  // LV_USE_OBSERVER
 
 int main() {
   std::cout << "Starting observer_test..." << std::endl;
   lv_init();
   std::cout << "lv_init done." << std::endl;
+  lvgl::Display display = lvgl::Display::create(800, 480);
 
 #if LV_USE_OBSERVER
   test_basic_types();
   test_cpp_callback();
+  test_extra_features();
 
   // Widget binding tests are disabled in this environment because
   // lv_display_create and lv_obj_create hang in the available headless

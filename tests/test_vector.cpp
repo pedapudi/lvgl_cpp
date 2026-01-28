@@ -40,6 +40,22 @@ int main() {
     path.append_circle(100, 100, 20, 20);
 
     std::cout << "VectorPath API test passed." << std::endl;
+
+    // Test Area overload (from Phase 10)
+    path.clear();
+    lvgl::Area a(10, 10, 100, 100);
+    path.append_rect(a, 5, 5);
+    std::cout << "VectorPath Area overload passed." << std::endl;
+  }
+
+  // Test GradientStop (from Phase 10)
+  {
+    lvgl::Color c(lvgl::Palette::Red);
+    lvgl::GradientStop stop(lv_color_to_32(c, 0xFF), 128);
+    lv_grad_stop_t raw = stop;
+    ASSERT(raw.frac == 128);
+    ASSERT(raw.color.red > 200);  // Red should be dominant
+    std::cout << "GradientStop test passed." << std::endl;
   }
 
   // Test VectorDraw (compilation and basic creation if possible)

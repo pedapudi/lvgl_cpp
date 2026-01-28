@@ -4,18 +4,19 @@ This document outlines the roadmap for achieving near-100% API coverage of LVGL 
 
 ## 1. Executive summary
 
-Current \`lvgl_cpp\` coverage stands at **51.7%** for functions and **33.6%** for enums based on the corrected v9.4 inclusive user-facing audit.
+Current `lvgl_cpp` coverage stands at **56.3%** for functions and **34.5%** for enums based on the latest v9.4 inclusive user-facing audit.
 
 ## 2. Coverage audit (v9.4 baseline - user-facing inclusive)
 
-- **Total Functions**: 1,836 | **Used**: 949 | **Coverage**: 51.7%
-- **Total Enums**: 859 | **Used**: 289 | **Coverage**: 33.6%
+- **Total Functions**: 1,835 | **Used**: 1,034 | **Coverage**: 56.3%
+- **Total Enums**: 859 | **Used**: 296 | **Coverage**: 34.5%
 
 ### 2.1. Widget inventory
 
 | LVGL Widget | `lvgl_cpp` Wrapper | Status | Notes |
 | :--- | :--- | :--- | :--- |
-| `lv_obj` | `core/object.h` | ⚠️ | 30.8% coverage. Includes behavior proxies. |
+| `lv_obj` | `core/object.h` | ⚠️ | 42.2% coverage. Includes behavior proxies. |
+| `lv_anim` | `misc/animation.h` | ⚠️ | 62.9% coverage. |
 | `lv_event` | `core/event.h` | ✅ | Improved via `EventProxy`. |
 | `lv_span` | `widgets/span.h` | ✅ | Phase 4 implementation complete. |
 | `lv_lottie` | `widgets/lottie.h` | ✅ | |

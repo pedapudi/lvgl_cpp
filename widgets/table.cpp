@@ -100,6 +100,28 @@ void Table::get_selected_cell(uint32_t* row, uint32_t* col) {
   if (obj_) lv_table_get_selected_cell(obj_, row, col);
 }
 
+const char* Table::get_cell_value(uint32_t row, uint32_t col) const {
+  return obj_ ? lv_table_get_cell_value(obj_, row, col) : nullptr;
+}
+
+Table& Table::set_cell_value_fmt(uint32_t row, uint32_t col, const char* fmt,
+                                 ...) {
+  if (obj_) {
+    va_list args;
+    va_start(args, fmt);
+    char buf[256];
+    lv_vsnprintf(buf, sizeof(buf), fmt, args);
+    lv_table_set_cell_value(obj_, row, col, buf);
+    va_end(args);
+  }
+  return *this;
+}
+
+Table& Table::set_selected_cell(uint32_t row, uint32_t col) {
+  if (obj_) lv_table_set_selected_cell(obj_, row, col);
+  return *this;
+}
+
 Table& Table::on_value_changed(std::function<void(lvgl::Event&)> cb) {
   add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
   return *this;

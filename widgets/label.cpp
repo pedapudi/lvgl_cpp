@@ -122,6 +122,24 @@ Observer Label::bind_text(Subject& subject, const char* fmt) {
   return Observer(lv_label_bind_text(raw(), subject.raw(), fmt));
 }
 
+Label& Label::set_text_static(const char* text) {
+  if (obj_) lv_label_set_text_static(obj_, text);
+  return *this;
+}
+
+Label& Label::set_translation_tag(uint32_t state_id, const char* txt) {
+  // Warning: lv_label_set_translation_tag is not available in all LVGL configs
+  // or versions. We should check the header or ignore if not present.
+  // api_coverage.json listed it as "not_wrapped", so it should be there.
+#if LV_USE_I18N
+  if (obj_) lv_label_set_translation_tag(obj_, state_id, txt);
+#else
+  (void)state_id;
+  (void)txt;
+#endif
+  return *this;
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_LABEL

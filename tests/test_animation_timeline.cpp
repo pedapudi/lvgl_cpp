@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 
 #include "../display/display.h"
@@ -136,11 +137,21 @@ void test_timeline_advanced() {
   }
 }
 
+void test_timeline_user_data() {
+  std::cout << "Testing Timeline User Data (from Phase 10)..." << std::endl;
+  lvgl::AnimationTimeline timeline;
+  int data = 42;
+  timeline.set_user_data(&data);
+  assert(timeline.get_user_data() == &data);
+  std::cout << "PASS: Timeline user data." << std::endl;
+}
+
 int main() {
   lv_init();
   lvgl::Display display = lvgl::Display::create(800, 480);
   test_timeline_basic();
   test_timeline_advanced();
+  test_timeline_user_data();
   std::cout << "All AnimationTimeline tests passed!" << std::endl;
   return 0;
 }

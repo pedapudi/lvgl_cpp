@@ -262,6 +262,10 @@ Canvas& Canvas::draw_arc(int32_t x, int32_t y, uint16_t r, int32_t start_angle,
   return *this;
 }
 
+size_t Canvas::get_buf_size(int32_t w, int32_t h, uint8_t bpp, uint8_t stride) {
+  return LV_CANVAS_BUF_SIZE(w, h, bpp, stride);
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_CANVAS

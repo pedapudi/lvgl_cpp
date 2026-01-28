@@ -73,7 +73,47 @@ void VectorPath::close() {
 
 void VectorPath::append_rect(float x, float y, float w, float h, float rx,
                              float ry) {
-  if (path_) lv_vector_path_append_rectangle(path_, x, y, w, h, rx, ry);
+  lv_area_t rect;
+  rect.x1 = (int32_t)x;
+  rect.y1 = (int32_t)y;
+  rect.x2 = (int32_t)(x + w - 1);
+  rect.y2 = (int32_t)(y + h - 1);
+  if (path_) lv_vector_path_append_rect(path_, &rect, rx, ry);
+}
+
+void VectorPath::append_rect(const Area& area, float rx, float ry) {
+  if (path_) lv_vector_path_append_rect(path_, area.raw(), rx, ry);
+}
+
+// ... existing code ...
+
+void VectorDraw::set_fill_image(const DrawImageDescriptor& dsc) {
+  if (dsc_)
+    lv_draw_vector_dsc_set_fill_image(
+        dsc_, reinterpret_cast<const lv_draw_image_dsc_t*>(dsc.raw()));
+}
+
+// ... existing code ...
+
+void VectorDraw::set_fill_gradient_stops(
+    const std::vector<GradientStop>& stops) {
+  if (dsc_ && !stops.empty()) {
+    // Cast is safe because GradientStop has same layout as lv_grad_stop_t
+    lv_draw_vector_dsc_set_fill_gradient_color_stops(
+        dsc_, reinterpret_cast<const lv_grad_stop_t*>(stops.data()),
+        stops.size());
+  }
+}
+
+// ... existing code ...
+
+void VectorDraw::set_stroke_gradient_stops(
+    const std::vector<GradientStop>& stops) {
+  if (dsc_ && !stops.empty()) {
+    lv_draw_vector_dsc_set_stroke_gradient_color_stops(
+        dsc_, reinterpret_cast<const lv_grad_stop_t*>(stops.data()),
+        stops.size());
+  }
 }
 
 void VectorPath::append_circle(float cx, float cy, float rx, float ry) {

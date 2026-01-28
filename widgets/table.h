@@ -75,6 +75,29 @@ class Table : public Widget<Table> {
   uint32_t get_column_count();
   int32_t get_column_width(uint32_t col);
   void get_selected_cell(uint32_t* row, uint32_t* col);
+
+  /**
+   * @brief Get the value of a cell.
+   * @param row Row index.
+   * @param col Column index.
+   * @return The cell value as a string.
+   */
+  const char* get_cell_value(uint32_t row, uint32_t col) const;
+
+  /**
+   * @brief Set the cell value using a formatted string.
+   * @param row Row index.
+   * @param col Column index.
+   * @param fmt Format string.
+   */
+  Table& set_cell_value_fmt(uint32_t row, uint32_t col, const char* fmt, ...);
+
+  /**
+   * @brief Set the selected cell.
+   * @param row Row index.
+   * @param col Column index.
+   */
+  Table& set_selected_cell(uint32_t row, uint32_t col);
 };
 
 }  // namespace lvgl

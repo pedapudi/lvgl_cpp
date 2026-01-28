@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -63,6 +64,12 @@ void test_canvas_1() {
   lv_draw_rect(&layer, &dsc, &coords);
 
   canvas.finish_layer(&layer);
+
+  // Test get_buf_size (from Phase 10)
+  // In LVGL v9, the macro adds alignment overhead (LV_DRAW_BUF_ALIGN) and
+  // treats the last parameter as row alignment.
+  size_t size = canvas.get_buf_size(50, 50, 32, 4);
+  assert(size >= 50 * 50 * 4);
 
   std::cout << "Canvas Example 1 Passed" << std::endl;
 }

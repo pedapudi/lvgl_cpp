@@ -1,12 +1,12 @@
 {
   "summary": {
     "total_user_api": 1835,
-    "wrapped": 1023,
-    "not_wrapped": 812,
+    "wrapped": 1034,
+    "not_wrapped": 801,
     "internal_api_violations": [],
     "total_enums": 859,
     "enums_used": 296,
-    "function_coverage_percent": 55.7,
+    "function_coverage_percent": 56.3,
     "enum_coverage_percent": 34.5
   },
   "subsystems": {
@@ -41,7 +41,7 @@
     "lv_anim": {
       "prefix": "lv_anim_",
       "total": 62,
-      "wrapped_count": 37,
+      "wrapped_count": 39,
       "wrapped": [
         "lv_anim_delete",
         "lv_anim_get",
@@ -72,6 +72,7 @@
         "lv_anim_timeline_get_repeat_count",
         "lv_anim_timeline_get_repeat_delay",
         "lv_anim_timeline_get_reverse",
+        "lv_anim_timeline_get_user_data",
         "lv_anim_timeline_merge",
         "lv_anim_timeline_pause",
         "lv_anim_timeline_set_delay",
@@ -79,6 +80,7 @@
         "lv_anim_timeline_set_repeat_count",
         "lv_anim_timeline_set_repeat_delay",
         "lv_anim_timeline_set_reverse",
+        "lv_anim_timeline_set_user_data",
         "lv_anim_timeline_start"
       ],
       "not_wrapped": [
@@ -104,15 +106,13 @@
         "lv_anim_set_reverse_time",
         "lv_anim_speed",
         "lv_anim_speed_clamped",
-        "lv_anim_speed_to_time",
-        "lv_anim_timeline_get_user_data",
-        "lv_anim_timeline_set_user_data"
+        "lv_anim_speed_to_time"
       ]
     },
     "lv_anim_timeline": {
       "prefix": "lv_anim_timeline_",
       "total": 19,
-      "wrapped_count": 17,
+      "wrapped_count": 19,
       "wrapped": [
         "lv_anim_timeline_add",
         "lv_anim_timeline_create",
@@ -123,6 +123,7 @@
         "lv_anim_timeline_get_repeat_count",
         "lv_anim_timeline_get_repeat_delay",
         "lv_anim_timeline_get_reverse",
+        "lv_anim_timeline_get_user_data",
         "lv_anim_timeline_merge",
         "lv_anim_timeline_pause",
         "lv_anim_timeline_set_delay",
@@ -130,12 +131,10 @@
         "lv_anim_timeline_set_repeat_count",
         "lv_anim_timeline_set_repeat_delay",
         "lv_anim_timeline_set_reverse",
+        "lv_anim_timeline_set_user_data",
         "lv_anim_timeline_start"
       ],
-      "not_wrapped": [
-        "lv_anim_timeline_get_user_data",
-        "lv_anim_timeline_set_user_data"
-      ]
+      "not_wrapped": []
     },
     "lv_obj": {
       "prefix": "lv_obj_",
@@ -947,7 +946,7 @@
     "lv_label": {
       "prefix": "lv_label_",
       "total": 21,
-      "wrapped_count": 18,
+      "wrapped_count": 20,
       "wrapped": [
         "lv_label_bind_text",
         "lv_label_create",
@@ -966,12 +965,12 @@
         "lv_label_set_text",
         "lv_label_set_text_selection_end",
         "lv_label_set_text_selection_start",
-        "lv_label_set_text_vfmt"
+        "lv_label_set_text_static",
+        "lv_label_set_text_vfmt",
+        "lv_label_set_translation_tag"
       ],
       "not_wrapped": [
-        "lv_label_set_text_fmt",
-        "lv_label_set_text_static",
-        "lv_label_set_translation_tag"
+        "lv_label_set_text_fmt"
       ]
     },
     "lv_button": {
@@ -986,8 +985,9 @@
     "lv_arc": {
       "prefix": "lv_arc_",
       "total": 28,
-      "wrapped_count": 26,
+      "wrapped_count": 28,
       "wrapped": [
+        "lv_arc_align_obj_to_angle",
         "lv_arc_bind_value",
         "lv_arc_create",
         "lv_arc_get_angle_end",
@@ -1000,6 +1000,7 @@
         "lv_arc_get_mode",
         "lv_arc_get_rotation",
         "lv_arc_get_value",
+        "lv_arc_rotate_obj_to_angle",
         "lv_arc_set_angles",
         "lv_arc_set_bg_angles",
         "lv_arc_set_bg_end_angle",
@@ -1015,10 +1016,7 @@
         "lv_arc_set_start_angle",
         "lv_arc_set_value"
       ],
-      "not_wrapped": [
-        "lv_arc_align_obj_to_angle",
-        "lv_arc_rotate_obj_to_angle"
-      ]
+      "not_wrapped": []
     },
     "lv_bar": {
       "prefix": "lv_bar_",
@@ -1243,11 +1241,12 @@
     "lv_table": {
       "prefix": "lv_table_",
       "total": 17,
-      "wrapped_count": 14,
+      "wrapped_count": 16,
       "wrapped": [
         "lv_table_clear_cell_ctrl",
         "lv_table_create",
         "lv_table_get_cell_user_data",
+        "lv_table_get_cell_value",
         "lv_table_get_column_count",
         "lv_table_get_column_width",
         "lv_table_get_row_count",
@@ -1258,12 +1257,11 @@
         "lv_table_set_cell_value",
         "lv_table_set_column_count",
         "lv_table_set_column_width",
-        "lv_table_set_row_count"
+        "lv_table_set_row_count",
+        "lv_table_set_selected_cell"
       ],
       "not_wrapped": [
-        "lv_table_get_cell_value",
-        "lv_table_set_cell_value_fmt",
-        "lv_table_set_selected_cell"
+        "lv_table_set_cell_value_fmt"
       ]
     },
     "lv_keyboard": {
@@ -1972,7 +1970,7 @@
         "lv_vector_path_append_arc",
         "lv_vector_path_append_circle",
         "lv_vector_path_append_path",
-        "lv_vector_path_append_rectangle",
+        "lv_vector_path_append_rect",
         "lv_vector_path_arc_to",
         "lv_vector_path_clear",
         "lv_vector_path_close",
@@ -1986,7 +1984,7 @@
         "lv_vector_path_quad_to"
       ],
       "not_wrapped": [
-        "lv_vector_path_append_rect"
+        "lv_vector_path_append_rectangle"
       ]
     },
     "lv_observer": {
@@ -2004,9 +2002,10 @@
     "lv_subject": {
       "prefix": "lv_subject_",
       "total": 32,
-      "wrapped_count": 29,
+      "wrapped_count": 30,
       "wrapped": [
         "lv_subject_add_observer",
+        "lv_subject_add_observer_obj",
         "lv_subject_add_observer_with_target",
         "lv_subject_copy_string",
         "lv_subject_deinit",
@@ -2037,7 +2036,6 @@
         "lv_subject_set_pointer"
       ],
       "not_wrapped": [
-        "lv_subject_add_observer_obj",
         "lv_subject_get_group_element",
         "lv_subject_snprintf"
       ]

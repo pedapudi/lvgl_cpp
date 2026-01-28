@@ -186,6 +186,13 @@ void test_arc_1() {
   arc2.center();
 
   std::cout << "Arc Example 1 Passed" << std::endl;
+
+  // Test extra methods (from Phase 10)
+  lvgl::Object child(&arc);
+  child.set_size(10, 10);
+  arc.align_obj_to_angle(child, 20);
+  arc.rotate_obj_to_angle(child, 30);
+  std::cout << "Arc extra methods passed." << std::endl;
 }
 
 // Image Example 1: Basic Usage
@@ -228,6 +235,39 @@ void test_led_1() {
   std::cout << "LED Example 1 Passed" << std::endl;
 }
 
+void test_coordinate_transforms() {
+  std::cout << "Testing coordinate transforms..." << std::endl;
+  lvgl::Object parent;
+  parent.set_pos(10, 10).set_size(100, 100);
+
+  lvgl::Object child(&parent);
+  child.set_pos(20, 20).set_size(50, 50);
+
+  parent.update_layout();
+  child.update_layout();
+
+  lvgl::Area child_coords = child.get_coords();
+  // Parent (10,10) + Child (20,20) = (30,30) in absolute coords
+  assert(child_coords.raw()->x1 == 30);
+  assert(child_coords.raw()->y1 == 30);
+
+  lvgl::Point p(5, 5);
+  lvgl::Point p_trans = child.transform_point(p, true, false);
+  assert(p_trans.x() == 5);
+  assert(p_trans.y() == 5);
+  std::cout << "Coordinate transforms passed." << std::endl;
+}
+
+void test_label_extra() {
+  std::cout << "Testing label extra methods..." << std::endl;
+  lvgl::Label label;
+  label.set_text_static("Static Text");
+  assert(std::string(lv_label_get_text(label.raw())) == "Static Text");
+
+  label.set_translation_tag(1, "TAG_ID");
+  std::cout << "Label extra methods passed." << std::endl;
+}
+
 int main() {
   lv_init();
 
@@ -248,6 +288,8 @@ int main() {
   test_arc_1();
   test_image_1();
   test_led_1();
+  test_coordinate_transforms();
+  test_label_extra();
 
   return 0;
 }

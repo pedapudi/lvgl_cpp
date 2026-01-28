@@ -72,6 +72,16 @@ void test_table_cell() {
   table.cell(2, 2).set_user_data(my_data);
   assert(table.cell(2, 2).get_user_data() == my_data);
 
+  // Test formatted value (from Phase 10)
+  table.set_cell_value_fmt(1, 1, "Val:%d", 100);
+  assert(std::string(table.get_cell_value(1, 1)) == "Val:100");
+
+  // Test selection (from Phase 10)
+  table.set_selected_cell(1, 1);
+  uint32_t r, c;
+  table.get_selected_cell(&r, &c);
+  assert(r == 1 && c == 1);
+
   std::cout << "TableCell test passed" << std::endl;
 }
 

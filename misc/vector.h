@@ -36,6 +36,7 @@ class VectorPath {
 
   // Shapes
   void append_rect(float x, float y, float w, float h, float rx, float ry);
+  void append_rect(const Area& area, float rx, float ry);
   void append_circle(float cx, float cy, float rx, float ry);
   void append_arc(float cx, float cy, float radius, float start_angle,
                   float sweep, bool pie);
@@ -49,6 +50,25 @@ class VectorPath {
 
  private:
   lv_vector_path_t* path_ = nullptr;
+};
+
+struct GradientStop {
+  lv_color32_t color;
+  uint8_t frac;
+  GradientStop(lv_color32_t c, uint8_t f) : color(c), frac(f) {}
+  operator lv_grad_stop_t() const {
+    lv_grad_stop_t s;
+    s.color = lv_color_make(color.red, color.green, color.blue);
+    s.opa = color.alpha;
+    s.frac = frac;
+    return s;
+  }
+};
+
+struct DrawImageDescriptor {
+  lv_draw_image_dsc_t dsc;
+  // TODO: Add convenience methods/ctors
+  const lv_draw_image_dsc_t* raw() const { return &dsc; }
 };
 
 class VectorDraw {
@@ -71,9 +91,11 @@ class VectorDraw {
   void set_fill_opa(lv_opa_t opa);
   void set_fill_rule(lv_vector_fill_t rule);
   void set_fill_image(const lv_draw_image_dsc_t& dsc);
+  void set_fill_image(const DrawImageDescriptor& dsc);
   void set_fill_linear_gradient(float x1, float y1, float x2, float y2);
   void set_fill_radial_gradient(float cx, float cy, float radius);
   void set_fill_gradient_stops(const std::vector<lv_grad_stop_t>& stops);
+  void set_fill_gradient_stops(const std::vector<GradientStop>& stops);
   void set_fill_gradient_spread(lv_vector_gradient_spread_t spread);
   void set_fill_transform(const lv_matrix_t& matrix);
 
@@ -88,6 +110,7 @@ class VectorDraw {
   void set_stroke_linear_gradient(float x1, float y1, float x2, float y2);
   void set_stroke_radial_gradient(float cx, float cy, float radius);
   void set_stroke_gradient_stops(const std::vector<lv_grad_stop_t>& stops);
+  void set_stroke_gradient_stops(const std::vector<GradientStop>& stops);
   void set_stroke_gradient_spread(lv_vector_gradient_spread_t spread);
   void set_stroke_transform(const lv_matrix_t& matrix);
 

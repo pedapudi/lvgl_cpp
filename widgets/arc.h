@@ -114,7 +114,26 @@ class Arc : public Widget<Arc> {
    * @param subject The integer subject to bind.
    * @return An Observer object. Keep this object alive to maintain the binding.
    */
+  /**
+   * @brief Bind the arc's value to an integer subject.
+   * @param subject The integer subject to bind.
+   * @return An Observer object. Keep this object alive to maintain the binding.
+   */
   [[nodiscard]] Observer bind_value(Subject& subject);
+
+  /**
+   * @brief Align an object to the current value's angle.
+   * @param obj The object to align.
+   * @param r_offset Radial offset.
+   */
+  void align_obj_to_angle(const Object& obj, int32_t r_offset) const;
+
+  /**
+   * @brief Rotate an object to the current value's angle.
+   * @param obj The object to rotate.
+   * @param r_offset Radial offset.
+   */
+  void rotate_obj_to_angle(const Object& obj, int32_t r_offset) const;
 };
 
 }  // namespace lvgl

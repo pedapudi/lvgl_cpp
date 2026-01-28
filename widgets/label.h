@@ -99,6 +99,19 @@ class Label : public Widget<Label> {
   Label& cut_text(uint32_t pos, uint32_t cnt);
 
   /**
+   * @brief Set the text with a static string.
+   * @param text The text to set. Must be kept alive by the caller.
+   */
+  Label& set_text_static(const char* text);
+
+  /**
+   * @brief Set the translation tag for the label.
+   * @param state_id The state ID.
+   * @param txt The text key.
+   */
+  Label& set_translation_tag(uint32_t state_id, const char* txt);
+
+  /**
    * @brief Get the text of the label.
    * @return The text.
    */

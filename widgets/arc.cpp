@@ -132,6 +132,18 @@ Observer Arc::bind_value(Subject& subject) {
   return Observer(lv_arc_bind_value(raw(), subject.raw()));
 }
 
+void Arc::align_obj_to_angle(const Object& obj, int32_t r_offset) const {
+  if (obj_) {
+    lv_arc_align_obj_to_angle(obj_, obj.raw(), r_offset);
+  }
+}
+
+void Arc::rotate_obj_to_angle(const Object& obj, int32_t r_offset) const {
+  if (obj_) {
+    lv_arc_rotate_obj_to_angle(obj_, obj.raw(), r_offset);
+  }
+}
+
 }  // namespace lvgl
 
 #endif  // LV_USE_ARC
