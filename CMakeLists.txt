@@ -361,6 +361,24 @@ add_test(NAME test_menu COMMAND test_menu)
     add_test(NAME test_coverage_sweep COMMAND test_coverage_sweep)
 
 
+
+    # --- New Benchmarking Framework v2 ---
+    add_executable(bench_suite
+        bench/bench_main.cpp
+        bench/bench.cpp
+        bench/bench_widgets.cpp
+        bench/bench_expanded.cpp
+    )
+    target_link_libraries(bench_suite PRIVATE lvgl_cpp)
+    
+    if(ENABLE_PROFILING)
+        target_compile_definitions(bench_suite PRIVATE ENABLE_PROFILING)
+        target_link_libraries(bench_suite PRIVATE ${GPERFTOOLS_LIBRARIES})
+        if(TCMALLOC_FOUND)
+            target_link_libraries(bench_suite PRIVATE ${TCMALLOC_LIBRARIES})
+        endif()
+    endif()
+
     # Header Integrity Check (Regression test for self-contained headers)
     find_package(Python3 REQUIRED)
     add_test(NAME test_header_integrity 
