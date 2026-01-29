@@ -2,166 +2,119 @@
 
 #include "esp_log.h"
 #include "hello_world.h"
-#include "widgets/screen.h"
 
-// Declare the font used for the roller and labels
+LV_FONT_DECLARE(lv_font_montserrat_14);
 LV_FONT_DECLARE(lv_font_montserrat_20);
 
-/*
- * SOLARIZED PALETTE (Full 16-color set)
- * -------------------------------------
- * Solarized is a professionally designed palette that provides consistent
- * contrast and color relationships across different themes (Light/Dark).
- *
- * For "Solarized Light":
- * - Backgrounds: BASE3, BASE2
- * - Content: BASE00, BASE01
- * - Emphasized: BASE01, BASE02
- *
- * Hex values translated to LVGL RGB colors:
- */
-// Darker Base Tones
-static const lvgl::Color BASE03 = lvgl::Color::make(0x00, 0x2b, 0x36);
-static const lvgl::Color BASE02 = lvgl::Color::make(0x07, 0x36, 0x42);
-static const lvgl::Color BASE01 = lvgl::Color::make(0x58, 0x6e, 0x75);
-static const lvgl::Color BASE00 = lvgl::Color::make(0x65, 0x7b, 0x83);
-// Lighter Base Tones
-static const lvgl::Color BASE0  = lvgl::Color::make(0x83, 0x94, 0x96);
-static const lvgl::Color BASE1  = lvgl::Color::make(0x93, 0xa1, 0xa1);
-static const lvgl::Color BASE2  = lvgl::Color::make(0xee, 0xe8, 0xd5);
-static const lvgl::Color BASE3  = lvgl::Color::make(0xfd, 0xf6, 0xe3);
-// Accent Colors
-static const lvgl::Color YELLOW  = lvgl::Color::make(0xb5, 0x89, 0x00);
-static const lvgl::Color ORANGE  = lvgl::Color::make(0xcb, 0x4b, 0x16);
-static const lvgl::Color RED     = lvgl::Color::make(0xdc, 0x32, 0x2f);
-static const lvgl::Color MAGENTA = lvgl::Color::make(0xd3, 0x36, 0x82);
-static const lvgl::Color VIOLET  = lvgl::Color::make(0x6c, 0x71, 0xc4);
-static const lvgl::Color BLUE    = lvgl::Color::make(0x26, 0x8b, 0xd2);
-static const lvgl::Color CYAN    = lvgl::Color::make(0x2a, 0xa1, 0x98);
-static const lvgl::Color GREEN   = lvgl::Color::make(0x85, 0x99, 0x00);
+// Solarized Palette (Full)
+static const lvgl::Color BASE03 = lvgl::Color::from_hex(0x002b36);
+static const lvgl::Color BASE02 = lvgl::Color::from_hex(0x073642);
+static const lvgl::Color BASE01 = lvgl::Color::from_hex(0x586e75);
+static const lvgl::Color BASE00 = lvgl::Color::from_hex(0x657b83);
+static const lvgl::Color BASE0 = lvgl::Color::from_hex(0x839496);
+static const lvgl::Color BASE1 = lvgl::Color::from_hex(0x93a1a1);
+static const lvgl::Color BASE2 = lvgl::Color::from_hex(0xeee8d5);
+static const lvgl::Color BASE3 = lvgl::Color::from_hex(0xfdf6e3);
+static const lvgl::Color YELLOW = lvgl::Color::from_hex(0xb58900);
+static const lvgl::Color ORANGE = lvgl::Color::from_hex(0xcb4b16);
+static const lvgl::Color RED = lvgl::Color::from_hex(0xdc322f);
+static const lvgl::Color MAGENTA = lvgl::Color::from_hex(0xd33682);
+static const lvgl::Color VIOLET = lvgl::Color::from_hex(0x6c71c4);
+static const lvgl::Color BLUE = lvgl::Color::from_hex(0x268bd2);
+static const lvgl::Color CYAN = lvgl::Color::from_hex(0x2aa198);
+static const lvgl::Color GREEN = lvgl::Color::from_hex(0x859900);
 
-SelectHello::SelectHello() {}
+SelectHello::SelectHello()
+    : menu_screen_((lv_obj_t*)nullptr, lvgl::Object::Ownership::Unmanaged),
+      hello_screen_((lv_obj_t*)nullptr, lvgl::Object::Ownership::Unmanaged) {}
 
 void SelectHello::show_menu(lvgl::Display& display) {
   display_ = &display;
-  auto screen = display_->get_screen_active();
-  lvgl::Screen scr(screen);
 
-  // Clean the current screen by deleting all its child objects.
-  scr.clean();
-  scr.set_bg_color(BASE3);  // Base3 background for Solarized Light
+  // Initialize menu screen if not already done
+  if (!menu_screen_.is_valid()) {
+    menu_screen_ = lvgl::Object();  // Create a new screen
+    menu_screen_.style().bg_color(BASE03).bg_opa(lvgl::Opacity::Cover);
 
-  in_menu_mode_ = true;
+    // Roller
+    roller_ = lvgl::Roller(&menu_screen_);
+    static const char* options =
+        "Hello, world!\nHello, ESP32!\nHello, LVGL C++!";
+    roller_.set_options(options, lvgl::RollerMode::Infinite);
 
-  // Create the Roller widget
-  roller_ = lvgl::Roller(&scr);
-  static const char* options = "Hello, world!\nHello, ESP32!\nHello, LVGL C++!";
-  roller_.set_options(options, lvgl::RollerMode::Infinite);
+    roller_.style()
+        .text_font(lvgl::Font(&lv_font_montserrat_20))
+        .text_color(BASE00)
+        .bg_color(BASE2)
+        .bg_opa(lvgl::Opacity::Cover)
+        .radius(20)
+        .border_width(0)
+        .outline_width(0);
 
-  // --- Fix 3: Fonts render poorly ---
-  // Apply font to MAIN part so non-selected items use it too
-  auto part_main = static_cast<lv_style_selector_t>(lvgl::Part::Main);
-  auto part_selected = static_cast<lv_style_selector_t>(lvgl::Part::Selected);
-  auto state_focus_key =
-      static_cast<lv_style_selector_t>(lvgl::State::FocusKey);
-  auto state_focused = static_cast<lv_style_selector_t>(lvgl::State::Focused);
-  auto state_pressed = static_cast<lv_style_selector_t>(lvgl::State::Pressed);
+    roller_.style(lvgl::Part::Selected)
+        .text_font(lvgl::Font(&lv_font_montserrat_20))
+        .bg_color(BLUE)
+        .text_color(BASE3);
 
-  /*
-   * Styling the Roller
-   * ------------------
-   * In LVGL, widgets consist of PARTS (like the Background or the Selected
-   * row). We use the 'fluent' C++ API to set multiple properties in a row.
-   */
-  roller_.style(part_main)
-      .text_font(lvgl::Font(&lv_font_montserrat_20))
-      .text_color(BASE00)  // Solarized text color
-      .bg_color(BASE2)     // Subtle background contrast
-      .bg_opa(lvgl::Opacity::Cover);
+    roller_.set_visible_row_count(3);
+    roller_.set_width(200);
+    roller_.center();
 
-  // Style for the currently SELECTED item
-  roller_.style(part_selected)
-      .text_color(BASE3)  // Bright text on dark highlight
-      .bg_color(BLUE)     // Solarized Blue for selection
-      .text_font(lvgl::Font(&lv_font_montserrat_20));
+    // Backlight Toggle
+    bl_switch_ = lvgl::Switch(&menu_screen_);
+    bl_switch_.align(lvgl::Align::TopMid, 0, 10).set_height(50).set_width(125);
+    bl_switch_.style().bg_color(BASE2).bg_opa(lvgl::Opacity::Cover);
+    bl_switch_
+        .style(static_cast<lv_style_selector_t>(lvgl::Part::Indicator) |
+               static_cast<lv_style_selector_t>(lvgl::State::Checked))
+        .bg_color(BASE2)
+        .bg_opa(lvgl::Opacity::Cover);
+    bl_switch_.style(lvgl::Part::Knob)
+        .bg_color(BASE02)
+        .bg_opa(lvgl::Opacity::Cover);
+    bl_switch_.add_state(lvgl::State::Checked);  // Default to on
+    bl_switch_.add_event_cb(
+        lvgl::EventCode::ValueChanged, [this](lvgl::Event& e) {
+          if (this->on_backlight_changed_) {
+            this->on_backlight_changed_(
+                this->bl_switch_.has_state(lvgl::State::Checked));
+          }
+        });
 
-  // Remove the blue focus outline/border
-  roller_.style(state_focus_key).outline_width(0).border_width(0);
-  roller_.style(state_focused).outline_width(0).border_width(0);
+    // Input Handling
+    auto on_select = [this](lvgl::Event& e) {
+      if (!this->in_menu_mode_) return;
 
-  // --- Fix 1: Roller hard to scroll ---
-  // Increase visible rows to make it easier to grab
-  roller_.set_visible_row_count(3);
-  roller_.set_width(200);
-  roller_.center();
+      bool triggered = false;
+      if (e.get_code() == lvgl::EventCode::Clicked) {
+        triggered = true;
+      } else if (e.get_code() == lvgl::EventCode::Key) {
+        if (*e.get_param<lvgl::Key>() == lvgl::Key::Enter) {
+          triggered = true;
+        }
+      }
 
-  // Create a Select Button with distinctive style
-  select_btn_ = lvgl::Button(&scr);
-  select_btn_.align(lvgl::Align::BottomMid, 0, -15);
-
-  // Use C++ API for size and flags
-  select_btn_.set_size(110, 40);
-  select_btn_.add_flag(lvgl::ObjFlag::Clickable);
-  select_btn_.remove_flag(lvgl::ObjFlag::Scrollable);
-
-  /*
-   * Styling the Button
-   * ------------------
-   * We apply different colors for the Default state and the Pressed state
-   * to provide visual feedback to the user.
-   */
-  select_btn_.style(part_main).bg_color(ORANGE);     // Neutral Solarized green
-  select_btn_.style(state_pressed).bg_color(YELLOW);  // Feedback when pressed
-  select_btn_.style(part_main).text_color(BASE3);
-
-  select_btn_label_ = lvgl::Label(&select_btn_);
-  select_btn_label_.set_text("SELECT");
-  select_btn_label_.style()
-      .text_font(lvgl::Font(&lv_font_montserrat_20))
-      .text_color(BASE3);
-  select_btn_label_.center();
-  // Print coordinates to debug layout
-  select_btn_.layout().update();
-
-  // Ensure label doesn't block clicks
-  select_btn_label_.remove_flag(lvgl::ObjFlag::Clickable);
-
-  // --- Fix 2: Select button does nothing ---
-  // Note: add_event_cb in Widget takes (Callback, Code)
-  select_btn_.add_event_cb(
-      [this](lvgl::Event& e) {
-        ESP_LOGI("SelectHello", "Select button clicked");
-        pending_selection_ = roller_.get_selected();
+      if (triggered) {
+        this->pending_selection_ = this->roller_.get_selected();
         lvgl::Async::call(
             [this]() { this->load_hello_screen(this->pending_selection_); });
-      },
-      LV_EVENT_CLICKED);
+      }
+    };
 
-  // Create a Label at the top to hint at functionality
-  hint_label_ = lvgl::Label(&scr);
-  hint_label_.set_text("Choose option").align(lvgl::Align::TopMid, 0, 20);
-  hint_label_.style()
-      .text_font(lvgl::Font(&lv_font_montserrat_20))
-      .text_color(BASE01)
-      .bg_opa(lvgl::Opacity::Transparent);
+    roller_.add_event_cb(lvgl::EventCode::Clicked, on_select);
+    roller_.add_event_cb(lvgl::EventCode::Key, on_select);
+  }
 
-  // Input Handling: Add the roller to the group so it can receive key events.
-  group_.remove_all_objs();
-  group_.add_obj(roller_);
+  // Ensure navigation works
+  lvgl::Group::get_default().remove_all_objs();
+  lvgl::Group::get_default().add_obj(roller_);
+  lvgl::Group::get_default().add_obj(bl_switch_);
 
-  // Register an event callback for key presses.
-  roller_.add_event_cb(
-      [this](lvgl::Event& e) {
-        uint32_t key = *e.get_param<uint32_t>();
-        // Only trigger on Enter key. Touch selection is handled by the Button.
-        if (key == static_cast<uint32_t>(lvgl::Key::Enter)) {
-          ESP_LOGI("SelectHello", "ENTER pressed via Key");
-          pending_selection_ = roller_.get_selected();
-          lvgl::Async::call(
-              [this]() { this->load_hello_screen(this->pending_selection_); });
-        }
-      },
-      LV_EVENT_CLICKED);
+  // Load the menu screen
+  in_menu_mode_ = true;
+  if (display.get_screen_active() != menu_screen_.raw()) {
+    display.load_screen(menu_screen_);
+  }
 }
 
 void SelectHello::load_hello_screen(int index) {
@@ -182,42 +135,81 @@ void SelectHello::load_hello_screen(int index) {
   }
 
   in_menu_mode_ = false;
-  ESP_LOGI("SelectHello", "Loading hello screen: %s", text);
 
   if (display_) {
-    active_screen_ = lvgl::Object(display_->get_screen_active(),
-                                  lvgl::Object::Ownership::Unmanaged);
-    active_screen_.clean();
+    // Prep separate hello screen
+    if (!hello_screen_.is_valid()) {
+      hello_screen_ = lvgl::Object();  // Create new screen
+    }
 
-    HelloWorld::load(*display_, text, BASE03, BASE0);
+    // Clean whatever was there
+    hello_screen_.clean();
 
-    lvgl::Label back_hint(&active_screen_);
-    back_hint.set_text("Tap to go back")
-        .align(lvgl::Align::TopMid, 0, 40)
+    // Load it BEFORE populating so get_screen_active() works in
+    // HelloWorld::load? Actually HelloWorld::load takes display and uses
+    // get_screen_active(). So we MUST load it first.
+    display_->load_screen(hello_screen_);
+
+    // Force immediate update of active screen ptr if needed, but load_screen in
+    // C++ wrapper usually calls lv_scr_load.
+
+    // Load HelloWorld widgets onto the now-active hello_screen_
+    HelloWorld::load(*display_, text, BASE03, BASE0, index == 0);
+
+    // BACK NAVIGATION: Capture clicks or keys on the screen to return to menu
+    // Since hello_screen_ is persistent, we can attach event cb once?
+    // No, we clean it every time, so we must re-attach.
+    // Wait, cleaning deletes children, but flags and event_cbs on the screen
+    // itself persist? Yes on screen object itself. But we want to be safe, so
+    // let's check if we already added it? Or just re-add (if not unique).
+    // lvgl::Object::add_event_cb adds unique? No. Simple Solution: remove all
+    // event cbs first.
+    hello_screen_.remove_all_event_cbs();
+
+    hello_screen_.add_flag(lvgl::ObjFlag::Clickable);
+
+    auto on_back = [this](lvgl::Event& e) {
+      if (this->in_menu_mode_) return;
+
+      bool trigger = false;
+      if (e.get_code() == lvgl::EventCode::Clicked) {
+        trigger = true;
+      } else if (e.get_code() == lvgl::EventCode::Key) {
+        trigger = true;  // Any key goes back
+      }
+
+      if (trigger) {
+        this->in_menu_mode_ = true;
+        lvgl::Async::call([this]() { this->show_menu(*this->display_); });
+      }
+    };
+
+    hello_screen_.add_event_cb(lvgl::EventCode::Clicked, on_back);
+    hello_screen_.add_event_cb(lvgl::EventCode::Key, on_back);
+
+    // Provide a visual hint for back navigation
+    lvgl::Label back_hint(&hello_screen_);
+    back_hint.set_long_mode(lvgl::Label::LongMode::ScrollCircular)
+        .set_width(140)
         .add_flag(lvgl::ObjFlag::Hidden);
+
+    back_hint.set_text("Tap screen to go back")
+        .align(lvgl::Align::TopMid, 0, 20);
+
     back_hint.style()
-        .text_font(lvgl::Font(&lv_font_montserrat_20))
+        .text_font(lvgl::Font(&lv_font_montserrat_14))
         .text_color(BASE01);
 
     lv_obj_t* hint_obj = back_hint.release();
 
-    lvgl::Timer::oneshot(2100, [hint_obj]() {
+    // Show hint after some delay
+    hint_timer_ = lvgl::Timer::periodic(2000, [hint_obj](lvgl::Timer* t) {
       lvgl::Object(hint_obj).remove_flag(lvgl::ObjFlag::Hidden);
+      t->pause();
     });
 
-    active_screen_.add_flag(lvgl::ObjFlag::Clickable);
-    group_.remove_all_objs();
-    group_.add_obj(active_screen_);
-
-    active_screen_.add_event_cb(
-        lvgl::EventCode::Clicked, [this](lvgl::Event& e) {
-          if (in_menu_mode_) return;
-          ESP_LOGI("SelectHello", "Back click received");
-          in_menu_mode_ = true;
-          lvgl::Async::call([this]() {
-            ESP_LOGI("SelectHello", "Returning to menu");
-            this->show_menu(*this->display_);
-          });
-        });
+    // Add screen to group for key navigation
+    lvgl::Group::get_default().remove_all_objs();
+    lvgl::Group::get_default().add_obj(hello_screen_);
   }
 }
