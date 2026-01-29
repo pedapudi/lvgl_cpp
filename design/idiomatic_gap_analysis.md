@@ -132,6 +132,8 @@ anim.set_exec_cb([](Object& obj, int32_t v) {
 
 ---
 
+---
+
 ## 4. Systemic Review
 
 This "marshall and wrap" pattern addresses the gap between C `void*` polymorphism and C++ strict typing.
@@ -141,7 +143,27 @@ This "marshall and wrap" pattern addresses the gap between C `void*` polymorphis
 - **`Group`**: Focus callbacks should receive `Object&` focused (already identified in strategic plan).
 - **`Event`**: The `Event` class already accesses the target via `get_target()`, which returns `Object*`. This is already consistent.
 
-## 5. Next Steps
+---
+
+## 5. v2.1 Improvements: Fluent Refinement
+
+Following critical review of the v2.0 implementation, several ergonomic refinements were identified:
+
+### 5.1 Fluent Selector Chaining
+While bitwise mixing (`Part::Knob | State::Pressed`) is supported, `StyleProxy` now supports explicit chaining for better discoverability:
+```cpp
+obj.style().part(Part::Knob).state(State::Pressed).bg_color(Color::Red);
+```
+
+### 5.2 Extended Part Operators
+`Part` now supports the full suite of bitwise operators (`&`, `|`, `~`, etc.), treating it as a first-class maskable type consistent with `State`.
+
+### 5.3 Callback Safety Guards
+The `ObjectExecCallback` trampoline includes null-checks and documentation warnings to prevent misuse with non-widget variables in the animation system.
+
+---
+
+## 6. Next Steps
 1.  Modify `misc/enums.h` to add `operator|` overloads.
 2.  Modify `misc/animation.h` to add `set_exec_cb(ObjectExecCallback)`.
 3.  Update `round_display_hello` example to use the new API to verify #170.

@@ -140,6 +140,8 @@ Animation& Animation::set_exec_cb(ObjectExecCallback cb) {
   // Trampoline to convert void* -> Object&
   auto trampoline = [cb](void* var, int32_t v) {
     if (var) {
+      // Safety Note: This assumes var is an lv_obj_t*.
+      // We check for null, but we can't fully verify type at runtime here.
       Object obj(static_cast<lv_obj_t*>(var), Object::Ownership::Unmanaged);
       cb(obj, v);
     }
