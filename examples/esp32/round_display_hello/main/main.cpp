@@ -1,3 +1,4 @@
+#include "driver/gpio.h"
 #include "esp_log.h"
 #include "hw/chsc6x.h"
 #include "hw/gc9a01.h"
@@ -37,30 +38,40 @@ extern "C" void app_main(void) {
       .mirror_y = false,
   };
   Chsc6x chsc6x(touch_cfg);
-  // Check if supported
   ESP_ERROR_CHECK(chsc6x.init());
 
   {
     // Initialize LVGL
     LvglPort::Config lvgl_config;
-    lvgl_config.task_priority = 4;
+    lvgl_config.task_priority = 5;
     LvglPort lvgl_port(lvgl_config);
     lvgl_port.init(display_hw.get_panel_handle(), display_hw.get_io_handle());
 
     // Register touch driver
     lvgl_port.register_touch_driver(&chsc6x);
 
-    std::shared_ptr<SelectHello> hello_world = std::make_shared<SelectHello>();
+    // UI Initialization
+    SelectHello select_hello;
+
+    // Connect Backlight Control
+    int bl_pin = display_cfg.bl_io_num;
+    select_hello.set_on_backlight_changed([bl_pin](bool on) {
+      gpio_num_t bl_gpio = (gpio_num_t)bl_pin;
+      ESP_LOGI("main", "Backlight %s", on ? "ON" : "OFF");
+      gpio_set_level(bl_gpio, on ? 1 : 0);
+    });
 
     // Lock the mutex because we are modifying LVGL state
     if (lvgl_port.lock(-1)) {
-      hello_world->show_menu(*lvgl_port.get_display());
+      if (auto* display = lvgl_port.get_display()) {
+        select_hello.show_menu(*display);
+      }
       lvgl_port.unlock();
     }
 
     // Keep main task alive
     while (1) {
-      vTaskDelay(pdMS_TO_TICKS(1000));
+      vTaskDelay(pdMS_TO_TICKS(500));
     }
   }
 }
