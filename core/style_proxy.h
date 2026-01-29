@@ -27,6 +27,28 @@ class StyleProxy : public StyleBase<StyleProxy> {
   StyleProxy(lv_obj_t* obj, lv_style_selector_t selector)
       : obj_(obj), selector_(selector) {}
 
+  /**
+   * @brief Narrow the style selector to a specific part.
+   * @param p The part.
+   * @return Reference to this proxy.
+   */
+  StyleProxy& part(Part p) {
+    // Replace part bits in selector (assumes 0xFF000000 mask for parts in LVGL
+    // 9)
+    selector_ = (selector_ & 0x00FFFFFF) | static_cast<lv_style_selector_t>(p);
+    return *this;
+  }
+
+  /**
+   * @brief Add a state to the style selector.
+   * @param s The state.
+   * @return Reference to this proxy.
+   */
+  StyleProxy& state(State s) {
+    selector_ |= static_cast<lv_style_selector_t>(s);
+    return *this;
+  }
+
  private:
   friend class StyleBase<StyleProxy>;
 

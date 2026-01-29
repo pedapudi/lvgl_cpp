@@ -21,11 +21,27 @@ void test_style_selector_operators() {
   lv_style_selector_t s2 = lvgl::State::Pressed | lvgl::Part::Main;
   assert((s2 & LV_PART_MAIN) && (s2 & LV_STATE_PRESSED));
 
-  // Test Part | Part
-  lv_style_selector_t s3 = lvgl::Part::Items | lvgl::Part::Selected;
-  assert((s3 & LV_PART_ITEMS) && (s3 & LV_PART_SELECTED));
+  // Test Part | Part (Masking)
+  lvgl::Part p1 = lvgl::Part::Items | lvgl::Part::Selected;
+  assert((static_cast<uint32_t>(p1) & LV_PART_ITEMS) &&
+         (static_cast<uint32_t>(p1) & LV_PART_SELECTED));
 
   std::cout << "PASS: Style Selector Operators" << std::endl;
+}
+
+void test_style_proxy_fluent() {
+  std::cout << "Testing Style Proxy Fluent API..." << std::endl;
+
+  lvgl::Object obj(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
+
+  // Test chaining .part() and .state()
+  obj.style()
+      .part(lvgl::Part::Knob)
+      .state(lvgl::State::Pressed)
+      .bg_color(lvgl::Color::Red);
+
+  // Verify it doesn't crash and compiles
+  std::cout << "PASS: Style Proxy Fluent API" << std::endl;
 }
 
 void test_animation_typed_callback() {
@@ -72,6 +88,7 @@ int main() {
   // lvgl::Display display(disp);
 
   test_style_selector_operators();
+  test_style_proxy_fluent();
   test_animation_typed_callback();
 
   return 0;

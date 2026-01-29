@@ -64,6 +64,31 @@ enum class Part : uint32_t {
   Any = LV_PART_ANY,
 };
 
+// Masking operators for Part (Part | Part, etc.)
+inline Part operator|(Part lhs, Part rhs) {
+  return static_cast<Part>(static_cast<uint32_t>(lhs) |
+                           static_cast<uint32_t>(rhs));
+}
+
+inline Part operator&(Part lhs, Part rhs) {
+  return static_cast<Part>(static_cast<uint32_t>(lhs) &
+                           static_cast<uint32_t>(rhs));
+}
+
+inline Part operator~(Part rhs) {
+  return static_cast<Part>(~static_cast<uint32_t>(rhs));
+}
+
+inline Part& operator|=(Part& lhs, Part rhs) {
+  lhs = lhs | rhs;
+  return lhs;
+}
+
+inline Part& operator&=(Part& lhs, Part rhs) {
+  lhs = lhs & rhs;
+  return lhs;
+}
+
 /**
  * @brief Wrapper for lv_state_t.
  */
@@ -128,15 +153,6 @@ inline lv_style_selector_t operator|(Part p, State s) {
 inline lv_style_selector_t operator|(State s, Part p) {
   return static_cast<lv_style_selector_t>(p) |
          static_cast<lv_style_selector_t>(s);
-}
-
-/**
- * @brief Combine Part and Part into a style selector.
- * Rare, but useful for LV_PART_ANY or complex masking.
- */
-inline lv_style_selector_t operator|(Part lhs, Part rhs) {
-  return static_cast<lv_style_selector_t>(lhs) |
-         static_cast<lv_style_selector_t>(rhs);
 }
 
 /**
