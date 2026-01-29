@@ -136,6 +136,17 @@ Animation& Animation::set_exec_cb(ExecCallback cb) {
   return *this;
 }
 
+Animation& Animation::set_exec_cb(ObjectExecCallback cb) {
+  // Trampoline to convert void* -> Object&
+  auto trampoline = [cb](void* var, int32_t v) {
+    if (var) {
+      Object obj(static_cast<lv_obj_t*>(var), Object::Ownership::Unmanaged);
+      cb(obj, v);
+    }
+  };
+  return set_exec_cb(static_cast<ExecCallback>(trampoline));
+}
+
 Animation& Animation::set_path_cb(PathCallback cb) {
   if (!user_data_) user_data_ = std::make_unique<CallbackData>();
   user_data_->path_cb = std::move(cb);
