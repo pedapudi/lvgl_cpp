@@ -46,6 +46,12 @@ class Animation {
 
  public:
   using ExecCallback = std::function<void(void*, int32_t)>;
+  /**
+   * @brief Type-safe execution callback for Objects.
+   * Receives a temporary unmanaged Object wrapper.
+   */
+  using ObjectExecCallback = std::function<void(Object&, int32_t)>;
+
   using PathCallback = std::function<int32_t(const lv_anim_t*)>;
   using CompletedCallback = std::function<void()>;
 
@@ -113,7 +119,30 @@ class Animation {
    *
    * @param cb The `std::function` callback.
    */
+  /**
+   * @brief Set a C++ execution callback (lambda/std::function).
+   *
+   * @example
+   * anim.set_exec_cb([](void* var, int32_t val) {
+   *     // Custom logic
+   * });
+   *
+   * @param cb The `std::function` callback.
+   */
   Animation& set_exec_cb(ExecCallback cb);
+
+  /**
+   * @brief Set a type-safe execution callback for Objects.
+   * Auto-wraps the void* var into a temporary `Object` wrapper.
+   *
+   * @example
+   * anim.set_exec_cb([](Object& obj, int32_t val) {
+   *     obj.style().translate_y(val);
+   * });
+   *
+   * @param cb The typed callback.
+   */
+  Animation& set_exec_cb(ObjectExecCallback cb);
 
   // ... (Exec struct omitted for brevity)
 

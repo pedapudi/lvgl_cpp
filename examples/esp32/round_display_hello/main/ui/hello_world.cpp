@@ -40,7 +40,10 @@ void HelloWorld::load(lvgl::Display& display, const std::string& text,
   lvgl::Animation(label)
       .set_values(-50, 0)  // Start off-screen and slide to center
       .set_duration(2000)
-      .set_exec_cb(lvgl::Animation::Exec::Y())
+      .set_exec_cb([](lvgl::Object& obj, int32_t v) {
+        // Use new typed callback (Issue #170)
+        obj.set_y(v);
+      })
       .set_path_cb(lvgl::Animation::Path::EaseOut())
       .set_completed_cb([]() { ESP_LOGI("UI", "Animation completed!"); })
       .start();
