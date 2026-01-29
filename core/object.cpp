@@ -1,6 +1,5 @@
 #include "object.h"
 
-#include <cstdio>
 #include <vector>
 
 #include "../misc/layout.h"
@@ -226,14 +225,11 @@ int32_t Object::get_height() const {
 }
 
 void Object::install_delete_hook() {
-  fprintf(stderr, "Install hook: obj=%p, wrapper=%p\n", obj_, this);
   lv_obj_add_event_cb(obj_, on_delete_event, LV_EVENT_DELETE, this);
 }
 
 void Object::on_delete_event(lv_event_t* e) {
   Object* self = static_cast<Object*>(lv_event_get_user_data(e));
-  fprintf(stderr, "On delete event trigger: obj=%p, wrapper=%p\n",
-          lv_event_get_target(e), self);
   if (self) {
     self->obj_ = nullptr;  // Invalidate wrapper
   }

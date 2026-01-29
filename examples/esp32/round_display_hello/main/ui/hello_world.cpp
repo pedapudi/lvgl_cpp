@@ -147,10 +147,10 @@ void HelloWorld::load(lvgl::Display& display, const std::string& text,
         .set_values(0, 3600)
         .set_duration(10000)
         .set_repeat_count(LV_ANIM_REPEAT_INFINITE)
-        .set_exec_cb(lvgl::Animation::ExecCallback([](void* obj, int32_t v) {
-          // Cast the void* back to an LVGL object pointer
-          lv_image_set_rotation((lv_obj_t*)obj, (int16_t)v);
-        }))
+        .set_exec_cb([](lvgl::Object& obj, int32_t v) {
+          // Use the Image wrapper to set rotation idiomatically
+          lvgl::Image(obj.raw()).set_rotation(v);
+        })
         .start();
 
     // HAND OFF OWNERSHIP: Detach the C++ wrapper so the C object survives.
@@ -173,18 +173,15 @@ void HelloWorld::load(lvgl::Display& display, const std::string& text,
       .text_font(lvgl::Font(&lv_font_montserrat_20))
       .text_color(text_color);
 
-  // Slide-in Animation (Move Y from -50 relative to current pos to 0)
-  // Wait, standard LVGL animations are usually absolute or relative depending
-  // on implementation? Here set_values(-50, 0) likely drives a translation
-  // offset.
+  // Slide-in Animation (Move Y from -150 relative to current pos to 0)
+  // We uses style().translate_y(v) for a smoother effect.
   lvgl::Animation(label)
       .set_values(-150, 0)
       .set_duration(1500)
-      .set_exec_cb(lvgl::Animation::ExecCallback([](void* obj, int32_t v) {
-        // Wrap the raw object pointer in a temporary C++ wrapper (Unmanaged)
-        // to use the idiomatic style API.
-        lvgl::Object(static_cast<lv_obj_t*>(obj)).style().translate_y(v);
-      }))
+      .set_exec_cb([](lvgl::Object& obj, int32_t v) {
+        // Use new typed callback (Issue #170) to apply style translation
+        obj.style().translate_y(v);
+      })
       .set_path_cb(lvgl::Animation::Path::EaseOut())
       .set_completed_cb([]() { ESP_LOGI("HelloWorld", "Slide-in completed"); })
       .start();

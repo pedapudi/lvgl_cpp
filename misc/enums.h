@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_MISC_ENUMS_H_
 #define LVGL_CPP_MISC_ENUMS_H_
 
+#include <cstdint>
+
 #include "lvgl.h"
 
 namespace lvgl {
@@ -62,6 +64,31 @@ enum class Part : uint32_t {
   Any = LV_PART_ANY,
 };
 
+// Masking operators for Part (Part | Part, etc.)
+inline Part operator|(Part lhs, Part rhs) {
+  return static_cast<Part>(static_cast<uint32_t>(lhs) |
+                           static_cast<uint32_t>(rhs));
+}
+
+inline Part operator&(Part lhs, Part rhs) {
+  return static_cast<Part>(static_cast<uint32_t>(lhs) &
+                           static_cast<uint32_t>(rhs));
+}
+
+inline Part operator~(Part rhs) {
+  return static_cast<Part>(~static_cast<uint32_t>(rhs));
+}
+
+inline Part& operator|=(Part& lhs, Part rhs) {
+  lhs = lhs | rhs;
+  return lhs;
+}
+
+inline Part& operator&=(Part& lhs, Part rhs) {
+  lhs = lhs & rhs;
+  return lhs;
+}
+
 /**
  * @brief Wrapper for lv_state_t.
  */
@@ -82,6 +109,7 @@ enum class State : uint16_t {
   Any = LV_STATE_ANY,
 };
 
+// Masking operators for State (State | State)
 inline State operator|(State lhs, State rhs) {
   return static_cast<State>(static_cast<lv_state_t>(lhs) |
                             static_cast<lv_state_t>(rhs));
@@ -104,6 +132,27 @@ inline State& operator|=(State& lhs, State rhs) {
 inline State& operator&=(State& lhs, State rhs) {
   lhs = lhs & rhs;
   return lhs;
+}
+
+// ============================================================================
+// Cross-Type Masking Operators (Part | State) -> lv_style_selector_t
+// See: https://github.com/pedapudi/lvgl_cpp/issues/168
+// ============================================================================
+
+/**
+ * @brief Combine Part and State into a style selector.
+ */
+inline lv_style_selector_t operator|(Part p, State s) {
+  return static_cast<lv_style_selector_t>(p) |
+         static_cast<lv_style_selector_t>(s);
+}
+
+/**
+ * @brief Combine State and Part into a style selector.
+ */
+inline lv_style_selector_t operator|(State s, Part p) {
+  return static_cast<lv_style_selector_t>(p) |
+         static_cast<lv_style_selector_t>(s);
 }
 
 /**

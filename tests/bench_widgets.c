@@ -54,6 +54,14 @@ int main(int argc, char** argv) {
     } else if (strcmp(widget_type, "textarea") == 0) {
       obj = lv_textarea_create(screen);
       lv_textarea_set_text(obj, "Hello");
+    } else if (strcmp(widget_type, "table") == 0) {
+      obj = lv_table_create(screen);
+      lv_table_set_cell_value(obj, 0, 0, "Cell");
+    } else if (strcmp(widget_type, "chart") == 0) {
+      obj = lv_chart_create(screen);
+      lv_chart_series_t* ser = lv_chart_add_series(
+          obj, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
+      lv_chart_set_next_value(obj, ser, 10);
     } else {
       printf("Unknown widget type: %s\n", widget_type);
       return 1;

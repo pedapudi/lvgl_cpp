@@ -76,11 +76,12 @@ Timer Timer::periodic(uint32_t period, TimerCallback cb) {
 
 uint32_t Timer::handler() { return lv_timer_handler(); }
 
-void Timer::set_period(uint32_t period) {
+Timer& Timer::set_period(uint32_t period) {
   if (timer_) lv_timer_set_period(timer_, period);
+  return *this;
 }
 
-void Timer::set_cb(TimerCallback cb) {
+Timer& Timer::set_cb(TimerCallback cb) {
   if (!cb_) {
     cb_ = std::make_unique<TimerCallback>(cb);
   } else {
@@ -90,26 +91,32 @@ void Timer::set_cb(TimerCallback cb) {
   if (timer_) {
     lv_timer_set_user_data(timer_, this);
   }
+  return *this;
 }
 
-void Timer::pause() {
+Timer& Timer::pause() {
   if (timer_) lv_timer_pause(timer_);
+  return *this;
 }
 
-void Timer::resume() {
+Timer& Timer::resume() {
   if (timer_) lv_timer_resume(timer_);
+  return *this;
 }
 
-void Timer::ready() {
+Timer& Timer::ready() {
   if (timer_) lv_timer_ready(timer_);
+  return *this;
 }
 
-void Timer::reset() {
+Timer& Timer::reset() {
   if (timer_) lv_timer_reset(timer_);
+  return *this;
 }
 
-void Timer::set_repeat_count(int32_t repeat_count) {
+Timer& Timer::set_repeat_count(int32_t repeat_count) {
   if (timer_) lv_timer_set_repeat_count(timer_, repeat_count);
+  return *this;
 }
 
 void Timer::enable(bool en) { lv_timer_enable(en); }
