@@ -157,9 +157,9 @@ Animation& Animation::set_exec_cb(ObjectExecCallback cb) {
   return set_exec_cb(static_cast<ExecCallback>(trampoline));
 }
 
-Animation& Animation::set_path_cb(PathCallback cb) {
+Animation& Animation::set_path_cb(const PathCallback& cb) {
   if (!user_data_) user_data_ = std::make_unique<CallbackData>();
-  user_data_->path_cb = std::move(cb);
+  user_data_->path_cb = cb;
   return *this;
 }
 

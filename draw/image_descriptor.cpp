@@ -8,6 +8,17 @@ namespace lvgl {
 
 ImageDescriptor::ImageDescriptor() { std::memset(&dsc_, 0, sizeof(dsc_)); }
 
+ImageDescriptor::ImageDescriptor(const char* svg_src) : ImageDescriptor() {
+  if (svg_src) {
+    *this = from_svg(svg_src);
+  }
+}
+
+ImageDescriptor::ImageDescriptor(const std::string& svg_src)
+    : ImageDescriptor() {
+  *this = from_svg(svg_src);
+}
+
 ImageDescriptor::ImageDescriptor(const lv_image_dsc_t* dsc) {
   if (dsc) {
     dsc_ = *dsc;  // Copy the descriptor struct, but data pointer refers to

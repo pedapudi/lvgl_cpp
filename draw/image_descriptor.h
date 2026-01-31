@@ -38,6 +38,18 @@ class ImageDescriptor {
                   const uint8_t* data, uint32_t data_size);
 
   /**
+   * @brief Construct an image descriptor from an SVG string.
+   * @param svg_src The SVG source string.
+   */
+  explicit ImageDescriptor(const char* svg_src);
+
+  /**
+   * @brief Construct an image descriptor from an SVG string.
+   * @param svg_src The SVG source string.
+   */
+  explicit ImageDescriptor(const std::string& svg_src);
+
+  /**
    * @brief Create an image descriptor from an SVG string.
    * @param svg_src The SVG source string.
    * @return An ImageDescriptor owning a copy of the SVG string.

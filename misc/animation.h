@@ -58,6 +58,9 @@ class Animation {
 
   Animation();
 
+  /** @brief Infinite repetition constant */
+  static constexpr uint32_t RepeatInfinite = LV_ANIM_REPEAT_INFINITE;
+
   /**
    * @brief Construct an animation with common parameters.
    * @param var The object/variable to animate.
@@ -182,6 +185,9 @@ class Animation {
   struct Path {
     using Callback = PathCallback;
 
+    /** @brief Bezier value shift constant (1024 = 2^10) */
+    static constexpr uint32_t BezierValueShift = LV_BEZIER_VAL_SHIFT;
+
     /** @brief Linear animation (no easing) */
     static Callback Linear();
 
@@ -258,16 +264,17 @@ class Animation {
   Animation& set_values(int32_t start, int32_t end);
 
   /**
-   * @brief Set the path (easing) function.
+   * @brief Set the path (easing) function using a raw C callback.
    * @param path_cb The LVGL path callback (e.g., `lv_anim_path_linear`).
    */
   Animation& set_path_cb(lv_anim_path_cb_t path_cb);
 
   /**
-   * @brief Set a C++ path (easing) callback.
+   * @brief Set a C++ path (easing) callback (lambda/std::function).
+   * Used for custom easing or capturing lambdas.
    * @param cb The `std::function` path callback.
    */
-  Animation& set_path_cb(PathCallback cb);
+  Animation& set_path_cb(const PathCallback& cb);
 
   /**
    * @brief Set the repeat count.
