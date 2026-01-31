@@ -64,7 +64,8 @@ class InputDevice {
   }
 
   // Access to active device
-  static InputDevice* get_act();
+  static InputDevice* get_active();
+  static InputDevice* get_next(InputDevice* indev);
 
   // Configuration
   [[deprecated("Use set_read_cb(std::function<void(IndevData&)>) instead.")]]
@@ -76,10 +77,19 @@ class InputDevice {
   void set_long_press_time(uint16_t time);
   void set_long_press_repeat_time(uint16_t time);
   void set_scroll_limit(uint8_t limit);
+  void set_scroll_throw(uint8_t throw_decay);
+  void set_display(lv_display_t* disp);
+  void set_driver_data(void* data);
+  void set_button_points(const lv_point_t points[]);
 
   // Events
   void add_event_cb(std::function<void(lv_event_t*)> cb,
                     lv_event_code_t filter = LV_EVENT_ALL);
+  void send_event(lv_event_code_t code, void* param);
+  bool remove_event(uint32_t index);
+  void remove_event_cb_with_user_data(lv_event_cb_t cb, void* user_data);
+  uint32_t get_event_count() const;
+  lv_event_dsc_t* get_event_dsc(uint32_t index) const;
 
   // Methods
   Type get_type() const;
@@ -105,6 +115,14 @@ class InputDevice {
   lv_obj_t* get_scroll_obj();
   lv_timer_t* get_read_timer();
   lv_display_t* get_display();
+  lv_group_t* get_group() const;
+  void set_group(lv_group_t* group);
+  void set_group(Group& group);
+  lv_obj_t* get_active_obj() const;
+  lv_obj_t* get_cursor() const;
+  void* get_driver_data() const;
+  bool get_press_moved() const;
+  lv_obj_t* search_obj(const Point& p) const;
 
   lv_indev_t* raw() const { return indev_; }
 

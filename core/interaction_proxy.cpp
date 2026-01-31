@@ -41,4 +41,8 @@ lv_group_t* InteractionProxy::get_group() const {
   return lv_obj_get_group(obj_->raw());
 }
 
+void InteractionProxy::set_ext_click_area(int32_t area) {
+  lv_obj_set_ext_click_area(obj_->raw(), area);
+}
+
 }  // namespace lvgl

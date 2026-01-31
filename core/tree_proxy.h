@@ -63,6 +63,18 @@ class TreeProxy {
    */
   TreeProxy& set_parent(Object& parent);
 
+  /**
+   * @brief Exchange the children position of two objects.
+   * @param other The other object.
+   */
+  void swap(Object& other);
+
+  /**
+   * @brief Move the object to a specific child index.
+   * @param index The new index.
+   */
+  void move_to_index(int32_t index);
+
  private:
   Object* obj_;
 };

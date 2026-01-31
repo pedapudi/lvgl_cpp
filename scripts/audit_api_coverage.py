@@ -69,6 +69,7 @@ NON_IDIOMATIC_PATTERNS = {
     'LabelProxy': r'lv_label_',
     'VectorProxy': r'lv_vector_path_',
     'SubjectProxy': r'lv_subject_',
+    'InputDevice': r'lv_indev_',
 }
 
 def get_proxy_mapping(func_name: str) -> str:
@@ -137,6 +138,7 @@ def scan_proxy_methods(lvgl_cpp_path: Path) -> Dict[str, Set[str]]:
         'LabelProxy': [lvgl_cpp_path / 'widgets/label.h'],
         'VectorProxy': [lvgl_cpp_path / 'draw/vector/vector_path.h', lvgl_cpp_path / 'draw/vector/vector_draw.h'],
         'SubjectProxy': [lvgl_cpp_path / 'core/subject.h'],
+        'InputDevice': [lvgl_cpp_path / 'indev/input_device.h'],
     }
     
     methods = {name: set() for name in proxies}
@@ -252,6 +254,9 @@ def generate_report(lvgl_path: Path, cpp_path: Path):
             elif proxy == 'SubjectProxy':
                 m = f.replace('lv_subject_', '').replace('set_', '').replace('get_', '')
                 lookup = 'SubjectProxy'
+            elif proxy == 'InputDevice':
+                m = f.replace('lv_indev_', '').replace('set_', '').replace('get_', '')
+                lookup = 'InputDevice'
             elif proxy == 'EventProxy':
                 m = f.replace('lv_obj_', '').replace('add_', '').replace('remove_', '').replace('get_', '')
                 lookup = 'EventProxy'

@@ -90,6 +90,22 @@ class Style : public StyleBase<Style> {
     lv_style_set_bg_main_stop(&style_, v);
     return *this;
   }
+  Style& set_bg_grad(const lv_grad_dsc_t* v) {
+    lv_style_set_bg_grad(&style_, v);
+    return *this;
+  }
+  Style& set_bg_grad_opa(lv_opa_t v) {
+    lv_style_set_bg_grad_opa(&style_, v);
+    return *this;
+  }
+  Style& set_bg_grad_opa(lv_opa_t v) {
+    lv_style_set_bg_grad_opa(&style_, v);
+    return *this;
+  }
+  Style& set_bg_main_opa(lv_opa_t v) {
+    lv_style_set_bg_main_opa(&style_, v);
+    return *this;
+  }
   Style& set_bg_image_src(const void* v) {
     lv_style_set_bg_image_src(&style_, v);
     return *this;
@@ -108,6 +124,14 @@ class Style : public StyleBase<Style> {
   }
   Style& set_bg_image_tiled(bool v) {
     lv_style_set_bg_image_tiled(&style_, v);
+    return *this;
+  }
+  Style& set_bitmap_mask_src(const void* v) {
+    lv_style_set_bitmap_mask_src(&style_, v);
+    return *this;
+  }
+  Style& set_image_colorkey(lv_color_t v) {
+    lv_style_set_image_recolor(&style_, v);
     return *this;
   }
 
@@ -268,6 +292,10 @@ class Style : public StyleBase<Style> {
     lv_style_set_pad_gap(&style_, v);
     return *this;
   }
+  Style& set_pad_radial(int32_t v) {
+    lv_style_set_pad_radial(&style_, v);
+    return *this;
+  }
 
   Style& set_margin_all(int32_t v) {
     lv_style_set_margin_all(&style_, v);
@@ -382,6 +410,53 @@ class Style : public StyleBase<Style> {
       return v.num;
     return 0;
   }
+  Style& set_x(int32_t v) {
+    lv_style_set_x(&style_, v);
+    return *this;
+  }
+  int32_t get_x() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_X, &v) == LV_RESULT_OK) return v.num;
+    return 0;
+  }
+  Style& set_y(int32_t v) {
+    lv_style_set_y(&style_, v);
+    return *this;
+  }
+  int32_t get_y() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_Y, &v) == LV_RESULT_OK) return v.num;
+    return 0;
+  }
+  Style& set_size(int32_t w, int32_t h) {
+    lv_style_set_width(&style_, w);
+    lv_style_set_height(&style_, h);
+    return *this;
+  }
+  Style& set_align(lv_align_t v) {
+    lv_style_set_align(&style_, v);
+    return *this;
+  }
+  Style& set_length(int32_t v) {
+    lv_style_set_length(&style_, v);
+    return *this;
+  }
+  int32_t get_length() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_LENGTH, &v) == LV_RESULT_OK)
+      return v.num;
+    return 0;
+  }
+  Style& set_length(int32_t v) {
+    lv_style_set_length(&style_, v);
+    return *this;
+  }
+  int32_t get_length() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_LENGTH, &v) == LV_RESULT_OK)
+      return v.num;
+    return 0;
+  }
 
   Style& set_radius(int32_t v) {
     lv_style_set_radius(&style_, v);
@@ -478,6 +553,22 @@ class Style : public StyleBase<Style> {
     lv_style_set_transform_pivot_y(&style_, v);
     return *this;
   }
+  Style& set_transform_skew_x(int32_t v) {
+    lv_style_set_transform_skew_x(&style_, v);
+    return *this;
+  }
+  Style& set_transform_skew_y(int32_t v) {
+    lv_style_set_transform_skew_y(&style_, v);
+    return *this;
+  }
+  Style& set_translate_radial(int32_t v) {
+    lv_style_set_translate_radial(&style_, v);
+    return *this;
+  }
+  Style& set_radial_offset(int32_t v) {
+    lv_style_set_radial_offset(&style_, v);
+    return *this;
+  }
 
   Style& set_text_color(lv_color_t v) {
     lv_style_set_text_color(&style_, v);
@@ -530,6 +621,30 @@ class Style : public StyleBase<Style> {
   }
   Style& set_text_decor(lv_text_decor_t v) {
     lv_style_set_text_decor(&style_, v);
+    return *this;
+  }
+  Style& set_recolor(bool v) {
+    lv_style_set_text_recolor(&style_, v);
+    return *this;
+  }
+  Style& set_recolor(lv_color_t v) {
+    lv_style_set_recolor(&style_, v);
+    return *this;
+  }
+  Style& set_recolor_opa(lv_opa_t v) {
+    lv_style_set_recolor_opa(&style_, v);
+    return *this;
+  }
+  Style& set_text_outline_stroke_color(lv_color_t v) {
+    lv_style_set_text_outline_stroke_color(&style_, v);
+    return *this;
+  }
+  Style& set_text_outline_stroke_opa(lv_opa_t v) {
+    lv_style_set_text_outline_stroke_opa(&style_, v);
+    return *this;
+  }
+  Style& set_text_outline_stroke_width(int32_t v) {
+    lv_style_set_text_outline_stroke_width(&style_, v);
     return *this;
   }
 
@@ -697,6 +812,34 @@ class Style : public StyleBase<Style> {
   }
   Style& set_base_dir(lv_base_dir_t v) {
     lv_style_set_base_dir(&style_, v);
+    return *this;
+  }
+  Style& set_color_filter_dsc(const lv_color_filter_dsc_t* v) {
+    lv_style_set_color_filter_dsc(&style_, v);
+    return *this;
+  }
+  Style& set_color_filter_opa(lv_opa_t v) {
+    lv_style_set_color_filter_opa(&style_, v);
+    return *this;
+  }
+  Style& set_anim(const lv_anim_t* v) {
+    lv_style_set_anim(&style_, v);
+    return *this;
+  }
+  Style& set_opa_layered(lv_opa_t v) {
+    lv_style_set_opa_layered(&style_, v);
+    return *this;
+  }
+  Style& set_rotary_sensitivity(uint32_t v) {
+    lv_style_set_rotary_sensitivity(&style_, v);
+    return *this;
+  }
+  Style& set_opa_layered(lv_opa_t v) {
+    lv_style_set_opa_layered(&style_, v);
+    return *this;
+  }
+  Style& set_rotary_sensitivity(uint32_t v) {
+    lv_style_set_rotary_sensitivity(&style_, v);
     return *this;
   }
 

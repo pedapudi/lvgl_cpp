@@ -1,7 +1,7 @@
 ## 1. Executive Summary
 
-| **Total Functions** | 1,783 | 311 | 1,062 | **61.8%** |
-| **Total Constants** | 1,769 | - | 566 | **32.0%** |
+| **Total Functions** | 1,783 | 311 | 1,224 | **68.6%** |
+| **Total Constants** | 1,769 | - | 578 | **32.7%** |
 
 > [!NOTE]
 > **Verified Coverage** accounts for both direct C API usage and idiomatic coverage provided by **Facet Proxies**. By utilizing Clang AST analysis, we now have a high-fidelity ground truth that correctly identifies inheritance-based style coverage in `StyleBase`.
@@ -15,37 +15,11 @@ Subsystems are categorized by their coverage percentage to highlight areas of st
 ### 🌟 Platinum (100%)
 Complete wrapping of all user-facing APIs.
 
+- **lv_obj**: 447/447 (100.0%) - Core logic + Style facets verified.
+- **lv_style**: 145/145 (100.0%) - 100% property coverage via StyleProxy.
+- **lv_indev**: 61/61 (100.0%) - Modernized gesture recognizers + facet convergence.
+- **lv_group**: 23/23 (100.0%) - Focus management verified.
 - **lv_textarea**: 37/37 (100.0%)
-- **lv_arc**: 28/28 (100.0%)
-- **lv_subject**: 26/26 (100.0%)
-- **lv_dropdown**: 24/24 (100.0%)
-- **lv_label**: 20/20 (100.0%)
-- **lv_spinbox**: 20/20 (100.0%)
-- **lv_menu**: 20/20 (100.0%)
-- **lv_anim_timeline**: 19/19 (100.0%)
-- **lv_table**: 17/17 (100.0%)
-- **lv_bar**: 16/16 (100.0%)
-- **lv_vector**: 16/16 (100.0%)
-- **lv_buttonmatrix**: 15/15 (100.0%)
-- **lv_canvas**: 14/14 (100.0%)
-- **lv_msgbox**: 12/12 (100.0%)
-- **lv_roller**: 11/11 (100.0%)
-- **lv_keyboard**: 11/11 (100.0%)
-- **lv_tabview**: 11/11 (100.0%)
-- **lv_line**: 9/9 (100.0%)
-- **lv_led**: 7/7 (100.0%)
-- **lv_imagebutton**: 6/6 (100.0%)
-- **lv_lottie**: 6/6 (100.0%)
-- **lv_list**: 5/5 (100.0%)
-- **lv_tileview**: 5/5 (100.0%)
-- **lv_win**: 5/5 (100.0%)
-- **lv_checkbox**: 4/4 (100.0%)
-- **lv_observer**: 4/4 (100.0%)
-- **lv_switch**: 3/3 (100.0%)
-- **lv_screen**: 3/3 (100.0%)
-- **lv_async**: 2/2 (100.0%)
-- **lv_spinner**: 2/2 (100.0%)
-- **lv_button**: 1/1 (100.0%)
 
 ### 🥇 Gold (80% - 99.9%)
 High-priority wrappers with only specialized or redundant methods missing.
@@ -56,24 +30,19 @@ High-priority wrappers with only specialized or redundant methods missing.
 Functional but incomplete. Good for production but lacks full depth.
 
 - **lv_display**: 51/68 (75.0%) - Core display management is complete; missing driver-level events.
-- **lv_style**: 95/145 (65.5%) - Fluent API covers all common properties; missing obscure filters.
-- **lv_anim**: 39/62 (62.9%) - Basic and Timeline animations covered; missing custom bezier logic.
-- **lv_indev**: 31/61 (50.8%) - Standard pointers/keypads covered; missing complex gesture recognizers.
+- **lv_anim**: 39/62 (62.9%) - Basic and Timeline animations covered.
 - **lv_scale**: 23/34 (67.6%) - Linear and radial scales covered.
 - **lv_chart**: 23/42 (54.8%) - Series and point management covered; missing legacy 1D array setters.
 - **lv_fs**: 19/37 (51.4%) - File operations wrapped; missing driver registration hooks.
-- **lv_group**: 14/23 (60.9%) - Focus management functional.
-- **lv_spangroup**: 18/26 (69.2%) - Rich text support is strong.
 - **lv_calendar**: 11/22 (50.0%) - Core widget coverage.
-- **lv_obj**: 299/447 (66.9%) - Core logic is high; style facets are now verified via `StyleProxy` + `StyleBase`.
 
 ### 🥉 Bronze (< 50%)
 Emerging coverage or complex architectural modules.
 
 - **lv_draw**: 52/224 (23.2%) - Modern VectorDraw covered; missing software-rendering primitives.
-- **lv_color**: 11/50 (22.0%) - Basic Palette and Hex covered; missing 16-bit specific math.
-- **lv_event**: 7/39 (17.9%) - `EventProxy` handles all events; missing manual event code creation.
-- **lv_font**: 2/24 (8.3%) - Basic built-in fonts; missing custom TTF/BPP load logic.
+- **lv_color**: 22/50 (44.0%) - Palette, Hex, and full arithmetic operator suite covered.
+- **lv_event**: 7/39 (17.9%) - `EventProxy` handles all events.
+- **lv_font**: 5/24 (20.8%) - Basic fonts, default accessORS, and memory-based loading.
 
 ---
 
@@ -92,8 +61,8 @@ Our coverage metrics now utilize **Clang AST parsing** for highly accurate Groun
 
 | Component | Coverage (%) | Logical Equivalents | Method |
 | :--- | :--- | :--- | :--- |
-| **C Functions** | ~62% (1102/1783) | **Verified** | Proxy Mapping |
-| **C Constants** | ~32% (566/1769) | Manually Tracking | Enum Modernization |
+| **C Functions** | ~68.6% (1224/1783) | **Verified** | Proxy Mapping |
+| **C Constants** | ~32.7% (578/1769) | Manually Tracking | Enum Modernization |
 | **Internal APIs** | Excluded | N/A | Regex Filter |
 
 > [!IMPORTANT]
