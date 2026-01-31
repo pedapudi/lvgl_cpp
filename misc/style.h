@@ -98,10 +98,6 @@ class Style : public StyleBase<Style> {
     lv_style_set_bg_grad_opa(&style_, v);
     return *this;
   }
-  Style& set_bg_grad_opa(lv_opa_t v) {
-    lv_style_set_bg_grad_opa(&style_, v);
-    return *this;
-  }
   Style& set_bg_main_opa(lv_opa_t v) {
     lv_style_set_bg_main_opa(&style_, v);
     return *this;
@@ -436,16 +432,6 @@ class Style : public StyleBase<Style> {
   Style& set_align(lv_align_t v) {
     lv_style_set_align(&style_, v);
     return *this;
-  }
-  Style& set_length(int32_t v) {
-    lv_style_set_length(&style_, v);
-    return *this;
-  }
-  int32_t get_length() const {
-    lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_LENGTH, &v) == LV_RESULT_OK)
-      return v.num;
-    return 0;
   }
   Style& set_length(int32_t v) {
     lv_style_set_length(&style_, v);
@@ -824,14 +810,6 @@ class Style : public StyleBase<Style> {
   }
   Style& set_anim(const lv_anim_t* v) {
     lv_style_set_anim(&style_, v);
-    return *this;
-  }
-  Style& set_opa_layered(lv_opa_t v) {
-    lv_style_set_opa_layered(&style_, v);
-    return *this;
-  }
-  Style& set_rotary_sensitivity(uint32_t v) {
-    lv_style_set_rotary_sensitivity(&style_, v);
     return *this;
   }
   Style& set_opa_layered(lv_opa_t v) {
