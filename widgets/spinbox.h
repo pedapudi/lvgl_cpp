@@ -38,6 +38,8 @@ class Spinbox : public Textarea {
   Spinbox& set_min_value(int32_t min_value);
   Spinbox& set_max_value(int32_t max_value);
   Spinbox& set_cursor_pos(uint32_t pos);
+  Spinbox& set_digit_step_direction(Dir direction);
+  [[deprecated("Use set_digit_step_direction(Dir) instead")]]
   Spinbox& set_digit_step_direction(lv_dir_t direction);
 
   bool get_rollover();
@@ -55,6 +57,13 @@ class Spinbox : public Textarea {
    */
   Spinbox& on_value_changed(std::function<void(lvgl::Event&)> cb);
 
+  /**
+   * @brief Bind the spinbox value to a subject.
+   * @param subject The subject to bind to.
+   * @return The observer.
+   */
+  Observer bind_value(Subject& subject);
+
   // Fluent API shadows
   Spinbox& set_width(int32_t width);
   Spinbox& set_height(int32_t height);
@@ -63,7 +72,9 @@ class Spinbox : public Textarea {
   Spinbox& add_state(State state);
   Spinbox& remove_state(State state);
   Spinbox& add_flag(lv_obj_flag_t flag);
+  Spinbox& add_flag(ObjFlag flag);
   Spinbox& remove_flag(lv_obj_flag_t flag);
+  Spinbox& remove_flag(ObjFlag flag);
 };
 
 /**

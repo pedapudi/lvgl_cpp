@@ -63,6 +63,8 @@ class Arc : public Widget<Arc> {
    * @param mode Mode (Normal, Symmetrical, Reverse).
    */
   Arc& set_mode(Mode mode);
+  [[deprecated("Use set_mode(Mode) instead")]]
+  Arc& set_mode(lv_arc_mode_t mode);
 
   /**
    * @brief Set the current value.

@@ -16,6 +16,10 @@ Canvas::Canvas(Object& parent) : Canvas(&parent) {}
 
 Canvas::Canvas(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
+Canvas& Canvas::set_buffer(void* buf, int32_t w, int32_t h, ColorFormat cf) {
+  return set_buffer(buf, w, h, static_cast<lv_color_format_t>(cf));
+}
+
 Canvas& Canvas::set_buffer(void* buf, int32_t w, int32_t h,
                            lv_color_format_t cf) {
   if (obj_) lv_canvas_set_buffer(obj_, buf, w, h, cf);
@@ -25,6 +29,10 @@ Canvas& Canvas::set_buffer(void* buf, int32_t w, int32_t h,
 Canvas& Canvas::set_draw_buf(lv_draw_buf_t* draw_buf) {
   if (obj_) lv_canvas_set_draw_buf(obj_, draw_buf);
   return *this;
+}
+
+Canvas& Canvas::set_px(int32_t x, int32_t y, Color color, Opacity opa) {
+  return set_px(x, y, color, static_cast<lv_opa_t>(opa));
 }
 
 Canvas& Canvas::set_px(int32_t x, int32_t y, Color color, lv_opa_t opa) {
@@ -78,6 +86,10 @@ Canvas& Canvas::set_scale_y(uint32_t zoom) {
   return *this;
 }
 
+Canvas& Canvas::set_blend_mode(BlendMode blend_mode) {
+  return set_blend_mode(static_cast<lv_blend_mode_t>(blend_mode));
+}
+
 Canvas& Canvas::set_blend_mode(lv_blend_mode_t blend_mode) {
   if (obj_) lv_image_set_blend_mode(obj_, blend_mode);
   return *this;
@@ -86,6 +98,10 @@ Canvas& Canvas::set_blend_mode(lv_blend_mode_t blend_mode) {
 Canvas& Canvas::set_antialias(bool antialias) {
   if (obj_) lv_image_set_antialias(obj_, antialias);
   return *this;
+}
+
+Canvas& Canvas::set_inner_align(ImageAlign align) {
+  return set_inner_align(static_cast<lv_image_align_t>(align));
 }
 
 Canvas& Canvas::set_inner_align(lv_image_align_t align) {
@@ -165,16 +181,18 @@ int32_t Canvas::get_src_height() {
   return obj_ ? lv_image_get_src_height(obj_) : 0;
 }
 
-lv_blend_mode_t Canvas::get_blend_mode() {
-  return obj_ ? lv_image_get_blend_mode(obj_) : LV_BLEND_MODE_NORMAL;
+BlendMode Canvas::get_blend_mode() {
+  return obj_ ? static_cast<BlendMode>(lv_image_get_blend_mode(obj_))
+              : BlendMode::Normal;
 }
 
 bool Canvas::get_antialias() {
   return obj_ ? lv_image_get_antialias(obj_) : false;
 }
 
-lv_image_align_t Canvas::get_inner_align() {
-  return obj_ ? lv_image_get_inner_align(obj_) : LV_IMAGE_ALIGN_DEFAULT;
+ImageAlign Canvas::get_inner_align() {
+  return obj_ ? static_cast<ImageAlign>(lv_image_get_inner_align(obj_))
+              : ImageAlign::Default;
 }
 
 Canvas& Canvas::draw_rect(int32_t x, int32_t y, int32_t w, int32_t h,
@@ -263,7 +281,7 @@ Canvas& Canvas::draw_arc(int32_t x, int32_t y, uint16_t r, int32_t start_angle,
 }
 
 size_t Canvas::get_buf_size(int32_t w, int32_t h, uint8_t bpp, uint8_t stride) {
-  return LV_CANVAS_BUF_SIZE(w, h, bpp, stride);
+  return lv_canvas_buf_size(w, h, bpp, stride);
 }
 
 }  // namespace lvgl

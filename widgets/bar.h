@@ -37,6 +37,14 @@ class Bar : public Widget<Bar> {
   };
 
   /**
+   * @brief Bar orientations.
+   */
+  enum class Orientation : uint8_t {
+    Horizontal = LV_BAR_ORIENTATION_HORIZONTAL,
+    Vertical = LV_BAR_ORIENTATION_VERTICAL,
+  };
+
+  /**
    * @brief Create a new Bar.
    * @param parent Parent object.
    */
@@ -54,14 +62,20 @@ class Bar : public Widget<Bar> {
    * @param value The value to set.
    * @param anim Enable animation.
    */
-  Bar& set_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Bar& set_value(int32_t value, AnimEnable anim = AnimEnable::Off);
+
+  [[deprecated("Use set_value(int32_t, AnimEnable) instead")]]
+  Bar& set_value(int32_t value, lv_anim_enable_t anim);
 
   /**
    * @brief Set the start value (for range bars).
    * @param value The start value.
    * @param anim Enable animation.
    */
-  Bar& set_start_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Bar& set_start_value(int32_t value, AnimEnable anim = AnimEnable::Off);
+
+  [[deprecated("Use set_start_value(int32_t, AnimEnable) instead")]]
+  Bar& set_start_value(int32_t value, lv_anim_enable_t anim);
 
   /**
    * @brief Set the range of the bar.
@@ -88,10 +102,16 @@ class Bar : public Widget<Bar> {
    */
   Bar& set_mode(Mode mode);
 
+  [[deprecated("Use set_mode(Mode) instead")]]
+  Bar& set_mode(lv_bar_mode_t mode);
+
   /**
    * @brief Set the orientation of the bar.
    * @param orientation Orientation (`LV_BAR_ORIENTATION_HORIZONTAL`, etc.).
    */
+  Bar& set_orientation(Orientation orientation);
+
+  [[deprecated("Use set_orientation(Orientation) instead")]]
   Bar& set_orientation(lv_bar_orientation_t orientation);
 
   int32_t get_value() const;
@@ -99,7 +119,7 @@ class Bar : public Widget<Bar> {
   int32_t get_min_value() const;
   int32_t get_max_value() const;
   Mode get_mode() const;
-  lv_bar_orientation_t get_orientation() const;
+  Orientation get_orientation() const;
   bool is_symmetrical() const;
 
   /**

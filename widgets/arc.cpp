@@ -55,6 +55,11 @@ Arc& Arc::set_mode(Mode mode) {
   return *this;
 }
 
+Arc& Arc::set_mode(lv_arc_mode_t mode) {
+  if (obj_) lv_arc_set_mode(obj_, mode);
+  return *this;
+}
+
 Arc& Arc::set_value(int32_t value) {
   if (obj_) lv_arc_set_value(obj_, value);
   return *this;
@@ -129,7 +134,7 @@ Arc& Arc::on_value_changed(std::function<void(lvgl::Event&)> cb) {
 }
 
 Observer Arc::bind_value(Subject& subject) {
-  return Observer(lv_arc_bind_value(raw(), subject.raw()));
+  return Observer(lv_arc_bind_value(raw(), subject.raw()), false);
 }
 
 void Arc::align_obj_to_angle(const Object& obj, int32_t r_offset) const {

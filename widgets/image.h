@@ -68,8 +68,14 @@ class Image : public Widget<Image> {
   Image& set_scale(uint32_t zoom);
   Image& set_scale_x(uint32_t zoom);
   Image& set_scale_y(uint32_t zoom);
+  Image& set_blend_mode(BlendMode blend_mode);
+  [[deprecated("Use set_blend_mode(BlendMode) instead")]]
   Image& set_blend_mode(lv_blend_mode_t blend_mode);
+
   Image& set_antialias(bool antialias);
+
+  Image& set_inner_align(ImageAlign align);
+  [[deprecated("Use set_inner_align(ImageAlign) instead")]]
   Image& set_inner_align(lv_image_align_t align);
 
   const void* get_src() const;
@@ -82,9 +88,9 @@ class Image : public Widget<Image> {
   int32_t get_scale_y();
   int32_t get_src_width();
   int32_t get_src_height();
-  lv_blend_mode_t get_blend_mode();
+  BlendMode get_blend_mode();
   bool get_antialias();
-  lv_image_align_t get_inner_align();
+  ImageAlign get_inner_align();
 };
 
 /**

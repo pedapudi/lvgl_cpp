@@ -19,13 +19,23 @@ Slider::Slider(Object& parent, int32_t min, int32_t max) : Slider(parent) {
 
 Slider::Slider(lv_obj_t* obj, Ownership ownership) : Bar(obj, ownership) {}
 
-Slider& Slider::set_value(int32_t value, lv_anim_enable_t anim) {
+Slider& Slider::set_value(int32_t value, AnimEnable anim) {
   Bar::set_value(value, anim);
   return *this;
 }
 
-Slider& Slider::set_start_value(int32_t value, lv_anim_enable_t anim) {
+Slider& Slider::set_value(int32_t value, lv_anim_enable_t anim) {
+  Bar::set_value(value, static_cast<AnimEnable>(anim));
+  return *this;
+}
+
+Slider& Slider::set_start_value(int32_t value, AnimEnable anim) {
   Bar::set_start_value(value, anim);
+  return *this;
+}
+
+Slider& Slider::set_start_value(int32_t value, lv_anim_enable_t anim) {
+  Bar::set_start_value(value, static_cast<AnimEnable>(anim));
   return *this;
 }
 
@@ -36,6 +46,17 @@ Slider& Slider::set_range(int32_t min, int32_t max) {
 
 Slider& Slider::set_mode(Mode mode) {
   if (obj_) lv_slider_set_mode(obj_, static_cast<lv_slider_mode_t>(mode));
+  return *this;
+}
+
+Slider& Slider::set_mode(lv_slider_mode_t mode) {
+  if (obj_) lv_slider_set_mode(obj_, mode);
+  return *this;
+}
+
+Slider& Slider::set_left_value(int32_t value, AnimEnable anim) {
+  if (obj_)
+    lv_slider_set_left_value(obj_, value, static_cast<lv_anim_enable_t>(anim));
   return *this;
 }
 
@@ -79,7 +100,17 @@ Slider& Slider::add_flag(lv_obj_flag_t flag) {
   return *this;
 }
 
+Slider& Slider::add_flag(ObjFlag flag) {
+  Bar::add_flag(flag);
+  return *this;
+}
+
 Slider& Slider::remove_flag(lv_obj_flag_t flag) {
+  Bar::remove_flag(flag);
+  return *this;
+}
+
+Slider& Slider::remove_flag(ObjFlag flag) {
   Bar::remove_flag(flag);
   return *this;
 }

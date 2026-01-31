@@ -56,17 +56,29 @@ class Slider : public Bar {
 
   // Inherits set_value, set_range, etc. from Bar, but we shadow them for fluent
   // API
-  Slider& set_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
-  Slider& set_start_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Slider& set_value(int32_t value, AnimEnable anim = AnimEnable::Off);
+
+  [[deprecated("Use set_value(int32_t, AnimEnable) instead")]]
+  Slider& set_value(int32_t value, lv_anim_enable_t anim);
+  Slider& set_start_value(int32_t value, AnimEnable anim = AnimEnable::Off);
+
+  [[deprecated("Use set_start_value(int32_t, AnimEnable) instead")]]
+  Slider& set_start_value(int32_t value, lv_anim_enable_t anim);
   Slider& set_range(int32_t min, int32_t max);
   Slider& set_mode(Mode mode);
+
+  [[deprecated("Use set_mode(Mode) instead")]]
+  Slider& set_mode(lv_slider_mode_t mode);
 
   /**
    * @brief Set the value of the left knob (for range slider).
    * @param value The value to set.
    * @param anim Enable animation (`LV_ANIM_ON`/`LV_ANIM_OFF`).
    */
-  Slider& set_left_value(int32_t value, lv_anim_enable_t anim = LV_ANIM_ON);
+  Slider& set_left_value(int32_t value, AnimEnable anim = AnimEnable::Off);
+
+  [[deprecated("Use set_left_value(int32_t, AnimEnable) instead")]]
+  Slider& set_left_value(int32_t value, lv_anim_enable_t anim);
 
   /**
    * @brief Register a callback for the ValueChanged event.

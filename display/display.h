@@ -59,14 +59,56 @@ class Display {
   void set_dpi(int32_t dpi);
   int32_t get_dpi() const;
 
+  /**
+   * @brief Display render modes.
+   */
+  enum class RenderMode : uint8_t {
+    Partial = LV_DISPLAY_RENDER_MODE_PARTIAL,
+    Direct = LV_DISPLAY_RENDER_MODE_DIRECT,
+    Full = LV_DISPLAY_RENDER_MODE_FULL,
+  };
+
+  /**
+   * @brief Screen load animations.
+   */
+  enum class LoadAnim : uint8_t {
+    None = LV_SCREEN_LOAD_ANIM_NONE,
+    FadeIn = LV_SCREEN_LOAD_ANIM_FADE_IN,
+    FadeOn = LV_SCREEN_LOAD_ANIM_FADE_ON,
+    FadeOut = LV_SCREEN_LOAD_ANIM_FADE_OUT,
+    OverLeft = LV_SCREEN_LOAD_ANIM_OVER_LEFT,
+    OverRight = LV_SCREEN_LOAD_ANIM_OVER_RIGHT,
+    OverTop = LV_SCREEN_LOAD_ANIM_OVER_TOP,
+    OverBottom = LV_SCREEN_LOAD_ANIM_OVER_BOTTOM,
+    MoveLeft = LV_SCREEN_LOAD_ANIM_MOVE_LEFT,
+    MoveRight = LV_SCREEN_LOAD_ANIM_MOVE_RIGHT,
+    MoveTop = LV_SCREEN_LOAD_ANIM_MOVE_TOP,
+    MoveBottom = LV_SCREEN_LOAD_ANIM_MOVE_BOTTOM,
+    OutLeft = LV_SCREEN_LOAD_ANIM_OUT_LEFT,
+    OutRight = LV_SCREEN_LOAD_ANIM_OUT_RIGHT,
+    OutTop = LV_SCREEN_LOAD_ANIM_OUT_TOP,
+    OutBottom = LV_SCREEN_LOAD_ANIM_OUT_BOTTOM,
+  };
+
   // Buffers & Rendering
   void set_buffers(void* buf1, void* buf2, uint32_t buf_size,
+                   RenderMode render_mode);
+  [[deprecated("Use set_buffers(void*, void*, uint32_t, RenderMode) instead")]]
+  void set_buffers(void* buf1, void* buf2, uint32_t buf_size,
                    lv_display_render_mode_t render_mode);
+  void set_buffers_with_stride(void* buf1, void* buf2, uint32_t buf_size,
+                               uint32_t stride, RenderMode render_mode);
+  [[deprecated(
+      "Use set_buffers_with_stride(void*, void*, uint32_t, uint32_t, "
+      "RenderMode) "
+      "instead")]]
   void set_buffers_with_stride(void* buf1, void* buf2, uint32_t buf_size,
                                uint32_t stride,
                                lv_display_render_mode_t render_mode);
   void set_draw_buffers(lv_draw_buf_t* buf1, lv_draw_buf_t* buf2);
   void set_3rd_draw_buffer(lv_draw_buf_t* buf3);
+  void set_render_mode(RenderMode render_mode);
+  [[deprecated("Use set_render_mode(RenderMode) instead")]]
   void set_render_mode(lv_display_render_mode_t render_mode);
   void set_tile_cnt(uint32_t tile_cnt);
   void set_antialiasing(bool en);
@@ -115,6 +157,9 @@ class Display {
   }
 
   void load_screen(Object& scr);
+  void load_screen_anim(Object& scr, LoadAnim anim_type, uint32_t time,
+                        uint32_t delay, bool auto_del);
+  [[deprecated("Use load_screen_anim(Object&, LoadAnim, ...) instead")]]
   void load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
                         uint32_t time, uint32_t delay, bool auto_del);
 
@@ -135,9 +180,11 @@ class Display {
 
   // Utilities
   void clear_active_screen();
-  void auto_configure_buffers(
-      lv_display_render_mode_t mode = LV_DISPLAY_RENDER_MODE_PARTIAL,
-      bool double_buffer = false);
+  void auto_configure_buffers(RenderMode mode = RenderMode::Partial,
+                              bool double_buffer = false);
+  [[deprecated("Use auto_configure_buffers(RenderMode, bool) instead")]]
+  void auto_configure_buffers(lv_display_render_mode_t mode,
+                              bool double_buffer);
 
  private:
   lv_display_t* disp_;

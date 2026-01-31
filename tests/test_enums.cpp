@@ -74,7 +74,7 @@ int main() {
   {
     std::cout << "Testing Keyboard mode..." << std::endl;
     lvgl::Keyboard kb;
-    kb.set_mode(lvgl::KeyboardMode::Number);
+    kb.set_mode(lvgl::Keyboard::Mode::Number);
     assert(lv_keyboard_get_mode(kb.raw()) == LV_KEYBOARD_MODE_NUMBER);
   }
 
@@ -94,7 +94,7 @@ int main() {
   {
     std::cout << "Testing Roller mode..." << std::endl;
     lvgl::Roller roller;
-    roller.set_options("1\n2\n3", lvgl::RollerMode::Infinite);
+    roller.set_options("1\n2\n3", lvgl::Roller::Mode::Infinite);
     // Roler options parsing is complex to verify via raw getter easily,
     // but we can check if it doesn't crash and the call succeeded.
     assert(roller.raw() != nullptr);
@@ -159,8 +159,8 @@ int main() {
   {
     std::cerr << "Keyboard Mode Start" << std::endl;
     lvgl::Keyboard kb(screen);
-    kb.set_mode(lvgl::KeyboardMode::Number);
-    assert(kb.get_mode() == LV_KEYBOARD_MODE_NUMBER);
+    kb.set_mode(lvgl::Keyboard::Mode::Number);
+    assert(kb.get_mode() == lvgl::Keyboard::Mode::Number);
     std::cerr << "Keyboard Mode Done" << std::endl;
   }
 
@@ -238,7 +238,7 @@ int main() {
     std::cerr << "Dir Enum Start" << std::endl;
     lvgl::Dropdown dd(screen);
     dd.set_dir(lvgl::Dir::Bottom);
-    assert(dd.get_dir() == LV_DIR_BOTTOM);
+    assert(dd.get_dir() == lvgl::Dir::Bottom);
     std::cerr << "Dir Enum Done" << std::endl;
   }
 

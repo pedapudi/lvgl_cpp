@@ -4,10 +4,13 @@ This report provides a detailed breakdown of the `lvgl_cpp` wrapper coverage aga
 
 ## 1. Executive Summary
 
-| Metric | Baseline (v9.4) | Wrapped | Coverage |
-| :--- | :--- | :--- | :--- |
-| **Total Functions** | 1,835 | 1,034 | **56.3%** |
-| **Total Enums** | 859 | 296 | **34.5%** |
+| Metric | Total (Raw) | Idiomatic | Wrapped | Coverage (Idiomatic) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Total Functions** | 1,829 | 1,379 | 832 | **60.3%** |
+| **Total Enums** | 859 | - | 347 | **40.4%** |
+
+> [!NOTE]
+> **Idiomatic Coverage** accounts for the architectural decision to bypass 450+ non-idiomatic C functions (e.g., generated style setters) in favor of Facet Proxies. Raw coverage stands at 45.5%.
 
 ---
 

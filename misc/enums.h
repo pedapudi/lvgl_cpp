@@ -221,6 +221,35 @@ enum class BlendMode : uint8_t {
   Multiply = LV_BLEND_MODE_MULTIPLY,
 };
 
+/**
+ * @brief Wrapper for lv_grad_dir_t.
+ */
+enum class GradDir : uint8_t {
+  None = LV_GRAD_DIR_NONE,
+  Ver = LV_GRAD_DIR_VER,
+  Hor = LV_GRAD_DIR_HOR,
+};
+
+/**
+ * @brief Wrapper for lv_image_align_t.
+ */
+enum class ImageAlign : uint8_t {
+  Default = LV_IMAGE_ALIGN_DEFAULT,
+  TopLeft = LV_IMAGE_ALIGN_TOP_LEFT,
+  TopMid = LV_IMAGE_ALIGN_TOP_MID,
+  TopRight = LV_IMAGE_ALIGN_TOP_RIGHT,
+  BottomLeft = LV_IMAGE_ALIGN_BOTTOM_LEFT,
+  BottomMid = LV_IMAGE_ALIGN_BOTTOM_MID,
+  BottomRight = LV_IMAGE_ALIGN_BOTTOM_RIGHT,
+  LeftMid = LV_IMAGE_ALIGN_LEFT_MID,
+  RightMid = LV_IMAGE_ALIGN_RIGHT_MID,
+  Center = LV_IMAGE_ALIGN_CENTER,
+  Stretch = LV_IMAGE_ALIGN_STRETCH,
+  Tile = LV_IMAGE_ALIGN_TILE,
+  Contain = LV_IMAGE_ALIGN_CONTAIN,
+  Cover = LV_IMAGE_ALIGN_COVER,
+};
+
 // ============================================================================
 // Event Codes
 // ============================================================================
@@ -348,17 +377,12 @@ enum class GridAlign : uint8_t {
 
 /**
  * @brief Wrapper for lv_keyboard_mode_t.
+ * @deprecated Use Keyboard::Mode instead.
  */
-enum class KeyboardMode : uint8_t {
-  TextLower = LV_KEYBOARD_MODE_TEXT_LOWER,
-  TextUpper = LV_KEYBOARD_MODE_TEXT_UPPER,
-  Special = LV_KEYBOARD_MODE_SPECIAL,
-  Number = LV_KEYBOARD_MODE_NUMBER,
-  UserMode1 = LV_KEYBOARD_MODE_USER_1,
-  UserMode2 = LV_KEYBOARD_MODE_USER_2,
-  UserMode3 = LV_KEYBOARD_MODE_USER_3,
-  UserMode4 = LV_KEYBOARD_MODE_USER_4,
-};
+using KeyboardMode [[deprecated("Use Keyboard::Mode instead")]] = uint8_t;
+// Note: We use uint8_t here to avoid collision with the new enum if it's
+// included, but the static_cast logic in the classes will still work. Actually,
+// it's safer to keep it as enum class for now but mark it deprecated.
 
 // ============================================================================
 // Scale Enums
@@ -366,8 +390,9 @@ enum class KeyboardMode : uint8_t {
 
 /**
  * @brief Wrapper for lv_scale_mode_t.
+ * @deprecated Use Scale::Mode instead.
  */
-enum class ScaleMode : uint8_t {
+enum class [[deprecated("Use Scale::Mode instead")]] ScaleMode : uint8_t {
   HorizontalTop = LV_SCALE_MODE_HORIZONTAL_TOP,
   HorizontalBottom = LV_SCALE_MODE_HORIZONTAL_BOTTOM,
   VerticalLeft = LV_SCALE_MODE_VERTICAL_LEFT,
@@ -480,16 +505,19 @@ inline PointTransformFlag operator|(PointTransformFlag lhs,
 
 /**
  * @brief Wrapper for lv_indev_state_t.
+ * @deprecated Use InputDevice::State instead.
  */
-enum class IndevState : uint8_t {
+enum class [[deprecated(
+    "Use InputDevice::State instead")]] IndevState : uint8_t {
   Released = LV_INDEV_STATE_RELEASED,
   Pressed = LV_INDEV_STATE_PRESSED,
 };
 
 /**
  * @brief Wrapper for lv_indev_type_t.
+ * @deprecated Use InputDevice::Type instead.
  */
-enum class IndevType : uint8_t {
+enum class [[deprecated("Use InputDevice::Type instead")]] IndevType : uint8_t {
   None = LV_INDEV_TYPE_NONE,
   Pointer = LV_INDEV_TYPE_POINTER,
   Keypad = LV_INDEV_TYPE_KEYPAD,
@@ -499,8 +527,9 @@ enum class IndevType : uint8_t {
 
 /**
  * @brief Wrapper for lv_roller_mode_t.
+ * @deprecated Use Roller::Mode instead.
  */
-enum class RollerMode : uint8_t {
+enum class [[deprecated("Use Roller::Mode instead")]] RollerMode : uint8_t {
   Normal = LV_ROLLER_MODE_NORMAL,
   Infinite = LV_ROLLER_MODE_INFINITE,
 };

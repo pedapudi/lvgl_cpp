@@ -78,11 +78,11 @@ void VectorPath::append_rect(float x, float y, float w, float h, float rx,
   rect.y1 = (int32_t)y;
   rect.x2 = (int32_t)(x + w - 1);
   rect.y2 = (int32_t)(y + h - 1);
-  if (path_) lv_vector_path_append_rect(path_, &rect, rx, ry);
+  if (path_) lv_vector_path_append_rectangle(path_, &rect, rx, ry);
 }
 
 void VectorPath::append_rect(const Area& area, float rx, float ry) {
-  if (path_) lv_vector_path_append_rect(path_, area.raw(), rx, ry);
+  if (path_) lv_vector_path_append_rectangle(path_, area.raw(), rx, ry);
 }
 
 // ... existing code ...

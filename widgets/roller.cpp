@@ -20,13 +20,21 @@ Roller& Roller::set_options(const char* options, lv_roller_mode_t mode) {
   return *this;
 }
 
-Roller& Roller::set_options(const char* options, RollerMode mode) {
+Roller& Roller::set_options(const char* options, Mode mode) {
   return set_options(options, static_cast<lv_roller_mode_t>(mode));
+}
+
+Roller& Roller::set_selected(uint32_t sel_opt, AnimEnable anim) {
+  return set_selected(sel_opt, static_cast<lv_anim_enable_t>(anim));
 }
 
 Roller& Roller::set_selected(uint32_t sel_opt, lv_anim_enable_t anim) {
   if (obj_) lv_roller_set_selected(obj_, sel_opt, anim);
   return *this;
+}
+
+bool Roller::set_selected_str(const char* sel_opt, AnimEnable anim) {
+  return set_selected_str(sel_opt, static_cast<lv_anim_enable_t>(anim));
 }
 
 bool Roller::set_selected_str(const char* sel_opt, lv_anim_enable_t anim) {
@@ -65,7 +73,7 @@ lv_result_t Roller::get_option_str(uint32_t option, char* buf,
 }
 
 Observer Roller::bind_value(Subject& subject) {
-  return Observer(lv_roller_bind_value(raw(), subject.raw()));
+  return Observer(lv_roller_bind_value(raw(), subject.raw()), false);
 }
 
 }  // namespace lvgl

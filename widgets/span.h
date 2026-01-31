@@ -43,6 +43,23 @@ class Span {
 
 class SpanGroup : public Widget<SpanGroup> {
  public:
+  /**
+   * @brief Span group display modes.
+   */
+  enum class Mode : uint8_t {
+    Fixed = LV_SPAN_MODE_FIXED,
+    Expand = LV_SPAN_MODE_EXPAND,
+    Break = LV_SPAN_MODE_BREAK,
+  };
+
+  /**
+   * @brief Span group overflow modes.
+   */
+  enum class Overflow : uint8_t {
+    Clip = LV_SPAN_OVERFLOW_CLIP,
+    Ellipsis = LV_SPAN_OVERFLOW_ELLIPSIS,
+  };
+
   SpanGroup();
   explicit SpanGroup(Object* parent, Ownership ownership = Ownership::Default);
   explicit SpanGroup(Object& parent);
@@ -53,16 +70,18 @@ class SpanGroup : public Widget<SpanGroup> {
 
   SpanGroup& set_align(TextAlign align);
   SpanGroup& set_overflow(lv_span_overflow_t overflow);
+  SpanGroup& set_overflow(Overflow overflow);
   SpanGroup& set_indent(int32_t indent);
   SpanGroup& set_mode(lv_span_mode_t mode);
+  SpanGroup& set_mode(Mode mode);
   SpanGroup& set_max_lines(int32_t lines);
 
   Span get_child(int32_t id);
   uint32_t get_span_count() const;
   TextAlign get_align() const;
-  lv_span_overflow_t get_overflow() const;
+  Overflow get_overflow() const;
   int32_t get_indent() const;
-  lv_span_mode_t get_mode() const;
+  Mode get_mode() const;
   int32_t get_max_lines() const;
   int32_t get_max_line_height() const;
 

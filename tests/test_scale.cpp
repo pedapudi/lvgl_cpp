@@ -10,12 +10,12 @@ void test_scale_enums() {
   lvgl::Object screen(lv_screen_active(), lvgl::Object::Ownership::Unmanaged);
   lvgl::Scale scale(screen);
 
-  scale.set_mode(lvgl::ScaleMode::VerticalRight);
-  assert(scale.get_mode() == lvgl::ScaleMode::VerticalRight);
+  scale.set_mode(lvgl::Scale::Mode::VerticalRight);
+  assert(scale.get_mode() == lvgl::Scale::Mode::VerticalRight);
   assert(lv_scale_get_mode(scale.raw()) == LV_SCALE_MODE_VERTICAL_RIGHT);
 
-  scale.set_mode(lvgl::ScaleMode::RoundOuter);
-  assert(scale.get_mode() == lvgl::ScaleMode::RoundOuter);
+  scale.set_mode(lvgl::Scale::Mode::RoundOuter);
+  assert(scale.get_mode() == lvgl::Scale::Mode::RoundOuter);
   assert(lv_scale_get_mode(scale.raw()) == LV_SCALE_MODE_ROUND_OUTER);
 
   std::cout << "PASS: Scale enums verified." << std::endl;

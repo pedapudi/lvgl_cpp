@@ -30,7 +30,7 @@ Keyboard& Keyboard::set_mode(lv_keyboard_mode_t mode) {
   return *this;
 }
 
-Keyboard& Keyboard::set_mode(KeyboardMode mode) {
+Keyboard& Keyboard::set_mode(Mode mode) {
   return set_mode(static_cast<lv_keyboard_mode_t>(mode));
 }
 
@@ -49,8 +49,8 @@ lv_obj_t* Keyboard::get_textarea() {
   return obj_ ? lv_keyboard_get_textarea(obj_) : nullptr;
 }
 
-lv_keyboard_mode_t Keyboard::get_mode() {
-  return obj_ ? lv_keyboard_get_mode(obj_) : LV_KEYBOARD_MODE_TEXT_LOWER;
+Keyboard::Mode Keyboard::get_mode() {
+  return obj_ ? static_cast<Mode>(lv_keyboard_get_mode(obj_)) : Mode::TextLower;
 }
 
 bool Keyboard::get_popovers() {

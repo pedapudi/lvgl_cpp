@@ -163,8 +163,53 @@ The `ObjectExecCallback` trampoline includes null-checks and documentation warni
 
 ---
 
-## 6. Next Steps
-1.  Modify `misc/enums.h` to add `operator|` overloads.
-2.  Modify `misc/animation.h` to add `set_exec_cb(ObjectExecCallback)`.
-3.  Update `round_display_hello` example to use the new API to verify #170.
-4.  Update a test case to verify style selector combination for #168.
+
+## 7. Enum Modernization & API Consolidation
+
+### 7.1 Problem Analysis
+
+Earlier versions of `lvgl_cpp` placed many widget-specific enums in the global `lvgl` namespace (e.g., `KeyboardMode`, `RollerMode`). While helpful for initial mapping, this approach led to:
+1.  **Namespace Clutter**: `lvgl::` prefix becoming overloaded with dozens of unrelated mode types.
+2.  **Naming Inconsistency**: Some widgets used `WidgetMode` while others used `Widget::Mode` (e.g., `Arc`, `Label`).
+3.  **Weak Type Safety**: Constant use of `lv_color_t`, `lv_opa_t`, and raw C-enums in style setters instead of the provided scoped wrappers (`Color`, `Opacity`).
+
+### 7.2 Class-Scoped Migration
+
+We moved all widget-specific enums into their respective classes.
+
+**Pattern:**
+```cpp
+// Old
+obj.set_mode(KeyboardMode::TextUpper);
+
+// New (Idiomatic)
+obj.set_mode(Keyboard::Mode::TextUpper);
+```
+
+**Affected Widgets:**
+- `Keyboard`: `KeyboardMode` -> `Keyboard::Mode`
+- `Roller`: `RollerMode` -> `Roller::Mode`
+- `Scale`: `ScaleMode` -> `Scale::Mode`
+- `InputDevice`: `IndevType` -> `InputDevice::Type`, `IndevState` -> `InputDevice::State`
+
+**Backward Compatibility:**
+The old global enums are retained as `[[deprecated]]` aliases or enums to allow gradual migration of user code. Methods now provide overloads for both the new scoped enum and the raw LVGL C-type.
+
+### 7.3 Style API Hardening
+
+The `StyleBase` template, which powers `Style` and `StyleProxy`, was audited and updated:
+- **Scoped Enum Priority**: Setters now favor `Color`, `Opacity`, `GradDir`, `FlexFlow`, `FlexAlign`, `GridAlign`, and `BaseDir`.
+- **Deprecation of C-Types**: Raw `lv_color_t` and `lv_opa_t` overloads are marked `[[deprecated]]`. This forces the compiler to nudge users toward the more ergonomic and descriptive C++ wrappers.
+
+### 7.4 Object Ownership Unification
+
+The `InputDevice` class was updated to use the common `Object::Ownership` enum instead of a legacy `bool owned = false` parameter in its constructor. This unifies ownership semantics across the entire library.
+
+---
+
+## 8. Summary of established patterns
+
+1. **Callback Marshalling**: Trampolines convert `void*` context to typed C++ references (`Object&`).
+2. **Enum Scoping**: All widget-specific modes reside within the widget class namespace.
+3. **Fluent overloads**: Provide both fluent/scoped enums and deprecated raw C-types for compatibility.
+4. **Manual Bitmasking**: Provide bitwise operators for scoped enums to maintain type safety while allowing combinations (e.g., `Part | State`).

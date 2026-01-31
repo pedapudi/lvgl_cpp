@@ -14,12 +14,13 @@ class ButtonInput : public InputDevice {
   static ButtonInput create() {
     lv_indev_t* indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_BUTTON);
-    return ButtonInput(indev, true);
+    return ButtonInput(indev, Object::Ownership::Managed);
   }
 
   ButtonInput() : InputDevice() {}
-  explicit ButtonInput(lv_indev_t* indev, bool owned = false)
-      : InputDevice(indev, owned) {}
+  explicit ButtonInput(lv_indev_t* indev,
+                       Object::Ownership ownership = Object::Ownership::Default)
+      : InputDevice(indev, ownership) {}
 
   ButtonInput(ButtonInput&& other) noexcept
       : InputDevice(std::move(other)), points_(std::move(other.points_)) {

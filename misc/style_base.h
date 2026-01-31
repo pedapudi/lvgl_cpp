@@ -34,6 +34,7 @@ class StyleBase {
     self().set_bg_color(color);
     return self();
   }
+  [[deprecated("Use bg_color(Color) instead")]]
   Derived& bg_color(lv_color_t color) {
     self().set_bg_color(color);
     return self();
@@ -43,6 +44,7 @@ class StyleBase {
     self().set_bg_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use bg_opa(Opacity) instead")]]
   Derived& bg_opa(lv_opa_t opa) {
     self().set_bg_opa(opa);
     return self();
@@ -52,6 +54,11 @@ class StyleBase {
     self().set_bg_grad_color(color);
     return self();
   }
+  Derived& bg_grad_dir(GradDir dir) {
+    self().set_bg_grad_dir(static_cast<lv_grad_dir_t>(dir));
+    return self();
+  }
+  [[deprecated("Use bg_grad_dir(GradDir) instead")]]
   Derived& bg_grad_dir(lv_grad_dir_t dir) {
     self().set_bg_grad_dir(dir);
     return self();
@@ -77,6 +84,7 @@ class StyleBase {
     self().set_bg_image_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use bg_image_opa(Opacity) instead")]]
   Derived& bg_image_opa(lv_opa_t opa) {
     self().set_bg_image_opa(opa);
     return self();
@@ -89,6 +97,7 @@ class StyleBase {
     self().set_bg_image_recolor_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use bg_image_recolor_opa(Opacity) instead")]]
   Derived& bg_image_recolor_opa(lv_opa_t opa) {
     self().set_bg_image_recolor_opa(opa);
     return self();
@@ -114,6 +123,7 @@ class StyleBase {
     self().set_border_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use border_opa(Opacity) instead")]]
   Derived& border_opa(lv_opa_t opa) {
     self().set_border_opa(opa);
     return self();
@@ -122,6 +132,7 @@ class StyleBase {
     self().set_border_side(static_cast<lv_border_side_t>(side));
     return self();
   }
+  [[deprecated("Use border_side(BorderSide) instead")]]
   Derived& border_side(lv_border_side_t side) {
     self().set_border_side(side);
     return self();
@@ -147,6 +158,7 @@ class StyleBase {
     self().set_outline_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use outline_opa(Opacity) instead")]]
   Derived& outline_opa(lv_opa_t opa) {
     self().set_outline_opa(opa);
     return self();
@@ -172,6 +184,7 @@ class StyleBase {
     self().set_shadow_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use shadow_opa(Opacity) instead")]]
   Derived& shadow_opa(lv_opa_t opa) {
     self().set_shadow_opa(opa);
     return self();
@@ -332,6 +345,7 @@ class StyleBase {
     self().set_text_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use text_opa(Opacity) instead")]]
   Derived& text_opa(lv_opa_t opa) {
     self().set_text_opa(opa);
     return self();
@@ -356,6 +370,7 @@ class StyleBase {
     self().set_text_align(static_cast<lv_text_align_t>(align));
     return self();
   }
+  [[deprecated("Use text_align(TextAlign) instead")]]
   Derived& text_align(lv_text_align_t align) {
     self().set_text_align(align);
     return self();
@@ -364,6 +379,7 @@ class StyleBase {
     self().set_text_decor(static_cast<lv_text_decor_t>(decor));
     return self();
   }
+  [[deprecated("Use text_decor(TextDecor) instead")]]
   Derived& text_decor(lv_text_decor_t decor) {
     self().set_text_decor(decor);
     return self();
@@ -377,6 +393,7 @@ class StyleBase {
     self().set_image_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use image_opa(Opacity) instead")]]
   Derived& image_opa(lv_opa_t opa) {
     self().set_image_opa(opa);
     return self();
@@ -389,6 +406,7 @@ class StyleBase {
     self().set_image_recolor_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use image_recolor_opa(Opacity) instead")]]
   Derived& image_recolor_opa(lv_opa_t opa) {
     self().set_image_recolor_opa(opa);
     return self();
@@ -422,6 +440,7 @@ class StyleBase {
     self().set_line_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use line_opa(Opacity) instead")]]
   Derived& line_opa(lv_opa_t opa) {
     self().set_line_opa(opa);
     return self();
@@ -443,6 +462,7 @@ class StyleBase {
     self().set_arc_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use arc_opa(Opacity) instead")]]
   Derived& arc_opa(lv_opa_t opa) {
     self().set_arc_opa(opa);
     return self();
@@ -477,18 +497,38 @@ class StyleBase {
   // Layout (Flex/Grid)
   // =========================================================================
 
+  Derived& flex_flow(FlexFlow flow) {
+    self().set_flex_flow(static_cast<lv_flex_flow_t>(flow));
+    return self();
+  }
+  [[deprecated("Use flex_flow(FlexFlow) instead")]]
   Derived& flex_flow(lv_flex_flow_t flow) {
     self().set_flex_flow(flow);
     return self();
   }
+  Derived& flex_main_place(FlexAlign place) {
+    self().set_flex_main_place(static_cast<lv_flex_align_t>(place));
+    return self();
+  }
+  [[deprecated("Use flex_main_place(FlexAlign) instead")]]
   Derived& flex_main_place(lv_flex_align_t place) {
     self().set_flex_main_place(place);
     return self();
   }
+  Derived& flex_cross_place(FlexAlign place) {
+    self().set_flex_cross_place(static_cast<lv_flex_align_t>(place));
+    return self();
+  }
+  [[deprecated("Use flex_cross_place(FlexAlign) instead")]]
   Derived& flex_cross_place(lv_flex_align_t place) {
     self().set_flex_cross_place(place);
     return self();
   }
+  Derived& flex_track_place(FlexAlign place) {
+    self().set_flex_track_place(static_cast<lv_flex_align_t>(place));
+    return self();
+  }
+  [[deprecated("Use flex_track_place(FlexAlign) instead")]]
   Derived& flex_track_place(lv_flex_align_t place) {
     self().set_flex_track_place(place);
     return self();
@@ -506,10 +546,20 @@ class StyleBase {
     self().set_grid_column_dsc_array(dsc);
     return self();
   }
+  Derived& grid_row_align(GridAlign align) {
+    self().set_grid_row_align(static_cast<lv_grid_align_t>(align));
+    return self();
+  }
+  [[deprecated("Use grid_row_align(GridAlign) instead")]]
   Derived& grid_row_align(lv_grid_align_t align) {
     self().set_grid_row_align(align);
     return self();
   }
+  Derived& grid_column_align(GridAlign align) {
+    self().set_grid_column_align(static_cast<lv_grid_align_t>(align));
+    return self();
+  }
+  [[deprecated("Use grid_column_align(GridAlign) instead")]]
   Derived& grid_column_align(lv_grid_align_t align) {
     self().set_grid_column_align(align);
     return self();
@@ -530,10 +580,20 @@ class StyleBase {
     self().set_grid_cell_row_span(span);
     return self();
   }
+  Derived& grid_cell_x_align(GridAlign align) {
+    self().set_grid_cell_x_align(static_cast<lv_grid_align_t>(align));
+    return self();
+  }
+  [[deprecated("Use grid_cell_x_align(GridAlign) instead")]]
   Derived& grid_cell_x_align(lv_grid_align_t align) {
     self().set_grid_cell_x_align(align);
     return self();
   }
+  Derived& grid_cell_y_align(GridAlign align) {
+    self().set_grid_cell_y_align(static_cast<lv_grid_align_t>(align));
+    return self();
+  }
+  [[deprecated("Use grid_cell_y_align(GridAlign) instead")]]
   Derived& grid_cell_y_align(lv_grid_align_t align) {
     self().set_grid_cell_y_align(align);
     return self();
@@ -547,6 +607,7 @@ class StyleBase {
     self().set_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  [[deprecated("Use opa(Opacity) instead")]]
   Derived& opa(lv_opa_t opa) {
     self().set_opa(opa);
     return self();
@@ -555,10 +616,16 @@ class StyleBase {
     self().set_blend_mode(static_cast<lv_blend_mode_t>(mode));
     return self();
   }
+  [[deprecated("Use blend_mode(BlendMode) instead")]]
   Derived& blend_mode(lv_blend_mode_t mode) {
     self().set_blend_mode(mode);
     return self();
   }
+  Derived& base_dir(BaseDir dir) {
+    self().set_base_dir(static_cast<lv_base_dir_t>(dir));
+    return self();
+  }
+  [[deprecated("Use base_dir(BaseDir) instead")]]
   Derived& base_dir(lv_base_dir_t dir) {
     self().set_base_dir(dir);
     return self();

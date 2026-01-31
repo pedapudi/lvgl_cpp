@@ -4,6 +4,7 @@
 #include "../core/object.h"
 #include "../display/display.h"
 #include "../widgets/button.h"
+#include "../widgets/checkbox.h"
 #include "../widgets/label.h"
 
 using namespace lvgl;
@@ -77,6 +78,58 @@ void test_get_display() {
   assert(disp == lv_display_get_default());
 }
 
+void test_modern_scroll() {
+  std::cout << "Testing modernized scroll API..." << std::endl;
+  Object screen(lv_screen_active());
+  Object container(&screen);
+  container.set_size(100, 100);
+  Object child(&container);
+  child.set_size(200, 200);
+
+  // Testing the new AnimEnable overload
+  container.scroll_to(10, 20, AnimEnable::Off);
+  assert(container.get_scroll_x() == 10);
+  assert(container.get_scroll_y() == 20);
+
+  // lv_obj_scroll_by(..., -5, ...) scrolls the content LEFT by 5,
+  // which INCREASES the scroll offset (seeing more of the right).
+  container.scroll_by(-5, -5, AnimEnable::Off);
+  assert(container.get_scroll_x() == 15);
+  assert(container.get_scroll_y() == 25);
+
+  child.scroll_to_view(AnimEnable::Off);
+}
+
+void test_modern_display() {
+  std::cout << "Testing modernized display API..." << std::endl;
+  Display* disp = Display::get_default();
+
+  disp->set_rotation(Display::Rotation::ROT_90);
+  assert(disp->get_rotation() == Display::Rotation::ROT_90);
+
+  disp->set_render_mode(Display::RenderMode::Direct);
+  // No direct getter for render mode in LVGL v9, but we can call it.
+
+  Object screen(lv_screen_active());
+  disp->load_screen_anim(screen, Display::LoadAnim::FadeIn, 100, 0, false);
+}
+
+void test_modern_observer() {
+  std::cout << "Testing modernized observer (Checked binding)..." << std::endl;
+  IntSubject subject(0);
+  Checkbox cb(lv_screen_active());
+
+  // Use the new fluent binding helper
+  cb.bind_checked(subject);
+  assert(!cb.state().is_checked());
+
+  subject.set(1);
+  assert(cb.state().is_checked());
+
+  subject.set(0);
+  assert(!cb.state().is_checked());
+}
+
 int main() {
   lv_init();
 
@@ -92,6 +145,9 @@ int main() {
   test_get_state();
   test_get_screen();
   test_get_display();
+  test_modern_scroll();
+  test_modern_display();
+  test_modern_observer();
 
   std::cout << "[SUCCESS] Object coverage tests passed." << std::endl;
   return 0;

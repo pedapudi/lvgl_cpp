@@ -24,9 +24,17 @@ TabView& TabView::rename_tab(uint32_t idx, const char* new_name) {
   return *this;
 }
 
-TabView& TabView::set_active(uint32_t idx, lv_anim_enable_t anim_en) {
-  if (obj_) lv_tabview_set_active(obj_, idx, anim_en);
+TabView& TabView::set_active(uint32_t idx, AnimEnable anim) {
+  return set_active(idx, static_cast<lv_anim_enable_t>(anim));
+}
+
+TabView& TabView::set_active(uint32_t idx, lv_anim_enable_t anim) {
+  if (obj_) lv_tabview_set_active(obj_, idx, anim);
   return *this;
+}
+
+TabView& TabView::set_tab_bar_position(Dir dir) {
+  return set_tab_bar_position(static_cast<lv_dir_t>(dir));
 }
 
 TabView& TabView::set_tab_bar_position(lv_dir_t dir) {

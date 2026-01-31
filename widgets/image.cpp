@@ -67,6 +67,10 @@ Image& Image::set_scale_y(uint32_t zoom) {
   return *this;
 }
 
+Image& Image::set_blend_mode(BlendMode blend_mode) {
+  return set_blend_mode(static_cast<lv_blend_mode_t>(blend_mode));
+}
+
 Image& Image::set_blend_mode(lv_blend_mode_t blend_mode) {
   if (obj_) lv_image_set_blend_mode(obj_, blend_mode);
   return *this;
@@ -75,6 +79,10 @@ Image& Image::set_blend_mode(lv_blend_mode_t blend_mode) {
 Image& Image::set_antialias(bool antialias) {
   if (obj_) lv_image_set_antialias(obj_, antialias);
   return *this;
+}
+
+Image& Image::set_inner_align(ImageAlign align) {
+  return set_inner_align(static_cast<lv_image_align_t>(align));
 }
 
 Image& Image::set_inner_align(lv_image_align_t align) {
@@ -110,16 +118,18 @@ int32_t Image::get_src_height() {
   return obj_ ? lv_image_get_src_height(obj_) : 0;
 }
 
-lv_blend_mode_t Image::get_blend_mode() {
-  return obj_ ? lv_image_get_blend_mode(obj_) : LV_BLEND_MODE_NORMAL;
+BlendMode Image::get_blend_mode() {
+  return obj_ ? static_cast<BlendMode>(lv_image_get_blend_mode(obj_))
+              : BlendMode::Normal;
 }
 
 bool Image::get_antialias() {
   return obj_ ? lv_image_get_antialias(obj_) : false;
 }
 
-lv_image_align_t Image::get_inner_align() {
-  return obj_ ? lv_image_get_inner_align(obj_) : LV_IMAGE_ALIGN_DEFAULT;
+ImageAlign Image::get_inner_align() {
+  return obj_ ? static_cast<ImageAlign>(lv_image_get_inner_align(obj_))
+              : ImageAlign::Default;
 }
 
 }  // namespace lvgl

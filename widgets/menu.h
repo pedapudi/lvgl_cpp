@@ -43,8 +43,22 @@ class MenuSeparator : public Widget<MenuSeparator> {
 class Menu : public Widget<Menu> {
  public:
   /**
-   * @brief Create a Menu on the active screen.
+   * @brief Header modes.
    */
+  enum class HeaderMode : uint8_t {
+    TopFixed = LV_MENU_HEADER_TOP_FIXED,
+    TopUnfixed = LV_MENU_HEADER_TOP_UNFIXED,
+    BottomFixed = LV_MENU_HEADER_BOTTOM_FIXED,
+  };
+
+  /**
+   * @brief Root back button modes.
+   */
+  enum class RootBackButtonMode : uint8_t {
+    Disabled = LV_MENU_ROOT_BACK_BUTTON_DISABLED,
+    Enabled = LV_MENU_ROOT_BACK_BUTTON_ENABLED,
+  };
+
   Menu();
   explicit Menu(Object* parent, Ownership ownership = Ownership::Default);
   explicit Menu(Object& parent);
@@ -60,7 +74,9 @@ class Menu : public Widget<Menu> {
   Menu& set_page_title_static(MenuPage& page, const char* title);
   Menu& set_sidebar_page(MenuPage& page);
   Menu& set_mode_header(lv_menu_mode_header_t mode);
+  Menu& set_mode_header(HeaderMode mode);
   Menu& set_mode_root_back_button(lv_menu_mode_root_back_button_t mode);
+  Menu& set_mode_root_back_button(RootBackButtonMode mode);
   Menu& set_load_page_event(Object& obj, MenuPage& page);
 
   MenuPage get_cur_main_page();

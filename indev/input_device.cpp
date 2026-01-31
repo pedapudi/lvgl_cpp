@@ -20,8 +20,8 @@ static void indev_event_cb_proxy(lv_event_t* e) {
 
 InputDevice::InputDevice() : indev_(nullptr), owned_(false) {}
 
-InputDevice::InputDevice(lv_indev_t* indev, bool owned)
-    : indev_(indev), owned_(owned) {}
+InputDevice::InputDevice(lv_indev_t* indev, Object::Ownership ownership)
+    : indev_(indev), owned_(ownership == Object::Ownership::Managed) {}
 
 InputDevice::~InputDevice() {
   if (owned_ && indev_) {
@@ -63,11 +63,11 @@ InputDevice& InputDevice::operator=(InputDevice&& other) noexcept {
 InputDevice InputDevice::create(lv_indev_type_t type) {
   lv_indev_t* indev = lv_indev_create();
   lv_indev_set_type(indev, type);
-  return InputDevice(indev, true);
+  return InputDevice(indev, Object::Ownership::Managed);
 }
 
 InputDevice* InputDevice::get_act() {
-  static InputDevice instance(nullptr, false);
+  static InputDevice instance(nullptr, Object::Ownership::Unmanaged);
   // This is tricky: get_act returns a wrapper around the active indev.
   // It is NOT the original C++ object if one exists.
   // We can check user_data, but for safety, we return a temporary-ish wrapper.
@@ -77,7 +77,7 @@ InputDevice* InputDevice::get_act() {
   if (!act) return nullptr;
 
   // Re-use the static instance to wrap the current active device
-  instance = InputDevice(act, false);
+  instance = InputDevice(act, Object::Ownership::Unmanaged);
   return &instance;
 }
 
@@ -144,9 +144,8 @@ void InputDevice::add_event_cb(std::function<void(lv_event_t*)> cb,
 
 // ... wrapped methods ...
 
-IndevType InputDevice::get_type() const {
-  return indev_ ? static_cast<IndevType>(lv_indev_get_type(indev_))
-                : IndevType::None;
+InputDevice::Type InputDevice::get_type() const {
+  return indev_ ? static_cast<Type>(lv_indev_get_type(indev_)) : Type::None;
 }
 
 void InputDevice::reset(Object* obj) {
@@ -177,9 +176,9 @@ lv_indev_mode_t InputDevice::get_mode() const {
   return indev_ ? lv_indev_get_mode(indev_) : LV_INDEV_MODE_NONE;
 }
 
-IndevState InputDevice::get_state() const {
-  return indev_ ? static_cast<IndevState>(lv_indev_get_state(indev_))
-                : IndevState::Released;
+InputDevice::State InputDevice::get_state() const {
+  return indev_ ? static_cast<State>(lv_indev_get_state(indev_))
+                : State::Released;
 }
 
 void InputDevice::get_point(lv_point_t* point) {

@@ -37,10 +37,18 @@ ButtonMatrix& ButtonMatrix::set_selected_button(uint32_t btn_id) {
   return *this;
 }
 
+ButtonMatrix& ButtonMatrix::set_button_ctrl(uint32_t btn_id, Control ctrl) {
+  return set_button_ctrl(btn_id, static_cast<lv_buttonmatrix_ctrl_t>(ctrl));
+}
+
 ButtonMatrix& ButtonMatrix::set_button_ctrl(uint32_t btn_id,
                                             lv_buttonmatrix_ctrl_t ctrl) {
   if (obj_) lv_buttonmatrix_set_button_ctrl(obj_, btn_id, ctrl);
   return *this;
+}
+
+ButtonMatrix& ButtonMatrix::clear_button_ctrl(uint32_t btn_id, Control ctrl) {
+  return clear_button_ctrl(btn_id, static_cast<lv_buttonmatrix_ctrl_t>(ctrl));
 }
 
 ButtonMatrix& ButtonMatrix::clear_button_ctrl(uint32_t btn_id,
@@ -49,9 +57,17 @@ ButtonMatrix& ButtonMatrix::clear_button_ctrl(uint32_t btn_id,
   return *this;
 }
 
+ButtonMatrix& ButtonMatrix::set_button_ctrl_all(Control ctrl) {
+  return set_button_ctrl_all(static_cast<lv_buttonmatrix_ctrl_t>(ctrl));
+}
+
 ButtonMatrix& ButtonMatrix::set_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl) {
   if (obj_) lv_buttonmatrix_set_button_ctrl_all(obj_, ctrl);
   return *this;
+}
+
+ButtonMatrix& ButtonMatrix::clear_button_ctrl_all(Control ctrl) {
+  return clear_button_ctrl_all(static_cast<lv_buttonmatrix_ctrl_t>(ctrl));
 }
 
 ButtonMatrix& ButtonMatrix::clear_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl) {
@@ -80,6 +96,10 @@ uint32_t ButtonMatrix::get_selected_button() {
 
 const char* ButtonMatrix::get_button_text(uint32_t btn_id) {
   return obj_ ? lv_buttonmatrix_get_button_text(obj_, btn_id) : nullptr;
+}
+
+bool ButtonMatrix::has_button_ctrl(uint32_t btn_id, Control ctrl) {
+  return has_button_ctrl(btn_id, static_cast<lv_buttonmatrix_ctrl_t>(ctrl));
 }
 
 bool ButtonMatrix::has_button_ctrl(uint32_t btn_id,

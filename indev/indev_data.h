@@ -1,10 +1,12 @@
 #ifndef LVGL_CPP_INDEV_INDEV_DATA_H_
 #define LVGL_CPP_INDEV_INDEV_DATA_H_
 
-#include "../misc/enums.h"
+#include "../misc/enums.h"  // Keep this for InputDevice::State
 #include "lvgl.h"
 
 namespace lvgl {
+
+class InputDevice;  // Forward declaration for InputDevice class
 
 /**
  * @brief Wrapper for lv_indev_data_t to provide type-safe accessors.
@@ -19,7 +21,7 @@ class IndevData {
   /**
    * @brief Set the input device state.
    */
-  IndevData& set_state(IndevState state) {
+  IndevData& set_state(InputDevice::State state) {
     data_->state = static_cast<lv_indev_state_t>(state);
     return *this;
   }
@@ -27,7 +29,9 @@ class IndevData {
   /**
    * @brief Get the input device state.
    */
-  IndevState get_state() const { return static_cast<IndevState>(data_->state); }
+  InputDevice::State get_state() const {
+    return static_cast<InputDevice::State>(data_->state);
+  }
 
   /**
    * @brief Set the point for pointer input devices.

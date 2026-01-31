@@ -1,37 +1,70 @@
 #ifndef LVGL_CPP_CORE_TREE_PROXY_H_
 #define LVGL_CPP_CORE_TREE_PROXY_H_
 
-#include <cstdint>
-
-#include "lvgl.h"
+#include "object.h"
 
 namespace lvgl {
 
-class Object;
-
 /**
- * @brief Proxy for tree hierarchy operations on an object.
+ * @brief Facet Proxy for object hierarchy management.
+ * Provides a scoped API for tree operations (children, parent, clean).
  */
 class TreeProxy {
  public:
-  explicit TreeProxy(lv_obj_t* obj);
+  explicit TreeProxy(Object* obj) : obj_(obj) {}
 
   /**
-   * @brief Swap this object with another object in the hierarchy (z-order).
-   * @param other The object to swap with.
-   * @return Reference to this proxy for chaining.
+   * @brief Get the parent of the object.
+   * @return The parent object.
    */
-  TreeProxy& swap(Object& other);
+  Object get_parent() const;
 
   /**
-   * @brief Move this object to a specific child index.
-   * @param index The index to move to.
-   * @return Reference to this proxy for chaining.
+   * @brief Get the child at a specific index.
+   * @param index The index of the child.
+   * @return The child object.
    */
-  TreeProxy& move_to_index(int32_t index);
+  Object get_child(int32_t index) const;
+
+  /**
+   * @brief Get the number of children.
+   * @return The child count.
+   */
+  uint32_t get_child_count() const;
+
+  /**
+   * @brief Remove all children.
+   * @return Reference to the tree proxy.
+   */
+  TreeProxy& clean();
+
+  /**
+   * @brief Get the index of this object among its siblings.
+   * @return The index.
+   */
+  uint32_t get_index() const;
+
+  /**
+   * @brief Move this object to the foreground.
+   * @return Reference to the tree proxy.
+   */
+  TreeProxy& move_to_foreground();
+
+  /**
+   * @brief Move this object to the background.
+   * @return Reference to the tree proxy.
+   */
+  TreeProxy& move_to_background();
+
+  /**
+   * @brief Send the object to a new parent.
+   * @param parent The new parent.
+   * @return Reference to the tree proxy.
+   */
+  TreeProxy& set_parent(Object& parent);
 
  private:
-  lv_obj_t* obj_;
+  Object* obj_;
 };
 
 }  // namespace lvgl

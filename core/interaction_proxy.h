@@ -1,52 +1,59 @@
 #ifndef LVGL_CPP_CORE_INTERACTION_PROXY_H_
 #define LVGL_CPP_CORE_INTERACTION_PROXY_H_
 
-#include "../misc/geometry.h"
-#include "lvgl.h"
+#include "object.h"
 
 namespace lvgl {
 
 /**
- * @brief Proxy for interaction-related operations on an object.
+ * @brief Facet Proxy for input and interaction properties.
+ * Scopes hit-testing, clickability, and group logic.
  */
 class InteractionProxy {
  public:
-  explicit InteractionProxy(lv_obj_t* obj);
+  explicit InteractionProxy(Object* obj) : obj_(obj) {}
 
   /**
-   * @brief Increase the clickable area of the object.
-   * @param size The amount to increase the area by (in pixels).
-   * @return Reference to this proxy for chaining.
+   * @brief Enable or disable clicking.
+   * @param en True to enable, false to disable.
+   * @return Reference to the interaction proxy.
    */
-  InteractionProxy& set_ext_click_area(int32_t size);
+  InteractionProxy& set_clickable(bool en);
 
   /**
-   * @brief Get the clickable area of the object (including extension).
-   * @param area The area to store the result in.
+   * @brief Check if the object is clickable.
+   * @return True if clickable.
    */
-  void get_click_area(Area& area) const;
+  bool is_clickable() const;
 
   /**
-   * @brief Check if a point hits the object.
-   * @param point The point to check.
-   * @return True if the point hits the object, false otherwise.
+   * @brief Check if a point is over the object (hit test).
+   * @param p The point to test.
+   * @return True if hit.
    */
-  bool hit_test(const Point& point) const;
+  bool hit_test(const Point& p) const;
 
   /**
-   * @brief Check if the object is editable (e.g. by encoder).
-   * @return True if editable.
+   * @brief Check if the object or any of its children are focused.
+   * @return True if focused.
    */
-  bool is_editable() const;
+  bool is_focused() const;
 
   /**
-   * @brief Check if the object is the default element in its group.
-   * @return True if it is the group default.
+   * @brief Add the object to a group.
+   * @param group The group.
+   * @return Reference to the interaction proxy.
    */
-  bool is_group_def() const;
+  InteractionProxy& set_group(lv_group_t* group);
+
+  /**
+   * @brief Get the associated group.
+   * @return The group pointer.
+   */
+  lv_group_t* get_group() const;
 
  private:
-  lv_obj_t* obj_;
+  Object* obj_;
 };
 
 }  // namespace lvgl

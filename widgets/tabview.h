@@ -38,7 +38,11 @@ class TabView : public Widget<TabView> {
   TabPage add_tab(const char* name);
 
   TabView& rename_tab(uint32_t idx, const char* new_name);
-  TabView& set_active(uint32_t idx, lv_anim_enable_t anim_en);
+  TabView& set_active(uint32_t idx, AnimEnable anim = AnimEnable::On);
+  [[deprecated("Use set_active(uint32_t, AnimEnable) instead")]]
+  TabView& set_active(uint32_t idx, lv_anim_enable_t anim);
+  TabView& set_tab_bar_position(Dir dir);
+  [[deprecated("Use set_tab_bar_position(Dir) instead")]]
   TabView& set_tab_bar_position(lv_dir_t dir);
   TabView& set_tab_bar_size(int32_t size);
 

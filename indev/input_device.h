@@ -6,18 +6,37 @@
 #include <memory>
 #include <vector>
 
-#include "indev_data.h"
-// #include "../core/group.h"   // Removed: cleanup
 #include "../core/object.h"  // IWYU pragma: export
 #include "../display/display.h"
-#include "../misc/enums.h"  // For IndevType, IndevState
+// #include "../core/group.h"   // Removed: cleanup
 #include "../misc/geometry.h"
 #include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
 
+class IndevData;  // Forward declaration
+
 class InputDevice {
  public:
+  /**
+   * @brief Input device types.
+   */
+  enum class Type : uint8_t {
+    None = LV_INDEV_TYPE_NONE,
+    Pointer = LV_INDEV_TYPE_POINTER,
+    Keypad = LV_INDEV_TYPE_KEYPAD,
+    Button = LV_INDEV_TYPE_BUTTON,
+    Encoder = LV_INDEV_TYPE_ENCODER,
+  };
+
+  /**
+   * @brief Input device states.
+   */
+  enum class State : uint8_t {
+    Released = LV_INDEV_STATE_RELEASED,
+    Pressed = LV_INDEV_STATE_PRESSED,
+  };
+
   // Constructors & Destructor
   struct EventCallbackData {
     std::function<void(lv_event_t*)> cb;
@@ -25,7 +44,8 @@ class InputDevice {
   };
 
   InputDevice();  // Default constructor (inactive)
-  explicit InputDevice(lv_indev_t* indev, bool owned = false);
+  explicit InputDevice(lv_indev_t* indev, Object::Ownership ownership =
+                                              Object::Ownership::Default);
   virtual ~InputDevice();
 
   // Move-only semantics
@@ -36,8 +56,11 @@ class InputDevice {
 
   // Factory
   static InputDevice create(lv_indev_type_t type);
+  static InputDevice create(Type type) {
+    return create(static_cast<lv_indev_type_t>(type));
+  }
   static InputDevice wrap(lv_indev_t* indev) {
-    return InputDevice(indev, false);
+    return InputDevice(indev, Object::Ownership::Unmanaged);
   }
 
   // Access to active device
@@ -59,7 +82,7 @@ class InputDevice {
                     lv_event_code_t filter = LV_EVENT_ALL);
 
   // Methods
-  IndevType get_type() const;
+  Type get_type() const;
   void reset(Object* obj);
   void reset_long_press();
   void stop_processing();
@@ -70,7 +93,7 @@ class InputDevice {
   lv_indev_mode_t get_mode() const;
 
   // Data Access
-  IndevState get_state() const;
+  State get_state() const;
   void get_point(lv_point_t* point);
   Point get_vect() const;
   lv_dir_t get_gesture_dir();
@@ -95,5 +118,7 @@ class InputDevice {
 };
 
 }  // namespace lvgl
+
+#include "indev_data.h"
 
 #endif  // LVGL_CPP_INDEV_INPUT_DEVICE_H_
