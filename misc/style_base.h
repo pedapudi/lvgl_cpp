@@ -75,6 +75,18 @@ class StyleBase {
     self().set_bg_main_stop(value);
     return self();
   }
+  Derived& bg_grad(const lv_grad_dsc_t* dsc) {
+    self().set_bg_grad(dsc);
+    return self();
+  }
+  Derived& bg_grad_opa(Opacity opa) {
+    self().set_bg_grad_opa(static_cast<lv_opa_t>(opa));
+    return self();
+  }
+  Derived& bg_main_opa(Opacity opa) {
+    self().set_bg_main_opa(static_cast<lv_opa_t>(opa));
+    return self();
+  }
 
   Derived& bg_image_src(const void* src) {
     self().set_bg_image_src(src);
@@ -108,6 +120,14 @@ class StyleBase {
   }
   Derived& bg_image_tiled(bool tiled) {
     self().set_bg_image_tiled(tiled);
+    return self();
+  }
+  Derived& bitmap_mask_src(const void* src) {
+    self().set_bitmap_mask_src(src);
+    return self();
+  }
+  Derived& image_colorkey(Color color) {
+    self().set_image_colorkey(color);
     return self();
   }
 
@@ -271,6 +291,10 @@ class StyleBase {
     self().set_pad_gap(gap);
     return self();
   }
+  Derived& pad_radial(int32_t pad) {
+    self().set_pad_radial(pad);
+    return self();
+  }
 
   // =========================================================================
   // Margin
@@ -351,6 +375,29 @@ class StyleBase {
     return self();
   }
   int32_t max_height() const { return self().get_max_height(); }
+  Derived& x(int32_t value) {
+    self().set_x(value);
+    return self();
+  }
+  int32_t x() const { return self().get_x(); }
+  Derived& y(int32_t value) {
+    self().set_y(value);
+    return self();
+  }
+  int32_t y() const { return self().get_y(); }
+  Derived& size(int32_t width_val, int32_t height_val) {
+    self().set_size(width_val, height_val);
+    return self();
+  }
+  Derived& align(Align align_val) {
+    self().set_align(static_cast<lv_align_t>(align_val));
+    return self();
+  }
+  Derived& length(int32_t value) {
+    self().set_length(value);
+    return self();
+  }
+  int32_t length() const { return self().get_length(); }
 
   // =========================================================================
   // Geometry
@@ -416,6 +463,22 @@ class StyleBase {
     self().set_transform_pivot_y(value);
     return self();
   }
+  Derived& transform_skew_x(int32_t value) {
+    self().set_transform_skew_x(value);
+    return self();
+  }
+  Derived& transform_skew_y(int32_t value) {
+    self().set_transform_skew_y(value);
+    return self();
+  }
+  Derived& translate_radial(int32_t value) {
+    self().set_translate_radial(value);
+    return self();
+  }
+  Derived& radial_offset(int32_t value) {
+    self().set_radial_offset(value);
+    return self();
+  }
 
   // =========================================================================
   // Text
@@ -447,6 +510,18 @@ class StyleBase {
     self().set_text_font(font.raw());
     return self();
   }
+  Derived& text_recolor(bool recolor) {
+    self().set_recolor(recolor);
+    return self();
+  }
+  Derived& recolor(Color color) {
+    self().set_recolor(color);
+    return self();
+  }
+  Derived& recolor_opa(Opacity opa) {
+    self().set_recolor_opa(static_cast<lv_opa_t>(opa));
+    return self();
+  }
   Derived& text_letter_space(int32_t space) {
     self().set_text_letter_space(space);
     return self();
@@ -474,6 +549,18 @@ class StyleBase {
   [[deprecated("Use text_decor(TextDecor) instead")]]
   Derived& text_decor(lv_text_decor_t decor) {
     self().set_text_decor(decor);
+    return self();
+  }
+  Derived& text_outline_stroke_color(Color color) {
+    self().set_text_outline_stroke_color(color);
+    return self();
+  }
+  Derived& text_outline_stroke_opa(Opacity opa) {
+    self().set_text_outline_stroke_opa(static_cast<lv_opa_t>(opa));
+    return self();
+  }
+  Derived& text_outline_stroke_width(int32_t width) {
+    self().set_text_outline_stroke_width(width);
     return self();
   }
 
@@ -727,6 +814,26 @@ class StyleBase {
   [[deprecated("Use base_dir(BaseDir) instead")]]
   Derived& base_dir(lv_base_dir_t dir) {
     self().set_base_dir(dir);
+    return self();
+  }
+  Derived& opa_layered(Opacity opa) {
+    self().set_opa_layered(static_cast<lv_opa_t>(opa));
+    return self();
+  }
+  Derived& rotary_sensitivity(uint32_t value) {
+    self().set_rotary_sensitivity(value);
+    return self();
+  }
+  Derived& color_filter_dsc(const lv_color_filter_dsc_t* dsc) {
+    self().set_color_filter_dsc(dsc);
+    return self();
+  }
+  Derived& color_filter_opa(Opacity opa) {
+    self().set_color_filter_opa(static_cast<lv_opa_t>(opa));
+    return self();
+  }
+  Derived& anim(const lv_anim_t* anim) {
+    self().set_anim(anim);
     return self();
   }
 

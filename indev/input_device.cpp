@@ -69,18 +69,19 @@ InputDevice InputDevice::create(lv_indev_type_t type) {
   return InputDevice(indev, Object::Ownership::Managed);
 }
 
-InputDevice* InputDevice::get_act() {
+InputDevice* InputDevice::get_active() {
   static InputDevice instance(nullptr, Object::Ownership::Unmanaged);
-  // This is tricky: get_act returns a wrapper around the active indev.
-  // It is NOT the original C++ object if one exists.
-  // We can check user_data, but for safety, we return a temporary-ish wrapper.
-  // Ideally, this returns a pointer to the singleton wrapper.
-  // For now, let's keep the existing pattern but be aware it's unowned.
   lv_indev_t* act = lv_indev_active();
   if (!act) return nullptr;
-
-  // Re-use the static instance to wrap the current active device
   instance = InputDevice(act, Object::Ownership::Unmanaged);
+  return &instance;
+}
+
+InputDevice* InputDevice::get_next(InputDevice* indev) {
+  static InputDevice instance(nullptr, Object::Ownership::Unmanaged);
+  lv_indev_t* next = lv_indev_get_next(indev ? indev->raw() : nullptr);
+  if (!next) return nullptr;
+  instance = InputDevice(next, Object::Ownership::Unmanaged);
   return &instance;
 }
 
@@ -135,6 +136,22 @@ void InputDevice::set_scroll_limit(uint8_t limit) {
   if (indev_) lv_indev_set_scroll_limit(indev_, limit);
 }
 
+void InputDevice::set_scroll_throw(uint8_t throw_decay) {
+  if (indev_) lv_indev_set_scroll_throw(indev_, throw_decay);
+}
+
+void InputDevice::set_display(lv_display_t* disp) {
+  if (indev_) lv_indev_set_display(indev_, disp);
+}
+
+void InputDevice::set_driver_data(void* data) {
+  if (indev_) lv_indev_set_driver_data(indev_, data);
+}
+
+void InputDevice::set_button_points(const lv_point_t points[]) {
+  if (indev_) lv_indev_set_button_points(indev_, points);
+}
+
 void InputDevice::add_event_cb(std::function<void(lv_event_t*)> cb,
                                lv_event_code_t filter) {
   if (!indev_) return;
@@ -143,6 +160,27 @@ void InputDevice::add_event_cb(std::function<void(lv_event_t*)> cb,
   data->instance = this;
   lv_indev_add_event_cb(indev_, indev_event_cb_proxy, filter, data.get());
   event_callbacks_.push_back(std::move(data));
+}
+
+void InputDevice::send_event(lv_event_code_t code, void* param) {
+  if (indev_) lv_indev_send_event(indev_, code, param);
+}
+
+bool InputDevice::remove_event(uint32_t index) {
+  return indev_ ? lv_indev_remove_event(indev_, index) : false;
+}
+
+void InputDevice::remove_event_cb_with_user_data(lv_event_cb_t cb,
+                                                 void* user_data) {
+  if (indev_) lv_indev_remove_event_cb_with_user_data(indev_, cb, user_data);
+}
+
+uint32_t InputDevice::get_event_count() const {
+  return indev_ ? lv_indev_get_event_count(indev_) : 0;
+}
+
+lv_event_dsc_t* InputDevice::get_event_dsc(uint32_t index) const {
+  return indev_ ? lv_indev_get_event_dsc(indev_, index) : nullptr;
 }
 
 // ... wrapped methods ...
@@ -220,6 +258,38 @@ lv_timer_t* InputDevice::get_read_timer() {
 
 lv_display_t* InputDevice::get_display() {
   return indev_ ? lv_indev_get_display(indev_) : nullptr;
+}
+
+lv_group_t* InputDevice::get_group() const {
+  return indev_ ? lv_indev_get_group(indev_) : nullptr;
+}
+
+void InputDevice::set_group(lv_group_t* group) {
+  if (indev_) lv_indev_set_group(indev_, group);
+}
+
+void InputDevice::set_group(Group& group) {
+  if (indev_) lv_indev_set_group(indev_, group.raw());
+}
+
+lv_obj_t* InputDevice::get_active_obj() const {
+  return indev_ ? lv_indev_get_active_obj(indev_) : nullptr;
+}
+
+lv_obj_t* InputDevice::get_cursor() const {
+  return indev_ ? lv_indev_get_cursor(indev_) : nullptr;
+}
+
+void* InputDevice::get_driver_data() const {
+  return indev_ ? lv_indev_get_driver_data(indev_) : nullptr;
+}
+
+bool InputDevice::get_press_moved() const {
+  return indev_ ? lv_indev_get_press_moved(indev_) : false;
+}
+
+lv_obj_t* InputDevice::search_obj(const Point& p) const {
+  return indev_ ? lv_indev_search_obj(indev_, p.raw()) : nullptr;
 }
 
 // --- GestureProxy ---

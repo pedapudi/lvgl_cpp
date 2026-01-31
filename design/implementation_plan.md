@@ -79,9 +79,28 @@ To eliminate the "Monolithic Object" problem where `lvgl::Object` has hundreds o
 - Update all entries in `examples/` to use the new Fluent APIs.
 - Create a "Kitchen Sink" demo showcasing all widgets and layout capabilities.
 
+## Phase 5: Platinum Coverage Advancement
+
+**Goal**: Elevate subsystems to 100% verified coverage by addressing identified gaps.
+
+### 5.1. Input Device (lv_indev) -> Platinum
+- **Gaps**: Missing 14 functions including `set_group`, `set_display`, `set_scroll_throw`.
+- **Action**: Add missing methods to `InputDevice` class.
+- **Verification**: `tests/test_indev_platinum.cpp`.
+
+### 5.2. Style Properties (lv_style) -> Platinum
+- **Gaps**: 39 missing functions in `StyleProxy` (logical equivalence gaps).
+- **Action**: Expand `StyleBase` and `StyleProxy` with properties like `radial_offset`, `opa_layered`, and filtered color accessors.
+- **Verification**: `tests/test_style_gaps.cpp`.
+
+### 5.3. Vector & Draw (lv_draw) -> Modernization
+- **Gaps**: 68 missing functions.
+- **Action**: Create `DrawProxy` for specialized drawing tasks; expand `VectorDraw` with path and layer control.
+- **Verification**: `tests/test_draw_platinum.cpp`.
+
 ## Execution Order
 
-1. **LayoutProxy & ScrollProxy**: High impact on developer experience.
-2. **Animation/Timer Hardening**: Critical for application stability.
-3. **Widget Coverage**: Filling holes.
+1. **Phase 1-2 Completion**: Ensure Layout/Scroll proxies and RAII are solid.
+2. **Phase 5 Platinum Push**: Targeted gap bridging in `indev` and `style`.
+3. **Phase 5 Draw Modernization**: Final push for graphics coverage.
 4. **Documentation**: continuous updates.

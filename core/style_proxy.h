@@ -33,8 +33,6 @@ class StyleProxy : public StyleBase<StyleProxy> {
    * @return Reference to this proxy.
    */
   StyleProxy& part(Part p) {
-    // Replace part bits in selector (assumes 0xFF000000 mask for parts in LVGL
-    // 9)
     selector_ = (selector_ & 0x00FFFFFF) | static_cast<lv_style_selector_t>(p);
     return *this;
   }
@@ -49,6 +47,9 @@ class StyleProxy : public StyleBase<StyleProxy> {
     return *this;
   }
 
+  lv_obj_t* obj() const { return obj_; }
+  lv_style_selector_t selector() const { return selector_; }
+
  private:
   friend class StyleBase<StyleProxy>;
 
@@ -60,6 +61,10 @@ class StyleProxy : public StyleBase<StyleProxy> {
     return lv_obj_get_style_bg_color(obj_, selector_);
   }
   void set_bg_opa(lv_opa_t v) { lv_obj_set_style_bg_opa(obj_, v, selector_); }
+  lv_opa_t get_bg_opa() const {
+    return lv_obj_get_style_bg_opa(obj_, selector_);
+  }
+
   void set_bg_grad_color(lv_color_t v) {
     lv_obj_set_style_bg_grad_color(obj_, v, selector_);
   }
@@ -75,6 +80,16 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_bg_main_stop(int32_t v) {
     lv_obj_set_style_bg_main_stop(obj_, v, selector_);
   }
+  void set_bg_grad(const lv_grad_dsc_t* v) {
+    lv_obj_set_style_bg_grad(obj_, v, selector_);
+  }
+  void set_bg_grad_opa(lv_opa_t v) {
+    lv_obj_set_style_bg_grad_opa(obj_, v, selector_);
+  }
+  void set_bg_main_opa(lv_opa_t v) {
+    lv_obj_set_style_bg_main_opa(obj_, v, selector_);
+  }
+
   void set_bg_image_src(const void* v) {
     lv_obj_set_style_bg_image_src(obj_, v, selector_);
   }
@@ -89,6 +104,12 @@ class StyleProxy : public StyleBase<StyleProxy> {
   }
   void set_bg_image_tiled(bool v) {
     lv_obj_set_style_bg_image_tiled(obj_, v, selector_);
+  }
+  void set_bitmap_mask_src(const void* v) {
+    lv_obj_set_style_bitmap_mask_src(obj_, v, selector_);
+  }
+  void set_image_colorkey(lv_color_t v) {
+    lv_obj_set_style_image_recolor(obj_, v, selector_);
   }
 
   void set_border_color(lv_color_t v) {
@@ -184,6 +205,9 @@ class StyleProxy : public StyleBase<StyleProxy> {
     return lv_obj_get_style_pad_column(obj_, selector_);
   }
   void set_pad_gap(int32_t v) { lv_obj_set_style_pad_gap(obj_, v, selector_); }
+  void set_pad_radial(int32_t v) {
+    lv_obj_set_style_pad_radial(obj_, v, selector_);
+  }
 
   void set_margin_all(int32_t v) {
     lv_obj_set_style_margin_all(obj_, v, selector_);
@@ -250,6 +274,19 @@ class StyleProxy : public StyleBase<StyleProxy> {
     return lv_obj_get_style_max_height(obj_, selector_);
   }
 
+  void set_x(int32_t v) { lv_obj_set_style_x(obj_, v, selector_); }
+  int32_t get_x() const { return lv_obj_get_style_x(obj_, selector_); }
+  void set_y(int32_t v) { lv_obj_set_style_y(obj_, v, selector_); }
+  int32_t get_y() const { return lv_obj_get_style_y(obj_, selector_); }
+  void set_size(int32_t w, int32_t h) {
+    lv_obj_set_style_size(obj_, w, h, selector_);
+  }
+  void set_align(lv_align_t v) { lv_obj_set_style_align(obj_, v, selector_); }
+  void set_length(int32_t v) { lv_obj_set_style_length(obj_, v, selector_); }
+  int32_t get_length() const {
+    return lv_obj_get_style_length(obj_, selector_);
+  }
+
   void set_radius(int32_t v) { lv_obj_set_style_radius(obj_, v, selector_); }
   int32_t get_radius() const {
     return lv_obj_get_style_radius(obj_, selector_);
@@ -287,6 +324,12 @@ class StyleProxy : public StyleBase<StyleProxy> {
   int32_t get_transform_scale_y() const {
     return lv_obj_get_style_transform_scale_y(obj_, selector_);
   }
+  int32_t get_transform_scale_x_safe() const {
+    return lv_obj_get_style_transform_scale_x_safe(obj_, selector_);
+  }
+  int32_t get_transform_scale_y_safe() const {
+    return lv_obj_get_style_transform_scale_y_safe(obj_, selector_);
+  }
   void set_transform_rotation(int32_t v) {
     lv_obj_set_style_transform_rotation(obj_, v, selector_);
   }
@@ -299,12 +342,27 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_transform_pivot_y(int32_t v) {
     lv_obj_set_style_transform_pivot_y(obj_, v, selector_);
   }
+  void set_transform_skew_x(int32_t v) {
+    lv_obj_set_style_transform_skew_x(obj_, v, selector_);
+  }
+  void set_transform_skew_y(int32_t v) {
+    lv_obj_set_style_transform_skew_y(obj_, v, selector_);
+  }
+  void set_translate_radial(int32_t v) {
+    lv_obj_set_style_translate_radial(obj_, v, selector_);
+  }
+  void set_radial_offset(int32_t v) {
+    lv_obj_set_style_radial_offset(obj_, v, selector_);
+  }
 
   void set_text_color(lv_color_t v) {
     lv_obj_set_style_text_color(obj_, v, selector_);
   }
   lv_color_t get_text_color() const {
     return lv_obj_get_style_text_color(obj_, selector_);
+  }
+  lv_color_t get_text_color_filtered() const {
+    return lv_obj_get_style_text_color_filtered(obj_, selector_);
   }
   void set_text_opa(lv_opa_t v) {
     lv_obj_set_style_text_opa(obj_, v, selector_);
@@ -332,6 +390,33 @@ class StyleProxy : public StyleBase<StyleProxy> {
   }
   void set_text_decor(lv_text_decor_t v) {
     lv_obj_set_style_text_decor(obj_, v, selector_);
+  }
+  void set_recolor(bool v) {
+    lv_obj_set_style_text_recolor(obj_, v, selector_);
+  }
+  void set_recolor(lv_color_t v) {
+    lv_obj_set_style_recolor(obj_, v, selector_);
+  }
+  void set_recolor_opa(lv_opa_t v) {
+    lv_obj_set_style_recolor_opa(obj_, v, selector_);
+  }
+  lv_color_t get_recolor() const {
+    return lv_obj_get_style_recolor(obj_, selector_);
+  }
+  lv_opa_t get_recolor_opa() const {
+    return lv_obj_get_style_recolor_opa(obj_, selector_);
+  }
+  lv_color_t get_recolor_recursive() const {
+    return lv_obj_get_style_recolor_recursive(obj_, selector_);
+  }
+  void set_text_outline_stroke_color(lv_color_t v) {
+    lv_obj_set_style_text_outline_stroke_color(obj_, v, selector_);
+  }
+  void set_text_outline_stroke_opa(lv_opa_t v) {
+    lv_obj_set_style_text_outline_stroke_opa(obj_, v, selector_);
+  }
+  void set_text_outline_stroke_width(int32_t v) {
+    lv_obj_set_style_text_outline_stroke_width(obj_, v, selector_);
   }
 
   void set_image_opa(lv_opa_t v) {
@@ -447,6 +532,101 @@ class StyleProxy : public StyleBase<StyleProxy> {
   }
   void set_base_dir(lv_base_dir_t v) {
     lv_obj_set_style_base_dir(obj_, v, selector_);
+  }
+  void set_color_filter_dsc(const lv_color_filter_dsc_t* v) {
+    lv_obj_set_style_color_filter_dsc(obj_, v, selector_);
+  }
+  const lv_color_filter_dsc_t* get_color_filter_dsc() const {
+    return lv_obj_get_style_color_filter_dsc(obj_, selector_);
+  }
+  void set_color_filter_opa(lv_opa_t v) {
+    lv_obj_set_style_color_filter_opa(obj_, v, selector_);
+  }
+  lv_opa_t get_color_filter_opa() const {
+    return lv_obj_get_style_color_filter_opa(obj_, selector_);
+  }
+  void set_anim(const lv_anim_t* v) {
+    lv_obj_set_style_anim(obj_, v, selector_);
+  }
+  const lv_anim_t* get_anim() const {
+    return lv_obj_get_style_anim(obj_, selector_);
+  }
+  void set_opa_layered(lv_opa_t v) {
+    lv_obj_set_style_opa_layered(obj_, v, selector_);
+  }
+  lv_opa_t get_opa_recursive() const {
+    return lv_obj_get_style_opa_recursive(obj_, selector_);
+  }
+  void set_rotary_sensitivity(uint32_t v) {
+    lv_obj_set_style_rotary_sensitivity(obj_, v, selector_);
+  }
+
+  int32_t get_space_top() const {
+    return lv_obj_get_style_space_top(obj_, selector_);
+  }
+  int32_t get_space_bottom() const {
+    return lv_obj_get_style_space_bottom(obj_, selector_);
+  }
+  int32_t get_space_left() const {
+    return lv_obj_get_style_space_left(obj_, selector_);
+  }
+  int32_t get_space_right() const {
+    return lv_obj_get_style_space_right(obj_, selector_);
+  }
+
+  lv_color_t get_bg_color_filtered() const {
+    return lv_obj_get_style_bg_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_border_color_filtered() const {
+    return lv_obj_get_style_border_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_outline_color_filtered() const {
+    return lv_obj_get_style_outline_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_shadow_color_filtered() const {
+    return lv_obj_get_style_shadow_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_line_color_filtered() const {
+    return lv_obj_get_style_line_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_arc_color_filtered() const {
+    return lv_obj_get_style_arc_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_text_outline_stroke_color_filtered() const {
+    return lv_obj_get_style_text_outline_stroke_color_filtered(obj_, selector_);
+  }
+  lv_opa_t get_text_outline_stroke_opa_filtered() const {
+    return lv_obj_get_style_text_outline_stroke_opa_filtered(obj_, selector_);
+  }
+  lv_color_t get_bg_grad_color_filtered() const {
+    return lv_obj_get_style_bg_grad_color_filtered(obj_, selector_);
+  }
+  lv_color_t get_image_recolor_filtered() const {
+    return lv_obj_get_style_image_recolor_filtered(obj_, selector_);
+  }
+  lv_color_t get_bg_image_recolor_filtered() const {
+    return lv_obj_get_style_bg_image_recolor_filtered(obj_, selector_);
+  }
+
+  lv_style_value_t get_prop(lv_style_prop_t prop) const {
+    lv_style_value_t v;
+    lv_obj_get_style_prop(obj_, selector_, prop, &v);
+    return v;
+  }
+  void set_prop(lv_style_prop_t prop, lv_style_value_t value) {
+    lv_obj_set_local_style_prop(obj_, prop, value, selector_);
+  }
+  lv_style_value_t get_prop_inlined(lv_style_prop_t prop) const {
+    lv_style_value_t v;
+    lv_style_get_prop_inlined(lv_obj_get_local_style(obj_, selector_), prop,
+                              &v);
+    return v;
+  }
+  static uint8_t get_prop_group(lv_style_prop_t prop) {
+    return lv_style_get_prop_group(prop);
+  }
+  static uint32_t get_num_custom_props() {
+    return lv_style_get_num_custom_props();
   }
 
   lv_obj_t* obj_;

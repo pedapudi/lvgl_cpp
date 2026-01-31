@@ -100,5 +100,5 @@ The `StyleProxy` is a zero-cost abstraction.
 - **Size**: `sizeof(StyleProxy)` is minimal (2 pointers/integers), fitting in registers.
 
 ## 7. Future Work
-- Complete coverage of all 100+ LVGL style properties in `StyleProxy`.
-- Implement similar proxies for **Layout** (`obj.layout().flex(...)`) and **Scroll** (`obj.scroll().to(...)`) to fully clean up the `Object` interface.
+- [x] Complete coverage of all 100+ LVGL style properties in `StyleProxy` (Platinum Status).
+- [ ] Implement similar proxies for **Layout** (`obj.layout().flex(...)`) and **Scroll** (`obj.scroll().to(...)`) to fully clean up the `Object` interface.

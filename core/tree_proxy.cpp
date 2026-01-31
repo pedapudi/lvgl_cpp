@@ -38,4 +38,10 @@ TreeProxy& TreeProxy::set_parent(Object& parent) {
   return *this;
 }
 
+void TreeProxy::swap(Object& other) { lv_obj_swap(obj_->raw(), other.raw()); }
+
+void TreeProxy::move_to_index(int32_t index) {
+  lv_obj_move_to_index(obj_->raw(), index);
+}
+
 }  // namespace lvgl
