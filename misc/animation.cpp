@@ -61,9 +61,17 @@ Animation& Animation::set_duration(uint32_t duration) {
   return *this;
 }
 
+Animation& Animation::set_duration(std::chrono::milliseconds duration) {
+  return set_duration(static_cast<uint32_t>(duration.count()));
+}
+
 Animation& Animation::set_delay(uint32_t delay) {
   lv_anim_set_delay(ptr_, delay);
   return *this;
+}
+
+Animation& Animation::set_delay(std::chrono::milliseconds delay) {
+  return set_delay(static_cast<uint32_t>(delay.count()));
 }
 
 Animation& Animation::set_values(int32_t start, int32_t end) {
@@ -200,6 +208,19 @@ Animation::Path::Callback Animation::Path::Bounce() {
 }
 
 Animation::Path::Callback Animation::Path::Step() { return lv_anim_path_step; }
+
+Animation::Path::Callback Animation::Path::Bezier(int32_t x1, int32_t y1,
+                                                  int32_t x2, int32_t y2) {
+  // We need to capture these coordinates. Since LVGL path callbacks are just
+  // function pointers, we can't capture in a raw C function.
+  // The Animation class already has a proxy mechanism that uses user_data.
+  // However, Animation::Path handles often return direct C function pointers.
+  // To support custom Bezier curves, we'll use a lambda that captures the
+  // coordinates.
+  return [x1, y1, x2, y2](const lv_anim_t* a) -> int32_t {
+    return lv_bezier3(lv_anim_path_linear(a), x1, y1, x2, y2);
+  };
+}
 
 Animation& Animation::set_completed_cb(CompletedCallback cb) {
   if (!user_data_) user_data_ = std::make_unique<CallbackData>();
