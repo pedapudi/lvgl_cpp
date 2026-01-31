@@ -28,8 +28,12 @@ bool InteractionProxy::is_focused() const {
   return lv_group_get_focused(g) == obj_->raw();
 }
 
+InteractionProxy& InteractionProxy::set_group(Group& group) {
+  return set_group(group.raw());
+}
+
 InteractionProxy& InteractionProxy::set_group(lv_group_t* group) {
-  lv_group_add_obj(group, obj_->raw());
+  if (obj_ && group) lv_group_add_obj(group, obj_->raw());
   return *this;
 }
 

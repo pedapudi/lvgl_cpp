@@ -44,6 +44,13 @@ class InteractionProxy {
    * @param group The group.
    * @return Reference to the interaction proxy.
    */
+  InteractionProxy& set_group(Group& group);
+
+  /**
+   * @brief Add the object to a group.
+   * @param group The group (raw pointer).
+   * @return Reference to the interaction proxy.
+   */
   InteractionProxy& set_group(lv_group_t* group);
 
   /**
