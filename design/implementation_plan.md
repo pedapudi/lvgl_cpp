@@ -88,10 +88,10 @@ To eliminate the "Monolithic Object" problem where `lvgl::Object` has hundreds o
 - **Action**: Add missing methods to `InputDevice` class.
 - **Verification**: `tests/test_indev_platinum.cpp`.
 
-### 5.2. Style Properties (lv_style) -> Platinum
-- **Gaps**: 39 missing functions in `StyleProxy` (logical equivalence gaps).
-- **Action**: Expand `StyleBase` and `StyleProxy` with properties like `radial_offset`, `opa_layered`, and filtered color accessors.
-- **Verification**: `tests/test_style_gaps.cpp`.
+### 5.2. Style Properties (lv_style) -> Platinum [DONE]
+- [x] 39 missing functions in `StyleProxy` (logical equivalence gaps).
+- [x] Expand `StyleBase` and `StyleProxy` with properties like `radial_offset`, `opa_layered`, and filtered color accessors.
+- [x] Verification: `tests/test_style_gaps.cpp`.
 
 ### 5.3. Vector & Draw (lv_draw) -> Modernization
 - **Gaps**: 68 missing functions.
