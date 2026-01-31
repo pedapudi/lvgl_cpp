@@ -113,10 +113,9 @@ class Label : public Widget<Label> {
 
   /**
    * @brief Set the translation tag for the label.
-   * @param state_id The state ID.
    * @param txt The text key.
    */
-  Label& set_translation_tag(uint32_t state_id, const char* txt);
+  Label& set_translation_tag(const char* txt);
 
   /**
    * @brief Get the text of the label.

@@ -517,12 +517,33 @@ enum class [[deprecated(
  * @brief Wrapper for lv_indev_type_t.
  * @deprecated Use InputDevice::Type instead.
  */
-enum class [[deprecated("Use InputDevice::Type instead")]] IndevType : uint8_t {
+enum class IndevType : uint8_t {
   None = LV_INDEV_TYPE_NONE,
   Pointer = LV_INDEV_TYPE_POINTER,
   Keypad = LV_INDEV_TYPE_KEYPAD,
   Button = LV_INDEV_TYPE_BUTTON,
   Encoder = LV_INDEV_TYPE_ENCODER,
+};
+
+/**
+ * @brief Wrapper for lv_indev_mode_t.
+ */
+enum class IndevMode : uint8_t {
+  None = LV_INDEV_MODE_NONE,
+  Timer = LV_INDEV_MODE_TIMER,
+  Event = LV_INDEV_MODE_EVENT,
+};
+
+/**
+ * @brief Wrapper for lv_indev_gesture_type_t.
+ */
+enum class GestureType : uint8_t {
+  None = LV_INDEV_GESTURE_NONE,
+  Pinch = LV_INDEV_GESTURE_PINCH,
+  Swipe = LV_INDEV_GESTURE_SWIPE,
+  Rotate = LV_INDEV_GESTURE_ROTATE,
+  TwoFingersSwipe = LV_INDEV_GESTURE_TWO_FINGERS_SWIPE,
+  Scroll = LV_INDEV_GESTURE_SCROLL,
 };
 
 /**

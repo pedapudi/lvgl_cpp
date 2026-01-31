@@ -39,6 +39,7 @@ class StyleBase {
     self().set_bg_color(color);
     return self();
   }
+  Color bg_color() const { return self().get_bg_color(); }
 
   Derived& bg_opa(Opacity opa) {
     self().set_bg_opa(static_cast<lv_opa_t>(opa));
@@ -62,6 +63,9 @@ class StyleBase {
   Derived& bg_grad_dir(lv_grad_dir_t dir) {
     self().set_bg_grad_dir(dir);
     return self();
+  }
+  GradDir bg_grad_dir() const {
+    return static_cast<GradDir>(self().get_bg_grad_dir());
   }
   Derived& bg_grad_stop(int32_t value) {
     self().set_bg_grad_stop(value);
@@ -115,13 +119,20 @@ class StyleBase {
     self().set_border_color(color);
     return self();
   }
+  Color border_color() const { return self().get_border_color(); }
+
   Derived& border_width(int32_t width) {
     self().set_border_width(width);
     return self();
   }
+  int32_t border_width() const { return self().get_border_width(); }
+
   Derived& border_opa(Opacity opa) {
     self().set_border_opa(static_cast<lv_opa_t>(opa));
     return self();
+  }
+  Opacity border_opa() const {
+    return static_cast<Opacity>(self().get_border_opa());
   }
   [[deprecated("Use border_opa(Opacity) instead")]]
   Derived& border_opa(lv_opa_t opa) {
@@ -225,30 +236,81 @@ class StyleBase {
     self().set_pad_left(pad);
     return self();
   }
+  int32_t pad_left() const { return self().get_pad_left(); }
+
   Derived& pad_right(int32_t pad) {
     self().set_pad_right(pad);
     return self();
   }
+  int32_t pad_right() const { return self().get_pad_right(); }
+
   Derived& pad_top(int32_t pad) {
     self().set_pad_top(pad);
     return self();
   }
+  int32_t pad_top() const { return self().get_pad_top(); }
+
   Derived& pad_bottom(int32_t pad) {
     self().set_pad_bottom(pad);
     return self();
   }
+  int32_t pad_bottom() const { return self().get_pad_bottom(); }
+
   Derived& pad_row(int32_t pad) {
     self().set_pad_row(pad);
     return self();
   }
+  int32_t pad_row() const { return self().get_pad_row(); }
+
   Derived& pad_column(int32_t pad) {
     self().set_pad_column(pad);
     return self();
   }
+  int32_t pad_column() const { return self().get_pad_column(); }
   Derived& pad_gap(int32_t gap) {
     self().set_pad_gap(gap);
     return self();
   }
+
+  // =========================================================================
+  // Margin
+  // =========================================================================
+
+  Derived& margin_all(int32_t margin) {
+    self().set_margin_all(margin);
+    return self();
+  }
+  Derived& margin_hor(int32_t margin) {
+    self().set_margin_hor(margin);
+    return self();
+  }
+  Derived& margin_ver(int32_t margin) {
+    self().set_margin_ver(margin);
+    return self();
+  }
+  Derived& margin_left(int32_t margin) {
+    self().set_margin_left(margin);
+    return self();
+  }
+  int32_t margin_left() const { return self().get_margin_left(); }
+
+  Derived& margin_right(int32_t margin) {
+    self().set_margin_right(margin);
+    return self();
+  }
+  int32_t margin_right() const { return self().get_margin_right(); }
+
+  Derived& margin_top(int32_t margin) {
+    self().set_margin_top(margin);
+    return self();
+  }
+  int32_t margin_top() const { return self().get_margin_top(); }
+
+  Derived& margin_bottom(int32_t margin) {
+    self().set_margin_bottom(margin);
+    return self();
+  }
+  int32_t margin_bottom() const { return self().get_margin_bottom(); }
 
   // =========================================================================
   // Size
@@ -258,26 +320,37 @@ class StyleBase {
     self().set_width(value);
     return self();
   }
+  int32_t width() const { return self().get_width(); }
+
   Derived& min_width(int32_t value) {
     self().set_min_width(value);
     return self();
   }
+  int32_t min_width() const { return self().get_min_width(); }
+
   Derived& max_width(int32_t value) {
     self().set_max_width(value);
     return self();
   }
+  int32_t max_width() const { return self().get_max_width(); }
+
   Derived& height(int32_t value) {
     self().set_height(value);
     return self();
   }
+  int32_t height() const { return self().get_height(); }
+
   Derived& min_height(int32_t value) {
     self().set_min_height(value);
     return self();
   }
+  int32_t min_height() const { return self().get_min_height(); }
+
   Derived& max_height(int32_t value) {
     self().set_max_height(value);
     return self();
   }
+  int32_t max_height() const { return self().get_max_height(); }
 
   // =========================================================================
   // Geometry
@@ -287,6 +360,7 @@ class StyleBase {
     self().set_radius(rad);
     return self();
   }
+  int32_t radius() const { return self().get_radius(); }
   Derived& clip_corner(bool clip) {
     self().set_clip_corner(clip);
     return self();
@@ -303,27 +377,37 @@ class StyleBase {
     self().set_translate_x(value);
     return self();
   }
+  int32_t translate_x() const { return self().get_translate_x(); }
+
   Derived& translate_y(int32_t value) {
     self().set_translate_y(value);
     return self();
   }
+  int32_t translate_y() const { return self().get_translate_y(); }
+
   Derived& transform_scale_x(int32_t value) {
     self().set_transform_scale_x(value);
     return self();
   }
+  int32_t transform_scale_x() const { return self().get_transform_scale_x(); }
+
   Derived& transform_scale_y(int32_t value) {
     self().set_transform_scale_y(value);
     return self();
   }
+  int32_t transform_scale_y() const { return self().get_transform_scale_y(); }
+
   Derived& transform_scale(int32_t value) {
     self().set_transform_scale_x(value);
     self().set_transform_scale_y(value);
     return self();
   }
+
   Derived& transform_rotation(int32_t value) {
     self().set_transform_rotation(value);
     return self();
   }
+  int32_t transform_rotation() const { return self().get_transform_rotation(); }
   Derived& transform_pivot_x(int32_t value) {
     self().set_transform_pivot_x(value);
     return self();
@@ -341,10 +425,15 @@ class StyleBase {
     self().set_text_color(color);
     return self();
   }
+  Color text_color() const { return self().get_text_color(); }
   Derived& text_opa(Opacity opa) {
     self().set_text_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  Opacity text_opa() const {
+    return static_cast<Opacity>(self().get_text_opa());
+  }
+
   [[deprecated("Use text_opa(Opacity) instead")]]
   Derived& text_opa(lv_opa_t opa) {
     self().set_text_opa(opa);
@@ -362,10 +451,13 @@ class StyleBase {
     self().set_text_letter_space(space);
     return self();
   }
+  int32_t text_letter_space() const { return self().get_text_letter_space(); }
+
   Derived& text_line_space(int32_t space) {
     self().set_text_line_space(space);
     return self();
   }
+  int32_t text_line_space() const { return self().get_text_line_space(); }
   Derived& text_align(TextAlign align) {
     self().set_text_align(static_cast<lv_text_align_t>(align));
     return self();
@@ -450,6 +542,8 @@ class StyleBase {
     self().set_arc_width(width);
     return self();
   }
+  int32_t arc_width() const { return self().get_arc_width(); }
+
   Derived& arc_rounded(bool rounded) {
     self().set_arc_rounded(rounded);
     return self();
@@ -458,10 +552,13 @@ class StyleBase {
     self().set_arc_color(color);
     return self();
   }
+  Color arc_color() const { return self().get_arc_color(); }
+
   Derived& arc_opa(Opacity opa) {
     self().set_arc_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  Opacity arc_opa() const { return static_cast<Opacity>(self().get_arc_opa()); }
   [[deprecated("Use arc_opa(Opacity) instead")]]
   Derived& arc_opa(lv_opa_t opa) {
     self().set_arc_opa(opa);
@@ -607,6 +704,8 @@ class StyleBase {
     self().set_opa(static_cast<lv_opa_t>(opa));
     return self();
   }
+  Opacity opa() const { return static_cast<Opacity>(self().get_opa()); }
+
   [[deprecated("Use opa(Opacity) instead")]]
   Derived& opa(lv_opa_t opa) {
     self().set_opa(opa);
@@ -630,6 +729,12 @@ class StyleBase {
     self().set_base_dir(dir);
     return self();
   }
+
+  Derived& layout(uint32_t value) {
+    self().set_layout(value);
+    return self();
+  }
+  uint32_t layout() const { return self().get_layout(); }
 };
 
 }  // namespace lvgl

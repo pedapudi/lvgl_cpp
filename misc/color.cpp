@@ -1,5 +1,7 @@
 #include "color.h"
 
+#include <algorithm>
+
 namespace lvgl {
 
 Color::Color() : color_{0, 0, 0} {}  // Default black
@@ -66,5 +68,44 @@ Color Color::darken(lv_opa_t lvl) const {
 }
 
 uint8_t Color::luminance() const { return lv_color_luminance(color_); }
+
+uint8_t Color::brightness() const { return lv_color_brightness(color_); }
+
+Color Color::operator+(const Color& other) const {
+  return Color((uint8_t)std::min(255, (int)r() + other.r()),
+               (uint8_t)std::min(255, (int)g() + other.g()),
+               (uint8_t)std::min(255, (int)b() + other.b()));
+}
+
+Color Color::operator-(const Color& other) const {
+  return Color((uint8_t)std::max(0, (int)r() - other.r()),
+               (uint8_t)std::max(0, (int)g() - other.g()),
+               (uint8_t)std::max(0, (int)b() - other.b()));
+}
+
+Color Color::operator*(float factor) const {
+  return Color((uint8_t)std::min(255.0f, std::max(0.0f, (float)r() * factor)),
+               (uint8_t)std::min(255.0f, std::max(0.0f, (float)g() * factor)),
+               (uint8_t)std::min(255.0f, std::max(0.0f, (float)b() * factor)));
+}
+
+Color Color::operator/(float factor) const {
+  if (factor == 0.0f) return *this;
+  return *this * (1.0f / factor);
+}
+
+Color Color::operator&(const Color& other) const {
+  return Color(r() & other.r(), g() & other.g(), b() & other.b());
+}
+
+Color Color::operator|(const Color& other) const {
+  return Color(r() | other.r(), g() | other.g(), b() | other.b());
+}
+
+Color Color::operator^(const Color& other) const {
+  return Color(r() ^ other.r(), g() ^ other.g(), b() ^ other.b());
+}
+
+Color Color::operator~() const { return Color(~r(), ~g(), ~b()); }
 
 }  // namespace lvgl

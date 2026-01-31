@@ -52,6 +52,18 @@ class Color {
   bool operator==(const Color& other) const;
   bool operator!=(const Color& other) const;
 
+  // Arithmetic operators (clamped to 0-255)
+  Color operator+(const Color& other) const;
+  Color operator-(const Color& other) const;
+  Color operator*(float factor) const;
+  Color operator/(float factor) const;
+
+  // Bitwise operators (raw component-wise)
+  Color operator&(const Color& other) const;
+  Color operator|(const Color& other) const;
+  Color operator^(const Color& other) const;
+  Color operator~() const;
+
   /**
    * @brief Mix this color with another color.
    * @param other The other color.
@@ -79,6 +91,12 @@ class Color {
    * @return Luminance (0-255).
    */
   uint8_t luminance() const;
+
+  /**
+   * @brief Get the brightness of the color.
+   * @return Brightness (0-255).
+   */
+  uint8_t brightness() const;
 
   // Accessors (using struct access)
   uint8_t r() const { return color_.red; }

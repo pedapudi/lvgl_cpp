@@ -56,12 +56,18 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_bg_color(lv_color_t v) {
     lv_obj_set_style_bg_color(obj_, v, selector_);
   }
+  lv_color_t get_bg_color() const {
+    return lv_obj_get_style_bg_color(obj_, selector_);
+  }
   void set_bg_opa(lv_opa_t v) { lv_obj_set_style_bg_opa(obj_, v, selector_); }
   void set_bg_grad_color(lv_color_t v) {
     lv_obj_set_style_bg_grad_color(obj_, v, selector_);
   }
   void set_bg_grad_dir(lv_grad_dir_t v) {
     lv_obj_set_style_bg_grad_dir(obj_, v, selector_);
+  }
+  lv_grad_dir_t get_bg_grad_dir() const {
+    return lv_obj_get_style_bg_grad_dir(obj_, selector_);
   }
   void set_bg_grad_stop(int32_t v) {
     lv_obj_set_style_bg_grad_stop(obj_, v, selector_);
@@ -88,11 +94,20 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_border_color(lv_color_t v) {
     lv_obj_set_style_border_color(obj_, v, selector_);
   }
+  lv_color_t get_border_color() const {
+    return lv_obj_get_style_border_color(obj_, selector_);
+  }
   void set_border_width(int32_t v) {
     lv_obj_set_style_border_width(obj_, v, selector_);
   }
+  int32_t get_border_width() const {
+    return lv_obj_get_style_border_width(obj_, selector_);
+  }
   void set_border_opa(lv_opa_t v) {
     lv_obj_set_style_border_opa(obj_, v, selector_);
+  }
+  lv_opa_t get_border_opa() const {
+    return lv_obj_get_style_border_opa(obj_, selector_);
   }
   void set_border_side(lv_border_side_t v) {
     lv_obj_set_style_border_side(obj_, v, selector_);
@@ -139,35 +154,106 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_pad_left(int32_t v) {
     lv_obj_set_style_pad_left(obj_, v, selector_);
   }
+  int32_t get_pad_left() const {
+    return lv_obj_get_style_pad_left(obj_, selector_);
+  }
   void set_pad_right(int32_t v) {
     lv_obj_set_style_pad_right(obj_, v, selector_);
   }
+  int32_t get_pad_right() const {
+    return lv_obj_get_style_pad_right(obj_, selector_);
+  }
   void set_pad_top(int32_t v) { lv_obj_set_style_pad_top(obj_, v, selector_); }
+  int32_t get_pad_top() const {
+    return lv_obj_get_style_pad_top(obj_, selector_);
+  }
   void set_pad_bottom(int32_t v) {
     lv_obj_set_style_pad_bottom(obj_, v, selector_);
   }
+  int32_t get_pad_bottom() const {
+    return lv_obj_get_style_pad_bottom(obj_, selector_);
+  }
   void set_pad_row(int32_t v) { lv_obj_set_style_pad_row(obj_, v, selector_); }
+  int32_t get_pad_row() const {
+    return lv_obj_get_style_pad_row(obj_, selector_);
+  }
   void set_pad_column(int32_t v) {
     lv_obj_set_style_pad_column(obj_, v, selector_);
   }
+  int32_t get_pad_column() const {
+    return lv_obj_get_style_pad_column(obj_, selector_);
+  }
   void set_pad_gap(int32_t v) { lv_obj_set_style_pad_gap(obj_, v, selector_); }
 
+  void set_margin_all(int32_t v) {
+    lv_obj_set_style_margin_all(obj_, v, selector_);
+  }
+  void set_margin_hor(int32_t v) {
+    lv_obj_set_style_margin_hor(obj_, v, selector_);
+  }
+  void set_margin_ver(int32_t v) {
+    lv_obj_set_style_margin_ver(obj_, v, selector_);
+  }
+  void set_margin_left(int32_t v) {
+    lv_obj_set_style_margin_left(obj_, v, selector_);
+  }
+  int32_t get_margin_left() const {
+    return lv_obj_get_style_margin_left(obj_, selector_);
+  }
+  void set_margin_right(int32_t v) {
+    lv_obj_set_style_margin_right(obj_, v, selector_);
+  }
+  int32_t get_margin_right() const {
+    return lv_obj_get_style_margin_right(obj_, selector_);
+  }
+  void set_margin_top(int32_t v) {
+    lv_obj_set_style_margin_top(obj_, v, selector_);
+  }
+  int32_t get_margin_top() const {
+    return lv_obj_get_style_margin_top(obj_, selector_);
+  }
+  void set_margin_bottom(int32_t v) {
+    lv_obj_set_style_margin_bottom(obj_, v, selector_);
+  }
+  int32_t get_margin_bottom() const {
+    return lv_obj_get_style_margin_bottom(obj_, selector_);
+  }
+
   void set_width(int32_t v) { lv_obj_set_style_width(obj_, v, selector_); }
+  int32_t get_width() const { return lv_obj_get_style_width(obj_, selector_); }
   void set_min_width(int32_t v) {
     lv_obj_set_style_min_width(obj_, v, selector_);
+  }
+  int32_t get_min_width() const {
+    return lv_obj_get_style_min_width(obj_, selector_);
   }
   void set_max_width(int32_t v) {
     lv_obj_set_style_max_width(obj_, v, selector_);
   }
+  int32_t get_max_width() const {
+    return lv_obj_get_style_max_width(obj_, selector_);
+  }
   void set_height(int32_t v) { lv_obj_set_style_height(obj_, v, selector_); }
+  int32_t get_height() const {
+    return lv_obj_get_style_height(obj_, selector_);
+  }
   void set_min_height(int32_t v) {
     lv_obj_set_style_min_height(obj_, v, selector_);
+  }
+  int32_t get_min_height() const {
+    return lv_obj_get_style_min_height(obj_, selector_);
   }
   void set_max_height(int32_t v) {
     lv_obj_set_style_max_height(obj_, v, selector_);
   }
+  int32_t get_max_height() const {
+    return lv_obj_get_style_max_height(obj_, selector_);
+  }
 
   void set_radius(int32_t v) { lv_obj_set_style_radius(obj_, v, selector_); }
+  int32_t get_radius() const {
+    return lv_obj_get_style_radius(obj_, selector_);
+  }
   void set_clip_corner(bool v) {
     lv_obj_set_style_clip_corner(obj_, v, selector_);
   }
@@ -180,17 +266,32 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_translate_x(int32_t v) {
     lv_obj_set_style_translate_x(obj_, v, selector_);
   }
+  int32_t get_translate_x() const {
+    return lv_obj_get_style_translate_x(obj_, selector_);
+  }
   void set_translate_y(int32_t v) {
     lv_obj_set_style_translate_y(obj_, v, selector_);
+  }
+  int32_t get_translate_y() const {
+    return lv_obj_get_style_translate_y(obj_, selector_);
   }
   void set_transform_scale_x(int32_t v) {
     lv_obj_set_style_transform_scale_x(obj_, v, selector_);
   }
+  int32_t get_transform_scale_x() const {
+    return lv_obj_get_style_transform_scale_x(obj_, selector_);
+  }
   void set_transform_scale_y(int32_t v) {
     lv_obj_set_style_transform_scale_y(obj_, v, selector_);
   }
+  int32_t get_transform_scale_y() const {
+    return lv_obj_get_style_transform_scale_y(obj_, selector_);
+  }
   void set_transform_rotation(int32_t v) {
     lv_obj_set_style_transform_rotation(obj_, v, selector_);
+  }
+  int32_t get_transform_rotation() const {
+    return lv_obj_get_style_transform_rotation(obj_, selector_);
   }
   void set_transform_pivot_x(int32_t v) {
     lv_obj_set_style_transform_pivot_x(obj_, v, selector_);
@@ -202,8 +303,14 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_text_color(lv_color_t v) {
     lv_obj_set_style_text_color(obj_, v, selector_);
   }
+  lv_color_t get_text_color() const {
+    return lv_obj_get_style_text_color(obj_, selector_);
+  }
   void set_text_opa(lv_opa_t v) {
     lv_obj_set_style_text_opa(obj_, v, selector_);
+  }
+  lv_opa_t get_text_opa() const {
+    return lv_obj_get_style_text_opa(obj_, selector_);
   }
   void set_text_font(const lv_font_t* v) {
     lv_obj_set_style_text_font(obj_, v, selector_);
@@ -211,8 +318,14 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_text_letter_space(int32_t v) {
     lv_obj_set_style_text_letter_space(obj_, v, selector_);
   }
+  int32_t get_text_letter_space() const {
+    return lv_obj_get_style_text_letter_space(obj_, selector_);
+  }
   void set_text_line_space(int32_t v) {
     lv_obj_set_style_text_line_space(obj_, v, selector_);
+  }
+  int32_t get_text_line_space() const {
+    return lv_obj_get_style_text_line_space(obj_, selector_);
   }
   void set_text_align(lv_text_align_t v) {
     lv_obj_set_style_text_align(obj_, v, selector_);
@@ -253,13 +366,22 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_arc_width(int32_t v) {
     lv_obj_set_style_arc_width(obj_, v, selector_);
   }
+  int32_t get_arc_width() const {
+    return lv_obj_get_style_arc_width(obj_, selector_);
+  }
   void set_arc_rounded(bool v) {
     lv_obj_set_style_arc_rounded(obj_, v, selector_);
   }
   void set_arc_color(lv_color_t v) {
     lv_obj_set_style_arc_color(obj_, v, selector_);
   }
+  lv_color_t get_arc_color() const {
+    return lv_obj_get_style_arc_color(obj_, selector_);
+  }
   void set_arc_opa(lv_opa_t v) { lv_obj_set_style_arc_opa(obj_, v, selector_); }
+  lv_opa_t get_arc_opa() const {
+    return lv_obj_get_style_arc_opa(obj_, selector_);
+  }
   void set_arc_image_src(const void* v) {
     lv_obj_set_style_arc_image_src(obj_, v, selector_);
   }
@@ -319,6 +441,7 @@ class StyleProxy : public StyleBase<StyleProxy> {
   }
 
   void set_opa(lv_opa_t v) { lv_obj_set_style_opa(obj_, v, selector_); }
+  lv_opa_t get_opa() const { return lv_obj_get_style_opa(obj_, selector_); }
   void set_blend_mode(lv_blend_mode_t v) {
     lv_obj_set_style_blend_mode(obj_, v, selector_);
   }

@@ -1,5 +1,8 @@
 #include "input_device.h"
 
+#include "gesture_event.h"
+#include "gesture_proxy.h"
+
 namespace lvgl {
 
 // Static trampoline to bridge C -> C++
@@ -217,6 +220,20 @@ lv_timer_t* InputDevice::get_read_timer() {
 
 lv_display_t* InputDevice::get_display() {
   return indev_ ? lv_indev_get_display(indev_) : nullptr;
+}
+
+// --- GestureProxy ---
+
+GestureProxy& GestureProxy::on_gesture(std::function<void(GestureEvent)> cb) {
+  if (indev_) {
+    indev_->add_event_cb(
+        [cb](lv_event_t* e) {
+          GestureEvent ge(e);
+          cb(ge);
+        },
+        LV_EVENT_GESTURE);
+  }
+  return *this;
 }
 
 }  // namespace lvgl

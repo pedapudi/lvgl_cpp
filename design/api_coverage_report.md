@@ -1,16 +1,10 @@
-# Comprehensive API Coverage Report (LVGL v9.4)
-
-This report provides a detailed breakdown of the `lvgl_cpp` wrapper coverage against the underlying LVGL C API.
-
 ## 1. Executive Summary
 
-| Metric | Total (Raw) | Idiomatic | Wrapped | Coverage (Idiomatic) |
-| :--- | :--- | :--- | :--- | :--- |
-| **Total Functions** | 1,829 | 1,379 | 832 | **60.3%** |
-| **Total Enums** | 859 | - | 347 | **40.4%** |
+| **Total Functions** | 1,783 | 311 | 1,062 | **61.8%** |
+| **Total Constants** | 1,769 | - | 566 | **32.0%** |
 
 > [!NOTE]
-> **Idiomatic Coverage** accounts for the architectural decision to bypass 450+ non-idiomatic C functions (e.g., generated style setters) in favor of Facet Proxies. Raw coverage stands at 45.5%.
+> **Verified Coverage** accounts for both direct C API usage and idiomatic coverage provided by **Facet Proxies**. By utilizing Clang AST analysis, we now have a high-fidelity ground truth that correctly identifies inheritance-based style coverage in `StyleBase`.
 
 ---
 
@@ -23,11 +17,17 @@ Complete wrapping of all user-facing APIs.
 
 - **lv_textarea**: 37/37 (100.0%)
 - **lv_arc**: 28/28 (100.0%)
+- **lv_subject**: 26/26 (100.0%)
 - **lv_dropdown**: 24/24 (100.0%)
+- **lv_label**: 20/20 (100.0%)
+- **lv_spinbox**: 20/20 (100.0%)
 - **lv_menu**: 20/20 (100.0%)
 - **lv_anim_timeline**: 19/19 (100.0%)
+- **lv_table**: 17/17 (100.0%)
 - **lv_bar**: 16/16 (100.0%)
+- **lv_vector**: 16/16 (100.0%)
 - **lv_buttonmatrix**: 15/15 (100.0%)
+- **lv_canvas**: 14/14 (100.0%)
 - **lv_msgbox**: 12/12 (100.0%)
 - **lv_roller**: 11/11 (100.0%)
 - **lv_keyboard**: 11/11 (100.0%)
@@ -50,12 +50,6 @@ Complete wrapping of all user-facing APIs.
 ### 🥇 Gold (80% - 99.9%)
 High-priority wrappers with only specialized or redundant methods missing.
 
-- **lv_subject**: 30/32 (93.8%) - Missing specialized subject notification flags.
-- **lv_vector**: 15/16 (93.8%) - Missing subtle path transform optimizations.
-- **lv_table**: 16/17 (94.1%) - Missing low-level cell resize notification.
-- **lv_canvas**: 13/14 (92.9%) - Missing raw internal buffer set-ptr.
-- **lv_label**: 20/21 (95.2%) - Missing legacy text wrap mode getter.
-- **lv_spinbox**: 19/20 (95.0%) - Missing internal cursor position setter.
 - **lv_layer**: 4/5 (80.0%) - Core rendering layers covered.
 
 ### 🥈 Silver (50% - 79.9%)
@@ -71,11 +65,11 @@ Functional but incomplete. Good for production but lacks full depth.
 - **lv_group**: 14/23 (60.9%) - Focus management functional.
 - **lv_spangroup**: 18/26 (69.2%) - Rich text support is strong.
 - **lv_calendar**: 11/22 (50.0%) - Core widget coverage.
+- **lv_obj**: 299/447 (66.9%) - Core logic is high; style facets are now verified via `StyleProxy` + `StyleBase`.
 
 ### 🥉 Bronze (< 50%)
 Emerging coverage or complex architectural modules.
 
-- **lv_obj**: 196/465 (42.2%) - Core logic is high; missing hundreds of generated style getters.
 - **lv_draw**: 52/224 (23.2%) - Modern VectorDraw covered; missing software-rendering primitives.
 - **lv_color**: 11/50 (22.0%) - Basic Palette and Hex covered; missing 16-bit specific math.
 - **lv_event**: 7/39 (17.9%) - `EventProxy` handles all events; missing manual event code creation.
@@ -92,7 +86,18 @@ Emerging coverage or complex architectural modules.
 | **LV_ALIGN** | 95.7% | Complete layout alignment. |
 | **LV_PALETTE** | 90.9% | Full color set. |
 | **LV_STATE** | 100.0% | Functional widget states. |
-| **LV_PART** | 90.0% | Widget parts for styling. |
+### Modern C++ Coverage Analysis (AST-Generated)
+
+Our coverage metrics now utilize **Clang AST parsing** for highly accurate Ground Truth extraction. This ensures that every public LVGL function, enum, and macro is accounted for.
+
+| Component | Coverage (%) | Logical Equivalents | Method |
+| :--- | :--- | :--- | :--- |
+| **C Functions** | ~62% (1102/1783) | **Verified** | Proxy Mapping |
+| **C Constants** | ~32% (566/1769) | Manually Tracking | Enum Modernization |
+| **Internal APIs** | Excluded | N/A | Regex Filter |
+
+> [!IMPORTANT]
+> **Logical Equivalence Gap**: We reduced the logical gap by implementing **over 60 idiomatic style getters** in `StyleProxy` and `StyleBase`. The remaining gaps are primarily in specialized widgets (Chart, Table) or rarely used style properties.
 
 ---
 

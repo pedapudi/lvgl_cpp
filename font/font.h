@@ -42,6 +42,11 @@ class Font {
   static const Font& montserrat_30();
   static const Font& montserrat_32();
 
+  /**
+   * @brief Get the default font.
+   */
+  static const Font& get_default();
+
  protected:
   const lv_font_t* font_;
 };

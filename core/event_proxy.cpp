@@ -36,6 +36,14 @@ EventProxy& EventProxy::on_all(EventCallback callback) {
   return on(LV_EVENT_ALL, std::move(callback));
 }
 
+EventProxy& EventProxy::on_gesture(
+    std::function<void(GestureEvent&)> callback) {
+  return on(LV_EVENT_GESTURE, [callback](Event& e) {
+    GestureEvent ge(e.raw());
+    callback(ge);
+  });
+}
+
 EventProxy& EventProxy::add_cb(lv_event_code_t event_code,
                                EventCallback callback) {
   return on(event_code, std::move(callback));

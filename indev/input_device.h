@@ -8,8 +8,8 @@
 
 #include "../core/object.h"  // IWYU pragma: export
 #include "../display/display.h"
-// #include "../core/group.h"   // Removed: cleanup
 #include "../misc/geometry.h"
+#include "gesture_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
@@ -89,6 +89,8 @@ class InputDevice {
   void enable(bool en);
   void wait_release();
   void read();  // Manual trigger
+
+  GestureProxy gestures() { return GestureProxy(this); }
 
   lv_indev_mode_t get_mode() const;
 

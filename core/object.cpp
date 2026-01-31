@@ -483,6 +483,53 @@ void Object::redraw(lv_layer_t* layer) {
   if (obj_) lv_obj_redraw(layer, obj_);
 }
 
+// --- Animations ---
+
+Object& Object::fade_in(uint32_t time, uint32_t delay) {
+  if (obj_) lv_obj_fade_in(obj_, time, delay);
+  return *this;
+}
+
+Object& Object::fade_in(std::chrono::milliseconds time,
+                        std::chrono::milliseconds delay) {
+  return fade_in(static_cast<uint32_t>(time.count()),
+                 static_cast<uint32_t>(delay.count()));
+}
+
+Object& Object::fade_out(uint32_t time, uint32_t delay) {
+  if (obj_) lv_obj_fade_out(obj_, time, delay);
+  return *this;
+}
+
+Object& Object::fade_out(std::chrono::milliseconds time,
+                         std::chrono::milliseconds delay) {
+  return fade_out(static_cast<uint32_t>(time.count()),
+                  static_cast<uint32_t>(delay.count()));
+}
+
+Object& Object::fade_to(Opacity opa, uint32_t time, uint32_t delay) {
+  if (obj_) {
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_var(&a, obj_);
+    lv_anim_set_values(&a, lv_obj_get_style_opa(obj_, LV_PART_MAIN),
+                       static_cast<lv_opa_t>(opa));
+    lv_anim_set_exec_cb(&a, [](void* var, int32_t v) {
+      lv_obj_set_style_opa(static_cast<lv_obj_t*>(var), v, LV_PART_MAIN);
+    });
+    lv_anim_set_duration(&a, time);
+    lv_anim_set_delay(&a, delay);
+    lv_anim_start(&a);
+  }
+  return *this;
+}
+
+Object& Object::fade_to(Opacity opa, std::chrono::milliseconds time,
+                        std::chrono::milliseconds delay) {
+  return fade_to(opa, static_cast<uint32_t>(time.count()),
+                 static_cast<uint32_t>(delay.count()));
+}
+
 // --- Other Properties ---
 
 void Object::set_base_dir(lv_base_dir_t dir) {
@@ -520,6 +567,28 @@ void Object::remove_all_event_cbs() {
     lv_obj_remove_event_cb_with_user_data(obj_, event_proxy, node.get());
   }
   callback_nodes_.clear();
+}
+
+// --- Metadata & ID ---
+
+void Object::set_id(void* id) {
+  if (obj_) lv_obj_set_id(obj_, id);
+}
+
+void* Object::get_id() const { return obj_ ? lv_obj_get_id(obj_) : nullptr; }
+
+Object Object::find_by_id(const void* id) const {
+  if (!obj_)
+    return Object(static_cast<lv_obj_t*>(nullptr), Ownership::Unmanaged);
+  return Object(lv_obj_find_by_id(obj_, id), Ownership::Unmanaged);
+}
+
+SubjectProxy Object::on_subject(Subject& subject) {
+  return SubjectProxy(obj_, subject.raw());
+}
+
+SubjectProxy Object::on_subject(lv_subject_t* subject) {
+  return SubjectProxy(obj_, subject);
 }
 
 EventProxy Object::event() { return EventProxy(this); }

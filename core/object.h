@@ -24,6 +24,7 @@
 #include "scroll_proxy.h"
 #include "state_proxy.h"
 #include "style_proxy.h"
+#include "subject_proxy.h"
 #include "traits.h"
 #include "tree_proxy.h"
 
@@ -436,14 +437,36 @@ class Object {
   bool is_area_visible(const Area& area) const;
 
   /**
-   * @brief Notify LVGL that extra draw size (shadow/outline) changed.
-   */
-  void refresh_ext_draw_size();
-
-  /**
    * @brief Force immediate redraw (Expert API).
    */
   void redraw(lv_layer_t* layer);
+
+  // --- Animations ---
+
+  /**
+   * @brief Fade in the object.
+   * @param time Duration of the animation in milliseconds.
+   * @param delay Delay before starting the animation in milliseconds.
+   * @return Reference to this object.
+   */
+  Object& fade_in(uint32_t time, uint32_t delay = 0);
+
+  /**
+   * @brief Fade out the object.
+   * @param time Duration of the animation in milliseconds.
+   * @param delay Delay before starting the animation in milliseconds.
+   * @return Reference to this object.
+   */
+  Object& fade_out(uint32_t time, uint32_t delay = 0);
+
+  /**
+   * @brief Fade the object to a specific opacity.
+   * @param opa Target opacity.
+   * @param time Duration in milliseconds.
+   * @param delay Delay in milliseconds.
+   * @return Reference to this object.
+   */
+  Object& fade_to(Opacity opa, uint32_t time, uint32_t delay = 0);
 
   // --- Layout Shortcuts ---
 
@@ -608,6 +631,42 @@ class Object {
    * @brief Remove all event callbacks from this object.
    */
   void remove_all_event_cbs();
+
+  // --- Metadata & ID ---
+
+  /**
+   * @brief Set the ID of the object.
+   * @param id The ID (typically a string pointer).
+   */
+  void set_id(void* id);
+
+  /**
+   * @brief Get the ID of the object.
+   * @return The ID.
+   */
+  void* get_id() const;
+
+  /**
+   * @brief Find a child object by its ID recursively.
+   * @param id The ID to search for.
+   * @return An unmanaged Object wrapper for the found child, or invalid if not
+   * found.
+   */
+  Object find_by_id(const void* id) const;
+
+  /**
+   * @brief Get a fluent proxy for subject-based interaction.
+   * @param subject The subject to bind to.
+   * @return A SubjectProxy object.
+   */
+  SubjectProxy on_subject(Subject& subject);
+
+  /**
+   * @brief Get a fluent proxy for subject-based interaction.
+   * @param subject The raw LVGL subject to bind to.
+   * @return A SubjectProxy object.
+   */
+  SubjectProxy on_subject(lv_subject_t* subject);
 
   // --- Flags & States ---
 

@@ -3,6 +3,7 @@
 
 #include <functional>
 
+#include "../indev/gesture_event.h"
 #include "../misc/enums.h"
 #include "lvgl.h"
 
@@ -36,6 +37,7 @@ class EventProxy {
   EventProxy& on_value_changed(EventCallback callback);
   EventProxy& on_long_pressed(EventCallback callback);
   EventProxy& on_all(EventCallback callback);
+  EventProxy& on_gesture(std::function<void(GestureEvent&)> callback);
 
   /**
    * @brief Add a callback for a specific event code (alias for on).

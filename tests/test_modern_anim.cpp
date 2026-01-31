@@ -17,6 +17,7 @@ TEST_F(ModernAnimTest, ChronoSupport) {
   lvgl::Animation anim;
   anim.set_duration(500ms);
   anim.set_delay(100ms);
+  anim.set_repeat_count(LV_ANIM_REPEAT_INFINITE);
   // No easy way to check internal lv_anim_t without access,
   // but if it compiles and runs without crashing it's a good sign.
 }
