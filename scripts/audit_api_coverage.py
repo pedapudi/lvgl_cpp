@@ -175,6 +175,36 @@ def is_internal_function(func_name: str, header_path: str) -> bool:
     return False
 
 
+# Non-idiomatic/Generated patterns that are covered by proxies or better abstractions
+NON_IDIOMATIC_PATTERNS = [
+    r'lv_obj_(set|get)_style_',      # Covered by StyleProxy
+    r'lv_\w+_(set|get)_style_',      # Covered by StyleProxy
+    r'lv_area_',                     # Covered by lvgl::Area
+    r'lv_point_',                    # Covered by lvgl::Point
+    r'lv_color_',                    # Covered by lvgl::Color
+    r'lv_palette_',                  # Covered by lvgl::Color/Palette
+    r'lv_obj_add_event_cb',          # Covered by EventProxy/Object::on_...
+    r'lv_obj_remove_event_cb',       # Covered by EventProxy
+    r'lv_obj_get_event_cb',          # Covered by EventProxy
+    r'lv_style_set_',                # Covered by StyleProxy
+    r'lv_style_get_',                # Covered by StyleProxy
+    r'lv_obj_set_ext_click_area',    # Planned for InteractionProxy
+    r'lv_obj_get_ext_click_area',    # Planned for InteractionProxy
+    r'lv_obj_hit_test',              # Planned for InteractionProxy
+    r'lv_obj_swap',                  # Planned for TreeProxy
+    r'lv_obj_move_to_index',         # Planned for TreeProxy
+    r'lv_obj_get_draw_area',         # Handled by Area wrapper for redraw
+]
+
+
+def is_non_idiomatic(func_name: str) -> bool:
+    """Check if a function should not be explicitly wrapped (covered by proxies/types)."""
+    for pattern in NON_IDIOMATIC_PATTERNS:
+        if re.search(pattern, func_name):
+            return True
+    return False
+
+
 def extract_enums(lvgl_path: Path) -> Dict[str, Set[str]]:
     """Extract enum values from LVGL headers."""
     enums: Dict[str, Set[str]] = {prefix: set() for prefix in ENUM_PREFIXES}
@@ -209,7 +239,7 @@ def extract_enums(lvgl_path: Path) -> Dict[str, Set[str]]:
     return enums
 
 
-def extract_c_functions(lvgl_path: Path) -> Tuple[Dict[str, Set[str]], Set[str]]:
+def extract_c_functions(lvgl_path: Path, skip_non_idiomatic: bool = True) -> Tuple[Dict[str, Set[str]], Set[str]]:
     """Extract C functions from LVGL headers."""
     user_functions: Dict[str, Set[str]] = {prefix: set() for prefix in USER_API_PREFIXES}
     internal_functions: Set[str] = set()
@@ -239,6 +269,8 @@ def extract_c_functions(lvgl_path: Path) -> Tuple[Dict[str, Set[str]], Set[str]]
                 
                 if is_internal_function(func_name, header):
                     internal_functions.add(func_name)
+                elif skip_non_idiomatic and is_non_idiomatic(func_name):
+                    continue
                 else:
                     user_functions[prefix].add(func_name)
         
@@ -294,7 +326,8 @@ def scan_cpp_for_usage(cpp_path: Path, known_functions: Set[str]) -> Tuple[Set[s
 
 def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
     """Generate coverage report."""
-    user_api_dict, internal_api = extract_c_functions(lvgl_path)
+    user_api_dict, internal_api = extract_c_functions(lvgl_path, skip_non_idiomatic=True)
+    raw_user_api_dict, _ = extract_c_functions(lvgl_path, skip_non_idiomatic=False)
     
     # Flatten user_api for easier scanning
     known_user_functions: Set[str] = set()
@@ -307,8 +340,10 @@ def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
     report = {
         'summary': {
             'total_user_api': 0,
+            'total_raw_api': 0,
             'wrapped': 0,
             'not_wrapped': 0,
+            'non_idiomatic_count': 0,
             'internal_api_violations': [],
             'total_enums': 0,
             'enums_used': 0,
@@ -316,6 +351,12 @@ def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
         'subsystems': {},
         'enums': {}
     }
+    
+    # Calculate non-idiomatic count
+    total_raw = sum(len(funcs) for funcs in raw_user_api_dict.values())
+    total_idiomatic = sum(len(funcs) for funcs in user_api_dict.values())
+    report['summary']['total_raw_api'] = total_raw
+    report['summary']['non_idiomatic_count'] = total_raw - total_idiomatic
     
     # Check for internal API violations
     for func in used_internal_api:
@@ -376,6 +417,14 @@ def generate_report(lvgl_path: Path, cpp_path: Path) -> Dict:
     else:
         report['summary']['function_coverage_percent'] = 0
     
+    # Raw coverage percentage
+    if total_raw > 0:
+        report['summary']['raw_coverage_percent'] = round(
+            100 * report['summary']['wrapped'] / total_raw, 1
+        )
+    else:
+        report['summary']['raw_coverage_percent'] = 0
+    
     total_enums = report['summary']['total_enums']
     if total_enums > 0:
         report['summary']['enum_coverage_percent'] = round(
@@ -404,9 +453,10 @@ def print_report(report: Dict):
         print(f"\n✅ No internal API violations detected")
     
     print(f"\nFunction Coverage:")
-    print(f"  User-facing functions: {summary['total_user_api']}")
+    print(f"  Idiomatic C API:       {summary['total_user_api']} (Filtered {summary['non_idiomatic_count']} non-idiomatic)")
     print(f"  Called by lvgl_cpp:    {summary['wrapped']}")
-    print(f"  Coverage:              {summary['function_coverage_percent']}%")
+    print(f"  Idiomatic Coverage:    {summary['function_coverage_percent']}%")
+    print(f"  Raw C API Coverage:    {summary['raw_coverage_percent']}%")
     
     print(f"\nEnum/Constant Coverage:")
     print(f"  Total enums:           {summary['total_enums']}")

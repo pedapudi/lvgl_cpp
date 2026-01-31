@@ -54,9 +54,18 @@ Menu& Menu::set_mode_header(lv_menu_mode_header_t mode) {
   return *this;
 }
 
+Menu& Menu::set_mode_header(HeaderMode mode) {
+  return set_mode_header(static_cast<lv_menu_mode_header_t>(mode));
+}
+
 Menu& Menu::set_mode_root_back_button(lv_menu_mode_root_back_button_t mode) {
   if (obj_) lv_menu_set_mode_root_back_button(obj_, mode);
   return *this;
+}
+
+Menu& Menu::set_mode_root_back_button(RootBackButtonMode mode) {
+  return set_mode_root_back_button(
+      static_cast<lv_menu_mode_root_back_button_t>(mode));
 }
 
 Menu& Menu::set_load_page_event(Object& obj, MenuPage& page) {

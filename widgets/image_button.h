@@ -26,9 +26,30 @@ class ImageButton : public Widget<ImageButton> {
   explicit ImageButton(Object& parent);
   explicit ImageButton(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
+  /**
+   * @brief ImageButton states.
+   */
+  enum class State : uint8_t {
+    Released = LV_IMAGEBUTTON_STATE_RELEASED,
+    Pressed = LV_IMAGEBUTTON_STATE_PRESSED,
+    Disabled = LV_IMAGEBUTTON_STATE_DISABLED,
+    CheckedReleased = LV_IMAGEBUTTON_STATE_CHECKED_RELEASED,
+    CheckedPressed = LV_IMAGEBUTTON_STATE_CHECKED_PRESSED,
+    CheckedDisabled = LV_IMAGEBUTTON_STATE_CHECKED_DISABLED,
+  };
+
+  ImageButton& set_src(State state, const void* src_left, const void* src_mid,
+                       const void* src_right);
+  ImageButton& set_state(State state);
+
+  // Deprecated legacy overloads
   ImageButton& set_src(lv_imagebutton_state_t state, const void* src_left,
                        const void* src_mid, const void* src_right);
   ImageButton& set_state(lv_imagebutton_state_t state);
+
+  const void* get_src_left(State state);
+  const void* get_src_middle(State state);
+  const void* get_src_right(State state);
 
   const void* get_src_left(lv_imagebutton_state_t state);
   const void* get_src_middle(lv_imagebutton_state_t state);

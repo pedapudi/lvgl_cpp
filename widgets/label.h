@@ -82,7 +82,14 @@ class Label : public Widget<Label> {
    * @brief Set the text using printf-style formatting.
    * @param fmt Format string.
    */
-  Label& set_text_fmt(const char* fmt, ...);
+  Label& set_text_fmt(const char* fmt, ...) LV_FORMAT_ATTRIBUTE(2, 3);
+
+  /**
+   * @brief Set the text using a format string and va_list.
+   * @param fmt Format string.
+   * @param args va_list of arguments.
+   */
+  Label& set_text_vfmt(const char* fmt, va_list args);
 
   /**
    * @brief Insert text at a position.

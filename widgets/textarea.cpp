@@ -106,6 +106,10 @@ Textarea& Textarea::set_password_show_time(uint32_t time) {
   return *this;
 }
 
+Textarea& Textarea::set_align(TextAlign align) {
+  return set_align(static_cast<lv_text_align_t>(align));
+}
+
 Textarea& Textarea::set_align(lv_text_align_t align) {
   if (obj_) lv_textarea_set_align(obj_, align);
   return *this;

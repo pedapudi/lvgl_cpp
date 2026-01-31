@@ -37,13 +37,23 @@ class TileView : public Widget<TileView> {
    * @brief Add a tile to the TileView.
    * @return A Tile wrapper with Ownership::Unmanaged.
    */
+  Tile add_tile(uint8_t col_id, uint8_t row_id, Dir dir);
+  [[deprecated("Use add_tile(uint8_t, uint8_t, Dir) instead")]]
   Tile add_tile(uint8_t col_id, uint8_t row_id, lv_dir_t dir);
 
-  TileView& set_tile(lv_obj_t* tile_obj, lv_anim_enable_t anim_en);
-  TileView& set_tile(Tile& tile, lv_anim_enable_t anim_en);
+  TileView& set_tile(lv_obj_t* tile_obj, AnimEnable anim = AnimEnable::On);
+  [[deprecated("Use set_tile(lv_obj_t*, AnimEnable) instead")]]
+  TileView& set_tile(lv_obj_t* tile_obj, lv_anim_enable_t anim);
+  TileView& set_tile(Tile& tile, AnimEnable anim = AnimEnable::On);
+  [[deprecated("Use set_tile(Tile&, AnimEnable) instead")]]
+  TileView& set_tile(Tile& tile, lv_anim_enable_t anim);
 
   TileView& set_tile_by_index(uint32_t col_id, uint32_t row_id,
-                              lv_anim_enable_t anim_en);
+                              AnimEnable anim = AnimEnable::On);
+  [[deprecated(
+      "Use set_tile_by_index(uint32_t, uint32_t, AnimEnable) instead")]]
+  TileView& set_tile_by_index(uint32_t col_id, uint32_t row_id,
+                              lv_anim_enable_t anim);
 
   Tile get_tile_active();
 };

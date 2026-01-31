@@ -55,8 +55,9 @@ class Dropdown : public Widget<Dropdown> {
   Dropdown& add_option(const char* option, uint32_t pos);
   Dropdown& clear_options();
   Dropdown& set_selected(uint32_t sel_opt);
+  Dropdown& set_dir(Dir dir);
+  [[deprecated("Use set_dir(Dir) instead")]]
   Dropdown& set_dir(lv_dir_t dir);
-  Dropdown& set_dir(Dir dir) { return set_dir(static_cast<lv_dir_t>(dir)); }
   Dropdown& set_symbol(const void* symbol);
   Dropdown& set_selected_highlight(bool en);
 
@@ -75,7 +76,7 @@ class Dropdown : public Widget<Dropdown> {
   int32_t get_option_index(const char* option);
   const char* get_symbol();
   bool get_selected_highlight();
-  lv_dir_t get_dir();
+  Dir get_dir();
 
   void open();
   void close();

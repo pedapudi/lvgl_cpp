@@ -28,8 +28,12 @@ class Canvas : public Widget<Canvas> {
   explicit Canvas(Object& parent);
   explicit Canvas(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
+  Canvas& set_buffer(void* buf, int32_t w, int32_t h, ColorFormat cf);
+  [[deprecated("Use set_buffer(..., ColorFormat) instead")]]
   Canvas& set_buffer(void* buf, int32_t w, int32_t h, lv_color_format_t cf);
   Canvas& set_draw_buf(lv_draw_buf_t* draw_buf);
+  Canvas& set_px(int32_t x, int32_t y, Color color, Opacity opa);
+  [[deprecated("Use set_px(..., Opacity) instead")]]
   Canvas& set_px(int32_t x, int32_t y, Color color, lv_opa_t opa);
   Canvas& set_palette(uint8_t index, lv_color32_t color);
 
@@ -42,8 +46,14 @@ class Canvas : public Widget<Canvas> {
   Canvas& set_scale(uint32_t zoom);
   Canvas& set_scale_x(uint32_t zoom);
   Canvas& set_scale_y(uint32_t zoom);
+  Canvas& set_blend_mode(BlendMode blend_mode);
+  [[deprecated("Use set_blend_mode(BlendMode) instead")]]
   Canvas& set_blend_mode(lv_blend_mode_t blend_mode);
+
   Canvas& set_antialias(bool antialias);
+
+  Canvas& set_inner_align(ImageAlign align);
+  [[deprecated("Use set_inner_align(ImageAlign) instead")]]
   Canvas& set_inner_align(lv_image_align_t align);
 
   lv_draw_buf_t* get_draw_buf();
@@ -62,9 +72,9 @@ class Canvas : public Widget<Canvas> {
   int32_t get_scale_y();
   int32_t get_src_width();
   int32_t get_src_height();
-  lv_blend_mode_t get_blend_mode();
+  BlendMode get_blend_mode();
   bool get_antialias();
-  lv_image_align_t get_inner_align();
+  ImageAlign get_inner_align();
 
   void copy_buf(const lv_area_t* canvas_area, lv_draw_buf_t* dest_buf,
                 const lv_area_t* dest_area);

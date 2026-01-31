@@ -13,12 +13,13 @@ class KeypadInput : public InputDevice {
   static KeypadInput create() {
     lv_indev_t* indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_KEYPAD);
-    return KeypadInput(indev, true);
+    return KeypadInput(indev, Object::Ownership::Managed);
   }
 
   KeypadInput() : InputDevice() {}
-  explicit KeypadInput(lv_indev_t* indev, bool owned = false)
-      : InputDevice(indev, owned) {}
+  explicit KeypadInput(lv_indev_t* indev,
+                       Object::Ownership ownership = Object::Ownership::Default)
+      : InputDevice(indev, ownership) {}
 
   KeypadInput(KeypadInput&& other) noexcept : InputDevice(std::move(other)) {}
   KeypadInput& operator=(KeypadInput&& other) noexcept {

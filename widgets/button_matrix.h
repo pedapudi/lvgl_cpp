@@ -22,6 +22,22 @@ namespace lvgl {
 
 class ButtonMatrix : public Widget<ButtonMatrix> {
  public:
+  /**
+   * @brief Button control flags.
+   */
+  enum class Control : uint16_t {
+    None = LV_BUTTONMATRIX_CTRL_NONE,
+    Hidden = LV_BUTTONMATRIX_CTRL_HIDDEN,
+    NoRepeat = LV_BUTTONMATRIX_CTRL_NO_REPEAT,
+    Disabled = LV_BUTTONMATRIX_CTRL_DISABLED,
+    Checkable = LV_BUTTONMATRIX_CTRL_CHECKABLE,
+    Checked = LV_BUTTONMATRIX_CTRL_CHECKED,
+    ClickTrig = LV_BUTTONMATRIX_CTRL_CLICK_TRIG,
+    Popover = LV_BUTTONMATRIX_CTRL_POPOVER,
+    Recolor = LV_BUTTONMATRIX_CTRL_RECOLOR,
+    Custom1 = LV_BUTTONMATRIX_CTRL_CUSTOM_1,
+    Custom2 = LV_BUTTONMATRIX_CTRL_CUSTOM_2,
+  };
   ButtonMatrix();
   explicit ButtonMatrix(Object* parent,
                         Ownership ownership = Ownership::Default);
@@ -39,9 +55,20 @@ class ButtonMatrix : public Widget<ButtonMatrix> {
   ButtonMatrix& set_map(const char* const map[]);
   ButtonMatrix& set_ctrl_map(const lv_buttonmatrix_ctrl_t ctrl_map[]);
   ButtonMatrix& set_selected_button(uint32_t btn_id);
+  ButtonMatrix& set_button_ctrl(uint32_t btn_id, Control ctrl);
+  [[deprecated("Use set_button_ctrl(uint32_t, Control) instead")]]
   ButtonMatrix& set_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
+
+  ButtonMatrix& clear_button_ctrl(uint32_t btn_id, Control ctrl);
+  [[deprecated("Use clear_button_ctrl(uint32_t, Control) instead")]]
   ButtonMatrix& clear_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
+
+  ButtonMatrix& set_button_ctrl_all(Control ctrl);
+  [[deprecated("Use set_button_ctrl_all(Control) instead")]]
   ButtonMatrix& set_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl);
+
+  ButtonMatrix& clear_button_ctrl_all(Control ctrl);
+  [[deprecated("Use clear_button_ctrl_all(Control) instead")]]
   ButtonMatrix& clear_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl);
   ButtonMatrix& set_button_width(uint32_t btn_id, uint32_t width);
   ButtonMatrix& set_one_checked(bool en);
@@ -49,6 +76,8 @@ class ButtonMatrix : public Widget<ButtonMatrix> {
   const char* const* get_map();
   uint32_t get_selected_button();
   const char* get_button_text(uint32_t btn_id);
+  bool has_button_ctrl(uint32_t btn_id, Control ctrl);
+  [[deprecated("Use has_button_ctrl(uint32_t, Control) instead")]]
   bool has_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
   bool get_one_checked();
 };

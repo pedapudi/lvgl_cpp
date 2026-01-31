@@ -86,6 +86,10 @@ SpanGroup& SpanGroup::set_overflow(lv_span_overflow_t overflow) {
   return *this;
 }
 
+SpanGroup& SpanGroup::set_overflow(Overflow overflow) {
+  return set_overflow(static_cast<lv_span_overflow_t>(overflow));
+}
+
 SpanGroup& SpanGroup::set_indent(int32_t indent) {
   if (obj_) lv_spangroup_set_indent(obj_, indent);
   return *this;
@@ -94,6 +98,10 @@ SpanGroup& SpanGroup::set_indent(int32_t indent) {
 SpanGroup& SpanGroup::set_mode(lv_span_mode_t mode) {
   if (obj_) lv_spangroup_set_mode(obj_, mode);
   return *this;
+}
+
+SpanGroup& SpanGroup::set_mode(Mode mode) {
+  return set_mode(static_cast<lv_span_mode_t>(mode));
 }
 
 SpanGroup& SpanGroup::set_max_lines(int32_t lines) {
@@ -115,16 +123,17 @@ TextAlign SpanGroup::get_align() const {
               : TextAlign::Left;
 }
 
-lv_span_overflow_t SpanGroup::get_overflow() const {
-  return obj_ ? lv_spangroup_get_overflow(obj_) : LV_SPAN_OVERFLOW_CLIP;
+SpanGroup::Overflow SpanGroup::get_overflow() const {
+  return obj_ ? static_cast<Overflow>(lv_spangroup_get_overflow(obj_))
+              : Overflow::Clip;
 }
 
 int32_t SpanGroup::get_indent() const {
   return obj_ ? lv_spangroup_get_indent(obj_) : 0;
 }
 
-lv_span_mode_t SpanGroup::get_mode() const {
-  return obj_ ? lv_spangroup_get_mode(obj_) : LV_SPAN_MODE_FIXED;
+SpanGroup::Mode SpanGroup::get_mode() const {
+  return obj_ ? static_cast<Mode>(lv_spangroup_get_mode(obj_)) : Mode::Fixed;
 }
 
 int32_t SpanGroup::get_max_lines() const {

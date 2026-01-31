@@ -54,12 +54,25 @@ class ScaleSection {
 
 class Scale : public Widget<Scale> {
  public:
+  /**
+   * @brief Scale display modes.
+   */
+  enum class Mode : uint8_t {
+    HorizontalTop = LV_SCALE_MODE_HORIZONTAL_TOP,
+    HorizontalBottom = LV_SCALE_MODE_HORIZONTAL_BOTTOM,
+    VerticalLeft = LV_SCALE_MODE_VERTICAL_LEFT,
+    VerticalRight = LV_SCALE_MODE_VERTICAL_RIGHT,
+    RoundInner = LV_SCALE_MODE_ROUND_INNER,
+    RoundOuter = LV_SCALE_MODE_ROUND_OUTER,
+  };
+
   Scale();
   explicit Scale(Object* parent, Ownership ownership = Ownership::Default);
   explicit Scale(Object& parent);
   explicit Scale(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  Scale& set_mode(ScaleMode mode);
+  Scale& set_mode(lv_scale_mode_t mode);
+  Scale& set_mode(Mode mode);
   Scale& set_total_tick_count(uint32_t total_tick_count);
   Scale& set_major_tick_every(uint32_t major_tick_every);
   Scale& set_label_show(bool show_label);
@@ -73,7 +86,10 @@ class Scale : public Widget<Scale> {
   Scale& set_post_draw(bool en);
   Scale& set_draw_ticks_on_top(bool en);
 
-  ScaleMode get_mode();
+  Mode get_mode();
+
+  // Deprecated legacy overloads
+  Scale& set_mode(ScaleMode mode) { return set_mode(static_cast<Mode>(mode)); }
   int32_t get_total_tick_count();
   int32_t get_major_tick_every();
   bool get_label_show();

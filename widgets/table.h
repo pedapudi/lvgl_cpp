@@ -19,33 +19,22 @@
  * ```
  */
 namespace lvgl {
-
-class Table;  // Forward declaration
-
-/**
- * @brief Proxy class for a table cell.
- */
-class TableCell {
- public:
-  TableCell(Table* table, uint32_t row, uint32_t col)
-      : table_(table), row_(row), col_(col) {}
-
-  TableCell& set_value(const char* txt);
-  TableCell& set_ctrl(lv_table_cell_ctrl_t ctrl);
-  TableCell& clear_ctrl(lv_table_cell_ctrl_t ctrl);
-  TableCell& add_ctrl(lv_table_cell_ctrl_t ctrl);
-  bool has_ctrl(lv_table_cell_ctrl_t ctrl) const;
-  TableCell& set_user_data(void* user_data);
-  void* get_user_data();
-
- private:
-  Table* table_;
-  uint32_t row_;
-  uint32_t col_;
-};
-
+class TableCell;
 class Table : public Widget<Table> {
  public:
+  /**
+   * @brief Table cell control flags.
+   */
+  enum class Control : uint8_t {
+    None = LV_TABLE_CELL_CTRL_NONE,
+    MergeRight = LV_TABLE_CELL_CTRL_MERGE_RIGHT,
+    TextCrop = LV_TABLE_CELL_CTRL_TEXT_CROP,
+    Custom1 = LV_TABLE_CELL_CTRL_CUSTOM_1,
+    Custom2 = LV_TABLE_CELL_CTRL_CUSTOM_2,
+    Custom3 = LV_TABLE_CELL_CTRL_CUSTOM_3,
+    Custom4 = LV_TABLE_CELL_CTRL_CUSTOM_4,
+  };
+
   Table();
   explicit Table(Object* parent, Ownership ownership = Ownership::Default);
   explicit Table(Object& parent);
@@ -99,6 +88,43 @@ class Table : public Widget<Table> {
    */
   Table& set_selected_cell(uint32_t row, uint32_t col);
 };
+
+/**
+ * @brief Proxy class for a table cell.
+ */
+class TableCell {
+ public:
+  TableCell(Table* table, uint32_t row, uint32_t col)
+      : table_(table), row_(row), col_(col) {}
+
+  TableCell& set_value(const char* txt);
+  TableCell& set_ctrl(Table::Control ctrl);
+  [[deprecated("Use set_ctrl(Table::Control) instead")]]
+  TableCell& set_ctrl(lv_table_cell_ctrl_t ctrl);
+
+  TableCell& clear_ctrl(Table::Control ctrl);
+  [[deprecated("Use clear_ctrl(Table::Control) instead")]]
+  TableCell& clear_ctrl(lv_table_cell_ctrl_t ctrl);
+
+  TableCell& add_ctrl(Table::Control ctrl);
+  [[deprecated("Use add_ctrl(Table::Control) instead")]]
+  TableCell& add_ctrl(lv_table_cell_ctrl_t ctrl);
+
+  bool has_ctrl(Table::Control ctrl) const;
+  [[deprecated("Use has_ctrl(Table::Control) instead")]]
+  bool has_ctrl(lv_table_cell_ctrl_t ctrl) const;
+  TableCell& set_user_data(void* user_data);
+  void* get_user_data();
+
+ private:
+  Table* table_;
+  uint32_t row_;
+  uint32_t col_;
+};
+
+inline TableCell Table::cell(uint32_t row, uint32_t col) {
+  return TableCell(this, row, col);
+}
 
 }  // namespace lvgl
 

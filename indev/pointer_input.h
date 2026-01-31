@@ -19,13 +19,14 @@ class PointerInput : public InputDevice {
     // Better yet, just create directly here.
     lv_indev_t* indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
-    return PointerInput(indev, true);
+    return PointerInput(indev, Object::Ownership::Managed);
   }
 
   // Constructors
   PointerInput() : InputDevice() {}
-  explicit PointerInput(lv_indev_t* indev, bool owned = false)
-      : InputDevice(indev, owned) {}
+  explicit PointerInput(lv_indev_t* indev, Object::Ownership ownership =
+                                               Object::Ownership::Default)
+      : InputDevice(indev, ownership) {}
 
   // Move semantics
   PointerInput(PointerInput&& other) noexcept : InputDevice(std::move(other)) {}

@@ -13,12 +13,13 @@ class EncoderInput : public InputDevice {
   static EncoderInput create() {
     lv_indev_t* indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_ENCODER);
-    return EncoderInput(indev, true);
+    return EncoderInput(indev, Object::Ownership::Managed);
   }
 
   EncoderInput() : InputDevice() {}
-  explicit EncoderInput(lv_indev_t* indev, bool owned = false)
-      : InputDevice(indev, owned) {}
+  explicit EncoderInput(lv_indev_t* indev, Object::Ownership ownership =
+                                               Object::Ownership::Default)
+      : InputDevice(indev, ownership) {}
 
   EncoderInput(EncoderInput&& other) noexcept : InputDevice(std::move(other)) {}
   EncoderInput& operator=(EncoderInput&& other) noexcept {

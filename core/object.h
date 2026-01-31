@@ -117,15 +117,6 @@ class Object {
   using EventCallback = std::function<void(Event&)>;
 
   /**
-   * @brief Create a wrapper around an existing LVGL object
-   * (Legacy/Convenience).
-   * @param obj The LVGL object to wrap.
-   * @param owned If true, equivalent to `Ownership::Managed`.
-   * @deprecated Use the `Ownership` enum constructor instead.
-   */
-  explicit Object(lv_obj_t* obj, bool owned);
-
-  /**
    * @brief Create a new Object (Screen).
    * Creates a new `lv_obj` with no parent, effectively serving as a Screen.
    * Takes ownership.
@@ -481,9 +472,20 @@ class Object {
 
   // --- Scroll ---
 
+  Object& scroll_to_view(AnimEnable anim_en);
+  [[deprecated("Use scroll_to_view(AnimEnable) instead")]]
   Object& scroll_to_view(lv_anim_enable_t anim_en);
+
+  Object& scroll_to_view_recursive(AnimEnable anim_en);
+  [[deprecated("Use scroll_to_view_recursive(AnimEnable) instead")]]
   Object& scroll_to_view_recursive(lv_anim_enable_t anim_en);
+
+  Object& scroll_by(int32_t x, int32_t y, AnimEnable anim_en);
+  [[deprecated("Use scroll_by(int32_t, int32_t, AnimEnable) instead")]]
   Object& scroll_by(int32_t x, int32_t y, lv_anim_enable_t anim_en);
+
+  Object& scroll_to(int32_t x, int32_t y, AnimEnable anim_en);
+  [[deprecated("Use scroll_to(int32_t, int32_t, AnimEnable) instead")]]
   Object& scroll_to(int32_t x, int32_t y, lv_anim_enable_t anim_en);
   int32_t get_scroll_x() const;
   int32_t get_scroll_y() const;

@@ -62,6 +62,16 @@ class StateProxy {
     return *this;
   }
 
+  // --- Convenience Helpers ---
+
+  bool is_checked() const { return is(State::Checked); }
+  bool is_pressed() const { return is(State::Pressed); }
+  bool is_focused() const { return is(State::Focused); }
+  bool is_disabled() const { return is(State::Disabled); }
+
+  StateProxy& set_checked(bool v) { return set(State::Checked, v); }
+  StateProxy& set_disabled(bool v) { return set(State::Disabled, v); }
+
  private:
   lv_obj_t* obj_;
 };

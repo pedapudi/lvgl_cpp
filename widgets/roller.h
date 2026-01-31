@@ -28,6 +28,14 @@ class Roller : public Widget<Roller> {
   using Widget::Widget;
 
   /**
+   * @brief Roller modes.
+   */
+  enum class Mode : uint8_t {
+    Normal = LV_ROLLER_MODE_NORMAL,
+    Infinite = LV_ROLLER_MODE_INFINITE,
+  };
+
+  /**
    * @brief Create a Roller on the active screen.
    */
   Roller();
@@ -50,10 +58,13 @@ class Roller : public Widget<Roller> {
   explicit Roller(Object& parent);
 
   Roller& set_options(const char* options, lv_roller_mode_t mode);
-  Roller& set_options(const char* options, RollerMode mode);
-  Roller& set_selected(uint32_t sel_opt, lv_anim_enable_t anim = LV_ANIM_ON);
-  bool set_selected_str(const char* sel_opt,
-                        lv_anim_enable_t anim = LV_ANIM_ON);
+  Roller& set_options(const char* options, Mode mode);
+  Roller& set_selected(uint32_t sel_opt, AnimEnable anim = AnimEnable::On);
+  [[deprecated("Use set_selected(uint32_t, AnimEnable) instead")]]
+  Roller& set_selected(uint32_t sel_opt, lv_anim_enable_t anim);
+  bool set_selected_str(const char* sel_opt, AnimEnable anim = AnimEnable::On);
+  [[deprecated("Use set_selected_str(const char*, AnimEnable) instead")]]
+  bool set_selected_str(const char* sel_opt, lv_anim_enable_t anim);
   Roller& set_visible_row_count(uint32_t row_cnt);
 
   /**
@@ -67,6 +78,11 @@ class Roller : public Widget<Roller> {
   const char* get_options();
   uint32_t get_option_count();
   lv_result_t get_option_str(uint32_t option, char* buf, uint32_t buf_size);
+
+  // Deprecated legacy overloads
+  Roller& set_options(const char* options, RollerMode mode) {
+    return set_options(options, static_cast<Mode>(mode));
+  }
 
   /**
    * @brief Bind the roller's selected option to an integer subject.

@@ -323,9 +323,17 @@ Object& Object::set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
 
 // --- Scroll ---
 
+Object& Object::scroll_to_view(AnimEnable anim_en) {
+  return scroll_to_view(static_cast<lv_anim_enable_t>(anim_en));
+}
+
 Object& Object::scroll_to_view(lv_anim_enable_t anim_en) {
   if (obj_) lv_obj_scroll_to_view(obj_, anim_en);
   return *this;
+}
+
+Object& Object::scroll_to_view_recursive(AnimEnable anim_en) {
+  return scroll_to_view_recursive(static_cast<lv_anim_enable_t>(anim_en));
 }
 
 Object& Object::scroll_to_view_recursive(lv_anim_enable_t anim_en) {
@@ -333,9 +341,17 @@ Object& Object::scroll_to_view_recursive(lv_anim_enable_t anim_en) {
   return *this;
 }
 
+Object& Object::scroll_by(int32_t x, int32_t y, AnimEnable anim_en) {
+  return scroll_by(x, y, static_cast<lv_anim_enable_t>(anim_en));
+}
+
 Object& Object::scroll_by(int32_t x, int32_t y, lv_anim_enable_t anim_en) {
   if (obj_) lv_obj_scroll_by(obj_, x, y, anim_en);
   return *this;
+}
+
+Object& Object::scroll_to(int32_t x, int32_t y, AnimEnable anim_en) {
+  return scroll_to(x, y, static_cast<lv_anim_enable_t>(anim_en));
 }
 
 Object& Object::scroll_to(int32_t x, int32_t y, lv_anim_enable_t anim_en) {

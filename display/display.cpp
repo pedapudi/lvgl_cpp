@@ -152,8 +152,20 @@ int32_t Display::get_dpi() const {
 }
 
 void Display::set_buffers(void* buf1, void* buf2, uint32_t buf_size,
+                          RenderMode render_mode) {
+  set_buffers(buf1, buf2, buf_size,
+              static_cast<lv_display_render_mode_t>(render_mode));
+}
+
+void Display::set_buffers(void* buf1, void* buf2, uint32_t buf_size,
                           lv_display_render_mode_t render_mode) {
   if (disp_) lv_display_set_buffers(disp_, buf1, buf2, buf_size, render_mode);
+}
+
+void Display::set_buffers_with_stride(void* buf1, void* buf2, uint32_t buf_size,
+                                      uint32_t stride, RenderMode render_mode) {
+  set_buffers_with_stride(buf1, buf2, buf_size, stride,
+                          static_cast<lv_display_render_mode_t>(render_mode));
 }
 
 void Display::set_buffers_with_stride(void* buf1, void* buf2, uint32_t buf_size,
@@ -170,6 +182,10 @@ void Display::set_draw_buffers(lv_draw_buf_t* buf1, lv_draw_buf_t* buf2) {
 
 void Display::set_3rd_draw_buffer(lv_draw_buf_t* buf3) {
   if (disp_) lv_display_set_3rd_draw_buffer(disp_, buf3);
+}
+
+void Display::set_render_mode(RenderMode render_mode) {
+  set_render_mode(static_cast<lv_display_render_mode_t>(render_mode));
 }
 
 void Display::set_render_mode(lv_display_render_mode_t render_mode) {
@@ -271,10 +287,17 @@ lv_obj_t* Display::get_layer_sys() {
 }
 
 lv_obj_t* Display::get_layer_bottom() {
-  return disp_ ? lv_display_get_layer_bottom(disp_) : nullptr;
+  if (!disp_ || disp_ == lv_display_get_default()) return lv_layer_bottom();
+  return lv_display_get_layer_bottom(disp_);
 }
 
 void Display::load_screen(Object& scr) { lv_screen_load(scr.raw()); }
+
+void Display::load_screen_anim(Object& scr, LoadAnim anim_type, uint32_t time,
+                               uint32_t delay, bool auto_del) {
+  load_screen_anim(scr, static_cast<lv_screen_load_anim_t>(anim_type), time,
+                   delay, auto_del);
+}
 
 void Display::load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
                                uint32_t time, uint32_t delay, bool auto_del) {
@@ -311,6 +334,11 @@ void Display::delete_refr_timer() {
 
 void Display::clear_active_screen() {
   if (disp_) lv_obj_clean(lv_display_get_screen_active(disp_));
+}
+
+void Display::auto_configure_buffers(RenderMode mode, bool double_buffer) {
+  auto_configure_buffers(static_cast<lv_display_render_mode_t>(mode),
+                         double_buffer);
 }
 
 void Display::auto_configure_buffers(lv_display_render_mode_t mode,

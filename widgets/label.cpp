@@ -39,8 +39,13 @@ Label& Label::set_text_fmt(const char* fmt, ...) {
   if (!obj_) return *this;
   va_list args;
   va_start(args, fmt);
-  lv_label_set_text_vfmt(obj_, fmt, args);
+  set_text_vfmt(fmt, args);
   va_end(args);
+  return *this;
+}
+
+Label& Label::set_text_vfmt(const char* fmt, va_list args) {
+  if (obj_) lv_label_set_text_vfmt(obj_, fmt, args);
   return *this;
 }
 
@@ -119,7 +124,7 @@ Point Label::get_letter_pos(uint32_t char_id) const {
 }
 
 Observer Label::bind_text(Subject& subject, const char* fmt) {
-  return Observer(lv_label_bind_text(raw(), subject.raw(), fmt));
+  return Observer(lv_label_bind_text(raw(), subject.raw(), fmt), false);
 }
 
 Label& Label::set_text_static(const char* text) {

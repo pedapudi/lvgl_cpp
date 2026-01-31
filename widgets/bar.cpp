@@ -15,9 +15,17 @@ Bar::Bar(Object& parent) : Bar(&parent) {}
 
 Bar::Bar(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
+Bar& Bar::set_value(int32_t value, AnimEnable anim) {
+  return set_value(value, static_cast<lv_anim_enable_t>(anim));
+}
+
 Bar& Bar::set_value(int32_t value, lv_anim_enable_t anim) {
   if (obj_) lv_bar_set_value(obj_, value, anim);
   return *this;
+}
+
+Bar& Bar::set_start_value(int32_t value, AnimEnable anim) {
+  return set_start_value(value, static_cast<lv_anim_enable_t>(anim));
 }
 
 Bar& Bar::set_start_value(int32_t value, lv_anim_enable_t anim) {
@@ -41,8 +49,16 @@ Bar& Bar::set_max_value(int32_t max) {
 }
 
 Bar& Bar::set_mode(Mode mode) {
-  if (obj_) lv_bar_set_mode(obj_, static_cast<lv_bar_mode_t>(mode));
+  return set_mode(static_cast<lv_bar_mode_t>(mode));
+}
+
+Bar& Bar::set_mode(lv_bar_mode_t mode) {
+  if (obj_) lv_bar_set_mode(obj_, mode);
   return *this;
+}
+
+Bar& Bar::set_orientation(Orientation orientation) {
+  return set_orientation(static_cast<lv_bar_orientation_t>(orientation));
 }
 
 Bar& Bar::set_orientation(lv_bar_orientation_t orientation) {
@@ -68,8 +84,9 @@ Bar::Mode Bar::get_mode() const {
   return obj_ ? static_cast<Mode>(lv_bar_get_mode(obj_)) : Mode::Normal;
 }
 
-lv_bar_orientation_t Bar::get_orientation() const {
-  return obj_ ? lv_bar_get_orientation(obj_) : LV_BAR_ORIENTATION_AUTO;
+Bar::Orientation Bar::get_orientation() const {
+  return obj_ ? static_cast<Orientation>(lv_bar_get_orientation(obj_))
+              : Orientation::Horizontal;
 }
 
 bool Bar::is_symmetrical() const {
@@ -77,7 +94,7 @@ bool Bar::is_symmetrical() const {
 }
 
 Observer Bar::bind_value(Subject& subject) {
-  return Observer(lv_bar_bind_value(raw(), subject.raw()));
+  return Observer(lv_bar_bind_value(raw(), subject.raw()), false);
 }
 
 }  // namespace lvgl

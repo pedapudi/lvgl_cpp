@@ -30,6 +30,18 @@ class Switch : public Widget<Switch> {
   explicit Switch(Object& parent);
   explicit Switch(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
+  /**
+   * @brief Switch orientations.
+   */
+  enum class Orientation : uint8_t {
+    Auto = LV_SWITCH_ORIENTATION_AUTO,
+    Horizontal = LV_SWITCH_ORIENTATION_HORIZONTAL,
+    Vertical = LV_SWITCH_ORIENTATION_VERTICAL,
+  };
+
+  Switch& set_orientation(Orientation orientation);
+
+  [[deprecated("Use set_orientation(Orientation) instead")]]
   Switch& set_orientation(lv_switch_orientation_t orientation);
 
   /**
@@ -37,7 +49,7 @@ class Switch : public Widget<Switch> {
    * @param cb The callback function.
    */
   Switch& on_value_changed(std::function<void(lvgl::Event&)> cb);
-  lv_switch_orientation_t get_orientation() const;
+  Orientation get_orientation() const;
 };
 
 /**

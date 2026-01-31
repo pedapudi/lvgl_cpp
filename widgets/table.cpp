@@ -13,11 +13,19 @@ TableCell& TableCell::set_value(const char* txt) {
   return *this;
 }
 
+TableCell& TableCell::set_ctrl(Table::Control ctrl) {
+  return set_ctrl(static_cast<lv_table_cell_ctrl_t>(ctrl));
+}
+
 TableCell& TableCell::set_ctrl(lv_table_cell_ctrl_t ctrl) {
   if (table_ && table_->raw()) {
     lv_table_set_cell_ctrl(table_->raw(), row_, col_, ctrl);
   }
   return *this;
+}
+
+TableCell& TableCell::clear_ctrl(Table::Control ctrl) {
+  return clear_ctrl(static_cast<lv_table_cell_ctrl_t>(ctrl));
 }
 
 TableCell& TableCell::clear_ctrl(lv_table_cell_ctrl_t ctrl) {
@@ -27,11 +35,19 @@ TableCell& TableCell::clear_ctrl(lv_table_cell_ctrl_t ctrl) {
   return *this;
 }
 
+TableCell& TableCell::add_ctrl(Table::Control ctrl) {
+  return add_ctrl(static_cast<lv_table_cell_ctrl_t>(ctrl));
+}
+
 TableCell& TableCell::add_ctrl(lv_table_cell_ctrl_t ctrl) {
   if (table_ && table_->raw()) {
     lv_table_set_cell_ctrl(table_->raw(), row_, col_, ctrl);
   }
   return *this;
+}
+
+bool TableCell::has_ctrl(Table::Control ctrl) const {
+  return has_ctrl(static_cast<lv_table_cell_ctrl_t>(ctrl));
 }
 
 bool TableCell::has_ctrl(lv_table_cell_ctrl_t ctrl) const {
@@ -64,10 +80,6 @@ Table::Table(Object* parent, Ownership ownership)
 Table::Table(Object& parent) : Table(&parent) {}
 
 Table::Table(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
-
-TableCell Table::cell(uint32_t row, uint32_t col) {
-  return TableCell(this, row, col);
-}
 
 Table& Table::set_row_count(uint32_t row_cnt) {
   if (obj_) lv_table_set_row_count(obj_, row_cnt);
@@ -109,9 +121,7 @@ Table& Table::set_cell_value_fmt(uint32_t row, uint32_t col, const char* fmt,
   if (obj_) {
     va_list args;
     va_start(args, fmt);
-    char buf[256];
-    lv_vsnprintf(buf, sizeof(buf), fmt, args);
-    lv_table_set_cell_value(obj_, row, col, buf);
+    lv_table_set_cell_value_fmt(obj_, row, col, fmt, args);
     va_end(args);
   }
   return *this;

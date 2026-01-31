@@ -1,9 +1,9 @@
 #pragma once
 
 #include "event.h"
-#include "lvgl.h"  // IWYU pragma: export
 #include "lvgl.h"
 #include "object.h"
+#include "observer.h"
 
 namespace lvgl {
 
@@ -131,6 +131,30 @@ class Widget : public Object {
   Derived& remove_state(lv_state_t state) {
     if (obj_) lv_obj_remove_state(obj_, state);
     return self();
+  }
+
+  // --- Observer Bindings (Fluent Proxies) ---
+
+  Observer bind_flag_if_eq(Subject& subject, ObjFlag flag, int32_t ref_value) {
+    return subject.bind_flag_if_eq(*this, flag, ref_value);
+  }
+
+  Observer bind_flag_if_eq(Subject& subject, lv_obj_flag_t flag,
+                           int32_t ref_value) {
+    return subject.bind_flag_if_eq(*this, flag, ref_value);
+  }
+
+  Observer bind_state_if_eq(Subject& subject, State state, int32_t ref_value) {
+    return subject.bind_state_if_eq(*this, state, ref_value);
+  }
+
+  Observer bind_state_if_eq(Subject& subject, lv_state_t state,
+                            int32_t ref_value) {
+    return subject.bind_state_if_eq(*this, state, ref_value);
+  }
+
+  Observer bind_checked(Subject& subject) {
+    return subject.bind_checked(*this);
   }
 
   // --- Events (Fluent Proxies) ---

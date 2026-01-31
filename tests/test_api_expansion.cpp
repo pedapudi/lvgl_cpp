@@ -90,7 +90,7 @@ void test_indev_config() {
 
   // We can create a dummy pointer input device
   lv_indev_t* raw_indev = lv_indev_create();
-  lvgl::InputDevice indev(raw_indev, true);
+  lvgl::InputDevice indev(raw_indev, lvgl::Object::Ownership::Managed);
   indev.set_type(LV_INDEV_TYPE_POINTER);
 
   indev.set_long_press_time(400);

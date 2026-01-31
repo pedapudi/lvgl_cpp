@@ -47,6 +47,10 @@ Dropdown& Dropdown::set_selected(uint32_t sel_opt) {
   return *this;
 }
 
+Dropdown& Dropdown::set_dir(Dir dir) {
+  return set_dir(static_cast<lv_dir_t>(dir));
+}
+
 Dropdown& Dropdown::set_dir(lv_dir_t dir) {
   if (obj_) lv_dropdown_set_dir(obj_, dir);
   return *this;
@@ -102,8 +106,8 @@ bool Dropdown::get_selected_highlight() {
   return obj_ ? lv_dropdown_get_selected_highlight(obj_) : false;
 }
 
-lv_dir_t Dropdown::get_dir() {
-  return obj_ ? lv_dropdown_get_dir(obj_) : LV_DIR_BOTTOM;
+Dir Dropdown::get_dir() {
+  return obj_ ? static_cast<Dir>(lv_dropdown_get_dir(obj_)) : Dir::Bottom;
 }
 
 void Dropdown::open() {
@@ -117,7 +121,7 @@ void Dropdown::close() {
 bool Dropdown::is_open() { return obj_ ? lv_dropdown_is_open(obj_) : false; }
 
 Observer Dropdown::bind_value(Subject& subject) {
-  return Observer(lv_dropdown_bind_value(raw(), subject.raw()));
+  return Observer(lv_dropdown_bind_value(raw(), subject.raw()), false);
 }
 
 }  // namespace lvgl

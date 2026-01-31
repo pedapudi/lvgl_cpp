@@ -43,46 +43,62 @@ class Subject {
 
   void notify();
 
-  void bind_flag_if_eq(lvgl::Object& obj, lv_obj_flag_t flag,
-                       int32_t ref_value);
-  void bind_flag_if_not_eq(lvgl::Object& obj, lv_obj_flag_t flag,
+  Observer bind_flag_if_eq(lvgl::Object& obj, lv_obj_flag_t flag,
                            int32_t ref_value);
-  void bind_flag_if_gt(lvgl::Object& obj, lv_obj_flag_t flag,
-                       int32_t ref_value);
-  void bind_flag_if_ge(lvgl::Object& obj, lv_obj_flag_t flag,
-                       int32_t ref_value);
-  void bind_flag_if_lt(lvgl::Object& obj, lv_obj_flag_t flag,
-                       int32_t ref_value);
-  void bind_flag_if_le(lvgl::Object& obj, lv_obj_flag_t flag,
-                       int32_t ref_value);
+  Observer bind_flag_if_not_eq(lvgl::Object& obj, lv_obj_flag_t flag,
+                               int32_t ref_value);
+  Observer bind_flag_if_gt(lvgl::Object& obj, lv_obj_flag_t flag,
+                           int32_t ref_value);
+  Observer bind_flag_if_ge(lvgl::Object& obj, lv_obj_flag_t flag,
+                           int32_t ref_value);
+  Observer bind_flag_if_lt(lvgl::Object& obj, lv_obj_flag_t flag,
+                           int32_t ref_value);
+  Observer bind_flag_if_le(lvgl::Object& obj, lv_obj_flag_t flag,
+                           int32_t ref_value);
 
   /**
    * @brief Bind an object flag to an integer value condition (Scoped Enum).
    */
-  void bind_flag_if_eq(Object& obj, ObjFlag flag, int32_t ref_value);
-  void bind_flag_if_not_eq(Object& obj, ObjFlag flag, int32_t ref_value);
-  void bind_flag_if_gt(Object& obj, ObjFlag flag, int32_t ref_value);
-  void bind_flag_if_ge(Object& obj, ObjFlag flag, int32_t ref_value);
-  void bind_flag_if_lt(Object& obj, ObjFlag flag, int32_t ref_value);
-  void bind_flag_if_le(Object& obj, ObjFlag flag, int32_t ref_value);
+  Observer bind_flag_if_eq(Object& obj, ObjFlag flag, int32_t ref_value);
+  Observer bind_flag_if_not_eq(Object& obj, ObjFlag flag, int32_t ref_value);
+  Observer bind_flag_if_gt(Object& obj, ObjFlag flag, int32_t ref_value);
+  Observer bind_flag_if_ge(Object& obj, ObjFlag flag, int32_t ref_value);
+  Observer bind_flag_if_lt(Object& obj, ObjFlag flag, int32_t ref_value);
+  Observer bind_flag_if_le(Object& obj, ObjFlag flag, int32_t ref_value);
 
-  void bind_state_if_eq(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_not_eq(lvgl::Object& obj, lv_state_t state,
+  Observer bind_state_if_eq(lvgl::Object& obj, lv_state_t state,
                             int32_t ref_value);
-  void bind_state_if_gt(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_ge(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_lt(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
-  void bind_state_if_le(lvgl::Object& obj, lv_state_t state, int32_t ref_value);
+  Observer bind_state_if_not_eq(lvgl::Object& obj, lv_state_t state,
+                                int32_t ref_value);
+  Observer bind_state_if_gt(lvgl::Object& obj, lv_state_t state,
+                            int32_t ref_value);
+  Observer bind_state_if_ge(lvgl::Object& obj, lv_state_t state,
+                            int32_t ref_value);
+  Observer bind_state_if_lt(lvgl::Object& obj, lv_state_t state,
+                            int32_t ref_value);
+  Observer bind_state_if_le(lvgl::Object& obj, lv_state_t state,
+                            int32_t ref_value);
 
   /**
    * @brief Bind an object state to an integer value condition (Scoped Enum).
    */
-  void bind_state_if_eq(Object& obj, State state, int32_t ref_value);
-  void bind_state_if_not_eq(Object& obj, State state, int32_t ref_value);
-  void bind_state_if_gt(Object& obj, State state, int32_t ref_value);
-  void bind_state_if_ge(Object& obj, State state, int32_t ref_value);
-  void bind_state_if_lt(Object& obj, State state, int32_t ref_value);
-  void bind_state_if_le(Object& obj, State state, int32_t ref_value);
+  Observer bind_state_if_eq(Object& obj, State state, int32_t ref_value);
+  Observer bind_state_if_not_eq(Object& obj, State state, int32_t ref_value);
+  Observer bind_state_if_gt(Object& obj, State state, int32_t ref_value);
+  Observer bind_state_if_ge(Object& obj, State state, int32_t ref_value);
+  Observer bind_state_if_lt(Object& obj, State state, int32_t ref_value);
+  Observer bind_state_if_le(Object& obj, State state, int32_t ref_value);
+
+  /**
+   * @brief Bind a style to the observer.
+   * @param obj The object.
+   * @param style The style to apply.
+   * @param selector The selector.
+   * @param ref_value The reference value to compare against.
+   * @return The observer.
+   */
+  Observer bind_style(Object& obj, const lv_style_t* style,
+                      lv_style_selector_t selector, int32_t ref_value);
 
   // Checked Binding
 
@@ -91,7 +107,7 @@ class Subject {
    * The subject acts as a boolean (0 or 1).
    * @param obj The target object (often a Checkbox or Switch).
    */
-  void bind_checked(Object& obj);
+  Observer bind_checked(Object& obj);
 
   /**
    * @brief Add a generic observer callback.

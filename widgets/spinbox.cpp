@@ -68,6 +68,12 @@ Spinbox& Spinbox::set_cursor_pos(uint32_t pos) {
   return *this;
 }
 
+Spinbox& Spinbox::set_digit_step_direction(Dir direction) {
+  if (obj_)
+    lv_spinbox_set_digit_step_direction(obj_, static_cast<lv_dir_t>(direction));
+  return *this;
+}
+
 Spinbox& Spinbox::set_digit_step_direction(lv_dir_t direction) {
   if (obj_) lv_spinbox_set_digit_step_direction(obj_, direction);
   return *this;
@@ -130,14 +136,28 @@ Spinbox& Spinbox::add_flag(lv_obj_flag_t flag) {
   Object::add_flag(flag);
   return *this;
 }
+
+Spinbox& Spinbox::add_flag(ObjFlag flag) {
+  Object::add_flag(flag);
+  return *this;
+}
+
 Spinbox& Spinbox::remove_flag(lv_obj_flag_t flag) {
   if (obj_) lv_obj_remove_flag(obj_, flag);
+  return *this;
+}
+
+Spinbox& Spinbox::remove_flag(ObjFlag flag) {
+  Object::remove_flag(flag);
   return *this;
 }
 
 Spinbox& Spinbox::on_value_changed(std::function<void(lvgl::Event&)> cb) {
   add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
   return *this;
+}
+Observer Spinbox::bind_value(Subject& subject) {
+  return Observer(lv_spinbox_bind_value(raw(), subject.raw()), false);
 }
 
 }  // namespace lvgl
