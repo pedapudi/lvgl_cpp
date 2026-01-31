@@ -28,12 +28,28 @@ class ImageDescriptor {
 
   /**
    * @brief Create a valid image descriptor from raw data.
-   * @param header Image header (w, h, cf).
+   * @param w Image width.
+   * @param h Image height.
+   * @param cf Color format.
    * @param data Raw image data.
    * @param data_size Size of data in bytes.
    */
   ImageDescriptor(uint32_t w, uint32_t h, lv_color_format_t cf,
                   const uint8_t* data, uint32_t data_size);
+
+  /**
+   * @brief Create an image descriptor from an SVG string.
+   * @param svg_src The SVG source string.
+   * @return An ImageDescriptor owning a copy of the SVG string.
+   */
+  static ImageDescriptor from_svg(const char* svg_src);
+
+  /**
+   * @brief Create an image descriptor from an SVG string.
+   * @param svg_src The SVG source string.
+   * @return An ImageDescriptor owning a copy of the SVG string.
+   */
+  static ImageDescriptor from_svg(const std::string& svg_src);
 
   ~ImageDescriptor();
 

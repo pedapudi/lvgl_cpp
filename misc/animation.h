@@ -1,6 +1,7 @@
 #ifndef LVGL_CPP_MISC_ANIMATION_H_
 #define LVGL_CPP_MISC_ANIMATION_H_
 
+#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -131,18 +132,28 @@ class Animation {
    */
   Animation& set_exec_cb(ExecCallback cb);
 
+  Animation& set_exec_cb(ObjectExecCallback cb);
+
   /**
-   * @brief Set a type-safe execution callback for Objects.
-   * Auto-wraps the void* var into a temporary `Object` wrapper.
+   * @brief Set a type-safe execution callback for a specific Widget type.
+   * Auto-casts the object to the requested type.
    *
    * @example
-   * anim.set_exec_cb([](Object& obj, int32_t val) {
-   *     obj.style().translate_y(val);
+   * anim.set_exec_cb<lvgl::Image>([](lvgl::Image& img, int32_t val) {
+   *     img.set_rotation(val);
    * });
    *
+   * @tparam T The widget type (e.g., lvgl::Image, lvgl::Label).
    * @param cb The typed callback.
    */
-  Animation& set_exec_cb(ObjectExecCallback cb);
+  template <typename T>
+  Animation& set_exec_cb(std::function<void(T&, int32_t)> cb) {
+    return set_exec_cb([cb](Object& obj, int32_t v) {
+      if (T* typed = dynamic_cast<T*>(&obj)) {
+        cb(*typed, v);
+      }
+    });
+  }
 
   // ... (Exec struct omitted for brevity)
 
@@ -191,6 +202,16 @@ class Animation {
 
     /** @brief Instant step to end value */
     static Callback Step();
+
+    /**
+     * @brief Create a cubic Bezier path.
+     * @param x1 Control point 1 X (0..1024)
+     * @param y1 Control point 1 Y (0..1024)
+     * @param x2 Control point 2 X (0..1024)
+     * @param y2 Control point 2 Y (0..1024)
+     * @return A PathCallback defined by the Bezier curve.
+     */
+    static Callback Bezier(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
   };
 
   /**
@@ -212,10 +233,22 @@ class Animation {
   Animation& set_duration(uint32_t duration);
 
   /**
+   * @brief Set the duration of the animation using chrono.
+   * @param duration Duration.
+   */
+  Animation& set_duration(std::chrono::milliseconds duration);
+
+  /**
    * @brief Set a delay before starting the animation.
    * @param delay Delay in milliseconds.
    */
   Animation& set_delay(uint32_t delay);
+
+  /**
+   * @brief Set a delay before starting the animation using chrono.
+   * @param delay Delay.
+   */
+  Animation& set_delay(std::chrono::milliseconds delay);
 
   /**
    * @brief Set the start and end values.
