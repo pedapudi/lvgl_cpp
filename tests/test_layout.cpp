@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "../core/object.h"
+#include "../display/display.h"
 #include "../misc/layout.h"
 
 using namespace lvgl;
@@ -34,7 +35,7 @@ void test_grid_layout_builder() {
 
 void test_object_integration() {
   std::cout << "Testing Object Integration..." << std::endl;
-  Object obj(lv_screen_active());
+  Object obj;  // This creates an object on the active screen
   GridLayout grid;
   grid.add_column(100).add_row(100);
 
@@ -44,6 +45,7 @@ void test_object_integration() {
 
 int main() {
   lv_init();
+  Display display = Display::create(800, 480);
   test_grid_layout_builder();
   test_object_integration();
   std::cout << "[SUCCESS] GridLayout tests passed." << std::endl;

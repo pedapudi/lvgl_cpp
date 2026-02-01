@@ -12,9 +12,7 @@ File::File() {
   std::memset(&file_, 0, sizeof(file_));
 }
 
-File::File(const std::string& path, lv_fs_mode_t mode) : File() {
-  open(path, mode);
-}
+File::File(const std::string& path, FsMode mode) : File() { open(path, mode); }
 
 File::~File() { close(); }
 
@@ -35,42 +33,44 @@ File& File::operator=(File&& other) noexcept {
   return *this;
 }
 
-lv_fs_res_t File::open(const std::string& path, lv_fs_mode_t mode) {
+FsRes File::open(const std::string& path, FsMode mode) {
   close();  // Ensure previous is closed
-  lv_fs_res_t res = lv_fs_open(&file_, path.c_str(), mode);
+  lv_fs_res_t res =
+      lv_fs_open(&file_, path.c_str(), static_cast<lv_fs_mode_t>(mode));
   if (res == LV_FS_RES_OK) {
     is_opened_ = true;
   }
-  return res;
+  return static_cast<FsRes>(res);
 }
 
-lv_fs_res_t File::close() {
+FsRes File::close() {
   if (is_opened_) {
     lv_fs_res_t res = lv_fs_close(&file_);
     is_opened_ = false;
-    return res;
+    return static_cast<FsRes>(res);
   }
-  return LV_FS_RES_OK;
+  return FsRes::Ok;
 }
 
-lv_fs_res_t File::read(void* buf, uint32_t btr, uint32_t* br) {
-  if (!is_opened_) return LV_FS_RES_NOT_EX;
-  return lv_fs_read(&file_, buf, btr, br);
+FsRes File::read(void* buf, uint32_t btr, uint32_t* br) {
+  if (!is_opened_) return FsRes::NotEx;
+  return static_cast<FsRes>(lv_fs_read(&file_, buf, btr, br));
 }
 
-lv_fs_res_t File::write(const void* buf, uint32_t btw, uint32_t* bw) {
-  if (!is_opened_) return LV_FS_RES_NOT_EX;
-  return lv_fs_write(&file_, buf, btw, bw);
+FsRes File::write(const void* buf, uint32_t btw, uint32_t* bw) {
+  if (!is_opened_) return FsRes::NotEx;
+  return static_cast<FsRes>(lv_fs_write(&file_, buf, btw, bw));
 }
 
-lv_fs_res_t File::seek(uint32_t pos, lv_fs_whence_t whence) {
-  if (!is_opened_) return LV_FS_RES_NOT_EX;
-  return lv_fs_seek(&file_, pos, whence);
+FsRes File::seek(uint32_t pos, FsWhence whence) {
+  if (!is_opened_) return FsRes::NotEx;
+  return static_cast<FsRes>(
+      lv_fs_seek(&file_, pos, static_cast<lv_fs_whence_t>(whence)));
 }
 
-lv_fs_res_t File::tell(uint32_t* pos) {
-  if (!is_opened_) return LV_FS_RES_NOT_EX;
-  return lv_fs_tell(&file_, pos);
+FsRes File::tell(uint32_t* pos) {
+  if (!is_opened_) return FsRes::NotEx;
+  return static_cast<FsRes>(lv_fs_tell(&file_, pos));
 }
 
 uint32_t File::size() {
@@ -107,32 +107,32 @@ Directory& Directory::operator=(Directory&& other) noexcept {
   return *this;
 }
 
-lv_fs_res_t Directory::open(const std::string& path) {
+FsRes Directory::open(const std::string& path) {
   close();
   lv_fs_res_t res = lv_fs_dir_open(&dir_, path.c_str());
   if (res == LV_FS_RES_OK) {
     is_opened_ = true;
   }
-  return res;
+  return static_cast<FsRes>(res);
 }
 
-lv_fs_res_t Directory::close() {
+FsRes Directory::close() {
   if (is_opened_) {
     lv_fs_res_t res = lv_fs_dir_close(&dir_);
     is_opened_ = false;
-    return res;
+    return static_cast<FsRes>(res);
   }
-  return LV_FS_RES_OK;
+  return FsRes::Ok;
 }
 
-lv_fs_res_t Directory::read(std::string& fn) {
-  if (!is_opened_) return LV_FS_RES_NOT_EX;
+FsRes Directory::read(std::string& fn) {
+  if (!is_opened_) return FsRes::NotEx;
   char buf[256];  // Max path length
   lv_fs_res_t res = lv_fs_dir_read(&dir_, buf, sizeof(buf));
   if (res == LV_FS_RES_OK) {
     fn = buf;
   }
-  return res;
+  return static_cast<FsRes>(res);
 }
 
 bool Directory::is_open() const { return is_opened_; }
@@ -197,9 +197,6 @@ std::vector<uint8_t> File::load_to_buffer(const std::string& path) {
   }
 
   std::vector<uint8_t> buf(size);
-  // Using lv_fs_load_to_buf if available, or manual read
-  // lv_fs_load_to_buf signature: lv_fs_res_t lv_fs_load_to_buf(void * buf,
-  // uint32_t buf_size, const char * path)
   if (lv_fs_load_to_buf(buf.data(), size, path.c_str()) != LV_FS_RES_OK) {
     return {};
   }

@@ -105,9 +105,25 @@ class Timer {
    */
   static void clear_resume_handler();
 
+  /**
+   * @brief Detach the timer from this object.
+   * The timer will continue running and the callback will be invoked with
+   * nullptr. caller must manage memory of the timer and data.
+   * @return The raw lv_timer_t pointer.
+   */
+  lv_timer_t* detach();
+
+  /**
+   * @brief Delete a detached timer and its data.
+   * @param t The timer to delete.
+   */
+  static void delete_detached(lv_timer_t* t);
+
  private:
   lv_timer_t* timer_;
-  std::unique_ptr<TimerCallback> cb_;
+  // We use a shared pointer for callback data to handle detached lifecycle
+  struct Data;
+  Data* data_ = nullptr;
 
   static void timer_proxy(lv_timer_t* t);
   static std::function<void()> resume_handler_;

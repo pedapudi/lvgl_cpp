@@ -185,8 +185,10 @@ Observer* Subject::add_observer_obj(Object& obj, ObserverCallback cb) {
 void StringSubject::set_formatted(const char* fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  lv_subject_snprintf(&subject_, fmt, args);
+  char buf[256];
+  vsnprintf(buf, sizeof(buf), fmt, args);
   va_end(args);
+  set(buf);
 }
 
 // IntSubject
@@ -307,12 +309,7 @@ Observer::Observer(Subject& subject, ObserverCallback cb)
   obs_ = lv_subject_add_observer(subject.raw(), observer_cb_shim, this);
 }
 
-Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {
-  if (owned)
-    printf("Observer created (owned) %p\n", (void*)obs);
-  else
-    printf("Observer created (unowned) %p\n", (void*)obs);
-}
+Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {}
 
 Observer::Observer(Observer&& other) noexcept
     : obs_(other.obs_),

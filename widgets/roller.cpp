@@ -15,34 +15,26 @@ Roller::Roller(Object& parent) : Roller(&parent) {}
 
 Roller::Roller(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
-Roller& Roller::set_options(const char* options, lv_roller_mode_t mode) {
-  if (obj_) lv_roller_set_options(obj_, options, mode);
+Roller& Roller::set_options(const char* options, Mode mode) {
+  if (raw())
+    lv_roller_set_options(raw(), options, static_cast<lv_roller_mode_t>(mode));
   return *this;
 }
 
-Roller& Roller::set_options(const char* options, Mode mode) {
-  return set_options(options, static_cast<lv_roller_mode_t>(mode));
-}
-
 Roller& Roller::set_selected(uint32_t sel_opt, AnimEnable anim) {
-  return set_selected(sel_opt, static_cast<lv_anim_enable_t>(anim));
-}
-
-Roller& Roller::set_selected(uint32_t sel_opt, lv_anim_enable_t anim) {
-  if (obj_) lv_roller_set_selected(obj_, sel_opt, anim);
+  if (raw())
+    lv_roller_set_selected(raw(), sel_opt, static_cast<lv_anim_enable_t>(anim));
   return *this;
 }
 
 bool Roller::set_selected_str(const char* sel_opt, AnimEnable anim) {
-  return set_selected_str(sel_opt, static_cast<lv_anim_enable_t>(anim));
-}
-
-bool Roller::set_selected_str(const char* sel_opt, lv_anim_enable_t anim) {
-  return obj_ ? lv_roller_set_selected_str(obj_, sel_opt, anim) : false;
+  return raw() ? lv_roller_set_selected_str(raw(), sel_opt,
+                                            static_cast<lv_anim_enable_t>(anim))
+               : false;
 }
 
 Roller& Roller::set_visible_row_count(uint32_t row_cnt) {
-  if (obj_) lv_roller_set_visible_row_count(obj_, row_cnt);
+  if (raw()) lv_roller_set_visible_row_count(raw(), row_cnt);
   return *this;
 }
 
@@ -51,25 +43,25 @@ Roller& Roller::on_value_changed(std::function<void(lvgl::Event&)> cb) {
 }
 
 uint32_t Roller::get_selected() {
-  return obj_ ? lv_roller_get_selected(obj_) : 0;
+  return raw() ? lv_roller_get_selected(raw()) : 0;
 }
 
 void Roller::get_selected_str(char* buf, uint32_t buf_size) {
-  if (obj_) lv_roller_get_selected_str(obj_, buf, buf_size);
+  if (raw()) lv_roller_get_selected_str(raw(), buf, buf_size);
 }
 
 const char* Roller::get_options() {
-  return obj_ ? lv_roller_get_options(obj_) : nullptr;
+  return raw() ? lv_roller_get_options(raw()) : nullptr;
 }
 
 uint32_t Roller::get_option_count() {
-  return obj_ ? lv_roller_get_option_count(obj_) : 0;
+  return raw() ? lv_roller_get_option_count(raw()) : 0;
 }
 
 lv_result_t Roller::get_option_str(uint32_t option, char* buf,
                                    uint32_t buf_size) {
-  return obj_ ? lv_roller_get_option_str(obj_, option, buf, buf_size)
-              : LV_RESULT_INVALID;
+  return raw() ? lv_roller_get_option_str(raw(), option, buf, buf_size)
+               : LV_RESULT_INVALID;
 }
 
 Observer Roller::bind_value(Subject& subject) {

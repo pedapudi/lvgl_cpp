@@ -63,5 +63,41 @@ void DrawBuf::clear_flag(lv_image_flags_t flag) {
   }
 }
 
+void* DrawBuf::data() { return buf_ ? buf_->data : nullptr; }
+
+const void* DrawBuf::data() const { return buf_ ? buf_->data : nullptr; }
+
+size_t DrawBuf::data_size() const { return buf_ ? buf_->data_size : 0; }
+
+void DrawBuf::swap_endianness() {
+  if (!buf_ || !buf_->data) return;
+
+  lv_color_format_t cf = format();
+  if (cf == LV_COLOR_FORMAT_RGB565) {
+    lv_draw_sw_rgb565_swap(buf_->data, width() * height());
+  } else if (cf == LV_COLOR_FORMAT_ARGB8888 || cf == LV_COLOR_FORMAT_XRGB8888) {
+    uint32_t* p = reinterpret_cast<uint32_t*>(buf_->data);
+    size_t count = (width() * height());
+    for (size_t i = 0; i < count; ++i) {
+      p[i] = __builtin_bswap32(p[i]);
+    }
+  } else {
+    // Generic fallback for 16-bit if not exactly RGB565 but still 2 bytes
+    if (LV_COLOR_FORMAT_GET_BPP(cf) == 16) {
+      uint16_t* p = reinterpret_cast<uint16_t*>(buf_->data);
+      size_t count = (width() * height());
+      for (size_t i = 0; i < count; ++i) {
+        p[i] = __builtin_bswap16(p[i]);
+      }
+    }
+  }
+}
+
+void DrawBuf::premultiply() {
+  if (buf_) {
+    lv_draw_buf_premultiply(buf_);
+  }
+}
+
 }  // namespace draw
 }  // namespace lvgl

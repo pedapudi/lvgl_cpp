@@ -1,5 +1,6 @@
 #include "input_device.h"
 
+#include "../core/group.h"
 #include "gesture_event.h"
 #include "gesture_proxy.h"
 
@@ -35,7 +36,6 @@ InputDevice::~InputDevice() {
 InputDevice::InputDevice(InputDevice&& other) noexcept
     : indev_(other.indev_),
       owned_(other.owned_),
-      read_cb_raw_(std::move(other.read_cb_raw_)),
       read_cb_(std::move(other.read_cb_)) {
   other.indev_ = nullptr;
   other.owned_ = false;
@@ -52,7 +52,6 @@ InputDevice& InputDevice::operator=(InputDevice&& other) noexcept {
     }
     indev_ = other.indev_;
     owned_ = other.owned_;
-    read_cb_raw_ = std::move(other.read_cb_raw_);
     read_cb_ = std::move(other.read_cb_);
     other.indev_ = nullptr;
     other.owned_ = false;
@@ -85,18 +84,8 @@ InputDevice* InputDevice::get_next(InputDevice* indev) {
   return &instance;
 }
 
-void InputDevice::set_read_cb(std::function<void(lv_indev_data_t*)> cb) {
-  read_cb_raw_ = cb;
-  read_cb_ = nullptr;
-  if (indev_) {
-    lv_indev_set_user_data(indev_, this);
-    lv_indev_set_read_cb(indev_, cpp_read_cb_trampoline);
-  }
-}
-
 void InputDevice::set_read_cb(std::function<void(IndevData&)> cb) {
   read_cb_ = cb;
-  read_cb_raw_ = nullptr;
   if (indev_) {
     lv_indev_set_user_data(indev_, this);
     lv_indev_set_read_cb(indev_, cpp_read_cb_trampoline);
@@ -107,8 +96,6 @@ void InputDevice::process_read(lv_indev_data_t* data) {
   if (read_cb_) {
     IndevData wrapped(data);
     read_cb_(wrapped);
-  } else if (read_cb_raw_) {
-    read_cb_raw_(data);
   }
 }
 
@@ -273,7 +260,7 @@ void InputDevice::set_group(Group& group) {
 }
 
 lv_obj_t* InputDevice::get_active_obj() const {
-  return indev_ ? lv_indev_get_active_obj(indev_) : nullptr;
+  return lv_indev_get_active_obj();
 }
 
 lv_obj_t* InputDevice::get_cursor() const {
@@ -289,7 +276,12 @@ bool InputDevice::get_press_moved() const {
 }
 
 lv_obj_t* InputDevice::search_obj(const Point& p) const {
-  return indev_ ? lv_indev_search_obj(indev_, p.raw()) : nullptr;
+  if (!indev_) return nullptr;
+  lv_display_t* disp = lv_indev_get_display(indev_);
+  lv_obj_t* scr = lv_display_get_screen_active(disp);
+  lv_point_t pt = {static_cast<lv_coord_t>(p.x()),
+                   static_cast<lv_coord_t>(p.y())};
+  return lv_indev_search_obj(scr, &pt);
 }
 
 // --- GestureProxy ---

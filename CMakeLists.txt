@@ -360,6 +360,10 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_coverage_sweep PRIVATE lvgl_cpp)
     add_test(NAME test_coverage_sweep COMMAND test_coverage_sweep)
 
+    add_executable(test_size tests/test_size.cpp)
+    target_link_libraries(test_size PRIVATE lvgl_cpp)
+    add_test(NAME test_size COMMAND test_size)
+
 
 
     # --- New Benchmarking Framework v2 ---

@@ -15,32 +15,30 @@ class Subject;  // Forward declaration
 class SubjectProxy {
  public:
   struct IncrementProxy {
-    IncrementProxy(lv_obj_t* obj, lv_subject_t* subject,
-                   lv_event_code_t trigger)
-        : obj_(obj), subject_(subject), trigger_(trigger) {}
+    IncrementProxy(lv_obj_t* obj, lv_subject_increment_dsc_t* dsc)
+        : obj_(obj), dsc_(dsc) {}
 
     IncrementProxy& min(int32_t val) {
-      if (obj_ && subject_)
-        lv_obj_set_subject_increment_min_value(obj_, subject_, trigger_, val);
+      if (obj_ && dsc_)
+        lv_obj_set_subject_increment_event_min_value(obj_, dsc_, val);
       return *this;
     }
 
     IncrementProxy& max(int32_t val) {
-      if (obj_ && subject_)
-        lv_obj_set_subject_increment_max_value(obj_, subject_, trigger_, val);
+      if (obj_ && dsc_)
+        lv_obj_set_subject_increment_event_max_value(obj_, dsc_, val);
       return *this;
     }
 
     IncrementProxy& rollover(bool en) {
-      if (obj_ && subject_)
-        lv_obj_set_subject_increment_rollover(obj_, subject_, trigger_, en);
+      if (obj_ && dsc_)
+        lv_obj_set_subject_increment_event_rollover(obj_, dsc_, en);
       return *this;
     }
 
    private:
     lv_obj_t* obj_;
-    lv_subject_t* subject_;
-    lv_event_code_t trigger_;
+    lv_subject_increment_dsc_t* dsc_;
   };
 
   SubjectProxy(lv_obj_t* obj, lv_subject_t* subject)
@@ -68,9 +66,10 @@ class SubjectProxy {
    */
   IncrementProxy increment(int32_t step,
                            lv_event_code_t trigger = LV_EVENT_CLICKED) {
+    lv_subject_increment_dsc_t* dsc = nullptr;
     if (obj_ && subject_)
-      lv_obj_add_subject_increment_event(obj_, subject_, trigger, step);
-    return IncrementProxy(obj_, subject_, trigger);
+      dsc = lv_obj_add_subject_increment_event(obj_, subject_, trigger, step);
+    return IncrementProxy(obj_, dsc);
   }
 
   IncrementProxy increment(int32_t step, EventCode trigger) {

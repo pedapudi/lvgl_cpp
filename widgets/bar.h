@@ -9,14 +9,18 @@
 #if LV_USE_BAR
 /**
  * @file bar.h
- * @brief C++ Wrapper for LVGL Bar Widget.
+ * @brief User Guide:
+ * The `Bar` widget is used to visualize a progress level or a value within a
+ * range. It can be horizontal or vertical and supports animations.
  *
- * # Usage
+ * Key Features:
+ * - **Modes**: Normal, Symmetrical (from zero), or Range (two indicators).
+ * - **Animation**: Smoothly transition between values with `set_value(val,
+ * AnimEnable::On)`.
+ * - **Data Binding**: Bind the bar value to a `Subject` via `bind_value`.
  *
- * ```cpp
- * lvgl::Bar widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `Bar(parent).set_range(0, 100).set_value(50, AnimEnable::On);`
  */
 namespace lvgl {
 class Subject;
@@ -64,18 +68,12 @@ class Bar : public Widget<Bar> {
    */
   Bar& set_value(int32_t value, AnimEnable anim = AnimEnable::Off);
 
-  [[deprecated("Use set_value(int32_t, AnimEnable) instead")]]
-  Bar& set_value(int32_t value, lv_anim_enable_t anim);
-
   /**
    * @brief Set the start value (for range bars).
    * @param value The start value.
    * @param anim Enable animation.
    */
   Bar& set_start_value(int32_t value, AnimEnable anim = AnimEnable::Off);
-
-  [[deprecated("Use set_start_value(int32_t, AnimEnable) instead")]]
-  Bar& set_start_value(int32_t value, lv_anim_enable_t anim);
 
   /**
    * @brief Set the range of the bar.
@@ -102,17 +100,11 @@ class Bar : public Widget<Bar> {
    */
   Bar& set_mode(Mode mode);
 
-  [[deprecated("Use set_mode(Mode) instead")]]
-  Bar& set_mode(lv_bar_mode_t mode);
-
   /**
    * @brief Set the orientation of the bar.
    * @param orientation Orientation (`LV_BAR_ORIENTATION_HORIZONTAL`, etc.).
    */
   Bar& set_orientation(Orientation orientation);
-
-  [[deprecated("Use set_orientation(Orientation) instead")]]
-  Bar& set_orientation(lv_bar_orientation_t orientation);
 
   int32_t get_value() const;
   int32_t get_start_value() const;

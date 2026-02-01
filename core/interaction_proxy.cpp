@@ -1,6 +1,7 @@
 #include "interaction_proxy.h"
 
 #include "../lvgl_cpp.h"
+#include "group.h"
 
 namespace lvgl {
 
@@ -18,7 +19,8 @@ bool InteractionProxy::is_clickable() const {
 }
 
 bool InteractionProxy::hit_test(const Point& p) const {
-  lv_point_t pt = {p.x, p.y};
+  lv_point_t pt = {static_cast<lv_coord_t>(p.x()),
+                   static_cast<lv_coord_t>(p.y())};
   return lv_obj_hit_test(obj_->raw(), &pt);
 }
 
@@ -37,8 +39,8 @@ InteractionProxy& InteractionProxy::set_group(lv_group_t* group) {
   return *this;
 }
 
-lv_group_t* InteractionProxy::get_group() const {
-  return lv_obj_get_group(obj_->raw());
+Group InteractionProxy::get_group() const {
+  return Group(lv_obj_get_group(obj_->raw()), Group::Ownership::Unmanaged);
 }
 
 void InteractionProxy::set_ext_click_area(int32_t area) {

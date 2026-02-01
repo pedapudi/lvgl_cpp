@@ -68,84 +68,77 @@ SpanGroup::SpanGroup(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
 
 Span SpanGroup::add_span() {
-  lv_span_t* span = obj_ ? lv_spangroup_add_span(obj_) : nullptr;
+  lv_span_t* span = raw() ? lv_spangroup_add_span(raw()) : nullptr;
   return Span(span, this);
 }
 
 void SpanGroup::delete_span(Span& span) {
-  if (obj_) lv_spangroup_delete_span(obj_, span.raw());
+  if (raw()) lv_spangroup_delete_span(raw(), span.raw());
 }
 
 SpanGroup& SpanGroup::set_align(TextAlign align) {
-  if (obj_) lv_spangroup_set_align(obj_, static_cast<lv_text_align_t>(align));
-  return *this;
-}
-
-SpanGroup& SpanGroup::set_overflow(lv_span_overflow_t overflow) {
-  if (obj_) lv_spangroup_set_overflow(obj_, overflow);
+  if (raw()) lv_spangroup_set_align(raw(), static_cast<lv_text_align_t>(align));
   return *this;
 }
 
 SpanGroup& SpanGroup::set_overflow(Overflow overflow) {
-  return set_overflow(static_cast<lv_span_overflow_t>(overflow));
-}
-
-SpanGroup& SpanGroup::set_indent(int32_t indent) {
-  if (obj_) lv_spangroup_set_indent(obj_, indent);
+  if (raw())
+    lv_spangroup_set_overflow(raw(), static_cast<lv_span_overflow_t>(overflow));
   return *this;
 }
 
-SpanGroup& SpanGroup::set_mode(lv_span_mode_t mode) {
-  if (obj_) lv_spangroup_set_mode(obj_, mode);
+SpanGroup& SpanGroup::set_indent(int32_t indent) {
+  if (raw()) lv_spangroup_set_indent(raw(), indent);
   return *this;
 }
 
 SpanGroup& SpanGroup::set_mode(Mode mode) {
-  return set_mode(static_cast<lv_span_mode_t>(mode));
+  if (raw()) lv_spangroup_set_mode(raw(), static_cast<lv_span_mode_t>(mode));
+  return *this;
 }
 
 SpanGroup& SpanGroup::set_max_lines(int32_t lines) {
-  if (obj_) lv_spangroup_set_max_lines(obj_, lines);
+  if (raw()) lv_spangroup_set_max_lines(raw(), lines);
   return *this;
 }
 
 Span SpanGroup::get_child(int32_t id) {
-  lv_span_t* span = obj_ ? lv_spangroup_get_child(obj_, id) : nullptr;
+  lv_span_t* span = raw() ? lv_spangroup_get_child(raw(), id) : nullptr;
   return Span(span, this);
 }
 
 uint32_t SpanGroup::get_span_count() const {
-  return obj_ ? lv_spangroup_get_span_count(obj_) : 0;
+  return raw() ? lv_spangroup_get_span_count(raw()) : 0;
 }
 
 TextAlign SpanGroup::get_align() const {
-  return obj_ ? static_cast<TextAlign>(lv_spangroup_get_align(obj_))
-              : TextAlign::Left;
+  return raw() ? static_cast<TextAlign>(lv_spangroup_get_align(raw()))
+               : TextAlign::Left;
 }
 
 SpanGroup::Overflow SpanGroup::get_overflow() const {
-  return obj_ ? static_cast<Overflow>(lv_spangroup_get_overflow(obj_))
-              : Overflow::Clip;
+  return raw() ? static_cast<Overflow>(lv_spangroup_get_overflow(raw()))
+               : Overflow::Clip;
 }
 
 int32_t SpanGroup::get_indent() const {
-  return obj_ ? lv_spangroup_get_indent(obj_) : 0;
+  return raw() ? lv_spangroup_get_indent(raw()) : 0;
 }
 
 SpanGroup::Mode SpanGroup::get_mode() const {
-  return obj_ ? static_cast<Mode>(lv_spangroup_get_mode(obj_)) : Mode::Fixed;
+  return raw() ? static_cast<Mode>(lv_spangroup_get_mode(raw())) : Mode::Fixed;
 }
 
 int32_t SpanGroup::get_max_lines() const {
-  return obj_ ? lv_spangroup_get_max_lines(obj_) : -1;
+  return raw() ? lv_spangroup_get_max_lines(raw()) : -1;
 }
 
 int32_t SpanGroup::get_max_line_height() const {
-  return obj_ ? lv_spangroup_get_max_line_height(obj_) : 0;
+  return raw() ? lv_spangroup_get_max_line_height(raw()) : 0;
 }
 
 void SpanGroup::refresh() {
-  if (obj_) lv_spangroup_refresh(obj_);
+  if (raw()) lv_spangroup_refresh(raw());
 }
 
 }  // namespace lvgl

@@ -7,6 +7,8 @@ namespace lvgl {
 
 class Object;
 
+class Group;
+
 /**
  * @brief Transient proxy object for managing group membership on an object.
  *
@@ -15,7 +17,7 @@ class Object;
  */
 class GroupProxy {
  public:
-  explicit GroupProxy(lv_obj_t* obj) : obj_(obj) {}
+  explicit GroupProxy(Object* obj) : obj_(obj) {}
 
   /**
    * @brief Add the object to the default group.
@@ -29,6 +31,13 @@ class GroupProxy {
    * @return Reference to this proxy for chaining.
    */
   GroupProxy& add(lv_group_t* group);
+
+  /**
+   * @brief Add the object to a specific group.
+   * @param group The group to add to.
+   * @return Reference to this proxy for chaining.
+   */
+  GroupProxy& add(Group& group);
 
   /**
    * @brief Remove the object from its group.
@@ -49,7 +58,7 @@ class GroupProxy {
   bool is_focused() const;
 
  private:
-  lv_obj_t* obj_;
+  Object* obj_;
 };
 
 }  // namespace lvgl

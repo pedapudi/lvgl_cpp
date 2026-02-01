@@ -375,31 +375,9 @@ enum class GridAlign : uint8_t {
 // Widget Mode Enums (remaining - to be migrated to class-scoped in future)
 // ============================================================================
 
-/**
- * @brief Wrapper for lv_keyboard_mode_t.
- * @deprecated Use Keyboard::Mode instead.
- */
-using KeyboardMode [[deprecated("Use Keyboard::Mode instead")]] = uint8_t;
-// Note: We use uint8_t here to avoid collision with the new enum if it's
-// included, but the static_cast logic in the classes will still work. Actually,
-// it's safer to keep it as enum class for now but mark it deprecated.
-
 // ============================================================================
 // Scale Enums
 // ============================================================================
-
-/**
- * @brief Wrapper for lv_scale_mode_t.
- * @deprecated Use Scale::Mode instead.
- */
-enum class [[deprecated("Use Scale::Mode instead")]] ScaleMode : uint8_t {
-  HorizontalTop = LV_SCALE_MODE_HORIZONTAL_TOP,
-  HorizontalBottom = LV_SCALE_MODE_HORIZONTAL_BOTTOM,
-  VerticalLeft = LV_SCALE_MODE_VERTICAL_LEFT,
-  VerticalRight = LV_SCALE_MODE_VERTICAL_RIGHT,
-  RoundInner = LV_SCALE_MODE_ROUND_INNER,
-  RoundOuter = LV_SCALE_MODE_ROUND_OUTER,
-};
 
 // ============================================================================
 // Scroll Enums
@@ -505,17 +483,14 @@ inline PointTransformFlag operator|(PointTransformFlag lhs,
 
 /**
  * @brief Wrapper for lv_indev_state_t.
- * @deprecated Use InputDevice::State instead.
  */
-enum class [[deprecated(
-    "Use InputDevice::State instead")]] IndevState : uint8_t {
+enum class IndevState : uint8_t {
   Released = LV_INDEV_STATE_RELEASED,
   Pressed = LV_INDEV_STATE_PRESSED,
 };
 
 /**
  * @brief Wrapper for lv_indev_type_t.
- * @deprecated Use InputDevice::Type instead.
  */
 enum class IndevType : uint8_t {
   None = LV_INDEV_TYPE_NONE,
@@ -544,15 +519,6 @@ enum class GestureType : uint8_t {
   Rotate = LV_INDEV_GESTURE_ROTATE,
   TwoFingersSwipe = LV_INDEV_GESTURE_TWO_FINGERS_SWIPE,
   Scroll = LV_INDEV_GESTURE_SCROLL,
-};
-
-/**
- * @brief Wrapper for lv_roller_mode_t.
- * @deprecated Use Roller::Mode instead.
- */
-enum class [[deprecated("Use Roller::Mode instead")]] RollerMode : uint8_t {
-  Normal = LV_ROLLER_MODE_NORMAL,
-  Infinite = LV_ROLLER_MODE_INFINITE,
 };
 
 /**
@@ -656,6 +622,82 @@ enum class LayerType : uint8_t {
   None = LV_LAYER_TYPE_NONE,
   Simple = LV_LAYER_TYPE_SIMPLE,
   Transform = LV_LAYER_TYPE_TRANSFORM,
+};
+
+/**
+ * @brief Wrapper for lv_fs_res_t.
+ */
+enum class FsRes : uint8_t {
+  Ok = LV_FS_RES_OK,
+  HwErr = LV_FS_RES_HW_ERR,
+  FsErr = LV_FS_RES_FS_ERR,
+  NotEx = LV_FS_RES_NOT_EX,
+  Full = LV_FS_RES_FULL,
+  Locked = LV_FS_RES_LOCKED,
+  Denied = LV_FS_RES_DENIED,
+  Busy = LV_FS_RES_BUSY,
+  Tout = LV_FS_RES_TOUT,
+  NotImp = LV_FS_RES_NOT_IMP,
+  OutOfMem = LV_FS_RES_OUT_OF_MEM,
+  InvParam = LV_FS_RES_INV_PARAM,
+  Unknown = LV_FS_RES_UNKNOWN,
+};
+
+/**
+ * @brief Wrapper for lv_fs_mode_t.
+ */
+enum class FsMode : uint8_t {
+  Write = LV_FS_MODE_WR,
+  Read = LV_FS_MODE_RD,
+  ReadWrite = LV_FS_MODE_RD | LV_FS_MODE_WR,
+};
+
+/**
+ * @brief Wrapper for lv_fs_whence_t.
+ */
+enum class FsWhence : uint8_t {
+  Set = LV_FS_SEEK_SET,
+  Cur = LV_FS_SEEK_CUR,
+  End = LV_FS_SEEK_END,
+};
+
+/**
+ * @brief Flex flow modes.
+ */
+enum class FlexFlow : uint8_t {
+  Row = LV_FLEX_FLOW_ROW,
+  Column = LV_FLEX_FLOW_COLUMN,
+  RowWrap = LV_FLEX_FLOW_ROW_WRAP,
+  RowReverse = LV_FLEX_FLOW_ROW_REVERSE,
+  RowWrapReverse = LV_FLEX_FLOW_ROW_WRAP_REVERSE,
+  ColumnWrap = LV_FLEX_FLOW_COLUMN_WRAP,
+  ColumnReverse = LV_FLEX_FLOW_COLUMN_REVERSE,
+  ColumnWrapReverse = LV_FLEX_FLOW_COLUMN_WRAP_REVERSE,
+};
+
+/**
+ * @brief Flex alignment modes.
+ */
+enum class FlexAlign : uint8_t {
+  Start = LV_FLEX_ALIGN_START,
+  End = LV_FLEX_ALIGN_END,
+  Center = LV_FLEX_ALIGN_CENTER,
+  SpaceEvenly = LV_FLEX_ALIGN_SPACE_EVENLY,
+  SpaceAround = LV_FLEX_ALIGN_SPACE_AROUND,
+  SpaceBetween = LV_FLEX_ALIGN_SPACE_BETWEEN,
+};
+
+/**
+ * @brief Grid alignment modes.
+ */
+enum class GridAlign : uint8_t {
+  Start = LV_GRID_ALIGN_START,
+  Center = LV_GRID_ALIGN_CENTER,
+  End = LV_GRID_ALIGN_END,
+  Stretch = LV_GRID_ALIGN_STRETCH,
+  SpaceEvenly = LV_GRID_ALIGN_SPACE_EVENLY,
+  SpaceAround = LV_GRID_ALIGN_SPACE_AROUND,
+  SpaceBetween = LV_GRID_ALIGN_SPACE_BETWEEN,
 };
 
 }  // namespace lvgl

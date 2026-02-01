@@ -144,7 +144,7 @@ const Font& Font::montserrat_32() {
 #endif
 
 const Font& Font::get_default() {
-  static Font f(lv_font_default());
+  static Font f(lv_font_get_default());
   return f;
 }
 

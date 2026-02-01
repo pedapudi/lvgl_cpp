@@ -153,43 +153,29 @@ int32_t Display::get_dpi() const {
 
 void Display::set_buffers(void* buf1, void* buf2, uint32_t buf_size,
                           RenderMode render_mode) {
-  set_buffers(buf1, buf2, buf_size,
-              static_cast<lv_display_render_mode_t>(render_mode));
-}
-
-void Display::set_buffers(void* buf1, void* buf2, uint32_t buf_size,
-                          lv_display_render_mode_t render_mode) {
-  if (disp_) lv_display_set_buffers(disp_, buf1, buf2, buf_size, render_mode);
+  if (disp_)
+    lv_display_set_buffers(disp_, buf1, buf2, buf_size,
+                           static_cast<lv_display_render_mode_t>(render_mode));
 }
 
 void Display::set_buffers_with_stride(void* buf1, void* buf2, uint32_t buf_size,
                                       uint32_t stride, RenderMode render_mode) {
-  set_buffers_with_stride(buf1, buf2, buf_size, stride,
-                          static_cast<lv_display_render_mode_t>(render_mode));
-}
-
-void Display::set_buffers_with_stride(void* buf1, void* buf2, uint32_t buf_size,
-                                      uint32_t stride,
-                                      lv_display_render_mode_t render_mode) {
   if (disp_)
-    lv_display_set_buffers_with_stride(disp_, buf1, buf2, buf_size, stride,
-                                       render_mode);
+    lv_display_set_buffers_with_stride(
+        disp_, buf1, buf2, buf_size, stride,
+        static_cast<lv_display_render_mode_t>(render_mode));
 }
 
-void Display::set_draw_buffers(lv_draw_buf_t* buf1, lv_draw_buf_t* buf2) {
-  if (disp_) lv_display_set_draw_buffers(disp_, buf1, buf2);
-}
-
-void Display::set_3rd_draw_buffer(lv_draw_buf_t* buf3) {
-  if (disp_) lv_display_set_3rd_draw_buffer(disp_, buf3);
+void Display::set_draw_buffers(const DrawBuf& buf1, const DrawBuf* buf2) {
+  if (disp_)
+    lv_display_set_draw_buffers(disp_, buf1.raw(),
+                                buf2 ? buf2->raw() : nullptr);
 }
 
 void Display::set_render_mode(RenderMode render_mode) {
-  set_render_mode(static_cast<lv_display_render_mode_t>(render_mode));
-}
-
-void Display::set_render_mode(lv_display_render_mode_t render_mode) {
-  if (disp_) lv_display_set_render_mode(disp_, render_mode);
+  if (disp_)
+    lv_display_set_render_mode(
+        disp_, static_cast<lv_display_render_mode_t>(render_mode));
 }
 
 void Display::set_tile_cnt(uint32_t tile_cnt) {
@@ -222,12 +208,15 @@ uint32_t Display::get_invalidated_draw_buf_size(uint32_t width,
                : 0;
 }
 
-void Display::set_color_format(lv_color_format_t color_format) {
-  if (disp_) lv_display_set_color_format(disp_, color_format);
+void Display::set_color_format(ColorFormat color_format) {
+  if (disp_)
+    lv_display_set_color_format(disp_,
+                                static_cast<lv_color_format_t>(color_format));
 }
 
-lv_color_format_t Display::get_color_format() const {
-  return disp_ ? lv_display_get_color_format(disp_) : LV_COLOR_FORMAT_UNKNOWN;
+ColorFormat Display::get_color_format() const {
+  return disp_ ? static_cast<ColorFormat>(lv_display_get_color_format(disp_))
+               : ColorFormat::Unknown;
 }
 
 void Display::set_flush_cb(FlushCallback cb) {
@@ -295,13 +284,8 @@ void Display::load_screen(Object& scr) { lv_screen_load(scr.raw()); }
 
 void Display::load_screen_anim(Object& scr, LoadAnim anim_type, uint32_t time,
                                uint32_t delay, bool auto_del) {
-  load_screen_anim(scr, static_cast<lv_screen_load_anim_t>(anim_type), time,
-                   delay, auto_del);
-}
-
-void Display::load_screen_anim(Object& scr, lv_screen_load_anim_t anim_type,
-                               uint32_t time, uint32_t delay, bool auto_del) {
-  lv_screen_load_anim(scr.raw(), anim_type, time, delay, auto_del);
+  lv_screen_load_anim(scr.raw(), static_cast<lv_screen_load_anim_t>(anim_type),
+                      time, delay, auto_del);
 }
 
 void Display::set_theme(lv_theme_t* th) {
@@ -337,12 +321,6 @@ void Display::clear_active_screen() {
 }
 
 void Display::auto_configure_buffers(RenderMode mode, bool double_buffer) {
-  auto_configure_buffers(static_cast<lv_display_render_mode_t>(mode),
-                         double_buffer);
-}
-
-void Display::auto_configure_buffers(lv_display_render_mode_t mode,
-                                     bool double_buffer) {
   if (!disp_) return;
 
   uint32_t hor_res = get_horizontal_resolution();
@@ -354,7 +332,7 @@ void Display::auto_configure_buffers(lv_display_render_mode_t mode,
   uint32_t stride = lv_draw_buf_width_to_stride(hor_res, cf);
   uint32_t buf_size = 0;
 
-  if (mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
+  if (mode == RenderMode::Partial) {
     // Standard recommendation: 1/10 screen size
     buf_size = stride * (ver_res / 10);
   } else {
@@ -372,7 +350,7 @@ void Display::auto_configure_buffers(lv_display_render_mode_t mode,
 
   lv_display_set_buffers(disp_, buf1_.data(),
                          double_buffer ? buf2_.data() : nullptr, buf_size,
-                         mode);
+                         static_cast<lv_display_render_mode_t>(mode));
 }
 
 }  // namespace lvgl

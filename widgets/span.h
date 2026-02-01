@@ -69,10 +69,8 @@ class SpanGroup : public Widget<SpanGroup> {
   void delete_span(Span& span);
 
   SpanGroup& set_align(TextAlign align);
-  SpanGroup& set_overflow(lv_span_overflow_t overflow);
   SpanGroup& set_overflow(Overflow overflow);
   SpanGroup& set_indent(int32_t indent);
-  SpanGroup& set_mode(lv_span_mode_t mode);
   SpanGroup& set_mode(Mode mode);
   SpanGroup& set_max_lines(int32_t lines);
 

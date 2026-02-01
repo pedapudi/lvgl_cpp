@@ -9,14 +9,19 @@
 #if LV_USE_BUTTONMATRIX
 /**
  * @file button_matrix.h
- * @brief C++ Wrapper for LVGL ButtonMatrix Widget.
+ * @brief User Guide:
+ * `ButtonMatrix` (also known as `Btnm`) can display multiple buttons in a grid.
+ * It is very memory-efficient as it creates only one `lv_obj_t` for the entire
+ * matrix.
  *
- * # Usage
+ * Key Features:
+ * - **Maps**: Define button text and layout using a simple array of strings.
+ * - **Control Flags**: Set hidden, checkable, or disabled states per-button.
+ * - **Styling**: Can style the background and the individual buttons (items).
  *
- * ```cpp
- * lvgl::ButtonMatrix widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `const char* map[] = {"Btn1", "Btn2", "\n", "Btn3", ""};`
+ * `ButtonMatrix(parent, map).center();`
  */
 namespace lvgl {
 
@@ -56,20 +61,12 @@ class ButtonMatrix : public Widget<ButtonMatrix> {
   ButtonMatrix& set_ctrl_map(const lv_buttonmatrix_ctrl_t ctrl_map[]);
   ButtonMatrix& set_selected_button(uint32_t btn_id);
   ButtonMatrix& set_button_ctrl(uint32_t btn_id, Control ctrl);
-  [[deprecated("Use set_button_ctrl(uint32_t, Control) instead")]]
-  ButtonMatrix& set_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
 
   ButtonMatrix& clear_button_ctrl(uint32_t btn_id, Control ctrl);
-  [[deprecated("Use clear_button_ctrl(uint32_t, Control) instead")]]
-  ButtonMatrix& clear_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
 
   ButtonMatrix& set_button_ctrl_all(Control ctrl);
-  [[deprecated("Use set_button_ctrl_all(Control) instead")]]
-  ButtonMatrix& set_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl);
 
   ButtonMatrix& clear_button_ctrl_all(Control ctrl);
-  [[deprecated("Use clear_button_ctrl_all(Control) instead")]]
-  ButtonMatrix& clear_button_ctrl_all(lv_buttonmatrix_ctrl_t ctrl);
   ButtonMatrix& set_button_width(uint32_t btn_id, uint32_t width);
   ButtonMatrix& set_one_checked(bool en);
 
@@ -77,8 +74,6 @@ class ButtonMatrix : public Widget<ButtonMatrix> {
   uint32_t get_selected_button();
   const char* get_button_text(uint32_t btn_id);
   bool has_button_ctrl(uint32_t btn_id, Control ctrl);
-  [[deprecated("Use has_button_ctrl(uint32_t, Control) instead")]]
-  bool has_button_ctrl(uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
   bool get_one_checked();
 };
 

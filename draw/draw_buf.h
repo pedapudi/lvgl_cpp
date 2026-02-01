@@ -5,12 +5,25 @@
 
 #include "lvgl.h"
 
+/**
+ * @file draw_buf.h
+ * @brief User Guide:
+ * `DrawBuf` is an RAII wrapper for `lv_draw_buf_t`. It manages the memory
+ * required for drawing operations, such as display buffers or off-screen
+ * canvases.
+ *
+ * Key Features:
+ * - **RAII**: Automatically allocates and deallocates buffer memory.
+ * - **Endianness**: Provides optimized byte-swapping (useful for SPI displays).
+ * - **Flags**: Easy management of image flags (e.g. static, pre-multiplied).
+ * - **Type Safety**: Prefer `lvgl_cpp` color formats and dimension types.
+ */
+
 namespace lvgl {
 namespace draw {
 
 /**
- * @brief RAII wrapper for lv_draw_buf_t.
- * Manages allocation and deallocation of an LVGL drawing buffer.
+ * @brief Drawing buffer management.
  */
 class DrawBuf {
  public:
@@ -70,6 +83,33 @@ class DrawBuf {
    * @brief Clear a flag on the draw buffer.
    */
   void clear_flag(lv_image_flags_t flag);
+
+  /**
+   * @brief Get pointer to raw data.
+   */
+  void* data();
+
+  /**
+   * @brief Get pointer to raw data (const).
+   */
+  const void* data() const;
+
+  /**
+   * @brief Get total size of the buffer in bytes.
+   */
+  size_t data_size() const;
+
+  /**
+   * @brief Swap the endianness of the buffer in-place.
+   * Optimized for 16-bit (RGB565) and 32-bit (ARGB8888) formats.
+   */
+  void swap_endianness();
+
+  /**
+   * @brief Premultiply the buffer color with alpha.
+   * Only applicable to formats with an alpha channel.
+   */
+  void premultiply();
 
  private:
   lv_draw_buf_t* buf_ = nullptr;

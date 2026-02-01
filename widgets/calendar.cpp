@@ -19,57 +19,57 @@ Calendar::Calendar(lv_obj_t* obj, Ownership ownership)
 
 Calendar& Calendar::set_today_date(uint32_t year, uint32_t month,
                                    uint32_t day) {
-  if (obj_) lv_calendar_set_today_date(obj_, year, month, day);
+  if (raw()) lv_calendar_set_today_date(raw(), year, month, day);
   return *this;
 }
 
 Calendar& Calendar::set_shown_date(uint32_t year, uint32_t month) {
-  if (obj_) lv_calendar_set_month_shown(obj_, year, month);
+  if (raw()) lv_calendar_set_month_shown(raw(), year, month);
   return *this;
 }
 
 Calendar& Calendar::set_highlighted_dates(lv_calendar_date_t highlighted[],
                                           size_t date_num) {
-  if (obj_) lv_calendar_set_highlighted_dates(obj_, highlighted, date_num);
+  if (raw()) lv_calendar_set_highlighted_dates(raw(), highlighted, date_num);
   return *this;
 }
 
 Calendar& Calendar::set_day_names(const char** day_names) {
-  if (obj_) lv_calendar_set_day_names(obj_, day_names);
+  if (raw()) lv_calendar_set_day_names(raw(), day_names);
   return *this;
 }
 
 ButtonMatrix Calendar::get_btnmatrix() {
-  return ButtonMatrix(obj_ ? lv_calendar_get_btnmatrix(obj_) : nullptr);
+  return ButtonMatrix(raw() ? lv_calendar_get_btnmatrix(raw()) : nullptr);
 }
 
 const lv_calendar_date_t* Calendar::get_today_date() {
-  return obj_ ? lv_calendar_get_today_date(obj_) : nullptr;
+  return raw() ? lv_calendar_get_today_date(raw()) : nullptr;
 }
 
 const lv_calendar_date_t* Calendar::get_showed_date() {
-  return obj_ ? lv_calendar_get_showed_date(obj_) : nullptr;
+  return raw() ? lv_calendar_get_showed_date(raw()) : nullptr;
 }
 
 lv_calendar_date_t* Calendar::get_highlighted_dates() {
-  return obj_ ? lv_calendar_get_highlighted_dates(obj_) : nullptr;
+  return raw() ? lv_calendar_get_highlighted_dates(raw()) : nullptr;
 }
 
 size_t Calendar::get_highlighted_dates_num() {
-  return obj_ ? lv_calendar_get_highlighted_dates_num(obj_) : 0;
+  return raw() ? lv_calendar_get_highlighted_dates_num(raw()) : 0;
 }
 
 bool Calendar::get_pressed_date(lv_calendar_date_t* date) {
-  return obj_ ? lv_calendar_get_pressed_date(obj_, date) == LV_RESULT_OK
+  return raw() ? lv_calendar_get_pressed_date(raw(), date) == LV_RESULT_OK
               : false;
 }
 
 lv_obj_t* Calendar::create_arrow_header() {
-  return obj_ ? lv_calendar_header_arrow_create(obj_) : nullptr;
+  return raw() ? lv_calendar_header_arrow_create(raw()) : nullptr;
 }
 
 lv_obj_t* Calendar::create_dropdown_header() {
-  return obj_ ? lv_calendar_header_dropdown_create(obj_) : nullptr;
+  return raw() ? lv_calendar_header_dropdown_create(raw()) : nullptr;
 }
 
 Calendar& Calendar::on_value_changed(std::function<void(lvgl::Event&)> cb) {

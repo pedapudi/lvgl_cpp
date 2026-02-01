@@ -43,15 +43,10 @@ class Keyboard : public Widget<Keyboard> {
 
   Keyboard& set_textarea(lv_obj_t* ta);
   Keyboard& set_textarea(Object& ta);
-  Keyboard& set_mode(lv_keyboard_mode_t mode);
   Keyboard& set_mode(Mode mode);
   Keyboard& set_popovers(bool en);
-  Keyboard& set_map(lv_keyboard_mode_t mode, const char* const map[],
-                    const lv_buttonmatrix_ctrl_t ctrl_map[]);
   Keyboard& set_map(Mode mode, const char* const map[],
-                    const lv_buttonmatrix_ctrl_t ctrl_map[]) {
-    return set_map(static_cast<lv_keyboard_mode_t>(mode), map, ctrl_map);
-  }
+                    const lv_buttonmatrix_ctrl_t ctrl_map[]);
 
   lv_obj_t* get_textarea();
   Mode get_mode();  // Returns modern enum
@@ -59,11 +54,6 @@ class Keyboard : public Widget<Keyboard> {
   const char* const* get_map_array();
   uint32_t get_selected_button();
   const char* get_button_text(uint32_t btn_id);
-
-  // Deprecated legacy overloads
-  Keyboard& set_mode(KeyboardMode mode) {
-    return set_mode(static_cast<Mode>(mode));
-  }
 };
 
 }  // namespace lvgl

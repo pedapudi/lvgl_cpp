@@ -3,21 +3,28 @@
 
 #include <cstdint>
 
-#include "../core/widget.h"  // IWYU pragma: export
-#include "../misc/color.h"   // IWYU pragma: export
-#include "lvgl.h"            // IWYU pragma: export
+#include "../core/widget.h"    // IWYU pragma: export
+#include "../misc/color.h"     // IWYU pragma: export
+#include "../misc/geometry.h"  // IWYU pragma: export
+#include "lvgl.h"              // IWYU pragma: export
 
 #if LV_USE_CHART
 /**
  * @file chart.h
- * @brief C++ Wrapper for LVGL Chart Widget.
+ * @brief User Guide:
+ * `Chart` is a versatile widget for visualizing data series as lines, bars, or
+ * scatter plots. It supports multiple axes and interactive cursors.
  *
- * # Usage
+ * Key Features:
+ * - **Types**: Line, Bar, or Scatter plots.
+ * - **Series**: Manage multiple data series with separate colors and axes.
+ * - **Cursors**: Add interactive crosshairs to track specific data points.
+ * - **Axes**: Configure primary and secondary X/Y axes with custom ranges.
  *
- * ```cpp
- * lvgl::Chart widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `auto chart = Chart(parent).set_type(Chart::Type::Line);`
+ * `auto series = chart.add_series(Color::blue(), Chart::Axis::PrimaryY);`
+ * `series.set_next_value(10); series.set_next_value(20);`
  */
 namespace lvgl {
 
@@ -55,7 +62,7 @@ class ChartCursor {
   /**
    * @brief Set the cursor position using a point.
    */
-  void set_pos(lv_point_t pos);
+  void set_pos(Point pos);
 
   /**
    * @brief Set the cursor X position.
@@ -75,7 +82,7 @@ class ChartCursor {
   /**
    * @brief Get the current cursor point position.
    */
-  lv_point_t get_point() const;
+  Point get_point() const;
 
   lv_chart_cursor_t* raw() const { return cursor_; }
 
@@ -133,7 +140,7 @@ class Chart : public Widget<Chart> {
   void remove_series(ChartSeries series);
 
   // Cursor management
-  ChartCursor add_cursor(Color color, lv_dir_t dir);
+  ChartCursor add_cursor(Color color, Dir dir);
   void remove_cursor(ChartCursor cursor);
 
   void refresh();

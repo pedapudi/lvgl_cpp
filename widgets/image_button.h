@@ -42,18 +42,9 @@ class ImageButton : public Widget<ImageButton> {
                        const void* src_right);
   ImageButton& set_state(State state);
 
-  // Deprecated legacy overloads
-  ImageButton& set_src(lv_imagebutton_state_t state, const void* src_left,
-                       const void* src_mid, const void* src_right);
-  ImageButton& set_state(lv_imagebutton_state_t state);
-
   const void* get_src_left(State state);
   const void* get_src_middle(State state);
   const void* get_src_right(State state);
-
-  const void* get_src_left(lv_imagebutton_state_t state);
-  const void* get_src_middle(lv_imagebutton_state_t state);
-  const void* get_src_right(lv_imagebutton_state_t state);
 };
 
 }  // namespace lvgl

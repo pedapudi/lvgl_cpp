@@ -6,6 +6,7 @@
 
 #include "../core/widget.h"  // IWYU pragma: export
 #include "../draw/image_descriptor.h"
+#include "../misc/geometry.h"
 #include "lvgl.h"  // IWYU pragma: export
 
 #if LV_USE_IMAGE
@@ -64,25 +65,22 @@ class Image : public Widget<Image> {
   Image& set_offset_x(int32_t x);
   Image& set_offset_y(int32_t y);
   Image& set_rotation(int32_t angle);
-  Image& set_pivot(int32_t x, int32_t y);
+  Image& set_pivot(Point pivot);
+
   Image& set_scale(uint32_t zoom);
   Image& set_scale_x(uint32_t zoom);
   Image& set_scale_y(uint32_t zoom);
   Image& set_blend_mode(BlendMode blend_mode);
-  [[deprecated("Use set_blend_mode(BlendMode) instead")]]
-  Image& set_blend_mode(lv_blend_mode_t blend_mode);
 
   Image& set_antialias(bool antialias);
 
   Image& set_inner_align(ImageAlign align);
-  [[deprecated("Use set_inner_align(ImageAlign) instead")]]
-  Image& set_inner_align(lv_image_align_t align);
 
   const void* get_src() const;
   int32_t get_offset_x();
   int32_t get_offset_y();
   int32_t get_rotation();
-  void get_pivot(lv_point_t* pivot);
+  Point get_pivot();
   int32_t get_scale();
   int32_t get_scale_x();
   int32_t get_scale_y();

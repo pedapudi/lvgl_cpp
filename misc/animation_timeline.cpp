@@ -147,4 +147,10 @@ void* AnimationTimeline::get_user_data() const {
   return timeline_ ? lv_anim_timeline_get_user_data(timeline_) : nullptr;
 }
 
+lv_anim_timeline_t* AnimationTimeline::detach() {
+  lv_anim_timeline_t* t = timeline_;
+  timeline_ = nullptr;
+  return t;
+}
+
 }  // namespace lvgl

@@ -10,7 +10,7 @@
 using namespace lvgl;
 
 static void test_event_basic() {
-  std::cout << "Testing basic event..." << std::endl;
+  printf("Testing basic event...\n");
 
   // Create a display to ensure lv_obj_create works
   std::cout << "Creating display..." << std::endl;

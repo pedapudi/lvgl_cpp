@@ -16,22 +16,22 @@ AnimImage::AnimImage(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
 
 AnimImage& AnimImage::set_src(const void* dsc[], size_t num) {
-  if (obj_) lv_animimg_set_src(obj_, dsc, num);
+  if (raw()) lv_animimg_set_src(raw(), dsc, num);
   return *this;
 }
 
 AnimImage& AnimImage::start() {
-  if (obj_) lv_animimg_start(obj_);
+  if (raw()) lv_animimg_start(raw());
   return *this;
 }
 
 AnimImage& AnimImage::set_duration(uint32_t duration) {
-  if (obj_) lv_animimg_set_duration(obj_, duration);
+  if (raw()) lv_animimg_set_duration(raw(), duration);
   return *this;
 }
 
 AnimImage& AnimImage::set_repeat_count(uint32_t count) {
-  if (obj_) lv_animimg_set_repeat_count(obj_, count);
+  if (raw()) lv_animimg_set_repeat_count(raw(), count);
   return *this;
 }
 

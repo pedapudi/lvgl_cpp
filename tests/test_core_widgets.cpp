@@ -264,7 +264,7 @@ void test_label_extra() {
   label.set_text_static("Static Text");
   assert(std::string(lv_label_get_text(label.raw())) == "Static Text");
 
-  label.set_translation_tag(1, "TAG_ID");
+  label.set_translation_tag("TAG_ID");
   std::cout << "Label extra methods passed." << std::endl;
 }
 

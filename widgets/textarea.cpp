@@ -27,168 +27,164 @@ Textarea::Textarea(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
 
 Textarea& Textarea::add_char(uint32_t c) {
-  if (obj_) lv_textarea_add_char(obj_, c);
+  if (raw()) lv_textarea_add_char(raw(), c);
   return *this;
 }
 
 Textarea& Textarea::add_text(const char* txt) {
-  if (obj_) lv_textarea_add_text(obj_, txt);
+  if (raw()) lv_textarea_add_text(raw(), txt);
   return *this;
 }
 
 Textarea& Textarea::delete_char() {
-  if (obj_) lv_textarea_delete_char(obj_);
+  if (raw()) lv_textarea_delete_char(raw());
   return *this;
 }
 
 Textarea& Textarea::delete_char_forward() {
-  if (obj_) lv_textarea_delete_char_forward(obj_);
+  if (raw()) lv_textarea_delete_char_forward(raw());
   return *this;
 }
 
 Textarea& Textarea::set_text(const char* txt) {
-  if (obj_) lv_textarea_set_text(obj_, txt);
+  if (raw()) lv_textarea_set_text(raw(), txt);
   return *this;
 }
 
 Textarea& Textarea::set_placeholder_text(const char* txt) {
-  if (obj_) lv_textarea_set_placeholder_text(obj_, txt);
+  if (raw()) lv_textarea_set_placeholder_text(raw(), txt);
   return *this;
 }
 
 Textarea& Textarea::set_cursor_pos(int32_t pos) {
-  if (obj_) lv_textarea_set_cursor_pos(obj_, pos);
+  if (raw()) lv_textarea_set_cursor_pos(raw(), pos);
   return *this;
 }
 
 Textarea& Textarea::set_cursor_click_pos(bool en) {
-  if (obj_) lv_textarea_set_cursor_click_pos(obj_, en);
+  if (raw()) lv_textarea_set_cursor_click_pos(raw(), en);
   return *this;
 }
 
 Textarea& Textarea::set_password_mode(bool en) {
-  if (obj_) lv_textarea_set_password_mode(obj_, en);
+  if (raw()) lv_textarea_set_password_mode(raw(), en);
   return *this;
 }
 
 Textarea& Textarea::set_password_bullet(const char* bullet) {
-  if (obj_) lv_textarea_set_password_bullet(obj_, bullet);
+  if (raw()) lv_textarea_set_password_bullet(raw(), bullet);
   return *this;
 }
 
 Textarea& Textarea::set_one_line(bool en) {
-  if (obj_) lv_textarea_set_one_line(obj_, en);
+  if (raw()) lv_textarea_set_one_line(raw(), en);
   return *this;
 }
 
 Textarea& Textarea::set_accepted_chars(const char* list) {
-  if (obj_) lv_textarea_set_accepted_chars(obj_, list);
+  if (raw()) lv_textarea_set_accepted_chars(raw(), list);
   return *this;
 }
 
 Textarea& Textarea::set_max_length(uint32_t num) {
-  if (obj_) lv_textarea_set_max_length(obj_, num);
+  if (raw()) lv_textarea_set_max_length(raw(), num);
   return *this;
 }
 
 Textarea& Textarea::set_insert_replace(const char* txt) {
-  if (obj_) lv_textarea_set_insert_replace(obj_, txt);
+  if (raw()) lv_textarea_set_insert_replace(raw(), txt);
   return *this;
 }
 
 Textarea& Textarea::set_text_selection(bool en) {
-  if (obj_) lv_textarea_set_text_selection(obj_, en);
+  if (raw()) lv_textarea_set_text_selection(raw(), en);
   return *this;
 }
 
 Textarea& Textarea::set_password_show_time(uint32_t time) {
-  if (obj_) lv_textarea_set_password_show_time(obj_, time);
+  if (raw()) lv_textarea_set_password_show_time(raw(), time);
   return *this;
 }
 
 Textarea& Textarea::set_align(TextAlign align) {
-  return set_align(static_cast<lv_text_align_t>(align));
-}
-
-Textarea& Textarea::set_align(lv_text_align_t align) {
-  if (obj_) lv_textarea_set_align(obj_, align);
+  if (raw()) lv_textarea_set_align(raw(), static_cast<lv_text_align_t>(align));
   return *this;
 }
 
 const char* Textarea::get_text() const {
-  return obj_ ? lv_textarea_get_text(obj_) : nullptr;
+  return raw() ? lv_textarea_get_text(raw()) : nullptr;
 }
 
 const char* Textarea::get_placeholder_text() {
-  return obj_ ? lv_textarea_get_placeholder_text(obj_) : nullptr;
+  return raw() ? lv_textarea_get_placeholder_text(raw()) : nullptr;
 }
 
 Label Textarea::get_label() {
-  return Label(obj_ ? lv_textarea_get_label(obj_) : nullptr);
+  return Label(raw() ? lv_textarea_get_label(raw()) : nullptr);
 }
 
 uint32_t Textarea::get_cursor_pos() {
-  return obj_ ? lv_textarea_get_cursor_pos(obj_) : 0;
+  return raw() ? lv_textarea_get_cursor_pos(raw()) : 0;
 }
 
 bool Textarea::get_cursor_click_pos() {
-  return obj_ ? lv_textarea_get_cursor_click_pos(obj_) : false;
+  return raw() ? lv_textarea_get_cursor_click_pos(raw()) : false;
 }
 
 bool Textarea::get_password_mode() const {
-  return obj_ ? lv_textarea_get_password_mode(obj_) : false;
+  return raw() ? lv_textarea_get_password_mode(raw()) : false;
 }
 
 const char* Textarea::get_password_bullet() {
-  return obj_ ? lv_textarea_get_password_bullet(obj_) : nullptr;
+  return raw() ? lv_textarea_get_password_bullet(raw()) : nullptr;
 }
 
 bool Textarea::get_one_line() const {
-  return obj_ ? lv_textarea_get_one_line(obj_) : false;
+  return raw() ? lv_textarea_get_one_line(raw()) : false;
 }
 
 const char* Textarea::get_accepted_chars() {
-  return obj_ ? lv_textarea_get_accepted_chars(obj_) : nullptr;
+  return raw() ? lv_textarea_get_accepted_chars(raw()) : nullptr;
 }
 
 uint32_t Textarea::get_max_length() {
-  return obj_ ? lv_textarea_get_max_length(obj_) : 0;
+  return raw() ? lv_textarea_get_max_length(raw()) : 0;
 }
 
 bool Textarea::text_is_selected() {
-  return obj_ ? lv_textarea_text_is_selected(obj_) : false;
+  return raw() ? lv_textarea_text_is_selected(raw()) : false;
 }
 
 bool Textarea::get_text_selection() {
-  return obj_ ? lv_textarea_get_text_selection(obj_) : false;
+  return raw() ? lv_textarea_get_text_selection(raw()) : false;
 }
 
 uint32_t Textarea::get_password_show_time() {
-  return obj_ ? lv_textarea_get_password_show_time(obj_) : 0;
+  return raw() ? lv_textarea_get_password_show_time(raw()) : 0;
 }
 
 uint32_t Textarea::get_current_char() {
-  return obj_ ? lv_textarea_get_current_char(obj_) : 0;
+  return raw() ? lv_textarea_get_current_char(raw()) : 0;
 }
 
 void Textarea::clear_selection() {
-  if (obj_) lv_textarea_clear_selection(obj_);
+  if (raw()) lv_textarea_clear_selection(raw());
 }
 
 void Textarea::cursor_right() {
-  if (obj_) lv_textarea_cursor_right(obj_);
+  if (raw()) lv_textarea_cursor_right(raw());
 }
 
 void Textarea::cursor_left() {
-  if (obj_) lv_textarea_cursor_left(obj_);
+  if (raw()) lv_textarea_cursor_left(raw());
 }
 
 void Textarea::cursor_down() {
-  if (obj_) lv_textarea_cursor_down(obj_);
+  if (raw()) lv_textarea_cursor_down(raw());
 }
 
 void Textarea::cursor_up() {
-  if (obj_) lv_textarea_cursor_up(obj_);
+  if (raw()) lv_textarea_cursor_up(raw());
 }
 
 Textarea& Textarea::on_value_changed(std::function<void(lvgl::Event&)> cb) {

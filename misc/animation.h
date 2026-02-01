@@ -42,6 +42,65 @@ class AnimationHandle {
   lv_anim_exec_xcb_t exec_cb_ = nullptr;
 };
 
+/**
+ * @brief An RAII wrapper for AnimationHandle that automatically stops
+ * the animation when it goes out of scope.
+ */
+class ScopedAnimation {
+ public:
+  explicit ScopedAnimation(AnimationHandle handle) : handle_(handle) {}
+  ~ScopedAnimation() {
+    if (handle_.is_running()) {
+      handle_.stop();
+    }
+  }
+
+  ScopedAnimation(const ScopedAnimation&) = delete;
+  ScopedAnimation& operator=(const ScopedAnimation&) = delete;
+
+  ScopedAnimation(ScopedAnimation&& other) noexcept : handle_(other.handle_) {
+    // Invalidate other handle mechanism? AnimationHandle copies are cheap/safe.
+    // But ScopedAnimation owns the responsibility to stop.
+    // If we move, the other shouldn't stop.
+    // But AnimationHandle doesn't have a "null" state easily except manually
+    // setting vars.
+    // We need to implement a move ctor that creates a "null" handle in other.
+    // But AnimationHandle fields are private.
+    // Let's rely on detach() or make AnimationHandle more flexible?
+    // Actually, AnimationHandle is copyable.
+    // We need a way to clear `other`'s handle inside specific scope logic.
+    // Since AnimationHandle fields are private, we can't clear them?
+    // We can add a "reset()" to AnimationHandle or just allow ScopedAnimation
+    // to default construct a handle (which is null).
+    other.handle_ = AnimationHandle();
+  }
+
+  ScopedAnimation& operator=(ScopedAnimation&& other) noexcept {
+    if (this != &other) {
+      if (handle_.is_running()) handle_.stop();
+      handle_ = other.handle_;
+      other.handle_ = AnimationHandle();
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Detach the animation, allowing it to continue running.
+   * @return The handle to the running animation.
+   */
+  AnimationHandle detach() {
+    AnimationHandle h = handle_;
+    handle_ = AnimationHandle();
+    return h;
+  }
+
+  bool is_running() const { return handle_.is_running(); }
+  void stop() { handle_.stop(); }
+
+ private:
+  AnimationHandle handle_;
+};
+
 class Animation {
   friend class AnimationTimeline;
 

@@ -12,14 +12,18 @@
 #if LV_USE_LABEL
 /**
  * @file label.h
- * @brief C++ Wrapper for LVGL Label Widget.
+ * @brief User Guide:
+ * `Label` is the primary widget for displaying text. It supports static
+ * strings, dynamic formatting, recoloring, and various wrap modes.
  *
- * # Usage
+ * Key Features:
+ * - **Fluent API**: Chained text setters and style modifiers.
+ * - **Long Mode**: Control wrapping, scrolling, or ellipsis via `LongMode`.
+ * - **Data Binding**: Directly bind label text to a `Subject` via `bind_text`.
+ * - **Formatting**: Printf-style formatting directly into the label.
  *
- * ```cpp
- * lvgl::Label widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `Label(parent, "Hello").center().set_text_fmt("Count: %d", i);`
  */
 namespace lvgl {
 class Label;

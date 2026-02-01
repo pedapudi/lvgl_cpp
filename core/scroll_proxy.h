@@ -67,6 +67,16 @@ class ScrollProxy {
   }
 
   /**
+   * @brief Scroll the object into view recursively.
+   * @param anim_en Animation enable/disable.
+   */
+  ScrollProxy& to_view_recursive(AnimEnable anim_en) {
+    lv_obj_scroll_to_view_recursive(obj_,
+                                    static_cast<lv_anim_enable_t>(anim_en));
+    return *this;
+  }
+
+  /**
    * @brief Set the scrollbar mode.
    * @param mode The new mode.
    */

@@ -1,9 +1,12 @@
 #ifndef LVGL_CPP_CORE_TREE_PROXY_H_
 #define LVGL_CPP_CORE_TREE_PROXY_H_
 
-#include "object.h"
+#include <cstdint>
+
+#include "lvgl.h"
 
 namespace lvgl {
+class Object;
 
 /**
  * @brief Facet Proxy for object hierarchy management.

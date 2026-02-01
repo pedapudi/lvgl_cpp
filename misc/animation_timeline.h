@@ -124,6 +124,13 @@ class AnimationTimeline {
   void* get_user_data() const;
 
   /**
+   * @brief Detach the timeline from this object.
+   * caller must manage memory of the timeline.
+   * @return The raw lv_anim_timeline_t pointer.
+   */
+  lv_anim_timeline_t* detach();
+
+  /**
    * @brief Access the underlying C struct.
    */
   lv_anim_timeline_t* raw() const { return timeline_; }

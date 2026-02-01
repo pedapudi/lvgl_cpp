@@ -1,106 +1,78 @@
-# Implementation Plan: lvgl_cpp Finalization (v0.3.0+)
+# Implementation Plan: lvgl_cpp Finalization (v1.0 Roadmap)
 
-This document outlines the strategic roadmap to complete the modernization of `lvgl_cpp` and achieve 100% architectural coverage of the core LVGL feature set. It bridges the gap between current progress and a cohesive, production-ready C++ framework.
+This plan outlines the final steps to transition `lvgl_cpp` from a structural wrapper into a production-hardened, high-performance C++ framework.
 
-## Executive Summary
+## Core Engineering Principles
 
-The structural refactoring (mixins, CRTP widgets) is **complete** (v0.3.0). The next phases focus on **Systemic Ergonomics** (Proxies), **Resource Safety** (RAII), and **API Completeness**.
+1.  **Zero-Overhead Abstraction**: C++ wrappers must compile down to direct C calls wherever possible.
+2.  **Memory Superiority**: Use RAII to eliminate memory leaks and use-after-free errors common in C UI development.
+3.  **Type-Safe Fluency**: Leverage scoped enums and fluent interfaces for a modern developer experience.
+4.  **Hardware Awareness**: Optimized paths for embedded hardware (SIMD, DMA) without overfitting to specific MCUs.
 
-## Phase 1: Systemic Proxies (The fluent interface)
+---
 
-To eliminate the "Monolithic Object" problem where `lvgl::Object` has hundreds of methods, we will implement the **Proxy Pattern** for major subsystems. This parallels the successful `StyleProxy`.
+## Phase 1: Foundational Ergonomics
+**Goal**: Finalize the high-level API structure to minimize `Object` bloat and ensure resource safety.
 
-### 1.1. LayoutProxy
-**Goal**: Encapsulate Flex and Grid layout configuration.
-- **Current State**: Raw `lv_obj_set_flex_*` calls on `Object`.
-- **Target API**:
-  ```cpp
-  obj.layout().flex()
-     .flow(FlexFlow::Row)
-     .align(FlexAlign::Center, FlexAlign::SpaceBetween)
-     .gap(10, 5);
-  ```
-- **Implementation**:
-  - Create `core/layout_proxy.h`.
-  - Add `LayoutProxy layout()` factory to `Object`.
-  - Wrap `lv_flex_*` and `lv_grid_*` functions.
+### 1.1. Systemic Facet Proxies
+- **LayoutProxy**: Move Flex and Grid configuration into a `obj.layout()` facet.
+- **ScrollProxy**: Move scrolling state and configuration into a `obj.scroll()` facet.
+- **Action**: Deprecate monolithic setters on `Object` in favor of these faceted entry points.
 
-### 1.2. ScrollProxy
-**Goal**: Fluent interface for scrolling and snapping.
-- **Current State**: Scattered `scroll_to`, `set_scroll_snap` methods.
-- **Target API**:
-  ```cpp
-  obj.scroll().to(0, 100, AnimEnable::On) // or Scroll::to_y(100)
-     .snap_y(ScrollSnap::Center)
-     .scrollbar_mode(ScrollbarMode::Auto);
-  ```
-- **Implementation**:
-  - Create `core/scroll_proxy.h`.
-  - Clean up `Scrollable` mixin (delegate to proxy or keep simple shortcuts).
+### 1.2. RAII Lifecycle Hardening
+- **Animation & Timer**: Ensure full RAII support. Destruction of the C++ wrapper must safely cancel/delete the underlying LVGL resource unless detached.
+- **Action**: Implement `detach()` for cases where the user wants to "fire and forget" a timer/animation.
 
-## Phase 2: Animation & Lifecycle (RAII)
+---
 
-**Goal**: Ensure memory safety for asynchronous operations and callbacks.
+## Phase 2: Hardware & Performance Optimization
+**Goal**: Reach parity with raw C performance while shrinking the memory footprint of the wrapper.
 
-### 2.1. Animation RAII
-- **Problem**: `lv_anim_t` C callbacks are dangerous with C++ lambdas (dangling pointers).
-- **Solution**:
-  - Finalize `misc/animation.h` with `std::function` support (already in progress).
-  - Ensure `Animation` destructor handles `lv_anim_del` correctly if strictly owned.
-  - Implement `Animation::start()` returning a handle/future for completion tracking.
+### 2.1. DrawBuf Helpers (Issue 181)
+- **Status**: IN PROGRESS.
+- **Action**: Implement portable `swap_endianness` and `premultiply` using compiler intrinsics (`__builtin_bswap`) and LVGL built-ins.
 
-### 2.2. Timer RAII
-- **Problem**: Similar memory risks with `lv_timer_create`.
-- **Solution**:
-  - `lvgl::Timer` class that wraps `lv_timer_t`.
-  - Scoped lifetime: Timer stops/deletes when C++ object goes out of scope (unless detached).
+### 2.2. Memory Size Optimization
+- [x] **Memory Size Optimization**
+  - [x] Mixin audit for Empty Base Optimization (EBO).
+  - [x] Target `sizeof(lvgl::Object) == sizeof(void*)`. (Achieved 8 bytes - pointer parity!)
+  - [x] Bit-packing for flags/state. (Packed 'owned' flag into object pointer LSB)
 
-## Phase 3: Widget & API Coverage
+### 2.3. Performance Hot-Paths
+- **Devirtualization**: Use `final` and `inline` aggressively in the Proxy layers to eliminate call overhead.
+- **Architecture Dispatch**: Tiered implementation for SIMD-heavy operations, falling back to portable loops.
 
-**Goal**: Reach >90% coverage for user-facing APIs.
+---
 
-### 3.1. Widget Gaps
-- **SpanGroup**: Verify implementation depth. Add `Span` wrapper class if missing.
-- **Canvas**: Implement C++ wrappers for drawing operations (`draw_rect`, `draw_text` on canvas).
-- **MsgBox**: Ensure strict typing for buttons and text interactions.
+## Phase 3: Platinum Convergence & Consistency
+**Goal**: 100% architectural coverage with strict type safety.
 
-### 3.2. Core API Hardening
-- **Flags**: Ensure `add_flag` / `remove_flag` uses the type-safe `ObjFlag` enum everywhere.
-- **Layers**: Wrap `lv_layer_top()` and `lv_layer_sys()` accessors in `Screen` or `Display`.
-- **Input**: Verify `Indev` and `Group` interactions are fully wrapped (no raw `lv_indev_t*` needed in user code).
+### 3.1. Subsystem Completion
+- **Indev (Input)**: Finish wrapping the remaining 14 input device handlers.
+- **Draw/Vector**: Extend path and layer control wrappers.
+- **Font**: Implement weighted font selection and runtime loading.
 
-## Phase 4: Documentation & Polish
+### 3.2. Strict Type Consistency
+- **Audit**: Every method in the library must use `lvgl_cpp` types (e.g., `lvgl::Color`, `lvgl::Area`, `ObjFlag`) instead of raw C types.
+- **Action**: Systemic pass to replace `lv_color_t` and raw `int32_t` where a domain type exists.
 
-### 4.1. Migration Guide Finalization
-- Document the shift from Mixins to Proxies (`style()`, `layout()`, `scroll()`).
-- Provide distinct "C vs C++" comparison examples.
+---
 
-### 4.2. Example Projects
-- Update all entries in `examples/` to use the new Fluent APIs.
-- Create a "Kitchen Sink" demo showcasing all widgets and layout capabilities.
+## Phase 4: Documentation & Ecosystem
+**Goal**: Finalize the public-facing image of the library.
 
-## Phase 5: Platinum Coverage Advancement
+### 4.1. Documentation Sync
+- Ensure `walkthrough.md`, `README.md`, and API reports are 100% in sync with the codebase.
+- Finalize the Migration Guide for users moving from LVGL C to CPP.
 
-**Goal**: Elevate subsystems to 100% verified coverage by addressing identified gaps.
+### 4.2. Example Refresh
+- Update `examples/` and `tests/` to use the finalized fluent patterns and generalized proxies.
 
-### 5.1. Input Device (lv_indev) -> Platinum
-- **Gaps**: Missing 14 functions including `set_group`, `set_display`, `set_scroll_throw`.
-- **Action**: Add missing methods to `InputDevice` class.
-- **Verification**: `tests/test_indev_platinum.cpp`.
-
-### 5.2. Style Properties (lv_style) -> Platinum [DONE]
-- [x] 39 missing functions in `StyleProxy` (logical equivalence gaps).
-- [x] Expand `StyleBase` and `StyleProxy` with properties like `radial_offset`, `opa_layered`, and filtered color accessors.
-- [x] Verification: `tests/test_style_gaps.cpp`.
-
-### 5.3. Vector & Draw (lv_draw) -> Modernization
-- **Gaps**: 68 missing functions.
-- **Action**: Create `DrawProxy` for specialized drawing tasks; expand `VectorDraw` with path and layer control.
-- **Verification**: `tests/test_draw_platinum.cpp`.
+---
 
 ## Execution Order
-
-1. **Phase 1-2 Completion**: Ensure Layout/Scroll proxies and RAII are solid.
-2. **Phase 5 Platinum Push**: Targeted gap bridging in `indev` and `style`.
-3. **Phase 5 Draw Modernization**: Final push for graphics coverage.
-4. **Documentation**: continuous updates.
+1. **Fix Build & Issue 181**: Resolve current `StyleProxy` regressions and finish `DrawBuf`.
+2. **Phase 1 (Ergonomics)**: Implement Layout and Scroll proxies.
+3. **Phase 2 (Optimization)**: Systemic memory and performance pass.
+4. **Phase 3 (Convergence)**: Bridge remaining coverage gaps.
+5. **Phase 4 (Release)**: Documentation and final polish.
