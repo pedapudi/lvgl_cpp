@@ -15,6 +15,10 @@
 #include "lvgl_cpp/lvgl_cpp.h"
 #include "lvgl_cpp/misc/enums.h"
 
+#if __has_include("esp_lcd_panel_rgb.h")
+#include "esp_lcd_panel_rgb.h"
+#endif
+
 class LvglPort {
  public:
   struct Config {
@@ -76,3 +80,8 @@ class LvglPort {
   esp_lcd_panel_handle_t panel_handle_;
   std::vector<uint8_t> draw_buf_;
 };
+
+#include "lvgl_cpp/display/drivers/esp32_rgb.h"
+
+// Note: Esp32RgbDisplay is now imported from
+// <lvgl_cpp/display/drivers/esp32_rgb.h>

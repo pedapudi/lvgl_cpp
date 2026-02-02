@@ -116,7 +116,7 @@ void HelloWorld::load(lvgl::Display& display, const std::string& text,
      * NOTE: This variable is STATIC. It must survive after this function
      * returns.
      */
-    static lvgl::ImageDescriptor earth_dsc(150, 150, LV_COLOR_FORMAT_RAW,
+    static lvgl::ImageDescriptor earth_dsc(150, 150, lvgl::ColorFormat::Raw,
                                            (const uint8_t*)raw_svg_ptr,
                                            strlen(raw_svg_ptr) + 1);
 

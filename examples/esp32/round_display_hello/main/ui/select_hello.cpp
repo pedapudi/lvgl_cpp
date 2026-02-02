@@ -40,7 +40,7 @@ void SelectHello::show_menu(lvgl::Display& display) {
     roller_ = lvgl::Roller(&menu_screen_);
     static const char* options =
         "Hello, world!\nHello, ESP32!\nHello, LVGL C++!";
-    roller_.set_options(options, lvgl::RollerMode::Infinite);
+    roller_.set_options(options, lvgl::Roller::Mode::Infinite);
 
     roller_.style()
         .text_font(lvgl::Font(&lv_font_montserrat_20))
