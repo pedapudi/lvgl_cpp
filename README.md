@@ -72,9 +72,8 @@ using namespace lvgl;
 
 void create_ui(Screen& screen) {
     // 1. Create a Style using the Fluent Builder
-    static Style btn_style; // Static to keep it alive (or use shared_ptr)
-    btn_style.init()
-             .bg_color(Palette::Blue)
+    static Style btn_style; // Static to keep it alive
+    btn_style.bg_color(Palette::Blue)
              .radius(8)
              .border_width(2)
              .border_color(Palette::Cyan)
@@ -94,11 +93,11 @@ void create_ui(Screen& screen) {
          .center();
 
     // 4. Handle Events with C++ Lambdas
-    btn.add_event_cb(EventCode::Clicked, [](Event event) {
+    btn.on_clicked([](Event event) {
         // 'event' is a C++ wrapper around lv_event_t
-        auto target_btn = Button(event.get_target(), Ownership::Unmanaged);
+        Button target(event.get_target().raw()); // Wrap existing object (Unmanaged)
         
-        if (target_btn.has_state(State::Checked)) {
+        if (target.has_state(State::Checked)) {
             printf("Button Checked!\n");
         } else {
             printf("Button Unchecked!\n");
