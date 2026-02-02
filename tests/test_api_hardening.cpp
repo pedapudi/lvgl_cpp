@@ -4,7 +4,7 @@
 #include "../core/object.h"
 #include "../display/display.h"
 #include "../misc/enums.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

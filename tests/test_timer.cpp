@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "../misc/timer.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Variable to capture execution
 static bool resumed = false;

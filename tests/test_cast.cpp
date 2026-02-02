@@ -3,7 +3,7 @@
 
 #include "core/cast.h"
 #include "display/display.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "widgets/button.h"
 #include "widgets/label.h"
 

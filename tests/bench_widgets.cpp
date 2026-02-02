@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "lvgl_cpp/core/object.h"
 #include "lvgl_cpp/display/display.h"
 

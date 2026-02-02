@@ -17,7 +17,7 @@
 #include "../widgets/line.h"
 #include "../widgets/slider.h"
 #include "../widgets/switch.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Mock event handler
 static void event_handler(lvgl::Event& e) {

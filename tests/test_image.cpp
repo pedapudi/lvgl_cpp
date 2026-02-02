@@ -5,7 +5,7 @@
 #include "../draw/draw_buf.h"
 #include "../draw/image_descriptor.h"
 #include "../widgets/image.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "src/draw/sw/lv_draw_sw_utils.h"
 
 void test_image_path() {

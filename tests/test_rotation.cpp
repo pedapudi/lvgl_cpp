@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "display/display.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 int main() {
   lv_init();

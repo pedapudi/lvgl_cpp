@@ -6,7 +6,7 @@
 #include "../misc/style.h"
 #include "../widgets/button.h"
 #include "../widgets/label.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_style_expansion() {
   std::cout << "Testing Style Expansion..." << std::endl;

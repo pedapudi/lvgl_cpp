@@ -5,7 +5,7 @@
 #include "../widgets/label.h"
 #include "../widgets/tabview.h"
 #include "../widgets/tileview.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

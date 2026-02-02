@@ -42,11 +42,17 @@ class Event {
    */
   Object get_target() const;
 
+  template <typename T>
+  T get_target() const;
+
   /**
    * @brief Get the current target (the object determining the event handler).
    * @return An Unmanaged Object wrapper around the current target.
    */
   Object get_current_target() const;
+
+  template <typename T>
+  T get_current_target() const;
 
   /**
    * @brief Get the user data associated with the event.

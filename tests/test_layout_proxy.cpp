@@ -3,7 +3,7 @@
 
 #include "../core/object.h"
 #include "../display/display.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Helper to check flex flow equality
 void test_flex_layout() {

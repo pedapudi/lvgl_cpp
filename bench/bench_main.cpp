@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "bench.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 #ifdef ENABLE_PROFILING
 #include <gperftools/malloc_extension.h>

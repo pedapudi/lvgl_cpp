@@ -4,7 +4,7 @@
 
 #include "../display/display.h"
 #include "../misc/file_system.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_filesystem_write_read() {
   std::cout << "Testing Filesystem Write/Read..." << std::endl;

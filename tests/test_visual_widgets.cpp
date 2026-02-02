@@ -12,7 +12,7 @@
 #include "../widgets/scale.h"
 #include "../widgets/span.h"
 #include "../widgets/spinner.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

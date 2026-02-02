@@ -17,7 +17,7 @@
 #include "../widgets/label.h"
 #include "../widgets/span.h"
 #include "bench.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // --- 7.1 Core Mechanisms ---
 

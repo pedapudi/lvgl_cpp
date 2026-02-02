@@ -2,7 +2,7 @@
 
 #include "../display/display.h"
 #include "../misc/color.h"  // For LV_PALETTE_...
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "widgets/anim_image.h"
 #include "widgets/arc.h"
 #include "widgets/bar.h"

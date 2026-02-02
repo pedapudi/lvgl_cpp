@@ -11,7 +11,7 @@
 #include "../widgets/roller.h"
 #include "../widgets/spinbox.h"
 #include "../widgets/textarea.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Textarea Example 1: Simple Text area
 void test_textarea_1() {

@@ -5,7 +5,7 @@
 #include "../widgets/button.h"
 #include "../widgets/label.h"
 #include "../widgets/menu.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_menu_basic() {
   std::cout << "Testing Menu Basic..." << std::endl;

@@ -4,7 +4,7 @@
 
 #include "../core/object.h"
 #include "../display/display.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_default_ownership() {
   std::cout << "Testing Default Ownership..." << std::endl;

@@ -6,7 +6,7 @@
 #include "../display/display.h"
 #include "../misc/style.h"
 #include "../widgets/span.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

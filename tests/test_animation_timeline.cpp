@@ -4,7 +4,7 @@
 #include "../display/display.h"
 #include "../misc/animation_timeline.h"
 #include "../widgets/button.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 static int anim1_exec_count = 0;
 static int anim2_exec_count = 0;

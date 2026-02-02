@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "../misc/log.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 static std::vector<std::string> log_messages;
 static std::vector<lvgl::LogLevel> log_levels;

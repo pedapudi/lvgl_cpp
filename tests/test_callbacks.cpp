@@ -12,7 +12,7 @@
 #include "../widgets/switch.h"
 #include "../widgets/table.h"
 #include "../widgets/textarea.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_generic_callbacks() {
   std::cout << "Testing Generic Callbacks..." << std::endl;

@@ -48,7 +48,7 @@ Most setters now return `*this` typed to the specific class, allowing chaining. 
 ```cpp
 lvgl::Button btn;
 btn.set_size(100, 50)
-   .set_align(lvgl::Align::Center) // Use Align::Center enum
+   .align(lvgl::Align::Center) // Use .align() not .set_align()
    .add_flag(lvgl::ObjFlag::Checkable); // Use ObjFlag enum
 ```
 
@@ -104,7 +104,7 @@ btn.style().set_pad_all(10).add_state(State::Checked | State::Focused);
 ### 5. Advanced Callbacks
 You can now use `std::function`, lambdas, and method binders directly.
 ```cpp
-btn.on_clicked([](lvgl::Event& e) {
+btn.on_clicked([](lvgl::Event e) {
     std::cout << "Clicked!" << std::endl;
 });
 ```

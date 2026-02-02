@@ -59,22 +59,14 @@ Here is a complete example showing the "Hello World" of `lvgl_cpp` with a styled
 
 ```cpp
 #include <unistd.h>
-#include "lvgl.h"
-#include "lvgl_cpp/core/object.h"
-#include "lvgl_cpp/display/display.h"
-#include "lvgl_cpp/widgets/button.h"
-#include "lvgl_cpp/widgets/label.h"
-#include "lvgl_cpp/widgets/screen.h"
-#include "lvgl_cpp/misc/style.h"
-#include "lvgl_cpp/misc/timer.h"
+#include "lvgl_cpp.h"
 
 using namespace lvgl;
 
 void create_ui(Screen& screen) {
     // 1. Create a Style using the Fluent Builder
-    static Style btn_style; // Static to keep it alive (or use shared_ptr)
-    btn_style.init()
-             .bg_color(Palette::Blue)
+    static Style btn_style; // Static to keep it alive
+    btn_style.bg_color(Palette::Blue)
              .radius(8)
              .border_width(2)
              .border_color(Palette::Cyan)
@@ -94,17 +86,19 @@ void create_ui(Screen& screen) {
          .center();
 
     // 4. Handle Events with C++ Lambdas
-    btn.add_event_cb(EventCode::Clicked, [](Event event) {
-        // 'event' is a C++ wrapper around lv_event_t
-        auto target_btn = Button(event.get_target(), Ownership::Unmanaged);
+    btn.on_clicked([](Event e) {
+        // Idiomatic way to get the sender as a specific type
+        auto target = e.get_target<Button>(); 
         
-        if (target_btn.has_state(State::Checked)) {
+        if (target.has_state(State::Checked)) {
             printf("Button Checked!\n");
         } else {
             printf("Button Unchecked!\n");
         }
     });
 }
+
+> **⚠️ Note on Lambdas**: In `lvgl_cpp`, always prefer `e.get_target<T>()` over capturing local wrappers by reference (e.g., `[&btn]`). Because `btn` is a C++ wrapper that may go out of scope, capturing it by reference can lead to dangling references when the event actually fires.
 
 int main() {
     lv_init();
@@ -118,8 +112,13 @@ int main() {
     create_ui(screen);
 
     while (true) {
-        uint32_t time_till_next = Timer::handler();
-        usleep(5 * 1000);
+        // Run LVGL timers and get ms until next task
+        uint32_t ms_until_next = Timer::handler();
+        
+        // Wait till next task (standard usleep conversion)
+        if (ms_until_next > 0) {
+            usleep(ms_until_next * 1000);
+        }
     }
 }
 ```

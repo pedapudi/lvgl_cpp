@@ -7,7 +7,7 @@
 #include "../indev/encoder_input.h"
 #include "../indev/keypad_input.h"
 #include "../indev/pointer_input.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Mock data to verify callback execution
 static bool callback_called = false;

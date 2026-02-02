@@ -5,7 +5,7 @@
 #include "../display/display.h"
 #include "../misc/animation.h"
 #include "../widgets/button.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Globals to be captured or modified
 static int test_val = 0;
