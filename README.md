@@ -146,6 +146,8 @@ We avoid the "Monolithic Object" anti-pattern. `lvgl::Object` is the base, but f
 *   **`style()`**: Returns a `StyleProxy` for fluent local styling.
 *   **`scroll()`**: Returns a `ScrollProxy` for scrolling operations.
 *   **`layout()`**: Returns a `LayoutProxy` for flex/grid configuration.
+*   **`interaction()`**: Returns an `InteractionProxy` for gesture and group interaction management.
+*   **`tree()`**: Returns a `TreeProxy` for DOM-like navigation (parent/child/neighbors).
 
 This means `lvgl::Object` remains lightweight. To use button-specific features, you must use `lvgl::Button`.
 
@@ -180,6 +182,7 @@ group.add_obj(btn2);
 -   **Lottie Animations**: Render vector animations using `lvgl::Lottie`.
 -   **Vector Graphics**: Direct drawing API via `lvgl::VectorDraw` and `lvgl::VectorPath` (ThorVG).
 -   **System Abstractions**: `Display` management, `InputDevice` configuration (cursors), and `Theme` application.
+-   **Modernized Enums**: Full adoption of scoped enums for `Align`, `State`, `Part`, `Palette`, `FlexFlow`, etc.
 
 ---
 
@@ -191,7 +194,7 @@ The `design/` directory contains detailed architectural decision records (ADRs) 
 *   **[API Coverage Plan](design/api_coverage_plan.md)**: Verified feature matrix.
 *   **[Strategic Plan](design/strategic_improvement_plan.md)**: Deep dive into API coverage goals.
 *   **[Memory Analysis](design/memory_analysis.md)**: Performance overhead study.
-    *   *Result*: ~24 bytes overhead per C++ wrapper. No leaks (RAII).
+    *   *Result*: ~48 bytes overhead per C++ wrapper (on 64-bit). No leaks (RAII).
 *   **[Widget Standardization](design/issue_61_standardization.md)**: Constructor patterns.
 
 ---
