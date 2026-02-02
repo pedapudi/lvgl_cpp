@@ -82,17 +82,7 @@ class Event;  // Forward declaration
  */
 class Object {
  public:
-  /**
-   * @brief Ownership policy for LVGL objects.
-   * Defines how the C++ wrapper manages the lifetime of the underlying LVGL
-   * object.
-   */
-  enum class Ownership {
-    Default,    ///< Owned if parent is set, Unmanaged if wrapping pointer.
-    Managed,    ///< The C++ object owns the LVGL object and will delete it.
-    Unmanaged,  ///< The C++ object is a weak reference (view) and will NOT
-                ///< delete.
-  };
+  using Ownership = lvgl::Ownership;
 
   /**
    * @brief Alignment types.
@@ -744,6 +734,20 @@ class Object {
    */
   void install_delete_hook();
 };
+
+// =========================================================================
+// Event Template Implementations
+// =========================================================================
+
+template <typename T>
+T Event::get_target() const {
+  return T(get_target().raw(), Ownership::Unmanaged);
+}
+
+template <typename T>
+T Event::get_current_target() const {
+  return T(get_current_target().raw(), Ownership::Unmanaged);
+}
 
 }  // namespace lvgl
 

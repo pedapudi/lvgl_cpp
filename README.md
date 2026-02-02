@@ -93,9 +93,9 @@ void create_ui(Screen& screen) {
          .center();
 
     // 4. Handle Events with C++ Lambdas
-    btn.on_clicked([](Event event) {
-        // 'event' is a C++ wrapper around lv_event_t
-        Button target(event.get_target().raw()); // Wrap existing object (Unmanaged)
+    btn.on_clicked([](Event e) {
+        // Idiomatic way to get the sender as a specific type
+        auto target = e.get_target<Button>(); 
         
         if (target.has_state(State::Checked)) {
             printf("Button Checked!\n");
@@ -104,6 +104,8 @@ void create_ui(Screen& screen) {
         }
     });
 }
+
+> **⚠️ Note on Lambdas**: In `lvgl_cpp`, always prefer `e.get_target<T>()` over capturing local wrappers by reference (e.g., `[&btn]`). Because `btn` is a C++ wrapper that may go out of scope, capturing it by reference can lead to dangling references when the event actually fires.
 
 int main() {
     lv_init();

@@ -8,6 +8,18 @@
 namespace lvgl {
 
 /**
+ * @brief Ownership policy for LVGL objects.
+ * Defines how the C++ wrapper manages the lifetime of the underlying LVGL
+ * object.
+ */
+enum class Ownership {
+  Default,    ///< Owned if parent is set, Unmanaged if wrapping pointer.
+  Managed,    ///< The C++ object owns the LVGL object and will delete it.
+  Unmanaged,  ///< The C++ object is a weak reference (view) and will NOT
+              ///< delete.
+};
+
+/**
  * @brief Wrapper for lv_align_t.
  */
 enum class Align : uint8_t {
