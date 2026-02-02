@@ -72,6 +72,46 @@ class Point {
 };
 
 /**
+ * @brief Wrapper for lv_point_precise_t.
+ */
+class PointPrecise {
+ public:
+  PointPrecise() : point_{0, 0} {}
+  PointPrecise(lv_value_precise_t x, lv_value_precise_t y) : point_{x, y} {}
+  PointPrecise(lv_point_precise_t p)
+      : point_(p) {}  // NOLINT(google-explicit-constructor)
+
+  operator lv_point_precise_t() const {
+    return point_;
+  }  // NOLINT(google-explicit-constructor)
+
+  lv_value_precise_t x() const { return point_.x; }
+  lv_value_precise_t y() const { return point_.y; }
+
+  void set_x(lv_value_precise_t x) { point_.x = x; }
+  void set_y(lv_value_precise_t y) { point_.y = y; }
+
+  bool operator==(const PointPrecise& other) const {
+    return point_.x == other.point_.x && point_.y == other.point_.y;
+  }
+  bool operator!=(const PointPrecise& other) const { return !(*this == other); }
+
+  PointPrecise operator+(const PointPrecise& other) const {
+    return PointPrecise(point_.x + other.point_.x, point_.y + other.point_.y);
+  }
+
+  PointPrecise operator-(const PointPrecise& other) const {
+    return PointPrecise(point_.x - other.point_.x, point_.y - other.point_.y);
+  }
+
+  lv_point_precise_t* raw() { return &point_; }
+  const lv_point_precise_t* raw() const { return &point_; }
+
+ private:
+  lv_point_precise_t point_;
+};
+
+/**
  * @brief Wrapper for lv_area_t.
  */
 class Area {

@@ -19,91 +19,87 @@ Spinbox::Spinbox(lv_obj_t* obj, Ownership ownership)
     : Textarea(obj, ownership) {}
 
 Spinbox& Spinbox::set_value(int32_t v) {
-  if (obj_) lv_spinbox_set_value(obj_, v);
+  if (raw()) lv_spinbox_set_value(raw(), v);
   return *this;
 }
 
 Spinbox& Spinbox::set_rollover(bool rollover) {
-  if (obj_) lv_spinbox_set_rollover(obj_, rollover);
+  if (raw()) lv_spinbox_set_rollover(raw(), rollover);
   return *this;
 }
 
 Spinbox& Spinbox::set_digit_format(uint32_t digit_count, uint32_t sep_pos) {
-  if (obj_) lv_spinbox_set_digit_format(obj_, digit_count, sep_pos);
+  if (raw()) lv_spinbox_set_digit_format(raw(), digit_count, sep_pos);
   return *this;
 }
 
 Spinbox& Spinbox::set_digit_count(uint32_t digit_count) {
-  if (obj_) lv_spinbox_set_digit_count(obj_, digit_count);
+  if (raw()) lv_spinbox_set_digit_count(raw(), digit_count);
   return *this;
 }
 
 Spinbox& Spinbox::set_dec_point_pos(uint32_t dec_point_pos) {
-  if (obj_) lv_spinbox_set_dec_point_pos(obj_, dec_point_pos);
+  if (raw()) lv_spinbox_set_dec_point_pos(raw(), dec_point_pos);
   return *this;
 }
 
 Spinbox& Spinbox::set_step(uint32_t step) {
-  if (obj_) lv_spinbox_set_step(obj_, step);
+  if (raw()) lv_spinbox_set_step(raw(), step);
   return *this;
 }
 
 Spinbox& Spinbox::set_range(int32_t min_value, int32_t max_value) {
-  if (obj_) lv_spinbox_set_range(obj_, min_value, max_value);
+  if (raw()) lv_spinbox_set_range(raw(), min_value, max_value);
   return *this;
 }
 
 Spinbox& Spinbox::set_min_value(int32_t min_value) {
-  if (obj_) lv_spinbox_set_min_value(obj_, min_value);
+  if (raw()) lv_spinbox_set_min_value(raw(), min_value);
   return *this;
 }
 
 Spinbox& Spinbox::set_max_value(int32_t max_value) {
-  if (obj_) lv_spinbox_set_max_value(obj_, max_value);
+  if (raw()) lv_spinbox_set_max_value(raw(), max_value);
   return *this;
 }
 
 Spinbox& Spinbox::set_cursor_pos(uint32_t pos) {
-  if (obj_) lv_spinbox_set_cursor_pos(obj_, pos);
+  if (raw()) lv_spinbox_set_cursor_pos(raw(), pos);
   return *this;
 }
 
 Spinbox& Spinbox::set_digit_step_direction(Dir direction) {
-  if (obj_)
-    lv_spinbox_set_digit_step_direction(obj_, static_cast<lv_dir_t>(direction));
-  return *this;
-}
-
-Spinbox& Spinbox::set_digit_step_direction(lv_dir_t direction) {
-  if (obj_) lv_spinbox_set_digit_step_direction(obj_, direction);
+  if (raw())
+    lv_spinbox_set_digit_step_direction(raw(),
+                                        static_cast<lv_dir_t>(direction));
   return *this;
 }
 
 bool Spinbox::get_rollover() {
-  return obj_ ? lv_spinbox_get_rollover(obj_) : false;
+  return raw() ? lv_spinbox_get_rollover(raw()) : false;
 }
 
-int32_t Spinbox::get_value() { return obj_ ? lv_spinbox_get_value(obj_) : 0; }
+int32_t Spinbox::get_value() { return raw() ? lv_spinbox_get_value(raw()) : 0; }
 
-int32_t Spinbox::get_step() { return obj_ ? lv_spinbox_get_step(obj_) : 0; }
+int32_t Spinbox::get_step() { return raw() ? lv_spinbox_get_step(raw()) : 0; }
 
 Spinbox& Spinbox::step_next() {
-  if (obj_) lv_spinbox_step_next(obj_);
+  if (raw()) lv_spinbox_step_next(raw());
   return *this;
 }
 
 Spinbox& Spinbox::step_prev() {
-  if (obj_) lv_spinbox_step_prev(obj_);
+  if (raw()) lv_spinbox_step_prev(raw());
   return *this;
 }
 
 Spinbox& Spinbox::increment() {
-  if (obj_) lv_spinbox_increment(obj_);
+  if (raw()) lv_spinbox_increment(raw());
   return *this;
 }
 
 Spinbox& Spinbox::decrement() {
-  if (obj_) lv_spinbox_decrement(obj_);
+  if (raw()) lv_spinbox_decrement(raw());
   return *this;
 }
 
@@ -132,18 +128,8 @@ Spinbox& Spinbox::remove_state(State state) {
   this->state().remove(state);
   return *this;
 }
-Spinbox& Spinbox::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-
 Spinbox& Spinbox::add_flag(ObjFlag flag) {
   Object::add_flag(flag);
-  return *this;
-}
-
-Spinbox& Spinbox::remove_flag(lv_obj_flag_t flag) {
-  if (obj_) lv_obj_remove_flag(obj_, flag);
   return *this;
 }
 
@@ -153,7 +139,7 @@ Spinbox& Spinbox::remove_flag(ObjFlag flag) {
 }
 
 Spinbox& Spinbox::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 Observer Spinbox::bind_value(Subject& subject) {

@@ -36,7 +36,7 @@ class Screen : public Widget<Screen> {
    * @param delay Delay before starting the animation in ms.
    * @param auto_del If true, automatically delete the old screen when finished.
    */
-  void load_anim(lv_screen_load_anim_t anim_type, uint32_t time, uint32_t delay,
+  void load_anim(ScreenLoadAnim anim_type, uint32_t time, uint32_t delay,
                  bool auto_del = false);
 
   /**

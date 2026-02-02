@@ -60,8 +60,6 @@ class Textarea : public Widget<Textarea> {
   Textarea& set_text_selection(bool en);
   Textarea& set_password_show_time(uint32_t time);
   Textarea& set_align(TextAlign align);
-  [[deprecated("Use set_align(TextAlign) instead")]]
-  Textarea& set_align(lv_text_align_t align);
 
   /**
    * @brief Register a callback for the ValueChanged event.

@@ -20,7 +20,7 @@ Spinner::Spinner(Object& parent, uint32_t time, uint32_t arc_length)
 Spinner::Spinner(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Spinner& Spinner::set_anim_params(uint32_t t, uint32_t angle) {
-  if (obj_) lv_spinner_set_anim_params(obj_, t, angle);
+  if (raw()) lv_spinner_set_anim_params(raw(), t, angle);
   return *this;
 }
 

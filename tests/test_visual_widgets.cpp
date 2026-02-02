@@ -48,7 +48,7 @@ void test_canvas_1() {
   // Canvas requires a buffer.
   static uint8_t buffer[50 * 50 * 4];
   Canvas canvas(screen);
-  canvas.set_buffer(buffer, 50, 50, LV_COLOR_FORMAT_ARGB8888);
+  canvas.set_buffer(buffer, 50, 50, lvgl::ColorFormat::ARGB8888);
   canvas.fill_bg(lv_color_hex3(0xccc), LV_OPA_COVER);
   canvas.center();
 
@@ -81,9 +81,9 @@ void test_animimg_1() {
 
   // Mock images
   static lv_image_dsc_t img1 = {
-      {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
+      {static_cast<uint32_t>(lvgl::ColorFormat::ARGB8888), 10, 10, 40, 0}, 0, 0};
   static lv_image_dsc_t img2 = {
-      {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
+      {static_cast<uint32_t>(lvgl::ColorFormat::ARGB8888), 10, 10, 40, 0}, 0, 0};
   static const void* anim_imgs[] = {&img1, &img2};
 
   animimg.set_src(anim_imgs, 2);
@@ -99,7 +99,7 @@ void test_scale_1() {
   Object screen = get_screen();
   Scale scale(screen);
   scale.set_size(LV_PCT(80), 100);
-  scale.set_mode(lvgl::ScaleMode::HorizontalBottom);
+  scale.set_mode(lvgl::Scale::Mode::HorizontalBottom);
   scale.center();
   scale.set_total_tick_count(31);
   scale.set_major_tick_every(5);
@@ -115,16 +115,16 @@ void test_imagebutton_1() {
 
   // Mock images
   static lv_image_dsc_t img_left = {
-      {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
+      {static_cast<uint32_t>(lvgl::ColorFormat::ARGB8888), 10, 10, 40, 0}, 0, 0};
   static lv_image_dsc_t img_mid = {
-      {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
+      {static_cast<uint32_t>(lvgl::ColorFormat::ARGB8888), 10, 10, 40, 0}, 0, 0};
   static lv_image_dsc_t img_right = {
-      {LV_COLOR_FORMAT_ARGB8888, 10, 10, 40, 0}, 0, 0};
+      {static_cast<uint32_t>(lvgl::ColorFormat::ARGB8888), 10, 10, 40, 0}, 0, 0};
 
-  imgbtn.set_src(LV_IMAGEBUTTON_STATE_RELEASED, &img_left, &img_mid,
+  imgbtn.set_src(lvgl::ImageButton::State::Released, &img_left, &img_mid,
                  &img_right);
   imgbtn.set_width(100);
-  imgbtn.align(LV_ALIGN_CENTER, 0, 0);
+  imgbtn.align(lvgl::Align::Center, 0, 0);
 
   // Create label on imgbtn
   // Note: imgbtn is an object, so we can wrap it if needed or use as parent if
@@ -132,7 +132,7 @@ void test_imagebutton_1() {
   // Object via valid copy/move or just &imgbtn.
   Label label(imgbtn);
   label.set_text("Button");
-  label.align(LV_ALIGN_CENTER, 0, -4);
+  label.align(lvgl::Align::Center, 0, -4);
 
   std::cout << "ImageButton Example 1 Passed" << std::endl;
 }

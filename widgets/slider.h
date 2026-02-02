@@ -10,14 +10,19 @@
 #if LV_USE_SLIDER
 /**
  * @file slider.h
- * @brief C++ Wrapper for LVGL Slider Widget.
+ * @brief User Guide:
+ * `Slider` is an interactive `Bar` that users can drag to change its value.
+ * It inherits all functionality from `Bar` and adds gesture handling.
  *
- * # Usage
+ * Key Features:
+ * - **Interactive**: Supports drag, click-to-set, and key controls.
+ * - **Modes**: Normal, Symmetrical, or Range (with two knobs).
+ * - **Events**: Frequently used with `on_value_changed`.
+ * - **Data Binding**: Bind the slider value to a `Subject` for automatic
+ * updates.
  *
- * ```cpp
- * lvgl::Slider widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `Slider(parent).set_range(0, 100).on_value_changed([](auto& e){...});`
  */
 namespace lvgl {
 class Subject;
@@ -58,17 +63,10 @@ class Slider : public Bar {
   // API
   Slider& set_value(int32_t value, AnimEnable anim = AnimEnable::Off);
 
-  [[deprecated("Use set_value(int32_t, AnimEnable) instead")]]
-  Slider& set_value(int32_t value, lv_anim_enable_t anim);
   Slider& set_start_value(int32_t value, AnimEnable anim = AnimEnable::Off);
 
-  [[deprecated("Use set_start_value(int32_t, AnimEnable) instead")]]
-  Slider& set_start_value(int32_t value, lv_anim_enable_t anim);
   Slider& set_range(int32_t min, int32_t max);
   Slider& set_mode(Mode mode);
-
-  [[deprecated("Use set_mode(Mode) instead")]]
-  Slider& set_mode(lv_slider_mode_t mode);
 
   /**
    * @brief Set the value of the left knob (for range slider).
@@ -76,9 +74,6 @@ class Slider : public Bar {
    * @param anim Enable animation (`LV_ANIM_ON`/`LV_ANIM_OFF`).
    */
   Slider& set_left_value(int32_t value, AnimEnable anim = AnimEnable::Off);
-
-  [[deprecated("Use set_left_value(int32_t, AnimEnable) instead")]]
-  Slider& set_left_value(int32_t value, lv_anim_enable_t anim);
 
   /**
    * @brief Register a callback for the ValueChanged event.
@@ -97,9 +92,7 @@ class Slider : public Bar {
   Slider& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Slider& add_state(State state);
   Slider& remove_state(State state);
-  Slider& add_flag(lv_obj_flag_t flag);
   Slider& add_flag(ObjFlag flag);
-  Slider& remove_flag(lv_obj_flag_t flag);
   Slider& remove_flag(ObjFlag flag);
 
   /**

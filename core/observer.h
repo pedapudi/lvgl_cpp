@@ -43,22 +43,6 @@ class Subject {
 
   void notify();
 
-  Observer bind_flag_if_eq(lvgl::Object& obj, lv_obj_flag_t flag,
-                           int32_t ref_value);
-  Observer bind_flag_if_not_eq(lvgl::Object& obj, lv_obj_flag_t flag,
-                               int32_t ref_value);
-  Observer bind_flag_if_gt(lvgl::Object& obj, lv_obj_flag_t flag,
-                           int32_t ref_value);
-  Observer bind_flag_if_ge(lvgl::Object& obj, lv_obj_flag_t flag,
-                           int32_t ref_value);
-  Observer bind_flag_if_lt(lvgl::Object& obj, lv_obj_flag_t flag,
-                           int32_t ref_value);
-  Observer bind_flag_if_le(lvgl::Object& obj, lv_obj_flag_t flag,
-                           int32_t ref_value);
-
-  /**
-   * @brief Bind an object flag to an integer value condition (Scoped Enum).
-   */
   Observer bind_flag_if_eq(Object& obj, ObjFlag flag, int32_t ref_value);
   Observer bind_flag_if_not_eq(Object& obj, ObjFlag flag, int32_t ref_value);
   Observer bind_flag_if_gt(Object& obj, ObjFlag flag, int32_t ref_value);
@@ -66,22 +50,6 @@ class Subject {
   Observer bind_flag_if_lt(Object& obj, ObjFlag flag, int32_t ref_value);
   Observer bind_flag_if_le(Object& obj, ObjFlag flag, int32_t ref_value);
 
-  Observer bind_state_if_eq(lvgl::Object& obj, lv_state_t state,
-                            int32_t ref_value);
-  Observer bind_state_if_not_eq(lvgl::Object& obj, lv_state_t state,
-                                int32_t ref_value);
-  Observer bind_state_if_gt(lvgl::Object& obj, lv_state_t state,
-                            int32_t ref_value);
-  Observer bind_state_if_ge(lvgl::Object& obj, lv_state_t state,
-                            int32_t ref_value);
-  Observer bind_state_if_lt(lvgl::Object& obj, lv_state_t state,
-                            int32_t ref_value);
-  Observer bind_state_if_le(lvgl::Object& obj, lv_state_t state,
-                            int32_t ref_value);
-
-  /**
-   * @brief Bind an object state to an integer value condition (Scoped Enum).
-   */
   Observer bind_state_if_eq(Object& obj, State state, int32_t ref_value);
   Observer bind_state_if_not_eq(Object& obj, State state, int32_t ref_value);
   Observer bind_state_if_gt(Object& obj, State state, int32_t ref_value);

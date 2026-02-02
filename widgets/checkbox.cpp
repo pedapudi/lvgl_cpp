@@ -22,21 +22,21 @@ Checkbox::Checkbox(Object& parent, const std::string& text) : Checkbox(parent) {
 }
 
 Checkbox& Checkbox::set_text(const char* txt) {
-  if (obj_) lv_checkbox_set_text(obj_, txt);
+  if (raw()) lv_checkbox_set_text(raw(), txt);
   return *this;
 }
 
 Checkbox& Checkbox::set_text_static(const char* txt) {
-  if (obj_) lv_checkbox_set_text_static(obj_, txt);
+  if (raw()) lv_checkbox_set_text_static(raw(), txt);
   return *this;
 }
 
 const char* Checkbox::get_text() const {
-  return obj_ ? lv_checkbox_get_text(obj_) : "";
+  return raw() ? lv_checkbox_get_text(raw()) : "";
 }
 
 Checkbox& Checkbox::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 

@@ -71,7 +71,6 @@ class Scale : public Widget<Scale> {
   explicit Scale(Object& parent);
   explicit Scale(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
-  Scale& set_mode(lv_scale_mode_t mode);
   Scale& set_mode(Mode mode);
   Scale& set_total_tick_count(uint32_t total_tick_count);
   Scale& set_major_tick_every(uint32_t major_tick_every);
@@ -87,15 +86,6 @@ class Scale : public Widget<Scale> {
   Scale& set_draw_ticks_on_top(bool en);
 
   Mode get_mode();
-
-  // Deprecated legacy overloads
-  Scale& set_mode(ScaleMode mode) { return set_mode(static_cast<Mode>(mode)); }
-  int32_t get_total_tick_count();
-  int32_t get_major_tick_every();
-  bool get_label_show();
-  uint32_t get_angle_range();
-  int32_t get_range_min_value();
-  int32_t get_range_max_value();
 
   // Section management
   ScaleSection add_section();

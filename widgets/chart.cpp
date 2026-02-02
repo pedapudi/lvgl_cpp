@@ -50,65 +50,67 @@ Chart::Chart(Object& parent) : Chart(&parent) {}
 Chart::Chart(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Chart& Chart::set_type(Type type) {
-  if (obj_) lv_chart_set_type(obj_, static_cast<lv_chart_type_t>(type));
+  if (raw()) lv_chart_set_type(raw(), static_cast<lv_chart_type_t>(type));
   return *this;
 }
 
 Chart& Chart::set_point_count(uint32_t cnt) {
-  if (obj_) lv_chart_set_point_count(obj_, cnt);
+  if (raw()) lv_chart_set_point_count(raw(), cnt);
   return *this;
 }
 
 Chart& Chart::set_axis_range(Axis axis, int32_t min, int32_t max) {
-  if (obj_)
-    lv_chart_set_axis_range(obj_, static_cast<lv_chart_axis_t>(axis), min, max);
+  if (raw())
+    lv_chart_set_axis_range(raw(), static_cast<lv_chart_axis_t>(axis), min,
+                            max);
   return *this;
 }
 
 Chart& Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
-  if (obj_) lv_chart_set_div_line_count(obj_, hdiv, vdiv);
+  if (raw()) lv_chart_set_div_line_count(raw(), hdiv, vdiv);
   return *this;
 }
 
 Chart& Chart::set_update_mode(UpdateMode update_mode) {
-  if (obj_)
-    lv_chart_set_update_mode(obj_,
+  if (raw())
+    lv_chart_set_update_mode(raw(),
                              static_cast<lv_chart_update_mode_t>(update_mode));
   return *this;
 }
 
 Chart::Type Chart::get_type() const {
-  return obj_ ? static_cast<Type>(lv_chart_get_type(obj_)) : Type::None;
+  return raw() ? static_cast<Type>(lv_chart_get_type(raw())) : Type::None;
 }
 
 uint32_t Chart::get_point_count() const {
-  return obj_ ? lv_chart_get_point_count(obj_) : 0;
+  return raw() ? lv_chart_get_point_count(raw()) : 0;
 }
 
 ChartSeries Chart::add_series(Color color, Axis axis) {
-  if (obj_) {
+  if (raw()) {
     return ChartSeries(
         this,
-        lv_chart_add_series(obj_, color, static_cast<lv_chart_axis_t>(axis)));
+        lv_chart_add_series(raw(), color, static_cast<lv_chart_axis_t>(axis)));
   }
   return ChartSeries(this, nullptr);
 }
 
 void Chart::remove_series(ChartSeries series) {
-  if (obj_ && series.raw()) {
-    lv_chart_remove_series(obj_, series.raw());
+  if (raw() && series.raw()) {
+    lv_chart_remove_series(raw(), series.raw());
   }
 }
 
 void Chart::refresh() {
-  if (obj_) lv_chart_refresh(obj_);
+  if (raw()) lv_chart_refresh(raw());
 }
 
 // --- ChartCursor ---
 
-void ChartCursor::set_pos(lv_point_t pos) {
+void ChartCursor::set_pos(Point pos) {
   if (chart_ && chart_->raw() && cursor_) {
-    lv_chart_set_cursor_pos(chart_->raw(), cursor_, &pos);
+    lv_point_t p = pos;
+    lv_chart_set_cursor_pos(chart_->raw(), cursor_, &p);
   }
 }
 
@@ -130,23 +132,24 @@ void ChartCursor::set_point(ChartSeries& series, uint32_t point_id) {
   }
 }
 
-lv_point_t ChartCursor::get_point() const {
+Point ChartCursor::get_point() const {
   if (chart_ && chart_->raw() && cursor_) {
-    return lv_chart_get_cursor_point(chart_->raw(), cursor_);
+    return Point(lv_chart_get_cursor_point(chart_->raw(), cursor_));
   }
-  return {0, 0};
+  return Point(0, 0);
 }
 
-ChartCursor Chart::add_cursor(Color color, lv_dir_t dir) {
-  if (obj_) {
-    return ChartCursor(this, lv_chart_add_cursor(obj_, color, dir));
+ChartCursor Chart::add_cursor(Color color, Dir dir) {
+  if (raw()) {
+    return ChartCursor(
+        this, lv_chart_add_cursor(raw(), color, static_cast<lv_dir_t>(dir)));
   }
   return ChartCursor(this, nullptr);
 }
 
 void Chart::remove_cursor(ChartCursor cursor) {
-  if (obj_ && cursor.raw()) {
-    lv_chart_remove_cursor(obj_, cursor.raw());
+  if (raw() && cursor.raw()) {
+    lv_chart_remove_cursor(raw(), cursor.raw());
   }
 }
 

@@ -45,14 +45,13 @@ void test_get_state() {
   Button btn(screen);
 
   // Initial state check
-  assert((static_cast<lv_state_t>(btn.get_state()) & LV_STATE_CHECKED) == 0);
+  assert((btn.get_state() & State::Checked) == State::Default);
 
   btn.add_state(State::Checked);
-  assert((static_cast<lv_state_t>(btn.get_state()) & LV_STATE_CHECKED) ==
-         LV_STATE_CHECKED);
+  assert((btn.get_state() & State::Checked) == State::Checked);
 
   btn.remove_state(State::Checked);
-  assert((static_cast<lv_state_t>(btn.get_state()) & LV_STATE_CHECKED) == 0);
+  assert((btn.get_state() & State::Checked) == State::Default);
 }
 
 void test_get_screen() {
@@ -73,9 +72,10 @@ void test_get_display() {
   Object screen(lv_screen_active());
   Button btn(screen);
 
-  lv_display_t* disp = btn.get_display();
-  assert(disp != nullptr);
-  assert(disp == lv_display_get_default());
+  Display disp(btn.get_display());
+  assert(disp.raw() != nullptr);
+  // Compare raw pointers since we have a wrapper object
+  assert(disp.raw() == lv_display_get_default());
 }
 
 void test_modern_scroll() {
@@ -87,17 +87,17 @@ void test_modern_scroll() {
   child.set_size(200, 200);
 
   // Testing the new AnimEnable overload
-  container.scroll_to(10, 20, AnimEnable::Off);
+  container.scroll().to(10, 20, AnimEnable::Off);
   assert(container.get_scroll_x() == 10);
   assert(container.get_scroll_y() == 20);
 
   // lv_obj_scroll_by(..., -5, ...) scrolls the content LEFT by 5,
   // which INCREASES the scroll offset (seeing more of the right).
-  container.scroll_by(-5, -5, AnimEnable::Off);
+  container.scroll().by(-5, -5, AnimEnable::Off);
   assert(container.get_scroll_x() == 15);
   assert(container.get_scroll_y() == 25);
 
-  child.scroll_to_view(AnimEnable::Off);
+  child.scroll().to_view(AnimEnable::Off);
 }
 
 void test_modern_display() {

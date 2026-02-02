@@ -1,9 +1,15 @@
 #ifndef LVGL_CPP_CORE_INTERACTION_PROXY_H_
 #define LVGL_CPP_CORE_INTERACTION_PROXY_H_
 
-#include "object.h"
+#include <cstdint>
+
+#include "lvgl.h"
 
 namespace lvgl {
+class Object;
+class Point;
+
+class Group;
 
 /**
  * @brief Facet Proxy for input and interaction properties.
@@ -57,7 +63,13 @@ class InteractionProxy {
    * @brief Get the associated group.
    * @return The group pointer.
    */
-  lv_group_t* get_group() const;
+  Group get_group() const;
+
+  /**
+   * @brief Set the extended click area.
+   * @param area The extra area.
+   */
+  void set_ext_click_area(int32_t area);
 
  private:
   Object* obj_;

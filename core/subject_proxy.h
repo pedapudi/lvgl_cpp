@@ -15,32 +15,30 @@ class Subject;  // Forward declaration
 class SubjectProxy {
  public:
   struct IncrementProxy {
-    IncrementProxy(lv_obj_t* obj, lv_subject_t* subject,
-                   lv_event_code_t trigger)
-        : obj_(obj), subject_(subject), trigger_(trigger) {}
+    IncrementProxy(lv_obj_t* obj, lv_subject_increment_dsc_t* dsc)
+        : obj_(obj), dsc_(dsc) {}
 
     IncrementProxy& min(int32_t val) {
-      if (obj_ && subject_)
-        lv_obj_set_subject_increment_min_value(obj_, subject_, trigger_, val);
+      if (obj_ && dsc_)
+        lv_obj_set_subject_increment_event_min_value(obj_, dsc_, val);
       return *this;
     }
 
     IncrementProxy& max(int32_t val) {
-      if (obj_ && subject_)
-        lv_obj_set_subject_increment_max_value(obj_, subject_, trigger_, val);
+      if (obj_ && dsc_)
+        lv_obj_set_subject_increment_event_max_value(obj_, dsc_, val);
       return *this;
     }
 
     IncrementProxy& rollover(bool en) {
-      if (obj_ && subject_)
-        lv_obj_set_subject_increment_rollover(obj_, subject_, trigger_, en);
+      if (obj_ && dsc_)
+        lv_obj_set_subject_increment_event_rollover(obj_, dsc_, en);
       return *this;
     }
 
    private:
     lv_obj_t* obj_;
-    lv_subject_t* subject_;
-    lv_event_code_t trigger_;
+    lv_subject_increment_dsc_t* dsc_;
   };
 
   SubjectProxy(lv_obj_t* obj, lv_subject_t* subject)
@@ -49,63 +47,51 @@ class SubjectProxy {
   /**
    * @brief Toggle the subject's value when the object is clicked.
    * @param trigger The event code that triggers the toggle (default:
-   * LV_EVENT_CLICKED).
+   * EventCode::Clicked).
    */
-  void toggle(lv_event_code_t trigger = LV_EVENT_CLICKED) {
+  void toggle(EventCode trigger = EventCode::Clicked) {
     if (obj_ && subject_)
-      lv_obj_add_subject_toggle_event(obj_, subject_, trigger);
-  }
-
-  void toggle(EventCode trigger) {
-    toggle(static_cast<lv_event_code_t>(trigger));
+      lv_obj_add_subject_toggle_event(obj_, subject_,
+                                      static_cast<lv_event_code_t>(trigger));
   }
 
   /**
    * @brief Increment the subject's value when the object is clicked.
    * @param step The amount to increment.
    * @param trigger The event code that triggers the increment (default:
-   * LV_EVENT_CLICKED).
+   * EventCode::Clicked).
    */
   IncrementProxy increment(int32_t step,
-                           lv_event_code_t trigger = LV_EVENT_CLICKED) {
+                           EventCode trigger = EventCode::Clicked) {
+    lv_subject_increment_dsc_t* dsc = nullptr;
     if (obj_ && subject_)
-      lv_obj_add_subject_increment_event(obj_, subject_, trigger, step);
-    return IncrementProxy(obj_, subject_, trigger);
-  }
-
-  IncrementProxy increment(int32_t step, EventCode trigger) {
-    return increment(step, static_cast<lv_event_code_t>(trigger));
+      dsc = lv_obj_add_subject_increment_event(
+          obj_, subject_, static_cast<lv_event_code_t>(trigger), step);
+    return IncrementProxy(obj_, dsc);
   }
 
   /**
    * @brief Set the subject's integer value when the object is clicked.
    * @param value The value to set.
    * @param trigger The event code that triggers the set (default:
-   * LV_EVENT_CLICKED).
+   * EventCode::Clicked).
    */
-  void set_int(int32_t value, lv_event_code_t trigger = LV_EVENT_CLICKED) {
+  void set_int(int32_t value, EventCode trigger = EventCode::Clicked) {
     if (obj_ && subject_)
-      lv_obj_add_subject_set_int_event(obj_, subject_, trigger, value);
-  }
-
-  void set_int(int32_t value, EventCode trigger) {
-    set_int(value, static_cast<lv_event_code_t>(trigger));
+      lv_obj_add_subject_set_int_event(
+          obj_, subject_, static_cast<lv_event_code_t>(trigger), value);
   }
 
   /**
    * @brief Set the subject's string value when the object is clicked.
    * @param value The value to set.
    * @param trigger The event code that triggers the set (default:
-   * LV_EVENT_CLICKED).
+   * EventCode::Clicked).
    */
-  void set_string(const char* value,
-                  lv_event_code_t trigger = LV_EVENT_CLICKED) {
+  void set_string(const char* value, EventCode trigger = EventCode::Clicked) {
     if (obj_ && subject_)
-      lv_obj_add_subject_set_string_event(obj_, subject_, trigger, value);
-  }
-
-  void set_string(const char* value, EventCode trigger) {
-    set_string(value, static_cast<lv_event_code_t>(trigger));
+      lv_obj_add_subject_set_string_event(
+          obj_, subject_, static_cast<lv_event_code_t>(trigger), value);
   }
 
  private:

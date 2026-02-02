@@ -5,19 +5,26 @@
 
 #include "../core/widget.h"  // IWYU pragma: export
 #include "../misc/color.h"   // IWYU pragma: export
-#include "lvgl.h"            // IWYU pragma: export
+#include "../misc/geometry.h"
+#include "lvgl.h"  // IWYU pragma: export
 
 #if LV_USE_CANVAS
 /**
  * @file canvas.h
- * @brief C++ Wrapper for LVGL Canvas Widget.
+ * @brief User Guide:
+ * `Canvas` is a powerful widget that allows for custom drawing. It uses a
+ * buffer (managed or unmanaged) to store the rendered graphics.
  *
- * # Usage
+ * Key Features:
+ * - **Drawing API**: Wrap LVGL's low-level drawing functions (rects, lines,
+ * text, etc.).
+ * - **Buffer Access**: Direct pixel manipulation via `set_px` and `get_px`.
+ * - **Transformations**: Support for rotation, scaling, and pivots.
+ * - **Layer Integration**: Can be used to create custom off-screen buffers.
  *
- * ```cpp
- * lvgl::Canvas widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `Canvas(parent).set_buffer(buf, 100, 100,
+ * ColorFormat::RGB565).fill_bg(Color::black(), 255);`
  */
 namespace lvgl {
 
@@ -29,12 +36,8 @@ class Canvas : public Widget<Canvas> {
   explicit Canvas(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   Canvas& set_buffer(void* buf, int32_t w, int32_t h, ColorFormat cf);
-  [[deprecated("Use set_buffer(..., ColorFormat) instead")]]
-  Canvas& set_buffer(void* buf, int32_t w, int32_t h, lv_color_format_t cf);
   Canvas& set_draw_buf(lv_draw_buf_t* draw_buf);
   Canvas& set_px(int32_t x, int32_t y, Color color, Opacity opa);
-  [[deprecated("Use set_px(..., Opacity) instead")]]
-  Canvas& set_px(int32_t x, int32_t y, Color color, lv_opa_t opa);
   Canvas& set_palette(uint8_t index, lv_color32_t color);
 
   // Copied from Image to maintain API compatibility
@@ -42,19 +45,16 @@ class Canvas : public Widget<Canvas> {
   Canvas& set_offset_x(int32_t x);
   Canvas& set_offset_y(int32_t y);
   Canvas& set_rotation(int32_t angle);
+  Canvas& set_pivot(Point pivot);
   Canvas& set_pivot(int32_t x, int32_t y);
   Canvas& set_scale(uint32_t zoom);
   Canvas& set_scale_x(uint32_t zoom);
   Canvas& set_scale_y(uint32_t zoom);
   Canvas& set_blend_mode(BlendMode blend_mode);
-  [[deprecated("Use set_blend_mode(BlendMode) instead")]]
-  Canvas& set_blend_mode(lv_blend_mode_t blend_mode);
 
   Canvas& set_antialias(bool antialias);
 
   Canvas& set_inner_align(ImageAlign align);
-  [[deprecated("Use set_inner_align(ImageAlign) instead")]]
-  Canvas& set_inner_align(lv_image_align_t align);
 
   lv_draw_buf_t* get_draw_buf();
   lv_color32_t get_px(int32_t x, int32_t y);
@@ -66,7 +66,7 @@ class Canvas : public Widget<Canvas> {
   int32_t get_offset_x();
   int32_t get_offset_y();
   int32_t get_rotation();
-  void get_pivot(lv_point_t* pivot);
+  Point get_pivot();
   int32_t get_scale();
   int32_t get_scale_x();
   int32_t get_scale_y();

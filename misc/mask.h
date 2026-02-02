@@ -2,6 +2,11 @@
 #define LVGL_CPP_MISC_MASK_H_
 
 #include "lvgl.h"
+#include "src/draw/lv_draw.h"
+#include "src/draw/lv_draw_mask.h"
+#define LV_USE_PRIVATE_API 1
+#include "src/draw/lv_draw_mask_private.h"
+#undef LV_USE_PRIVATE_API
 
 namespace lvgl {
 

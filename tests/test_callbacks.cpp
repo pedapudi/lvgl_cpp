@@ -26,10 +26,10 @@ void test_generic_callbacks() {
       .set_size(100, 50);  // Checks return type covariance
 
   // Trigger events
-  lv_obj_send_event(btn.raw(), LV_EVENT_CLICKED, nullptr);
+  (btn).send_event(lvgl::EventCode::Clicked);
   assert(clicked);
 
-  lv_obj_send_event(btn.raw(), LV_EVENT_PRESSED, nullptr);
+  (btn).send_event(lvgl::EventCode::Pressed);
   assert(pressed);
 
   std::cout << "Generic Callbacks Passed" << std::endl;
@@ -43,10 +43,10 @@ void test_slider_change() {
   slider.on_value_changed([&](lvgl::Event& e) { value = slider.get_value(); });
 
   // Changing value programmatically usually doesn't fire event in LVGL
-  // unless LV_ANIM_ON or manually sent.
+  // unless lvgl::AnimEnable::On or manually sent.
   // Let's send event manually to verify callback registration.
-  slider.set_value(50, LV_ANIM_OFF);
-  lv_obj_send_event(slider.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  slider.set_value(50, lvgl::AnimEnable::Off);
+  (slider).send_event(lvgl::EventCode::ValueChanged);
 
   assert(value == 50);
   std::cout << "Slider Change Passed" << std::endl;
@@ -59,7 +59,7 @@ void test_switch_change() {
 
   sw.on_value_changed([&](lvgl::Event& e) { toggled = true; });
 
-  lv_obj_send_event(sw.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (sw).send_event(lvgl::EventCode::ValueChanged);
   assert(toggled);
   std::cout << "Switch Change Passed" << std::endl;
 }
@@ -81,7 +81,7 @@ int main() {
   lvgl::Checkbox cb;
   bool cb_checked = false;
   cb.on_value_changed([&](lvgl::Event& e) { cb_checked = true; });
-  lv_obj_send_event(cb.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (cb).send_event(lvgl::EventCode::ValueChanged);
   assert(cb_checked);
   std::cout << "Checkbox Change Passed" << std::endl;
 
@@ -89,7 +89,7 @@ int main() {
   lvgl::Arc arc;
   int arc_val = -1;
   arc.on_value_changed([&](lvgl::Event& e) { arc_val = 100; });
-  lv_obj_send_event(arc.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (arc).send_event(lvgl::EventCode::ValueChanged);
   assert(arc_val == 100);
   std::cout << "Arc Change Passed" << std::endl;
 
@@ -97,7 +97,7 @@ int main() {
   lvgl::Textarea ta;
   bool ta_changed = false;
   ta.on_value_changed([&](lvgl::Event& e) { ta_changed = true; });
-  lv_obj_send_event(ta.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (ta).send_event(lvgl::EventCode::ValueChanged);
   assert(ta_changed);
   std::cout << "Textarea Change Passed" << std::endl;
 
@@ -105,7 +105,7 @@ int main() {
   lvgl::Spinbox sb;
   bool sb_changed = false;
   sb.on_value_changed([&](lvgl::Event& e) { sb_changed = true; });
-  lv_obj_send_event(sb.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (sb).send_event(lvgl::EventCode::ValueChanged);
   assert(sb_changed);
   std::cout << "Spinbox Change Passed" << std::endl;
 
@@ -113,7 +113,7 @@ int main() {
   lvgl::Calendar cal;
   bool cal_changed = false;
   cal.on_value_changed([&](lvgl::Event& e) { cal_changed = true; });
-  lv_obj_send_event(cal.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (cal).send_event(lvgl::EventCode::ValueChanged);
   assert(cal_changed);
   std::cout << "Calendar Change Passed" << std::endl;
 
@@ -121,7 +121,7 @@ int main() {
   lvgl::Table table;
   bool table_changed = false;
   table.on_value_changed([&](lvgl::Event& e) { table_changed = true; });
-  lv_obj_send_event(table.raw(), LV_EVENT_VALUE_CHANGED, nullptr);
+  (table).send_event(lvgl::EventCode::ValueChanged);
   assert(table_changed);
   std::cout << "Table Change Passed" << std::endl;
 

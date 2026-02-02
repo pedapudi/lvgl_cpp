@@ -9,14 +9,20 @@
 #if LV_USE_ARC
 /**
  * @file arc.h
- * @brief C++ Wrapper for LVGL Arc Widget.
+ * @brief User Guide:
+ * The `Arc` widget draws a curved bar that can represent a value or progress.
+ * It is commonly used for gauges, dials, or circular sliders.
  *
- * # Usage
+ * Key Features:
+ * - **Angles**: Set start and end angles for both the background and the
+ * foreground.
+ * - **Modes**: Normal, Symmetrical (from zero), or Reverse.
+ * - **Rotation**: Offset the zero-degree point.
+ * - **Alignment**: Methods to align or rotate other objects according to the
+ * arc's current angle.
  *
- * ```cpp
- * lvgl::Arc widget(lv_screen_active());
- * widget.center();
- * ```
+ * Example:
+ * `Arc(parent).set_angles(135, 405).set_range(0, 100).set_value(75);`
  */
 namespace lvgl {
 class Subject;
@@ -63,8 +69,6 @@ class Arc : public Widget<Arc> {
    * @param mode Mode (Normal, Symmetrical, Reverse).
    */
   Arc& set_mode(Mode mode);
-  [[deprecated("Use set_mode(Mode) instead")]]
-  Arc& set_mode(lv_arc_mode_t mode);
 
   /**
    * @brief Set the current value.

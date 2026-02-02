@@ -94,13 +94,13 @@ void test_tileview_1() {
 
   // Tile1: 0,0
   // Tile1: 0,0
-  Tile tile1 = tv.add_tile(0, 0, LV_DIR_BOTTOM);
+  Tile tile1 = tv.add_tile(0, 0, lvgl::Dir::Bottom);
   Label label1(tile1);
   label1.set_text("Scroll down");
   label1.center();
 
   // Tile2: 0,1
-  Tile tile2 = tv.add_tile(0, 1, (lv_dir_t)(LV_DIR_TOP | LV_DIR_RIGHT));
+  Tile tile2 = tv.add_tile(0, 1, lvgl::Dir::Top | lvgl::Dir::Right);
   Button btn(tile2);
   Label btn_label(btn);
   btn_label.set_text("Scroll up or right");
@@ -108,7 +108,7 @@ void test_tileview_1() {
   btn.center();
 
   // Tile3: 1,1
-  Tile tile3 = tv.add_tile(1, 1, LV_DIR_LEFT);
+  Tile tile3 = tv.add_tile(1, 1, lvgl::Dir::Left);
   List list(tile3);
   list.set_size(LV_PCT(100), LV_PCT(100));
   list.add_button(NULL, "One");
@@ -169,7 +169,7 @@ void test_btnmatrix_1() {
 
   static const char* btnm_map[] = {"1", "2", "3", "\n", "4", "5", "6", ""};
   btnm.set_map(btnm_map);
-  btnm.align(LV_ALIGN_CENTER, 0, 0);
+  btnm.align(lvgl::Align::Center, 0, 0);
 
   std::cout << "ButtonMatrix Example 1 Passed" << std::endl;
 }

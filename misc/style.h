@@ -1,22 +1,35 @@
 #ifndef LVGL_CPP_MISC_STYLE_H_
 #define LVGL_CPP_MISC_STYLE_H_
 
-#include <cstdint>
-
-#include "color.h"
-#include "enums.h"
 #include "lvgl.h"
 #include "style_base.h"
+
+/**
+ * @file style.h
+ * @brief User Guide:
+ * `Style` is a persistent container for UI properties. It can be shared among
+ * multiple objects to maintain a consistent look and feel while saving memory.
+ *
+ * Key Features:
+ * - **Fluent API**: Chained setters for all LVGL style properties.
+ * - **Memory Efficient**: Internal `lv_style_t` management.
+ * - **Type Safe**: Uses `lvgl_cpp` enums and classes (e.g., `Color`,
+ * `Opacity`).
+ *
+ * Example:
+ * `static Style my_style;`
+ * `my_style.bg_color(Color::navy()).pad_all(10);`
+ * `btn.add_style(my_style);`
+ */
 
 namespace lvgl {
 
 class Font;
 
 /**
- * @brief Fluent wrapper for lv_style_t.
+ * @brief Persistent style object.
  *
- * The Style class provides a fluent API for defining LVGL styles. It owns
- * the underlying lv_style_t and automatically initializes it on construction.
+ * Inherits the fluent API from StyleBase. Owns an lv_style_t.
  */
 class Style : public StyleBase<Style> {
  public:
@@ -60,7 +73,7 @@ class Style : public StyleBase<Style> {
   }
   lv_color_t get_bg_color() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_BG_COLOR, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_BG_COLOR, &v) == LV_STYLE_RES_FOUND)
       return v.color;
     return lv_color_white();
   }
@@ -78,7 +91,8 @@ class Style : public StyleBase<Style> {
   }
   lv_grad_dir_t get_bg_grad_dir() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_BG_GRAD_DIR, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_BG_GRAD_DIR, &v) ==
+        LV_STYLE_RES_FOUND)
       return (lv_grad_dir_t)v.num;
     return LV_GRAD_DIR_NONE;
   }
@@ -137,7 +151,8 @@ class Style : public StyleBase<Style> {
   }
   lv_color_t get_border_color() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_BORDER_COLOR, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_BORDER_COLOR, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.color;
     return lv_color_black();
   }
@@ -147,7 +162,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_border_width() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_BORDER_WIDTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_BORDER_WIDTH, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -157,7 +173,7 @@ class Style : public StyleBase<Style> {
   }
   lv_opa_t get_border_opa() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_BORDER_OPA, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_BORDER_OPA, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return LV_OPA_COVER;
   }
@@ -230,7 +246,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_pad_left() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_PAD_LEFT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_PAD_LEFT, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -240,7 +256,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_pad_right() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_PAD_RIGHT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_PAD_RIGHT, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -250,7 +266,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_pad_top() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_PAD_TOP, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_PAD_TOP, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -260,7 +276,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_pad_bottom() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_PAD_BOTTOM, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_PAD_BOTTOM, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -270,7 +286,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_pad_row() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_PAD_ROW, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_PAD_ROW, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -280,7 +296,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_pad_column() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_PAD_COLUMN, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_PAD_COLUMN, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -311,7 +327,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_margin_left() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_LEFT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_LEFT, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -321,7 +338,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_margin_right() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_RIGHT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_RIGHT, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -331,7 +349,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_margin_top() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_TOP, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_TOP, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -341,7 +359,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_margin_bottom() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_BOTTOM, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MARGIN_BOTTOM, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -352,7 +371,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_width() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_WIDTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_WIDTH, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -362,7 +381,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_min_width() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MIN_WIDTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MIN_WIDTH, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -372,7 +391,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_max_width() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MAX_WIDTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MAX_WIDTH, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -382,7 +401,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_height() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_HEIGHT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_HEIGHT, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -392,7 +411,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_min_height() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MIN_HEIGHT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MIN_HEIGHT, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -402,7 +421,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_max_height() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_MAX_HEIGHT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_MAX_HEIGHT, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -412,7 +431,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_x() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_X, &v) == LV_RESULT_OK) return v.num;
+    if (lv_style_get_prop(raw(), LV_STYLE_X, &v) == LV_STYLE_RES_FOUND)
+      return v.num;
     return 0;
   }
   Style& set_y(int32_t v) {
@@ -421,7 +441,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_y() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_Y, &v) == LV_RESULT_OK) return v.num;
+    if (lv_style_get_prop(raw(), LV_STYLE_Y, &v) == LV_STYLE_RES_FOUND)
+      return v.num;
     return 0;
   }
   Style& set_size(int32_t w, int32_t h) {
@@ -439,7 +460,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_length() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_LENGTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_LENGTH, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -450,7 +471,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_radius() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_RADIUS, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_RADIUS, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -464,7 +485,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_transform_width() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_WIDTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_WIDTH, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -474,7 +496,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_transform_height() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_HEIGHT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_HEIGHT, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -484,7 +507,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_translate_x() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TRANSLATE_X, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TRANSLATE_X, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -494,7 +518,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_translate_y() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TRANSLATE_Y, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TRANSLATE_Y, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -505,7 +530,7 @@ class Style : public StyleBase<Style> {
   int32_t get_transform_scale_x() const {
     lv_style_value_t v;
     if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_SCALE_X, &v) ==
-        LV_RESULT_OK)
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 256;
   }
@@ -516,7 +541,7 @@ class Style : public StyleBase<Style> {
   int32_t get_transform_scale_y() const {
     lv_style_value_t v;
     if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_SCALE_Y, &v) ==
-        LV_RESULT_OK)
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 256;
   }
@@ -527,7 +552,7 @@ class Style : public StyleBase<Style> {
   int32_t get_transform_rotation() const {
     lv_style_value_t v;
     if (lv_style_get_prop(raw(), LV_STYLE_TRANSFORM_ROTATION, &v) ==
-        LV_RESULT_OK)
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -562,7 +587,7 @@ class Style : public StyleBase<Style> {
   }
   lv_color_t get_text_color() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TEXT_COLOR, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TEXT_COLOR, &v) == LV_STYLE_RES_FOUND)
       return v.color;
     return lv_color_white();
   }
@@ -572,7 +597,7 @@ class Style : public StyleBase<Style> {
   }
   lv_opa_t get_text_opa() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TEXT_OPA, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TEXT_OPA, &v) == LV_STYLE_RES_FOUND)
       return (lv_opa_t)v.num;
     return LV_OPA_COVER;
   }
@@ -587,7 +612,7 @@ class Style : public StyleBase<Style> {
   int32_t get_text_letter_space() const {
     lv_style_value_t v;
     if (lv_style_get_prop(raw(), LV_STYLE_TEXT_LETTER_SPACE, &v) ==
-        LV_RESULT_OK)
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -597,7 +622,8 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_text_line_space() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_TEXT_LINE_SPACE, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_TEXT_LINE_SPACE, &v) ==
+        LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -607,10 +633,6 @@ class Style : public StyleBase<Style> {
   }
   Style& set_text_decor(lv_text_decor_t v) {
     lv_style_set_text_decor(&style_, v);
-    return *this;
-  }
-  Style& set_recolor(bool v) {
-    lv_style_set_text_recolor(&style_, v);
     return *this;
   }
   Style& set_recolor(lv_color_t v) {
@@ -678,7 +700,7 @@ class Style : public StyleBase<Style> {
   }
   int32_t get_arc_width() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_ARC_WIDTH, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_ARC_WIDTH, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }
@@ -692,7 +714,7 @@ class Style : public StyleBase<Style> {
   }
   lv_color_t get_arc_color() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_ARC_COLOR, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_ARC_COLOR, &v) == LV_STYLE_RES_FOUND)
       return v.color;
     return lv_color_black();
   }
@@ -702,7 +724,7 @@ class Style : public StyleBase<Style> {
   }
   lv_opa_t get_arc_opa() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_ARC_OPA, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_ARC_OPA, &v) == LV_STYLE_RES_FOUND)
       return (lv_opa_t)v.num;
     return LV_OPA_COVER;
   }
@@ -720,24 +742,24 @@ class Style : public StyleBase<Style> {
     return *this;
   }
 
-  Style& set_flex_flow(lv_flex_flow_t v) {
-    lv_style_set_flex_flow(&style_, v);
+  Style& set_flex_flow(FlexFlow v) {
+    lv_style_set_flex_flow(&style_, static_cast<lv_flex_flow_t>(v));
     return *this;
   }
-  Style& set_flex_main_place(lv_flex_align_t v) {
-    lv_style_set_flex_main_place(&style_, v);
+  Style& set_flex_main_place(FlexAlign v) {
+    lv_style_set_flex_main_place(&style_, static_cast<lv_flex_align_t>(v));
     return *this;
   }
-  Style& set_flex_cross_place(lv_flex_align_t v) {
-    lv_style_set_flex_cross_place(&style_, v);
+  Style& set_flex_cross_place(FlexAlign v) {
+    lv_style_set_flex_cross_place(&style_, static_cast<lv_flex_align_t>(v));
     return *this;
   }
-  Style& set_flex_track_place(lv_flex_align_t v) {
-    lv_style_set_flex_track_place(&style_, v);
+  Style& set_flex_track_place(FlexAlign v) {
+    lv_style_set_flex_track_place(&style_, static_cast<lv_flex_align_t>(v));
     return *this;
   }
-  Style& set_flex_grow(uint8_t v) {
-    lv_style_set_flex_grow(&style_, v);
+  Style& set_flex_grow(uint32_t v) {
+    lv_style_set_flex_grow(&style_, static_cast<uint32_t>(v));
     return *this;
   }
 
@@ -749,12 +771,12 @@ class Style : public StyleBase<Style> {
     lv_style_set_grid_column_dsc_array(&style_, v);
     return *this;
   }
-  Style& set_grid_row_align(lv_grid_align_t v) {
-    lv_style_set_grid_row_align(&style_, v);
+  Style& set_grid_row_align(GridAlign v) {
+    lv_style_set_grid_row_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
-  Style& set_grid_column_align(lv_grid_align_t v) {
-    lv_style_set_grid_column_align(&style_, v);
+  Style& set_grid_column_align(GridAlign v) {
+    lv_style_set_grid_column_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
   Style& set_grid_cell_column_pos(int32_t v) {
@@ -773,12 +795,12 @@ class Style : public StyleBase<Style> {
     lv_style_set_grid_cell_row_span(&style_, v);
     return *this;
   }
-  Style& set_grid_cell_x_align(lv_grid_align_t v) {
-    lv_style_set_grid_cell_x_align(&style_, v);
+  Style& set_grid_cell_x_align(GridAlign v) {
+    lv_style_set_grid_cell_x_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
-  Style& set_grid_cell_y_align(lv_grid_align_t v) {
-    lv_style_set_grid_cell_y_align(&style_, v);
+  Style& set_grid_cell_y_align(GridAlign v) {
+    lv_style_set_grid_cell_y_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
 
@@ -788,7 +810,7 @@ class Style : public StyleBase<Style> {
   }
   lv_opa_t get_opa() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_OPA, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_OPA, &v) == LV_STYLE_RES_FOUND)
       return (lv_opa_t)v.num;
     return LV_OPA_COVER;
   }
@@ -827,7 +849,7 @@ class Style : public StyleBase<Style> {
   }
   uint32_t get_layout() const {
     lv_style_value_t v;
-    if (lv_style_get_prop(raw(), LV_STYLE_LAYOUT, &v) == LV_RESULT_OK)
+    if (lv_style_get_prop(raw(), LV_STYLE_LAYOUT, &v) == LV_STYLE_RES_FOUND)
       return v.num;
     return 0;
   }

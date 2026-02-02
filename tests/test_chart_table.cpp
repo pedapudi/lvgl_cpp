@@ -46,6 +46,32 @@ void test_chart_series() {
   std::cout << "ChartSeries test passed" << std::endl;
 }
 
+void test_chart_cursor() {
+  std::cout << "Testing ChartCursor..." << std::endl;
+  Object screen;
+  Chart chart(screen);
+
+  // Test adding cursor with new Dir enum (scopeless or scoped via lvgl::Dir)
+  // enums.h defines Dir as enum class.
+  ChartCursor c1 = chart.add_cursor(Color::from_hex(0xFF0000), Dir::Bottom);
+  assert(c1.raw() != nullptr);
+
+  // Test Point API
+  c1.set_pos(Point(10, 20));
+  Point p = c1.get_point();
+  std::cout << "Cursor pos: " << p.x() << ", " << p.y() << std::endl;
+  assert(p.x() == 10);
+  assert(p.y() == 20);
+
+  // Test set_pos with Point via initializer list
+  c1.set_pos({30, 40});
+  p = c1.get_point();
+  assert(p.x() == 30);
+  assert(p.y() == 40);
+
+  std::cout << "ChartCursor test passed" << std::endl;
+}
+
 void test_table_cell() {
   std::cout << "Testing TableCell..." << std::endl;
   Object screen;
@@ -54,17 +80,17 @@ void test_table_cell() {
   table.set_row_count(4);
 
   // Test chaining
-  table.cell(0, 0).set_value("A0").set_ctrl(LV_TABLE_CELL_CTRL_MERGE_RIGHT);
+  table.cell(0, 0).set_value("A0").set_ctrl(lvgl::Table::Control::MergeRight);
 
   // Test individual methods
   TableCell c1 = table.cell(1, 1);
   c1.set_value("B1");
-  c1.add_ctrl(LV_TABLE_CELL_CTRL_TEXT_CROP);
+  c1.add_ctrl(lvgl::Table::Control::TextCrop);
 
-  assert(c1.has_ctrl(LV_TABLE_CELL_CTRL_TEXT_CROP));
+  assert(c1.has_ctrl(lvgl::Table::Control::TextCrop));
 
-  c1.clear_ctrl(LV_TABLE_CELL_CTRL_TEXT_CROP);
-  assert(!c1.has_ctrl(LV_TABLE_CELL_CTRL_TEXT_CROP));
+  c1.clear_ctrl(lvgl::Table::Control::TextCrop);
+  assert(!c1.has_ctrl(lvgl::Table::Control::TextCrop));
 
   // Test user data
   int* my_data = (int*)lv_malloc(sizeof(int));
@@ -90,6 +116,7 @@ int main() {
   lvgl::Display display = lvgl::Display::create(800, 480);
 
   test_chart_series();
+  test_chart_cursor();
   test_table_cell();
 
   std::cout << "All Chart/Table tests passed!" << std::endl;

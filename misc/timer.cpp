@@ -2,32 +2,46 @@
 
 namespace lvgl {
 
+struct Timer::Data {
+  TimerCallback cb;
+  Timer* owner = nullptr;
+};
+
 void Timer::timer_proxy(lv_timer_t* t) {
-  auto* timer_instance = static_cast<Timer*>(lv_timer_get_user_data(t));
-  if (timer_instance && timer_instance->cb_ && *timer_instance->cb_) {
-    (*timer_instance->cb_)(timer_instance);
+  auto* data = static_cast<Data*>(lv_timer_get_user_data(t));
+  if (data && data->cb) {
+    if (data->owner) {
+      data->cb(data->owner);
+    } else {
+      // Detached: Pass nullptr. Callback must handle it.
+      data->cb(nullptr);
+    }
   }
 }
 
 Timer::Timer() : timer_(nullptr) {}
 
 Timer::Timer(uint32_t period, TimerCallback cb) {
-  cb_ = std::make_unique<TimerCallback>(cb);
-  timer_ = lv_timer_create(timer_proxy, period, this);
+  data_ = new Data{std::move(cb), this};
+  timer_ = lv_timer_create(timer_proxy, period, data_);
 }
 
 Timer::~Timer() {
   if (timer_) {
     lv_timer_delete(timer_);
     timer_ = nullptr;
+    delete data_;
+    data_ = nullptr;
   }
 }
 
 Timer::Timer(Timer&& other) noexcept
-    : timer_(other.timer_), cb_(std::move(other.cb_)) {
+    : timer_(other.timer_), data_(other.data_) {
   other.timer_ = nullptr;
-  if (timer_) {
-    lv_timer_set_user_data(timer_, this);
+  other.data_ = nullptr;
+  if (data_) {
+    data_->owner = this;
+    if (timer_) lv_timer_set_user_data(timer_, data_);
   }
 }
 
@@ -35,15 +49,39 @@ Timer& Timer::operator=(Timer&& other) noexcept {
   if (this != &other) {
     if (timer_) {
       lv_timer_delete(timer_);
+      delete data_;
     }
     timer_ = other.timer_;
-    cb_ = std::move(other.cb_);
+    data_ = other.data_;
     other.timer_ = nullptr;
-    if (timer_) {
-      lv_timer_set_user_data(timer_, this);
+    other.data_ = nullptr;
+    if (data_) {
+      data_->owner = this;
+      if (timer_) lv_timer_set_user_data(timer_, data_);
     }
   }
   return *this;
+}
+
+lv_timer_t* Timer::detach() {
+  if (timer_) {
+    lv_timer_t* t = timer_;
+    if (data_) {
+      data_->owner = nullptr;
+    }
+    timer_ = nullptr;
+    data_ = nullptr;
+    return t;
+  }
+  return nullptr;
+}
+
+void Timer::delete_detached(lv_timer_t* t) {
+  if (t) {
+    auto* data = static_cast<Data*>(lv_timer_get_user_data(t));
+    delete data;
+    lv_timer_delete(t);
+  }
 }
 
 namespace {
@@ -56,9 +94,6 @@ void oneshot_proxy(lv_timer_t* t) {
   if (data && data->cb) {
     data->cb();
   }
-  // Data is deleted by lv_timer auto_delete mechanism?
-  // No, lv_timer doesn't delete user_data automatically.
-  // We need to delete it here since the timer is about to be auto-deleted.
   delete data;
 }
 }  // namespace
@@ -82,14 +117,13 @@ Timer& Timer::set_period(uint32_t period) {
 }
 
 Timer& Timer::set_cb(TimerCallback cb) {
-  if (!cb_) {
-    cb_ = std::make_unique<TimerCallback>(cb);
+  if (!data_) {
+    data_ = new Data{std::move(cb), this};
   } else {
-    *cb_ = cb;
+    data_->cb = std::move(cb);
   }
-  // Ensure user data points to this instance if we updated callback
   if (timer_) {
-    lv_timer_set_user_data(timer_, this);
+    lv_timer_set_user_data(timer_, data_);
   }
   return *this;
 }

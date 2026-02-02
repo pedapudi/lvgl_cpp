@@ -24,127 +24,100 @@ Subject::~Subject() { lv_subject_deinit(&subject_); }
 
 void Subject::notify() { lv_subject_notify(&subject_); }
 
-Observer Subject::bind_flag_if_eq(Object& obj, lv_obj_flag_t flag,
-                                  int32_t ref_value) {
-  return Observer(lv_obj_bind_flag_if_eq(obj.raw(), &subject_, flag, ref_value),
-                  false);
-}
-
-Observer Subject::bind_flag_if_not_eq(Object& obj, lv_obj_flag_t flag,
-                                      int32_t ref_value) {
-  return Observer(
-      lv_obj_bind_flag_if_not_eq(obj.raw(), &subject_, flag, ref_value), false);
-}
-
-Observer Subject::bind_flag_if_gt(Object& obj, lv_obj_flag_t flag,
-                                  int32_t ref_value) {
-  return Observer(lv_obj_bind_flag_if_gt(obj.raw(), &subject_, flag, ref_value),
-                  false);
-}
-
-Observer Subject::bind_flag_if_ge(Object& obj, lv_obj_flag_t flag,
-                                  int32_t ref_value) {
-  return Observer(lv_obj_bind_flag_if_ge(obj.raw(), &subject_, flag, ref_value),
-                  false);
-}
-
-Observer Subject::bind_flag_if_lt(Object& obj, lv_obj_flag_t flag,
-                                  int32_t ref_value) {
-  return Observer(lv_obj_bind_flag_if_lt(obj.raw(), &subject_, flag, ref_value),
-                  false);
-}
-
-Observer Subject::bind_flag_if_le(Object& obj, lv_obj_flag_t flag,
-                                  int32_t ref_value) {
-  return Observer(lv_obj_bind_flag_if_le(obj.raw(), &subject_, flag, ref_value),
-                  false);
-}
-
 Observer Subject::bind_flag_if_eq(Object& obj, ObjFlag flag,
                                   int32_t ref_value) {
-  return bind_flag_if_eq(obj, static_cast<lv_obj_flag_t>(flag), ref_value);
-}
-Observer Subject::bind_flag_if_not_eq(Object& obj, ObjFlag flag,
-                                      int32_t ref_value) {
-  return bind_flag_if_not_eq(obj, static_cast<lv_obj_flag_t>(flag), ref_value);
-}
-Observer Subject::bind_flag_if_gt(Object& obj, ObjFlag flag,
-                                  int32_t ref_value) {
-  return bind_flag_if_gt(obj, static_cast<lv_obj_flag_t>(flag), ref_value);
-}
-Observer Subject::bind_flag_if_ge(Object& obj, ObjFlag flag,
-                                  int32_t ref_value) {
-  return bind_flag_if_ge(obj, static_cast<lv_obj_flag_t>(flag), ref_value);
-}
-Observer Subject::bind_flag_if_lt(Object& obj, ObjFlag flag,
-                                  int32_t ref_value) {
-  return bind_flag_if_lt(obj, static_cast<lv_obj_flag_t>(flag), ref_value);
-}
-Observer Subject::bind_flag_if_le(Object& obj, ObjFlag flag,
-                                  int32_t ref_value) {
-  return bind_flag_if_le(obj, static_cast<lv_obj_flag_t>(flag), ref_value);
-}
-
-Observer Subject::bind_state_if_eq(Object& obj, lv_state_t state,
-                                   int32_t ref_value) {
   return Observer(
-      lv_obj_bind_state_if_eq(obj.raw(), &subject_, state, ref_value), false);
-}
-
-Observer Subject::bind_state_if_not_eq(Object& obj, lv_state_t state,
-                                       int32_t ref_value) {
-  return Observer(
-      lv_obj_bind_state_if_not_eq(obj.raw(), &subject_, state, ref_value),
+      lv_obj_bind_flag_if_eq(obj.raw(), &subject_,
+                             static_cast<lv_obj_flag_t>(flag), ref_value),
       false);
 }
 
-Observer Subject::bind_state_if_gt(Object& obj, lv_state_t state,
-                                   int32_t ref_value) {
+Observer Subject::bind_flag_if_not_eq(Object& obj, ObjFlag flag,
+                                      int32_t ref_value) {
   return Observer(
-      lv_obj_bind_state_if_gt(obj.raw(), &subject_, state, ref_value), false);
+      lv_obj_bind_flag_if_not_eq(obj.raw(), &subject_,
+                                 static_cast<lv_obj_flag_t>(flag), ref_value),
+      false);
 }
 
-Observer Subject::bind_state_if_ge(Object& obj, lv_state_t state,
-                                   int32_t ref_value) {
+Observer Subject::bind_flag_if_gt(Object& obj, ObjFlag flag,
+                                  int32_t ref_value) {
   return Observer(
-      lv_obj_bind_state_if_ge(obj.raw(), &subject_, state, ref_value), false);
+      lv_obj_bind_flag_if_gt(obj.raw(), &subject_,
+                             static_cast<lv_obj_flag_t>(flag), ref_value),
+      false);
 }
 
-Observer Subject::bind_state_if_lt(Object& obj, lv_state_t state,
-                                   int32_t ref_value) {
+Observer Subject::bind_flag_if_ge(Object& obj, ObjFlag flag,
+                                  int32_t ref_value) {
   return Observer(
-      lv_obj_bind_state_if_lt(obj.raw(), &subject_, state, ref_value), false);
+      lv_obj_bind_flag_if_ge(obj.raw(), &subject_,
+                             static_cast<lv_obj_flag_t>(flag), ref_value),
+      false);
 }
 
-Observer Subject::bind_state_if_le(Object& obj, lv_state_t state,
-                                   int32_t ref_value) {
+Observer Subject::bind_flag_if_lt(Object& obj, ObjFlag flag,
+                                  int32_t ref_value) {
   return Observer(
-      lv_obj_bind_state_if_le(obj.raw(), &subject_, state, ref_value), false);
+      lv_obj_bind_flag_if_lt(obj.raw(), &subject_,
+                             static_cast<lv_obj_flag_t>(flag), ref_value),
+      false);
+}
+
+Observer Subject::bind_flag_if_le(Object& obj, ObjFlag flag,
+                                  int32_t ref_value) {
+  return Observer(
+      lv_obj_bind_flag_if_le(obj.raw(), &subject_,
+                             static_cast<lv_obj_flag_t>(flag), ref_value),
+      false);
 }
 
 Observer Subject::bind_state_if_eq(Object& obj, State state,
                                    int32_t ref_value) {
-  return bind_state_if_eq(obj, static_cast<lv_state_t>(state), ref_value);
+  return Observer(
+      lv_obj_bind_state_if_eq(obj.raw(), &subject_,
+                              static_cast<lv_state_t>(state), ref_value),
+      false);
 }
+
 Observer Subject::bind_state_if_not_eq(Object& obj, State state,
                                        int32_t ref_value) {
-  return bind_state_if_not_eq(obj, static_cast<lv_state_t>(state), ref_value);
+  return Observer(
+      lv_obj_bind_state_if_not_eq(obj.raw(), &subject_,
+                                  static_cast<lv_state_t>(state), ref_value),
+      false);
 }
+
 Observer Subject::bind_state_if_gt(Object& obj, State state,
                                    int32_t ref_value) {
-  return bind_state_if_gt(obj, static_cast<lv_state_t>(state), ref_value);
+  return Observer(
+      lv_obj_bind_state_if_gt(obj.raw(), &subject_,
+                              static_cast<lv_state_t>(state), ref_value),
+      false);
 }
+
 Observer Subject::bind_state_if_ge(Object& obj, State state,
                                    int32_t ref_value) {
-  return bind_state_if_ge(obj, static_cast<lv_state_t>(state), ref_value);
+  return Observer(
+      lv_obj_bind_state_if_ge(obj.raw(), &subject_,
+                              static_cast<lv_state_t>(state), ref_value),
+      false);
 }
+
 Observer Subject::bind_state_if_lt(Object& obj, State state,
                                    int32_t ref_value) {
-  return bind_state_if_lt(obj, static_cast<lv_state_t>(state), ref_value);
+  return Observer(
+      lv_obj_bind_state_if_lt(obj.raw(), &subject_,
+                              static_cast<lv_state_t>(state), ref_value),
+      false);
 }
+
 Observer Subject::bind_state_if_le(Object& obj, State state,
                                    int32_t ref_value) {
-  return bind_state_if_le(obj, static_cast<lv_state_t>(state), ref_value);
+  return Observer(
+      lv_obj_bind_state_if_le(obj.raw(), &subject_,
+                              static_cast<lv_state_t>(state), ref_value),
+      false);
 }
 
 Observer Subject::bind_style(Object& obj, const lv_style_t* style,
@@ -185,8 +158,10 @@ Observer* Subject::add_observer_obj(Object& obj, ObserverCallback cb) {
 void StringSubject::set_formatted(const char* fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  lv_subject_snprintf(&subject_, fmt, args);
+  char buf[256];
+  vsnprintf(buf, sizeof(buf), fmt, args);
   va_end(args);
+  set(buf);
 }
 
 // IntSubject
@@ -307,12 +282,7 @@ Observer::Observer(Subject& subject, ObserverCallback cb)
   obs_ = lv_subject_add_observer(subject.raw(), observer_cb_shim, this);
 }
 
-Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {
-  if (owned)
-    printf("Observer created (owned) %p\n", (void*)obs);
-  else
-    printf("Observer created (unowned) %p\n", (void*)obs);
-}
+Observer::Observer(lv_observer_t* obs, bool owned) : obs_(obs), owned_(owned) {}
 
 Observer::Observer(Observer&& other) noexcept
     : obs_(other.obs_),

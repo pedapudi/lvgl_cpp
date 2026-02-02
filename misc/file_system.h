@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "enums.h"
 #include "lvgl.h"  // IWYU pragma: export
 
 namespace lvgl {
@@ -15,7 +16,7 @@ namespace lvgl {
 class File {
  public:
   File();
-  explicit File(const std::string& path, lv_fs_mode_t mode = LV_FS_MODE_RD);
+  explicit File(const std::string& path, FsMode mode = FsMode::Read);
   ~File();
 
   // Disable verify by default to prevent accidental closing
@@ -30,13 +31,13 @@ class File {
    * @param mode Access mode (e.g. `LV_FS_MODE_RD`).
    * @return `LV_FS_RES_OK` on success, or an error code.
    */
-  lv_fs_res_t open(const std::string& path, lv_fs_mode_t mode);
+  FsRes open(const std::string& path, FsMode mode);
 
   /**
    * @brief Close the file.
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t close();
+  FsRes close();
 
   /**
    * @brief Read from the file.
@@ -45,7 +46,7 @@ class File {
    * @param br Pointer to store the number of bytes read.
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t read(void* buf, uint32_t btr, uint32_t* br = nullptr);
+  FsRes read(void* buf, uint32_t btr, uint32_t* br = nullptr);
 
   /**
    * @brief Load the entire file into a buffer.
@@ -61,7 +62,7 @@ class File {
    * @param bw Pointer to store the number of bytes written.
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t write(const void* buf, uint32_t btw, uint32_t* bw = nullptr);
+  FsRes write(const void* buf, uint32_t btw, uint32_t* bw = nullptr);
 
   /**
    * @brief Seek to a position in the file.
@@ -70,14 +71,14 @@ class File {
    * `LV_FS_SEEK_END`).
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t seek(uint32_t pos, lv_fs_whence_t whence);
+  FsRes seek(uint32_t pos, FsWhence whence);
 
   /**
    * @brief Get the current position.
    * @param pos Pointer to store the position.
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t tell(uint32_t* pos);
+  FsRes tell(uint32_t* pos);
 
   /**
    * @brief Get the file size.
@@ -115,20 +116,20 @@ class Directory {
    * @param path Path to the directory.
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t open(const std::string& path);
+  FsRes open(const std::string& path);
 
   /**
    * @brief Close the directory.
    * @return `LV_FS_RES_OK` on success.
    */
-  lv_fs_res_t close();
+  FsRes close();
 
   /**
    * @brief Read next entry.
    * @param fn Buffer to store filename.
    * @return LV_FS_RES_OK on success. if fn is empty, end of dir.
    */
-  lv_fs_res_t read(std::string& fn);
+  FsRes read(std::string& fn);
 
   bool is_open() const;
 

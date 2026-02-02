@@ -40,14 +40,14 @@ void test_tabview_fluent() {
   Object screen(lv_screen_active(), Object::Ownership::Unmanaged);
   TabView tv(screen);
 
-  tv.set_tab_bar_position(LV_DIR_BOTTOM).set_tab_bar_size(40);
+  tv.set_tab_bar_position(lvgl::Dir::Bottom).set_tab_bar_size(40);
 
   assert(tv.get_tab_count() == 0);
 
   tv.add_tab("Temp");
   tv.rename_tab(0, "Permanent");
 
-  tv.set_active(0, LV_ANIM_OFF);
+  tv.set_active(0, lvgl::AnimEnable::Off);
   assert(tv.get_tab_active() == 0);
 
   std::cout << "TabView Fluent API Passed" << std::endl;
@@ -59,13 +59,13 @@ void test_tileview_ownership() {
   TileView tv(screen);
 
   {
-    Tile t1 = tv.add_tile(0, 0, LV_DIR_BOTTOM);
+    Tile t1 = tv.add_tile(0, 0, lvgl::Dir::Bottom);
     Label l1(t1);
     l1.set_text("Tile 0,0");
   }
 
   // Test API access after scoped object destruction
-  tv.set_tile_by_index(0, 0, LV_ANIM_OFF);
+  tv.set_tile_by_index(0, 0, lvgl::AnimEnable::Off);
 
   std::cout << "TileView Ownership Passed" << std::endl;
 }
@@ -75,11 +75,11 @@ void test_tileview_fluent_set() {
   Object screen(lv_screen_active(), Object::Ownership::Unmanaged);
   TileView tv(screen);
 
-  Tile t1 = tv.add_tile(0, 0, LV_DIR_BOTTOM);
-  Tile t2 = tv.add_tile(0, 1, LV_DIR_TOP);
+  Tile t1 = tv.add_tile(0, 0, lvgl::Dir::Bottom);
+  Tile t2 = tv.add_tile(0, 1, lvgl::Dir::Top);
 
   // Test the new overload taking reference
-  tv.set_tile(t2, LV_ANIM_OFF);
+  tv.set_tile(t2, lvgl::AnimEnable::Off);
 
   std::cout << "TileView Fluent Set Passed" << std::endl;
 }

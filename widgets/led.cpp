@@ -16,31 +16,31 @@ Led::Led(Object& parent) : Led(&parent) {}
 Led::Led(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Led& Led::set_color(Color color) {
-  if (obj_) lv_led_set_color(obj_, color);
+  if (raw()) lv_led_set_color(raw(), color);
   return *this;
 }
 
 Led& Led::set_brightness(uint8_t bright) {
-  if (obj_) lv_led_set_brightness(obj_, bright);
+  if (raw()) lv_led_set_brightness(raw(), bright);
   return *this;
 }
 
 Led& Led::on() {
-  if (obj_) lv_led_on(obj_);
+  if (raw()) lv_led_on(raw());
   return *this;
 }
 
 Led& Led::off() {
-  if (obj_) lv_led_off(obj_);
+  if (raw()) lv_led_off(raw());
   return *this;
 }
 
 Led& Led::toggle() {
-  if (obj_) lv_led_toggle(obj_);
+  if (raw()) lv_led_toggle(raw());
   return *this;
 }
 
-uint8_t Led::get_brightness() { return obj_ ? lv_led_get_brightness(obj_) : 0; }
+uint8_t Led::get_brightness() { return raw() ? lv_led_get_brightness(raw()) : 0; }
 
 }  // namespace lvgl
 

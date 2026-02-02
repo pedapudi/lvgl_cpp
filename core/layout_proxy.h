@@ -1,6 +1,8 @@
-#pragma once
+#ifndef LVGL_CPP_CORE_LAYOUT_PROXY_H_
+#define LVGL_CPP_CORE_LAYOUT_PROXY_H_
 
 #include "../misc/enums.h"
+#include "../misc/layout.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -62,6 +64,17 @@ class LayoutProxy {
    */
   LayoutProxy& grid_dsc(const int32_t col_dsc[], const int32_t row_dsc[]) {
     lv_obj_set_grid_dsc_array(obj_, col_dsc, row_dsc);
+    lv_obj_set_layout(obj_, LV_LAYOUT_GRID);
+    return *this;
+  }
+
+  /**
+   * @brief Set the grid descriptor arrays using a GridLayout object.
+   * @param grid The GridLayout object containing descriptor arrays.
+   */
+  LayoutProxy& grid_dsc(const GridLayout& grid) {
+    lv_obj_set_grid_dsc_array(obj_, grid.col_dsc(), grid.row_dsc());
+    lv_obj_set_layout(obj_, LV_LAYOUT_GRID);
     return *this;
   }
 
@@ -107,3 +120,5 @@ class LayoutProxy {
 };
 
 }  // namespace lvgl
+
+#endif  // LVGL_CPP_CORE_LAYOUT_PROXY_H_

@@ -265,10 +265,10 @@ class Object {
 
   /**
    * @brief Get the current state of the object.
-   * @return The LVGL state flags.
+   * @return The state as a State scoped enum.
    */
-  lv_state_t get_state() const {
-    return obj_ ? lv_obj_get_state(obj_) : LV_STATE_ANY;
+  State get_state() const {
+    return obj_ ? static_cast<State>(lv_obj_get_state(obj_)) : State::Default;
   }
 
   /**
@@ -322,15 +322,6 @@ class Object {
   Object& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
 
   /**
-   * @brief Set the alignment of the object.
-   * @param align The alignment type (raw LVGL enum).
-   * @param x_ofs The x offset.
-   * @param y_ofs The y offset.
-   * @return Reference to this object.
-   */
-  Object& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0);
-
-  /**
    * @brief Align the object to another object.
    * @param base The object to align to.
    * @param align The alignment type.
@@ -339,17 +330,6 @@ class Object {
    * @return Reference to this object.
    */
   Object& align_to(const Object& base, Align align, int32_t x_ofs = 0,
-                   int32_t y_ofs = 0);
-
-  /**
-   * @brief Align the object to another object.
-   * @param base The object to align to.
-   * @param align The alignment type (raw LVGL enum).
-   * @param x_ofs The x offset.
-   * @param y_ofs The y offset.
-   * @return Reference to this object.
-   */
-  Object& align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
                    int32_t y_ofs = 0);
 
   /**
@@ -470,10 +450,9 @@ class Object {
 
   // --- Layout Shortcuts ---
 
-  Object& set_flex_flow(lv_flex_flow_t flow);
-  Object& set_flex_align(lv_flex_align_t main_place,
-                         lv_flex_align_t cross_place,
-                         lv_flex_align_t track_place);
+  Object& set_flex_flow(FlexFlow flow);
+  Object& set_flex_align(FlexAlign main_place, FlexAlign cross_place,
+                         FlexAlign track_place);
   Object& set_flex_grow(uint8_t grow);
 
   /**
@@ -487,29 +466,20 @@ class Object {
    * if it's a temporary), the layout will reference invalid memory.
    */
   Object& set_grid_dsc_array(const GridLayout& grid);
-  Object& set_grid_align(lv_grid_align_t column_align,
-                         lv_grid_align_t row_align);
-  Object& set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
-                        int32_t col_span, lv_grid_align_t row_align,
-                        int32_t row_pos, int32_t row_span);
+  Object& set_grid_align(GridAlign column_align, GridAlign row_align);
+  Object& set_grid_cell(GridAlign column_align, int32_t col_pos,
+                        int32_t col_span, GridAlign row_align, int32_t row_pos,
+                        int32_t row_span);
 
   // --- Scroll ---
 
   Object& scroll_to_view(AnimEnable anim_en);
-  [[deprecated("Use scroll_to_view(AnimEnable) instead")]]
-  Object& scroll_to_view(lv_anim_enable_t anim_en);
 
   Object& scroll_to_view_recursive(AnimEnable anim_en);
-  [[deprecated("Use scroll_to_view_recursive(AnimEnable) instead")]]
-  Object& scroll_to_view_recursive(lv_anim_enable_t anim_en);
 
   Object& scroll_by(int32_t x, int32_t y, AnimEnable anim_en);
-  [[deprecated("Use scroll_by(int32_t, int32_t, AnimEnable) instead")]]
-  Object& scroll_by(int32_t x, int32_t y, lv_anim_enable_t anim_en);
 
   Object& scroll_to(int32_t x, int32_t y, AnimEnable anim_en);
-  [[deprecated("Use scroll_to(int32_t, int32_t, AnimEnable) instead")]]
-  Object& scroll_to(int32_t x, int32_t y, lv_anim_enable_t anim_en);
   int32_t get_scroll_x() const;
   int32_t get_scroll_y() const;
   int32_t get_scroll_top() const;
@@ -610,8 +580,9 @@ class Object {
    * @param code The event code.
    * @param param Optional parameter for the event.
    */
-  void send_event(lv_event_code_t code, void* param = nullptr) {
-    if (obj_) lv_obj_send_event(obj_, code, param);
+  void send_event(EventCode code, void* param = nullptr) {
+    if (obj_)
+      lv_obj_send_event(obj_, static_cast<lv_event_code_t>(code), param);
   }
 
   /**
@@ -621,11 +592,7 @@ class Object {
    * @return Reference to this object.
    * @note Usually accessed via event().add_cb()
    */
-  Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
-  Object& add_event_cb(EventCode event_code, EventCallback callback) {
-    return add_event_cb(static_cast<lv_event_code_t>(event_code),
-                        std::move(callback));
-  }
+  Object& add_event_cb(EventCode event_code, EventCallback callback);
 
   /**
    * @brief Remove all event callbacks from this object.
@@ -672,27 +639,9 @@ class Object {
 
   /**
    * @brief Add a flag to the object.
-   * @param f The flag to add (e.g., `LV_OBJ_FLAG_HIDDEN`).
-   */
-  bool has_flag(lv_obj_flag_t f) const;
-
-  /**
-   * @brief Add a flag to the object.
-   * @param f The flag to add.
-   */
-  void add_flag(lv_obj_flag_t f);
-
-  /**
-   * @brief Add a flag to the object.
    * @param f The flag to add.
    */
   void add_flag(ObjFlag f);
-
-  /**
-   * @brief Remove a flag from the object.
-   * @param f The flag to remove.
-   */
-  void remove_flag(lv_obj_flag_t f);
 
   /**
    * @brief Remove a flag from the object.
@@ -704,31 +653,13 @@ class Object {
    * @brief Add a state to the object.
    * @param s The state to add.
    */
-  void add_state(lv_state_t s);
-
-  /**
-   * @brief Add a state to the object.
-   * @param s The state to add.
-   */
   void add_state(State s);
 
   /**
    * @brief Remove a state from the object.
    * @param s The state to remove.
    */
-  void remove_state(lv_state_t s);
-
-  /**
-   * @brief Remove a state from the object.
-   * @param s The state to remove.
-   */
   void remove_state(State s);
-
-  /**
-   * @brief Check if a state is set.
-   * @param s The state to check.
-   */
-  bool has_state(lv_state_t s) const;
 
   /**
    * @brief Check if a state is set.

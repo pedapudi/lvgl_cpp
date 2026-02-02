@@ -88,7 +88,7 @@ void test_bar_1() {
   lvgl::Bar bar1;
   bar1.set_size(200, 20);
   bar1.center();
-  bar1.set_value(70, LV_ANIM_OFF);
+  bar1.set_value(70, lvgl::AnimEnable::Off);
   std::cout << "Bar Example 1 Passed" << std::endl;
 }
 
@@ -99,7 +99,7 @@ void test_slider_1() {
   lvgl::Slider slider(screen);
   slider.center();
 
-  // slider.add_event_cb(slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+  // slider.add_event_cb(slider_event_cb, lvgl::EventCode::ValueChanged, NULL);
   slider.style().anim_time(2000);
 
   lvgl::Label label(screen);
@@ -158,7 +158,7 @@ void test_checkbox_1() {
 // Line Example 1: Simple Line
 void test_line_1() {
   std::cout << "Testing Line Example 1..." << std::endl;
-  static lv_point_precise_t line_points[] = {
+  static lvgl::PointPrecise line_points[] = {
       {5, 5}, {70, 70}, {120, 10}, {180, 60}, {240, 10}};
 
   lvgl::Line line1;
@@ -264,7 +264,7 @@ void test_label_extra() {
   label.set_text_static("Static Text");
   assert(std::string(lv_label_get_text(label.raw())) == "Static Text");
 
-  label.set_translation_tag(1, "TAG_ID");
+  label.set_translation_tag("TAG_ID");
   std::cout << "Label extra methods passed." << std::endl;
 }
 

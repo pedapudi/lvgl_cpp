@@ -17,11 +17,11 @@ static void test_event_proxy() {
 
   obj.event().on_clicked([&](Event& e) { called = true; });
 
-  lv_obj_send_event(obj.raw(), LV_EVENT_CLICKED, nullptr);
+  obj.send_event(lvgl::EventCode::Clicked);
   assert(called);
 
   called = false;
-  obj.event().send(LV_EVENT_CLICKED);
+  obj.event().send(lvgl::EventCode::Clicked);
   assert(called);
 
   std::cout << "EventProxy passed." << std::endl;

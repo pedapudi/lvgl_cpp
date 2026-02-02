@@ -9,12 +9,14 @@ Screen::Screen() : Widget(static_cast<Object*>(nullptr)) {
 Screen::Screen(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 void Screen::load() {
-  if (obj_) lv_screen_load(obj_);
+  if (raw()) lv_screen_load(raw());
 }
 
-void Screen::load_anim(lv_screen_load_anim_t anim_type, uint32_t time,
-                       uint32_t delay, bool auto_del) {
-  if (obj_) lv_screen_load_anim(obj_, anim_type, time, delay, auto_del);
+void Screen::load_anim(ScreenLoadAnim anim_type, uint32_t time, uint32_t delay,
+                       bool auto_del) {
+  if (raw())
+    lv_screen_load_anim(raw(), static_cast<lv_screen_load_anim_t>(anim_type),
+                        time, delay, auto_del);
 }
 
 Screen Screen::active() {

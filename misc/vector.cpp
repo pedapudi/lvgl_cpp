@@ -73,16 +73,15 @@ void VectorPath::close() {
 
 void VectorPath::append_rect(float x, float y, float w, float h, float rx,
                              float ry) {
-  lv_area_t rect;
-  rect.x1 = (int32_t)x;
-  rect.y1 = (int32_t)y;
-  rect.x2 = (int32_t)(x + w - 1);
-  rect.y2 = (int32_t)(y + h - 1);
-  if (path_) lv_vector_path_append_rectangle(path_, &rect, rx, ry);
+  if (path_) lv_vector_path_append_rectangle(path_, x, y, w, h, rx, ry);
 }
 
 void VectorPath::append_rect(const Area& area, float rx, float ry) {
-  if (path_) lv_vector_path_append_rectangle(path_, area.raw(), rx, ry);
+  if (path_)
+    lv_vector_path_append_rectangle(
+        path_, (float)area.raw()->x1, (float)area.raw()->y1,
+        (float)lv_area_get_width(area.raw()),
+        (float)lv_area_get_height(area.raw()), rx, ry);
 }
 
 // ... existing code ...

@@ -37,7 +37,8 @@
 void test_button() {
   std::cerr << "Testing Button..." << std::endl;  // Keep this print
   lvgl::Button btn;  // Use default constructor (active screen)
-  btn.set_width(100).set_height(50).set_size(100, 50).align(LV_ALIGN_CENTER);
+  btn.set_width(100).set_height(50).set_size(100, 50).align(
+      lvgl::Align::Center);
 }
 
 void test_checkbox() {
@@ -45,16 +46,16 @@ void test_checkbox() {
   lvgl::Checkbox cb(parent, "Check me");
   cb.set_text("Updated")
       .set_width(200)
-      .add_state(LV_STATE_CHECKED)
-      .remove_state(LV_STATE_DISABLED);
+      .add_state(lvgl::State::Checked)
+      .remove_state(lvgl::State::Disabled);
   std::cout << "Checkbox fluent API passed." << std::endl;
 }
 
 void test_switch() {
   lvgl::Switch sw;  // Use default constructor
-  sw.set_orientation(LV_SWITCH_ORIENTATION_VERTICAL)
+  sw.set_orientation(lvgl::Switch::Orientation::Vertical)
       .set_size(50, 100)
-      .add_state(LV_STATE_CHECKED);
+      .add_state(lvgl::State::Checked);
   std::cout << "Switch fluent API passed." << std::endl;
 }
 
@@ -95,7 +96,7 @@ void test_bar() {
   bar.set_range(0, 200)
       .set_value(100)
       .set_mode(lvgl::Bar::Mode::Normal)
-      .set_orientation(LV_BAR_ORIENTATION_HORIZONTAL)
+      .set_orientation(lvgl::Bar::Orientation::Horizontal)
       .set_size(200, 20);
   std::cout << "Bar fluent API passed." << std::endl;
 }
@@ -103,7 +104,7 @@ void test_bar() {
 void test_image() {
   lvgl::Image img;
   img.set_src(nullptr).set_offset_x(10).set_scale(128).set_rotation(900).align(
-      LV_ALIGN_CENTER);
+      lvgl::Align::Center);
   std::cout << "Image fluent API passed." << std::endl;
 }
 
@@ -120,9 +121,9 @@ void test_led() {
 
 void test_line() {
   lvgl::Line line;
-  static lv_point_precise_t points[] = {{0, 0}, {100, 100}};
+  static lvgl::PointPrecise points[] = {{0, 0}, {100, 100}};
   line.set_points(points, 2).set_y_invert(true).set_width(100).align(
-      LV_ALIGN_TOP_LEFT);
+      lvgl::Align::TopLeft);
   std::cout << "Line fluent API passed." << std::endl;
 }
 
@@ -130,8 +131,8 @@ void test_spinner() {
   lvgl::Spinner spinner;
   spinner.set_anim_params(1000, 60)
       .set_size(100, 100)
-      .align(LV_ALIGN_CENTER)
-      .add_state(LV_STATE_DEFAULT);
+      .align(lvgl::Align::Center)
+      .add_state(lvgl::State::Default);
   std::cout << "Spinner fluent API passed." << std::endl;
 }
 
@@ -140,7 +141,7 @@ void test_anim_image() {
   anim_img.set_duration(500)
       .set_repeat_count(LV_ANIM_REPEAT_INFINITE)
       .set_width(100)
-      .align(LV_ALIGN_CENTER);
+      .align(lvgl::Align::Center);
   std::cout << "AnimImage fluent API passed." << std::endl;
 }
 
@@ -149,15 +150,15 @@ void test_dropdown() {
   dd.set_text("Select option")
       .set_options("Option 1\nOption 2\nOption 3")
       .set_selected(1)
-      .set_dir(LV_DIR_BOTTOM)
+      .set_dir(lvgl::Dir::Bottom)
       .set_width(150);
   std::cout << "Dropdown fluent API passed." << std::endl;
 }
 
 void test_roller() {
   lvgl::Roller roller;
-  roller.set_options("1\n2\n3\n4\n5", LV_ROLLER_MODE_NORMAL)
-      .set_selected(2, LV_ANIM_ON)
+  roller.set_options("1\n2\n3\n4\n5", lvgl::Roller::Mode::Normal)
+      .set_selected(2, lvgl::AnimEnable::On)
       .set_visible_row_count(3)
       .set_width(100);
   std::cout << "Roller fluent API passed." << std::endl;
@@ -177,7 +178,7 @@ void test_btn_matrix() {
   lvgl::ButtonMatrix btnm;
   static const char* map[] = {"Btn1", "Btn2", "\n", "Btn3", ""};
   btnm.set_map(map).set_one_checked(true).set_size(200, 100).align(
-      LV_ALIGN_CENTER);
+      lvgl::Align::Center);
   std::cout << "ButtonMatrix fluent API passed." << std::endl;
 }
 
@@ -186,7 +187,7 @@ void test_calendar() {
   cal.set_today_date(2023, 10, 27)
       .set_shown_date(2023, 10)
       .set_width(200)
-      .align(LV_ALIGN_CENTER);
+      .align(lvgl::Align::Center);
   std::cout << "Calendar fluent API passed." << std::endl;
 }
 
@@ -204,7 +205,7 @@ void test_scale() {
       .set_total_tick_count(11)
       .set_major_tick_every(5)
       .set_label_show(true)
-      .set_mode(lvgl::ScaleMode::HorizontalBottom)
+      .set_mode(lvgl::Scale::Mode::HorizontalBottom)
       .set_width(200);
   std::cout << "Scale fluent API passed." << std::endl;
 }
@@ -217,7 +218,7 @@ void test_canvas() {
   red.blue = 0;
   red.alpha = 0xff;
   static uint8_t buf[100 * 100 * 4];
-  canvas.set_buffer(buf, 100, 100, LV_COLOR_FORMAT_ARGB8888);
+  canvas.set_buffer(buf, 100, 100, lvgl::ColorFormat::ARGB8888);
   canvas.set_width(100).set_height(100).set_palette(0, red);
   std::cout << "Canvas fluent API passed." << std::endl;
 }
@@ -233,7 +234,7 @@ void test_chart() {
 
 void test_keyboard() {
   lvgl::Keyboard kb;
-  kb.set_mode(LV_KEYBOARD_MODE_NUMBER).set_popovers(true).set_width(200);
+  kb.set_mode(lvgl::Keyboard::Mode::Number).set_popovers(true).set_width(200);
   std::cout << "Keyboard fluent API passed." << std::endl;
 }
 
@@ -248,7 +249,7 @@ void test_list() {
   std::cout << "List created." << std::endl;
   list.set_size(150, 200);
   std::cout << "List size set." << std::endl;
-  list.align(LV_ALIGN_CENTER);
+  list.align(lvgl::Align::Center);
   std::cout << "List aligned." << std::endl;
   std::cout << "List fluent API passed." << std::endl;
 }
@@ -256,20 +257,22 @@ void test_list() {
 void test_menu() {
   lvgl::Menu menu;
   lvgl::MenuPage page = menu.page_create("Page 1");
-  menu.set_page(page).set_mode_header(LV_MENU_HEADER_TOP_FIXED).set_width(200);
+  menu.set_page(page)
+      .set_mode_header(lvgl::Menu::HeaderMode::TopFixed)
+      .set_width(200);
   std::cout << "Menu fluent API passed." << std::endl;
 }
 
 void test_msgbox() {
   lvgl::MsgBox mbox;  // No parent -> modal
-  mbox.set_size(200, 150).align(LV_ALIGN_CENTER);
+  mbox.set_size(200, 150).align(lvgl::Align::Center);
   std::cout << "MsgBox fluent API passed." << std::endl;
 }
 
 void test_span() {
   lvgl::SpanGroup spangroup;
   spangroup.set_align(lvgl::TextAlign::Center)
-      .set_overflow(LV_SPAN_OVERFLOW_ELLIPSIS)
+      .set_overflow(lvgl::SpanGroup::Overflow::Ellipsis)
       .set_indent(10)
       .set_width(200);
   std::cout << "SpanGroup fluent API passed." << std::endl;
@@ -277,28 +280,28 @@ void test_span() {
 
 void test_tabview() {
   lvgl::TabView tv;
-  tv.set_tab_bar_position(LV_DIR_TOP)
+  tv.set_tab_bar_position(lvgl::Dir::Top)
       .set_tab_bar_size(40)
-      .set_active(0, LV_ANIM_OFF)
+      .set_active(0, lvgl::AnimEnable::Off)
       .set_width(200);
   std::cout << "TabView fluent API passed." << std::endl;
 }
 
 void test_tileview() {
   lvgl::TileView tv;
-  tv.set_width(200).set_height(200).align(LV_ALIGN_CENTER);
+  tv.set_width(200).set_height(200).align(lvgl::Align::Center);
   std::cout << "TileView fluent API passed." << std::endl;
 }
 
 void test_win() {
   lvgl::Win win;
-  win.set_width(200).set_height(200).align(LV_ALIGN_CENTER);
+  win.set_width(200).set_height(200).align(lvgl::Align::Center);
   std::cout << "Win fluent API passed." << std::endl;
 }
 
 void test_image_button() {
   lvgl::ImageButton ib;
-  ib.set_state(LV_IMAGEBUTTON_STATE_PRESSED).set_width(50).set_height(50);
+  ib.set_state(lvgl::ImageButton::State::Pressed).set_width(50).set_height(50);
   std::cout << "ImageButton fluent API passed." << std::endl;
 }
 
@@ -311,7 +314,7 @@ int main() {
   static std::vector<uint8_t> buf(128 * 128 * 4);
   lvgl::Display disp = lvgl::Display::create(128, 128);
   disp.set_buffers(buf.data(), nullptr, buf.size(),
-                   LV_DISPLAY_RENDER_MODE_PARTIAL);
+                   lvgl::Display::RenderMode::Partial);
 
   test_button();
   test_checkbox();

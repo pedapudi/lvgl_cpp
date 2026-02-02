@@ -1,12 +1,26 @@
-#pragma once
-
-#include <cstdint>
+#ifndef LVGL_CPP_MISC_STYLE_BASE_H_
+#define LVGL_CPP_MISC_STYLE_BASE_H_
 
 #include "../draw/image_descriptor.h"
 #include "../font/font.h"
 #include "color.h"
 #include "enums.h"
 #include "lvgl.h"
+
+/**
+ * @file style_base.h
+ * @brief User Guide:
+ * `StyleBase<Derived>` is a CRTP template that defines the high-level fluent
+ * API for all style-related operations in `lvgl_cpp`.
+ *
+ * It is used by:
+ * - `Style`: For persistent, reusable style objects.
+ * - `StyleProxy` (via `Object::style()`): For modifying an object's local
+ * styles.
+ *
+ * The API prefers `lvgl_cpp` types like `Color`, `Opacity`, `GradDir`, etc.,
+ * while providing legacy overloads for raw LVGL types.
+ */
 
 namespace lvgl {
 
@@ -19,16 +33,20 @@ class ImageDescriptor;
  * and transient StyleProxy objects. It uses the Curiously Recurring Template
  * Pattern (CRTP) to allow methods to return the derived type for chaining.
  *
- * Derived classes must implement the internal `set_property` methods.
+ * Derived classes must implement the internal `set_property` and `get_property`
+ * methods.
+ *
+ * @tparam Derived The actual implementation class (Style or StyleProxy).
  */
 template <typename Derived>
 class StyleBase {
  public:
   Derived& self() { return static_cast<Derived&>(*this); }
 
-  // =========================================================================
-  // Background
-  // =========================================================================
+  /**
+   * @name Background Properties
+   * @{
+   */
 
   Derived& bg_color(Color color) {
     self().set_bg_color(color);
@@ -130,10 +148,12 @@ class StyleBase {
     self().set_image_colorkey(color);
     return self();
   }
+  /** @} */
 
-  // =========================================================================
-  // Border
-  // =========================================================================
+  /**
+   * @name Border Properties
+   * @{
+   */
 
   Derived& border_color(Color color) {
     self().set_border_color(color);
@@ -173,9 +193,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Outline
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Outline Properties
+   * @{
+   */
 
   Derived& outline_color(Color color) {
     self().set_outline_color(color);
@@ -199,9 +222,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Shadow
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Shadow Properties
+   * @{
+   */
 
   Derived& shadow_width(int32_t width) {
     self().set_shadow_width(width);
@@ -236,9 +262,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Padding
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Padding Properties
+   * @{
+   */
 
   Derived& pad_all(int32_t pad) {
     self().set_pad_all(pad);
@@ -296,9 +325,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Margin
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Margin Properties
+   * @{
+   */
 
   Derived& margin_all(int32_t margin) {
     self().set_margin_all(margin);
@@ -336,9 +368,12 @@ class StyleBase {
   }
   int32_t margin_bottom() const { return self().get_margin_bottom(); }
 
-  // =========================================================================
-  // Size
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Size and Position Properties
+   * @{
+   */
 
   Derived& width(int32_t value) {
     self().set_width(value);
@@ -399,9 +434,12 @@ class StyleBase {
   }
   int32_t length() const { return self().get_length(); }
 
-  // =========================================================================
-  // Geometry
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Geometry and Transformation Properties
+   * @{
+   */
 
   Derived& radius(int32_t rad) {
     self().set_radius(rad);
@@ -480,9 +518,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Text
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Text Properties
+   * @{
+   */
 
   Derived& text_color(Color color) {
     self().set_text_color(color);
@@ -564,9 +605,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Image
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Image Properties
+   * @{
+   */
 
   Derived& image_opa(Opacity opa) {
     self().set_image_opa(static_cast<lv_opa_t>(opa));
@@ -591,9 +635,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Line & Arc
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Line and Arc Properties
+   * @{
+   */
 
   Derived& line_width(int32_t width) {
     self().set_line_width(width);
@@ -660,9 +707,12 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Animation
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Animation Properties
+   * @{
+   */
 
   Derived& anim_time(uint32_t time) {
     self().set_anim_duration(time);
@@ -677,43 +727,26 @@ class StyleBase {
     return self();
   }
 
-  // =========================================================================
-  // Layout (Flex/Grid)
-  // =========================================================================
+  /** @} */
+
+  /**
+   * @name Layout Properties (Flex/Grid)
+   * @{
+   */
 
   Derived& flex_flow(FlexFlow flow) {
-    self().set_flex_flow(static_cast<lv_flex_flow_t>(flow));
-    return self();
-  }
-  [[deprecated("Use flex_flow(FlexFlow) instead")]]
-  Derived& flex_flow(lv_flex_flow_t flow) {
     self().set_flex_flow(flow);
     return self();
   }
   Derived& flex_main_place(FlexAlign place) {
-    self().set_flex_main_place(static_cast<lv_flex_align_t>(place));
-    return self();
-  }
-  [[deprecated("Use flex_main_place(FlexAlign) instead")]]
-  Derived& flex_main_place(lv_flex_align_t place) {
     self().set_flex_main_place(place);
     return self();
   }
   Derived& flex_cross_place(FlexAlign place) {
-    self().set_flex_cross_place(static_cast<lv_flex_align_t>(place));
-    return self();
-  }
-  [[deprecated("Use flex_cross_place(FlexAlign) instead")]]
-  Derived& flex_cross_place(lv_flex_align_t place) {
     self().set_flex_cross_place(place);
     return self();
   }
   Derived& flex_track_place(FlexAlign place) {
-    self().set_flex_track_place(static_cast<lv_flex_align_t>(place));
-    return self();
-  }
-  [[deprecated("Use flex_track_place(FlexAlign) instead")]]
-  Derived& flex_track_place(lv_flex_align_t place) {
     self().set_flex_track_place(place);
     return self();
   }
@@ -731,20 +764,10 @@ class StyleBase {
     return self();
   }
   Derived& grid_row_align(GridAlign align) {
-    self().set_grid_row_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_row_align(GridAlign) instead")]]
-  Derived& grid_row_align(lv_grid_align_t align) {
     self().set_grid_row_align(align);
     return self();
   }
   Derived& grid_column_align(GridAlign align) {
-    self().set_grid_column_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_column_align(GridAlign) instead")]]
-  Derived& grid_column_align(lv_grid_align_t align) {
     self().set_grid_column_align(align);
     return self();
   }
@@ -765,20 +788,10 @@ class StyleBase {
     return self();
   }
   Derived& grid_cell_x_align(GridAlign align) {
-    self().set_grid_cell_x_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_cell_x_align(GridAlign) instead")]]
-  Derived& grid_cell_x_align(lv_grid_align_t align) {
     self().set_grid_cell_x_align(align);
     return self();
   }
   Derived& grid_cell_y_align(GridAlign align) {
-    self().set_grid_cell_y_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_cell_y_align(GridAlign) instead")]]
-  Derived& grid_cell_y_align(lv_grid_align_t align) {
     self().set_grid_cell_y_align(align);
     return self();
   }
@@ -845,3 +858,5 @@ class StyleBase {
 };
 
 }  // namespace lvgl
+
+#endif  // LVGL_CPP_MISC_STYLE_BASE_H_

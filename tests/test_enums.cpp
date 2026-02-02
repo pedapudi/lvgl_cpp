@@ -181,7 +181,7 @@ int main() {
     lvgl::Object obj(&screen);
     obj.add_event_cb(lvgl::EventCode::Clicked, [](lvgl::Event& e) { (void)e; });
     // Run an event?
-    lv_obj_send_event(obj.raw(), LV_EVENT_CLICKED, nullptr);
+    obj.send_event(lvgl::EventCode::Clicked);
     std::cerr << "Event Done" << std::endl;
   }
 
@@ -202,7 +202,9 @@ int main() {
     obj.set_size(100, 100);
     obj.align(lvgl::Align::Center);
     // Rough check of position, assuming parent is sizeable
-    assert(lv_obj_get_style_align(obj.raw(), LV_PART_MAIN) == LV_ALIGN_CENTER);
+    assert(static_cast<lv_align_t>(
+               lv_obj_get_style_align(obj.raw(), LV_PART_MAIN)) ==
+           static_cast<lv_align_t>(lvgl::Align::Center));
     std::cerr << "Align Enum Done" << std::endl;
   }
 

@@ -13,6 +13,7 @@ set(SOURCES
     core/observer.cpp
     core/interaction_proxy.cpp
     core/tree_proxy.cpp
+    core/state_proxy.cpp
 )
 
 set(DRAW_SOURCES
@@ -81,6 +82,7 @@ if(IDF_TARGET)
     target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_20)
 else()
     project(lvgl_cpp)
+    enable_testing()
 
     set(CMAKE_CXX_STANDARD 20)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -90,7 +92,7 @@ else()
         # Use the test configuration for internal builds/tests
         set(LV_BUILD_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/tests/lv_conf_test.h CACHE STRING "Path to lv_conf.h" FORCE)
         set(CONFIG_LV_BUILD_EXAMPLES ON CACHE BOOL "Build examples" FORCE)
-        set(CONFIG_LV_BUILD_DEMOS ON CACHE BOOL "Build demos" FORCE)
+        set(CONFIG_LV_DEMOS ON CACHE BOOL "Build demos" FORCE)
         set(CONFIG_LV_USE_THORVG_INTERNAL OFF CACHE BOOL "Use ThorVG" FORCE)
 
         if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lvgl/CMakeLists.txt")
@@ -113,7 +115,6 @@ else()
     option(ENABLE_PROFILING "Enable gperftools profiling" OFF)
     if(ENABLE_PROFILING)
         find_library(LIBPROFILER profiler)
-        find_library(LIBTCMALLOC tcmalloc)
         
         if(LIBPROFILER)
             message(STATUS "Found libprofiler: ${LIBPROFILER}")
@@ -268,7 +269,6 @@ add_test(NAME test_menu COMMAND test_menu)
 
 
 
-    enable_testing()
     add_test(NAME test_core_widgets COMMAND test_core_widgets)
     add_test(NAME test_input_widgets COMMAND test_input_widgets)
     add_test(NAME test_complex_widgets COMMAND test_complex_widgets)
@@ -359,6 +359,10 @@ add_test(NAME test_menu COMMAND test_menu)
     add_executable(test_coverage_sweep tests/test_coverage_sweep.cpp)
     target_link_libraries(test_coverage_sweep PRIVATE lvgl_cpp)
     add_test(NAME test_coverage_sweep COMMAND test_coverage_sweep)
+
+    add_executable(test_size tests/test_size.cpp)
+    target_link_libraries(test_size PRIVATE lvgl_cpp)
+    add_test(NAME test_size COMMAND test_size)
 
 
 

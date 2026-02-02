@@ -19,10 +19,6 @@ void Lottie::set_buffer(int32_t w, int32_t h, void* buf) {
   lv_lottie_set_buffer(raw(), w, h, buf);
 }
 
-void Lottie::set_draw_buf(lv_draw_buf_t* draw_buf) {
-  lv_lottie_set_draw_buf(raw(), draw_buf);
-}
-
 void Lottie::set_draw_buf(const DrawBuf& draw_buf) {
   lv_lottie_set_draw_buf(raw(), draw_buf.raw());
 }

@@ -46,7 +46,6 @@ class Lottie : public Widget<Lottie> {
    * @brief Set a draw buffer for the animation.
    * @param draw_buf Initialized draw buffer (ARGB8888).
    */
-  void set_draw_buf(lv_draw_buf_t* draw_buf);
 
   /**
    * @brief Set a draw buffer for the animation (RAII version).

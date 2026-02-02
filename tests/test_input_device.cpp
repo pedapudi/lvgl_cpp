@@ -107,10 +107,10 @@ void test_enhancements() {
         event_called = true;
         lvgl::InputDevice::wrap(lv_event_get_indev(e)).stop_processing();
       },
-      LV_EVENT_PRESSED);
+      lvgl::EventCode::Pressed);
 
   // Send a mock event to verify the callback
-  lv_indev_send_event(ptr.raw(), LV_EVENT_PRESSED, nullptr);
+  ptr.send_event(lvgl::EventCode::Pressed, nullptr);
   assert(event_called == true);
 
   std::cout << "v9 Enhancements passed." << std::endl;

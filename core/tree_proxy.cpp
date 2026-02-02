@@ -1,15 +1,17 @@
 #include "tree_proxy.h"
 
 #include "../lvgl_cpp.h"
+#include "object.h"
 
 namespace lvgl {
 
 Object TreeProxy::get_parent() const {
-  return Object(lv_obj_get_parent(obj_->raw()), false);
+  return Object(lv_obj_get_parent(obj_->raw()), Object::Ownership::Unmanaged);
 }
 
 Object TreeProxy::get_child(int32_t index) const {
-  return Object(lv_obj_get_child(obj_->raw(), index), false);
+  return Object(lv_obj_get_child(obj_->raw(), index),
+                Object::Ownership::Unmanaged);
 }
 
 uint32_t TreeProxy::get_child_count() const {

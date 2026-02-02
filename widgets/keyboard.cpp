@@ -16,58 +16,57 @@ Keyboard::Keyboard(lv_obj_t* obj, Ownership ownership)
     : Widget(obj, ownership) {}
 
 Keyboard& Keyboard::set_textarea(lv_obj_t* ta) {
-  if (obj_) lv_keyboard_set_textarea(obj_, ta);
+  if (raw()) lv_keyboard_set_textarea(raw(), ta);
   return *this;
 }
 
 Keyboard& Keyboard::set_textarea(Object& ta) {
-  if (obj_) lv_keyboard_set_textarea(obj_, ta.raw());
-  return *this;
-}
-
-Keyboard& Keyboard::set_mode(lv_keyboard_mode_t mode) {
-  if (obj_) lv_keyboard_set_mode(obj_, mode);
+  if (raw()) lv_keyboard_set_textarea(raw(), ta.raw());
   return *this;
 }
 
 Keyboard& Keyboard::set_mode(Mode mode) {
-  return set_mode(static_cast<lv_keyboard_mode_t>(mode));
-}
-
-Keyboard& Keyboard::set_popovers(bool en) {
-  if (obj_) lv_keyboard_set_popovers(obj_, en);
+  if (raw()) lv_keyboard_set_mode(raw(), static_cast<lv_keyboard_mode_t>(mode));
   return *this;
 }
 
-Keyboard& Keyboard::set_map(lv_keyboard_mode_t mode, const char* const map[],
+Keyboard& Keyboard::set_popovers(bool en) {
+  if (raw()) lv_keyboard_set_popovers(raw(), en);
+  return *this;
+}
+
+Keyboard& Keyboard::set_map(Mode mode, const char* const map[],
                             const lv_buttonmatrix_ctrl_t ctrl_map[]) {
-  if (obj_) lv_keyboard_set_map(obj_, mode, map, ctrl_map);
+  if (raw())
+    lv_keyboard_set_map(raw(), static_cast<lv_keyboard_mode_t>(mode), map,
+                        ctrl_map);
   return *this;
 }
 
 lv_obj_t* Keyboard::get_textarea() {
-  return obj_ ? lv_keyboard_get_textarea(obj_) : nullptr;
+  return raw() ? lv_keyboard_get_textarea(raw()) : nullptr;
 }
 
 Keyboard::Mode Keyboard::get_mode() {
-  return obj_ ? static_cast<Mode>(lv_keyboard_get_mode(obj_)) : Mode::TextLower;
+  return raw() ? static_cast<Mode>(lv_keyboard_get_mode(raw()))
+               : Mode::TextLower;
 }
 
 bool Keyboard::get_popovers() {
-  return obj_ ? lv_keyboard_get_popovers(obj_) : false;
+  return raw() ? lv_keyboard_get_popovers(raw()) : false;
 }
 
 const char* const* Keyboard::get_map_array() {
-  return obj_ ? lv_keyboard_get_map_array(obj_) : nullptr;
+  return raw() ? lv_keyboard_get_map_array(raw()) : nullptr;
 }
 
 uint32_t Keyboard::get_selected_button() {
-  return obj_ ? lv_keyboard_get_selected_button(obj_)
-              : LV_BUTTONMATRIX_BUTTON_NONE;
+  return raw() ? lv_keyboard_get_selected_button(raw())
+               : LV_BUTTONMATRIX_BUTTON_NONE;
 }
 
 const char* Keyboard::get_button_text(uint32_t btn_id) {
-  return obj_ ? lv_keyboard_get_button_text(obj_, btn_id) : nullptr;
+  return raw() ? lv_keyboard_get_button_text(raw(), btn_id) : nullptr;
 }
 
 }  // namespace lvgl

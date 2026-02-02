@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+#include "../display/display.h"
 #include "../misc/file_system.h"
 #include "lvgl.h"
 
@@ -16,10 +17,10 @@ void test_filesystem_write_read() {
 
   {
     lvgl::File f;
-    lv_fs_res_t res = f.open(path, LV_FS_MODE_WR);
-    if (res != LV_FS_RES_OK) {
+    lvgl::FsRes res = f.open(path, lvgl::FsMode::Write);
+    if (res != lvgl::FsRes::Ok) {
       std::cerr << "FAIL: Could not open file for writing: " << path
-                << " res=" << res << std::endl;
+                << " res=" << static_cast<int>(res) << std::endl;
       exit(1);
     }
 
@@ -27,16 +28,16 @@ void test_filesystem_write_read() {
     uint32_t len = strlen(data);
     uint32_t bw = 0;
     res = f.write(data, len, &bw);
-    if (res != LV_FS_RES_OK || bw != len) {
-      std::cerr << "FAIL: Write failed. res=" << res << " bw=" << bw
-                << std::endl;
+    if (res != lvgl::FsRes::Ok || bw != len) {
+      std::cerr << "FAIL: Write failed. res=" << static_cast<int>(res)
+                << " bw=" << bw << std::endl;
       exit(1);
     }
     f.close();
   }
 
   {
-    lvgl::File f(path, LV_FS_MODE_RD);
+    lvgl::File f(path, lvgl::FsMode::Read);
     if (!f.is_open()) {
       std::cerr << "FAIL: Could not open file for reading." << std::endl;
       exit(1);
@@ -44,9 +45,10 @@ void test_filesystem_write_read() {
 
     char buf[100];
     uint32_t br = 0;
-    lv_fs_res_t res = f.read(buf, sizeof(buf) - 1, &br);
-    if (res != LV_FS_RES_OK) {
-      std::cerr << "FAIL: Read failed. res=" << res << std::endl;
+    lvgl::FsRes res = f.read(buf, sizeof(buf) - 1, &br);
+    if (res != lvgl::FsRes::Ok) {
+      std::cerr << "FAIL: Read failed. res=" << static_cast<int>(res)
+                << std::endl;
       exit(1);
     }
     buf[br] = '\0';
@@ -61,8 +63,8 @@ void test_filesystem_write_read() {
 
   // Test tell/seek
   {
-    lvgl::File f(path, LV_FS_MODE_RD);
-    f.seek(6, LV_FS_SEEK_SET);
+    lvgl::File f(path, lvgl::FsMode::Read);
+    f.seek(6, lvgl::FsWhence::Set);
     uint32_t pos;
     f.tell(&pos);
     if (pos == 6) {
@@ -133,12 +135,10 @@ void test_directory() {
 int main() {
   lv_init();
 
-  // We need to ensure the driver is ready.
-  if (!lvgl::FileSystem::is_ready('A')) {
-    std::cout << "WARNING: Driver 'A' not ready. Is LV_USE_FS_STDIO enabled?"
-              << std::endl;
-    // Proceed anyway, maybe it just needs first access
-  }
+  // Creating/deleting objects requires memory management to be initialized
+  // Depending on lv_conf.h, lv_init might be sufficient.
+  // We need a display for active screen to work in widgets.
+  lvgl::Display display = lvgl::Display::create(800, 480);
 
   test_filesystem_write_read();
 

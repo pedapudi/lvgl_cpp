@@ -6,6 +6,7 @@
 #include "../misc/style.h"
 #include "event.h"
 #include "lvgl.h"
+#include "observer.h"
 
 namespace lvgl {
 
@@ -169,27 +170,11 @@ Object& Object::align(Align align, int32_t x_ofs, int32_t y_ofs) {
   return *this;
 }
 
-Object& Object::align(lv_align_t align, int32_t x_ofs, int32_t y_ofs) {
-  if (obj_) {
-    lv_obj_set_align(obj_, align);
-    lv_obj_set_pos(obj_, x_ofs, y_ofs);
-  }
-  return *this;
-}
-
 Object& Object::align_to(const Object& base, Align align, int32_t x_ofs,
                          int32_t y_ofs) {
   if (obj_ && base.raw()) {
     lv_obj_align_to(obj_, base.raw(), static_cast<lv_align_t>(align), x_ofs,
                     y_ofs);
-  }
-  return *this;
-}
-
-Object& Object::align_to(const Object& base, lv_align_t align, int32_t x_ofs,
-                         int32_t y_ofs) {
-  if (obj_ && base.raw()) {
-    lv_obj_align_to(obj_, base.raw(), align, x_ofs, y_ofs);
   }
   return *this;
 }
@@ -237,59 +222,43 @@ void Object::on_delete_event(lv_event_t* e) {
 
 // --- Flags & States ---
 
-void Object::add_flag(lv_obj_flag_t f) {
-  if (obj_) lv_obj_add_flag(obj_, f);
-}
-
-void Object::add_flag(ObjFlag f) { add_flag(static_cast<lv_obj_flag_t>(f)); }
-
-void Object::remove_flag(lv_obj_flag_t f) {
-  if (obj_) lv_obj_remove_flag(obj_, f);
+void Object::add_flag(ObjFlag f) {
+  if (obj_) lv_obj_add_flag(obj_, static_cast<lv_obj_flag_t>(f));
 }
 
 void Object::remove_flag(ObjFlag f) {
-  remove_flag(static_cast<lv_obj_flag_t>(f));
-}
-
-bool Object::has_flag(lv_obj_flag_t f) const {
-  return obj_ ? lv_obj_has_flag(obj_, f) : false;
+  if (obj_) lv_obj_remove_flag(obj_, static_cast<lv_obj_flag_t>(f));
 }
 
 bool Object::has_flag(ObjFlag f) const {
-  return has_flag(static_cast<lv_obj_flag_t>(f));
+  return obj_ ? lv_obj_has_flag(obj_, static_cast<lv_obj_flag_t>(f)) : false;
 }
 
-void Object::add_state(lv_state_t s) {
-  if (obj_) lv_obj_add_state(obj_, s);
+void Object::add_state(State s) {
+  if (obj_) lv_obj_add_state(obj_, static_cast<lv_state_t>(s));
 }
 
-void Object::add_state(State s) { add_state(static_cast<lv_state_t>(s)); }
-
-void Object::remove_state(lv_state_t s) {
-  if (obj_) lv_obj_remove_state(obj_, s);
-}
-
-void Object::remove_state(State s) { remove_state(static_cast<lv_state_t>(s)); }
-
-bool Object::has_state(lv_state_t s) const {
-  return obj_ ? lv_obj_has_state(obj_, s) : false;
+void Object::remove_state(State s) {
+  if (obj_) lv_obj_remove_state(obj_, static_cast<lv_state_t>(s));
 }
 
 bool Object::has_state(State s) const {
-  return has_state(static_cast<lv_state_t>(s));
+  return obj_ ? lv_obj_has_state(obj_, static_cast<lv_state_t>(s)) : false;
 }
 
 // --- Layout Shortcuts ---
 
-Object& Object::set_flex_flow(lv_flex_flow_t flow) {
-  if (obj_) lv_obj_set_flex_flow(obj_, flow);
+Object& Object::set_flex_flow(FlexFlow flow) {
+  if (obj_) lv_obj_set_flex_flow(obj_, static_cast<lv_flex_flow_t>(flow));
   return *this;
 }
 
-Object& Object::set_flex_align(lv_flex_align_t main_place,
-                               lv_flex_align_t cross_place,
-                               lv_flex_align_t track_place) {
-  if (obj_) lv_obj_set_flex_align(obj_, main_place, cross_place, track_place);
+Object& Object::set_flex_align(FlexAlign main_place, FlexAlign cross_place,
+                               FlexAlign track_place) {
+  if (obj_)
+    lv_obj_set_flex_align(obj_, static_cast<lv_flex_align_t>(main_place),
+                          static_cast<lv_flex_align_t>(cross_place),
+                          static_cast<lv_flex_align_t>(track_place));
   return *this;
 }
 
@@ -305,18 +274,20 @@ Object& Object::set_grid_dsc_array(const GridLayout& grid) {
   return *this;
 }
 
-Object& Object::set_grid_align(lv_grid_align_t column_align,
-                               lv_grid_align_t row_align) {
-  if (obj_) lv_obj_set_grid_align(obj_, column_align, row_align);
+Object& Object::set_grid_align(GridAlign column_align, GridAlign row_align) {
+  if (obj_)
+    lv_obj_set_grid_align(obj_, static_cast<lv_grid_align_t>(column_align),
+                          static_cast<lv_grid_align_t>(row_align));
   return *this;
 }
 
-Object& Object::set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
-                              int32_t col_span, lv_grid_align_t row_align,
+Object& Object::set_grid_cell(GridAlign column_align, int32_t col_pos,
+                              int32_t col_span, GridAlign row_align,
                               int32_t row_pos, int32_t row_span) {
   if (obj_) {
-    lv_obj_set_grid_cell(obj_, column_align, col_pos, col_span, row_align,
-                         row_pos, row_span);
+    lv_obj_set_grid_cell(
+        obj_, static_cast<lv_grid_align_t>(column_align), col_pos, col_span,
+        static_cast<lv_grid_align_t>(row_align), row_pos, row_span);
   }
   return *this;
 }
@@ -324,38 +295,26 @@ Object& Object::set_grid_cell(lv_grid_align_t column_align, int32_t col_pos,
 // --- Scroll ---
 
 Object& Object::scroll_to_view(AnimEnable anim_en) {
-  return scroll_to_view(static_cast<lv_anim_enable_t>(anim_en));
-}
-
-Object& Object::scroll_to_view(lv_anim_enable_t anim_en) {
-  if (obj_) lv_obj_scroll_to_view(obj_, anim_en);
+  if (obj_) lv_obj_scroll_to_view(obj_, static_cast<lv_anim_enable_t>(anim_en));
   return *this;
 }
 
 Object& Object::scroll_to_view_recursive(AnimEnable anim_en) {
-  return scroll_to_view_recursive(static_cast<lv_anim_enable_t>(anim_en));
-}
-
-Object& Object::scroll_to_view_recursive(lv_anim_enable_t anim_en) {
-  if (obj_) lv_obj_scroll_to_view_recursive(obj_, anim_en);
+  if (obj_)
+    lv_obj_scroll_to_view_recursive(obj_,
+                                    static_cast<lv_anim_enable_t>(anim_en));
   return *this;
 }
 
 Object& Object::scroll_by(int32_t x, int32_t y, AnimEnable anim_en) {
-  return scroll_by(x, y, static_cast<lv_anim_enable_t>(anim_en));
-}
-
-Object& Object::scroll_by(int32_t x, int32_t y, lv_anim_enable_t anim_en) {
-  if (obj_) lv_obj_scroll_by(obj_, x, y, anim_en);
+  if (obj_)
+    lv_obj_scroll_by(obj_, x, y, static_cast<lv_anim_enable_t>(anim_en));
   return *this;
 }
 
 Object& Object::scroll_to(int32_t x, int32_t y, AnimEnable anim_en) {
-  return scroll_to(x, y, static_cast<lv_anim_enable_t>(anim_en));
-}
-
-Object& Object::scroll_to(int32_t x, int32_t y, lv_anim_enable_t anim_en) {
-  if (obj_) lv_obj_scroll_to(obj_, x, y, anim_en);
+  if (obj_)
+    lv_obj_scroll_to(obj_, x, y, static_cast<lv_anim_enable_t>(anim_en));
   return *this;
 }
 
@@ -475,10 +434,6 @@ bool Object::is_area_visible(const Area& area) const {
   return lv_obj_area_is_visible(obj_, &copy);
 }
 
-void Object::refresh_ext_draw_size() {
-  if (obj_) lv_obj_refresh_ext_draw_size(obj_);
-}
-
 void Object::redraw(lv_layer_t* layer) {
   if (obj_) lv_obj_redraw(layer, obj_);
 }
@@ -490,21 +445,9 @@ Object& Object::fade_in(uint32_t time, uint32_t delay) {
   return *this;
 }
 
-Object& Object::fade_in(std::chrono::milliseconds time,
-                        std::chrono::milliseconds delay) {
-  return fade_in(static_cast<uint32_t>(time.count()),
-                 static_cast<uint32_t>(delay.count()));
-}
-
 Object& Object::fade_out(uint32_t time, uint32_t delay) {
   if (obj_) lv_obj_fade_out(obj_, time, delay);
   return *this;
-}
-
-Object& Object::fade_out(std::chrono::milliseconds time,
-                         std::chrono::milliseconds delay) {
-  return fade_out(static_cast<uint32_t>(time.count()),
-                  static_cast<uint32_t>(delay.count()));
 }
 
 Object& Object::fade_to(Opacity opa, uint32_t time, uint32_t delay) {
@@ -524,11 +467,23 @@ Object& Object::fade_to(Opacity opa, uint32_t time, uint32_t delay) {
   return *this;
 }
 
-Object& Object::fade_to(Opacity opa, std::chrono::milliseconds time,
-                        std::chrono::milliseconds delay) {
-  return fade_to(opa, static_cast<uint32_t>(time.count()),
-                 static_cast<uint32_t>(delay.count()));
+/*
+// --- Metadata & ID ---
+
+#if LV_USE_OBJ_ID
+void Object::set_id(void* id) {
+  if (obj_) lv_obj_set_id(obj_, id);
 }
+
+void* Object::get_id() const { return obj_ ? lv_obj_get_id(obj_) : nullptr; }
+
+Object Object::find_by_id(const void* id) const {
+  if (!obj_)
+    return Object(static_cast<lv_obj_t*>(nullptr), Ownership::Unmanaged);
+  return Object(lv_obj_find_by_id(obj_, id), Ownership::Unmanaged);
+}
+#endif
+*/
 
 // --- Other Properties ---
 
@@ -550,13 +505,12 @@ void Object::event_proxy(lv_event_t* e) {
   }
 }
 
-Object& Object::add_event_cb(lv_event_code_t event_code,
-                             EventCallback callback) {
+Object& Object::add_event_cb(EventCode event_code, EventCallback callback) {
   if (!obj_) return *this;
   auto node = std::make_unique<CallbackNode>();
-  node->event_code = event_code;
+  node->event_code = static_cast<lv_event_code_t>(event_code);
   node->callback = std::move(callback);
-  lv_obj_add_event_cb(obj_, event_proxy, event_code, node.get());
+  lv_obj_add_event_cb(obj_, event_proxy, node->event_code, node.get());
   callback_nodes_.push_back(std::move(node));
   return *this;
 }
@@ -569,20 +523,6 @@ void Object::remove_all_event_cbs() {
   callback_nodes_.clear();
 }
 
-// --- Metadata & ID ---
-
-void Object::set_id(void* id) {
-  if (obj_) lv_obj_set_id(obj_, id);
-}
-
-void* Object::get_id() const { return obj_ ? lv_obj_get_id(obj_) : nullptr; }
-
-Object Object::find_by_id(const void* id) const {
-  if (!obj_)
-    return Object(static_cast<lv_obj_t*>(nullptr), Ownership::Unmanaged);
-  return Object(lv_obj_find_by_id(obj_, id), Ownership::Unmanaged);
-}
-
 SubjectProxy Object::on_subject(Subject& subject) {
   return SubjectProxy(obj_, subject.raw());
 }
@@ -593,13 +533,13 @@ SubjectProxy Object::on_subject(lv_subject_t* subject) {
 
 EventProxy Object::event() { return EventProxy(this); }
 
-StateProxy Object::state() { return StateProxy(obj_); }
+StateProxy Object::state() { return StateProxy(this); }
 
-GroupProxy Object::group() { return GroupProxy(obj_); }
+GroupProxy Object::group() { return GroupProxy(this); }
 
-InteractionProxy Object::interaction() { return InteractionProxy(obj_); }
+InteractionProxy Object::interaction() { return InteractionProxy(this); }
 
-TreeProxy Object::tree() { return TreeProxy(obj_); }
+TreeProxy Object::tree() { return TreeProxy(this); }
 
 // --- Styles ---
 

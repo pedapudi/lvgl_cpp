@@ -99,20 +99,12 @@ class TableCell {
 
   TableCell& set_value(const char* txt);
   TableCell& set_ctrl(Table::Control ctrl);
-  [[deprecated("Use set_ctrl(Table::Control) instead")]]
-  TableCell& set_ctrl(lv_table_cell_ctrl_t ctrl);
 
   TableCell& clear_ctrl(Table::Control ctrl);
-  [[deprecated("Use clear_ctrl(Table::Control) instead")]]
-  TableCell& clear_ctrl(lv_table_cell_ctrl_t ctrl);
 
   TableCell& add_ctrl(Table::Control ctrl);
-  [[deprecated("Use add_ctrl(Table::Control) instead")]]
-  TableCell& add_ctrl(lv_table_cell_ctrl_t ctrl);
 
   bool has_ctrl(Table::Control ctrl) const;
-  [[deprecated("Use has_ctrl(Table::Control) instead")]]
-  bool has_ctrl(lv_table_cell_ctrl_t ctrl) const;
   TableCell& set_user_data(void* user_data);
   void* get_user_data();
 

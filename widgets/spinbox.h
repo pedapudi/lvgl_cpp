@@ -39,8 +39,6 @@ class Spinbox : public Textarea {
   Spinbox& set_max_value(int32_t max_value);
   Spinbox& set_cursor_pos(uint32_t pos);
   Spinbox& set_digit_step_direction(Dir direction);
-  [[deprecated("Use set_digit_step_direction(Dir) instead")]]
-  Spinbox& set_digit_step_direction(lv_dir_t direction);
 
   bool get_rollover();
   int32_t get_value();

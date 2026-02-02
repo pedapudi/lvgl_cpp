@@ -41,9 +41,6 @@ class Switch : public Widget<Switch> {
 
   Switch& set_orientation(Orientation orientation);
 
-  [[deprecated("Use set_orientation(Orientation) instead")]]
-  Switch& set_orientation(lv_switch_orientation_t orientation);
-
   /**
    * @brief Register a callback for the ValueChanged event.
    * @param cb The callback function.

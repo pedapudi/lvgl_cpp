@@ -8,19 +8,16 @@
 #if LV_USE_BUTTON
 /**
  * @file button.h
- * @brief C++ Wrapper for LVGL Button Widget.
+ * @brief User Guide:
+ * The `Button` widget is a simple clickable container. It is often used with
+ * a `Label` child to create buttons with text.
  *
- * # Usage
+ * Key Features:
+ * - **Fluent API**: Inherits all `Widget` and `Object` properties.
+ * - **Events**: Specifically designed for click, press, and release events.
  *
- * ```cpp
- * lvgl::Button btn(lv_screen_active());
- * btn.set_size(120, 50);
- * btn.center();
- *
- * btn.add_event_cb(LV_EVENT_CLICKED, [](lv_event_t* e) {
- *     printf("Clicked!\n");
- * });
- * ```
+ * Example:
+ * `Button(parent).set_size(100, 50).center().on_click([](auto& e){...});`
  */
 
 namespace lvgl {

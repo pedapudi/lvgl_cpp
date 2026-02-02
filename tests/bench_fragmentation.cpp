@@ -13,7 +13,9 @@
 #include <vector>
 
 #include "lvgl.h"
+#include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/lvgl_cpp.h"
+#include "lvgl_cpp/widgets/button.h"
 
 #define MAX_ALLOCS 1000
 #define ITERATIONS 50
@@ -26,14 +28,15 @@ int main(void) {
   lv_init();
 
   // Need a display for widgets (even if partial)
-  lv_display_t* disp = lv_display_create(800, 600);
+  lv_display_t* d = lv_display_create(800, 600);
+  lvgl::Display display(d);
   lv_display_set_flush_cb(
-      disp, [](lv_display_t* disp, const lv_area_t* area, uint8_t* px_map) {
-        lv_display_flush_ready(disp);
+      d, [](lv_display_t* d, const lv_area_t* area, uint8_t* px_map) {
+        lv_display_flush_ready(d);
       });
   static uint8_t buf[800 * 10 * 4];
-  lv_display_set_buffers(disp, buf, NULL, sizeof(buf),
-                         LV_DISPLAY_RENDER_MODE_PARTIAL);
+  display.set_buffers(buf, nullptr, sizeof(buf),
+                      lvgl::Display::RenderMode::Partial);
 
   std::cout << "Starting Fragmentation C++ benchmark (LVGL Widgets)..."
             << std::endl;
@@ -62,7 +65,7 @@ int main(void) {
 
         // Add a lambda with capture to exercise std::function allocation
         CaptureState state;
-        btn.add_event_cb(LV_EVENT_CLICKED, [state](lvgl::Event& e) {
+        btn.add_event_cb(lvgl::EventCode::Clicked, [state](lvgl::Event& e) {
           (void)state;
           (void)e;
         });

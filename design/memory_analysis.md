@@ -1,6 +1,7 @@
 # Memory overhead analysis: lvgl_cpp vs lvgl
 
 **Tracking Issue:** #67
+**Implementation Details**: See [optimizations.md](optimizations.md).
 
 ## Executive Summary
 
