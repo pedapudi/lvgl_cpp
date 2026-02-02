@@ -6,7 +6,7 @@
 #include "../widgets/label.h"
 #include "../widgets/msgbox.h"
 #include "../widgets/win.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

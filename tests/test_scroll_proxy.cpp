@@ -3,7 +3,7 @@
 
 #include "../core/object.h"
 #include "../display/display.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_scroll_proxy() {
   std::cout << "Testing Scroll Proxy..." << std::endl;

@@ -4,7 +4,7 @@
 #include "../display/display.h"
 #include "../widgets/chart.h"
 #include "../widgets/table.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

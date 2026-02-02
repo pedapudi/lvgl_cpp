@@ -10,7 +10,7 @@
 #include <iostream>
 #include <vector>
 
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "lvgl_cpp/core/object.h"
 #include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/widgets/button.h"

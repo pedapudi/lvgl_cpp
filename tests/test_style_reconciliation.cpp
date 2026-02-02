@@ -4,7 +4,7 @@
 #include "../display/display.h"
 #include "../misc/style.h"
 #include "../widgets/button.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 int main() {
   lv_init();

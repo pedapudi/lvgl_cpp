@@ -3,7 +3,7 @@
 
 #include "../display/display.h"
 #include "../widgets/lottie.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_lottie_creation() {
 #if LV_USE_LOTTIE

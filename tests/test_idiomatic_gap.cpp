@@ -5,7 +5,7 @@
 #include "../core/object.h"
 #include "../misc/animation.h"
 #include "../misc/enums.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Mock for testing without full display driver if possible,
 // otherwise this runs as a normal test in the suite.

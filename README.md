@@ -59,14 +59,7 @@ Here is a complete example showing the "Hello World" of `lvgl_cpp` with a styled
 
 ```cpp
 #include <unistd.h>
-#include "lvgl.h"
-#include "lvgl_cpp/core/object.h"
-#include "lvgl_cpp/display/display.h"
-#include "lvgl_cpp/widgets/button.h"
-#include "lvgl_cpp/widgets/label.h"
-#include "lvgl_cpp/widgets/screen.h"
-#include "lvgl_cpp/misc/style.h"
-#include "lvgl_cpp/misc/timer.h"
+#include "lvgl_cpp.h"
 
 using namespace lvgl;
 
@@ -119,8 +112,13 @@ int main() {
     create_ui(screen);
 
     while (true) {
-        uint32_t time_till_next = Timer::handler();
-        usleep(5 * 1000);
+        // Run LVGL timers and get ms until next task
+        uint32_t ms_until_next = Timer::handler();
+        
+        // Wait till next task (standard usleep conversion)
+        if (ms_until_next > 0) {
+            usleep(ms_until_next * 1000);
+        }
     }
 }
 ```

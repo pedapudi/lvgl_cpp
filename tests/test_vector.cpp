@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "lvgl_cpp/lvgl_cpp.h"
 
 // Define a simple test macro if not using a framework

@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "../widgets/screen.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_screen_lifecycle() {
   std::cout << "Testing Screen Lifecycle..." << std::endl;

@@ -11,7 +11,7 @@
 #include "../widgets/label.h"
 #include "../widgets/roller.h"
 #include "../widgets/slider.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 int main() {
   lv_init();

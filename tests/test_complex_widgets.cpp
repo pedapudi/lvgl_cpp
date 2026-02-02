@@ -12,7 +12,7 @@
 #include "../widgets/tabview.h"
 #include "../widgets/tileview.h"
 #include "../widgets/win.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 using namespace lvgl;
 

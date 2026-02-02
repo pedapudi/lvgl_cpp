@@ -5,7 +5,7 @@
 #include "../misc/style.h"
 #include "../widgets/button.h"
 #include "../widgets/label.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 // Helper to check color equality
 bool color_eq(lv_color_t c1, lv_color_t c2) {

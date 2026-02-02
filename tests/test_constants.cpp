@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "misc/constants.h"
 
 int main() {

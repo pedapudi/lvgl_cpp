@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "../misc/async.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 static int callback_count = 0;
 static bool callback_executed = false;

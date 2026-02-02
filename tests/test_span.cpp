@@ -5,7 +5,7 @@
 #include "../display/display.h"
 #include "../misc/style.h"
 #include "../widgets/span.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_span_proxy() {
   std::cout << "Testing Span Proxy..." << std::endl;

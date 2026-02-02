@@ -3,7 +3,7 @@
 
 #include "../display/display.h"
 #include "../widgets/scale.h"
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 
 void test_scale_enums() {
   std::cout << "Testing Scale Enums..." << std::endl;

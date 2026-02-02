@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <vector>
 
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "lvgl_cpp/core/object.h"
 #include "lvgl_cpp/widgets/arc.h"
 #include "lvgl_cpp/widgets/bar.h"

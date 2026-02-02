@@ -12,7 +12,7 @@
 #include <random>
 #include <vector>
 
-#include "lvgl.h"
+#include "../lvgl_cpp.h"
 #include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/lvgl_cpp.h"
 #include "lvgl_cpp/widgets/button.h"
