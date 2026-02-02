@@ -735,38 +735,18 @@ class StyleBase {
    */
 
   Derived& flex_flow(FlexFlow flow) {
-    self().set_flex_flow(static_cast<lv_flex_flow_t>(flow));
-    return self();
-  }
-  [[deprecated("Use flex_flow(FlexFlow) instead")]]
-  Derived& flex_flow(lv_flex_flow_t flow) {
     self().set_flex_flow(flow);
     return self();
   }
   Derived& flex_main_place(FlexAlign place) {
-    self().set_flex_main_place(static_cast<lv_flex_align_t>(place));
-    return self();
-  }
-  [[deprecated("Use flex_main_place(FlexAlign) instead")]]
-  Derived& flex_main_place(lv_flex_align_t place) {
     self().set_flex_main_place(place);
     return self();
   }
   Derived& flex_cross_place(FlexAlign place) {
-    self().set_flex_cross_place(static_cast<lv_flex_align_t>(place));
-    return self();
-  }
-  [[deprecated("Use flex_cross_place(FlexAlign) instead")]]
-  Derived& flex_cross_place(lv_flex_align_t place) {
     self().set_flex_cross_place(place);
     return self();
   }
   Derived& flex_track_place(FlexAlign place) {
-    self().set_flex_track_place(static_cast<lv_flex_align_t>(place));
-    return self();
-  }
-  [[deprecated("Use flex_track_place(FlexAlign) instead")]]
-  Derived& flex_track_place(lv_flex_align_t place) {
     self().set_flex_track_place(place);
     return self();
   }
@@ -784,20 +764,10 @@ class StyleBase {
     return self();
   }
   Derived& grid_row_align(GridAlign align) {
-    self().set_grid_row_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_row_align(GridAlign) instead")]]
-  Derived& grid_row_align(lv_grid_align_t align) {
     self().set_grid_row_align(align);
     return self();
   }
   Derived& grid_column_align(GridAlign align) {
-    self().set_grid_column_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_column_align(GridAlign) instead")]]
-  Derived& grid_column_align(lv_grid_align_t align) {
     self().set_grid_column_align(align);
     return self();
   }
@@ -818,20 +788,10 @@ class StyleBase {
     return self();
   }
   Derived& grid_cell_x_align(GridAlign align) {
-    self().set_grid_cell_x_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_cell_x_align(GridAlign) instead")]]
-  Derived& grid_cell_x_align(lv_grid_align_t align) {
     self().set_grid_cell_x_align(align);
     return self();
   }
   Derived& grid_cell_y_align(GridAlign align) {
-    self().set_grid_cell_y_align(static_cast<lv_grid_align_t>(align));
-    return self();
-  }
-  [[deprecated("Use grid_cell_y_align(GridAlign) instead")]]
-  Derived& grid_cell_y_align(lv_grid_align_t align) {
     self().set_grid_cell_y_align(align);
     return self();
   }

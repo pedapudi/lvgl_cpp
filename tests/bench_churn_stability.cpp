@@ -29,7 +29,7 @@ void run_cycle() {
     auto btn = std::make_unique<lvgl::Button>(screen.get());
     btn->set_pos(i * 10, i * 10);
     // Add event callback (potential leak source if not cleaned)
-    btn->add_event_cb(LV_EVENT_CLICKED, [](lvgl::Event&) {});
+    btn->add_event_cb(lvgl::EventCode::Clicked, [](lvgl::Event&) {});
     buttons.push_back(std::move(btn));
   }
 
@@ -50,7 +50,7 @@ int main(void) {
                        uint8_t* px_map) { lv_display_flush_ready(d->raw()); });
 
   static uint8_t buf[800 * 10 * 4];
-  disp.set_buffers(buf, nullptr, sizeof(buf), LV_DISPLAY_RENDER_MODE_PARTIAL);
+  disp.set_buffers(buf, nullptr, sizeof(buf), lvgl::Display::RenderMode::Partial);
 
   std::cout << "Starting Stability benchmark (" << ITERATIONS << " cycles)..."
             << std::endl;

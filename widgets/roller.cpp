@@ -39,7 +39,7 @@ Roller& Roller::set_visible_row_count(uint32_t row_cnt) {
 }
 
 Roller& Roller::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  return add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  return add_event_cb(EventCode::ValueChanged, std::move(cb));
 }
 
 uint32_t Roller::get_selected() {

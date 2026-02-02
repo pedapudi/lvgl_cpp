@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "../misc/enums.h"
 #include "lvgl.h"
 
 /**
@@ -34,8 +35,8 @@ class DrawBuf {
    * @param cf Color format (default ARGB8888).
    * @param stride Stride in bytes (0 for auto).
    */
-  DrawBuf(uint32_t w, uint32_t h,
-          lv_color_format_t cf = LV_COLOR_FORMAT_ARGB8888, uint32_t stride = 0);
+  DrawBuf(uint32_t w, uint32_t h, ColorFormat cf = ColorFormat::ARGB8888,
+          uint32_t stride = 0);
 
   /**
    * @brief Wrap an existing C draw buffer.
@@ -66,7 +67,7 @@ class DrawBuf {
   uint32_t height() const;
 
   /** @brief Get color format. */
-  lv_color_format_t format() const;
+  ColorFormat format() const;
 
   /**
    * @brief Clear the buffer (fill with 0/transparent).

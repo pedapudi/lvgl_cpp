@@ -75,18 +75,8 @@ Slider& Slider::remove_state(State state) {
   return *this;
 }
 
-Slider& Slider::add_flag(lv_obj_flag_t flag) {
-  Bar::add_flag(flag);
-  return *this;
-}
-
 Slider& Slider::add_flag(ObjFlag flag) {
   Bar::add_flag(flag);
-  return *this;
-}
-
-Slider& Slider::remove_flag(lv_obj_flag_t flag) {
-  Bar::remove_flag(flag);
   return *this;
 }
 
@@ -96,7 +86,7 @@ Slider& Slider::remove_flag(ObjFlag flag) {
 }
 
 Slider& Slider::on_value_changed(Object::EventCallback cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 

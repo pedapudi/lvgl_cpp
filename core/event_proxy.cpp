@@ -8,9 +8,7 @@ namespace lvgl {
 EventProxy::EventProxy(Object* obj) : obj_(obj) {}
 
 EventProxy& EventProxy::on(EventCode event_code, EventCallback callback) {
-  if (obj_)
-    obj_->add_event_cb(static_cast<lv_event_code_t>(event_code),
-                       std::move(callback));
+  if (obj_) obj_->add_event_cb(event_code, std::move(callback));
   return *this;
 }
 
@@ -23,8 +21,7 @@ EventProxy& EventProxy::on_gesture(
 }
 
 EventProxy& EventProxy::send(EventCode code, void* param) {
-  if (obj_ && obj_->raw())
-    lv_obj_send_event(obj_->raw(), static_cast<lv_event_code_t>(code), param);
+  if (obj_) obj_->send_event(code, param);
   return *this;
 }
 

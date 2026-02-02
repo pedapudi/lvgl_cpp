@@ -33,7 +33,7 @@ void run_cycle() {
     btn->set_pos(i * 10, i * 10);
 
     // Add callback to exercise EventSource leak path
-    btn->add_event_cb(LV_EVENT_CLICKED, [](lvgl::Event&) {});
+    btn->add_event_cb(lvgl::EventCode::Clicked, [](lvgl::Event&) {});
 
     buttons.push_back(std::move(btn));
   }
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
                        uint8_t* px_map) { lv_display_flush_ready(d->raw()); });
 
   static uint8_t buf[800 * 10 * 4];
-  disp.set_buffers(buf, nullptr, sizeof(buf), LV_DISPLAY_RENDER_MODE_PARTIAL);
+  disp.set_buffers(buf, nullptr, sizeof(buf), lvgl::Display::RenderMode::Partial);
 
   int duration_sec = 0;
   if (argc > 1) {

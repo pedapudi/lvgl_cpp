@@ -128,18 +128,8 @@ Spinbox& Spinbox::remove_state(State state) {
   this->state().remove(state);
   return *this;
 }
-Spinbox& Spinbox::add_flag(lv_obj_flag_t flag) {
-  Object::add_flag(flag);
-  return *this;
-}
-
 Spinbox& Spinbox::add_flag(ObjFlag flag) {
   Object::add_flag(flag);
-  return *this;
-}
-
-Spinbox& Spinbox::remove_flag(lv_obj_flag_t flag) {
-  if (raw()) lv_obj_remove_flag(raw(), flag);
   return *this;
 }
 
@@ -149,7 +139,7 @@ Spinbox& Spinbox::remove_flag(ObjFlag flag) {
 }
 
 Spinbox& Spinbox::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 Observer Spinbox::bind_value(Subject& subject) {

@@ -123,7 +123,7 @@ Table& Table::set_selected_cell(uint32_t row, uint32_t col) {
 }
 
 Table& Table::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 

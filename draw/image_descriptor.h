@@ -1,9 +1,11 @@
 #ifndef LVGL_CPP_DRAW_IMAGE_DESCRIPTOR_H_
 #define LVGL_CPP_DRAW_IMAGE_DESCRIPTOR_H_
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
+#include "../misc/enums.h"
 #include "lvgl.h"
 
 namespace lvgl {
@@ -34,8 +36,8 @@ class ImageDescriptor {
    * @param data Raw image data.
    * @param data_size Size of data in bytes.
    */
-  ImageDescriptor(uint32_t w, uint32_t h, lv_color_format_t cf,
-                  const uint8_t* data, uint32_t data_size);
+  ImageDescriptor(uint32_t w, uint32_t h, ColorFormat cf, const uint8_t* data,
+                  uint32_t data_size);
 
   /**
    * @brief Construct an image descriptor from an SVG string.

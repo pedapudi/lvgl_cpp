@@ -42,7 +42,7 @@ void test_draw_buf_helpers() {
 
   uint32_t w = 2;
   uint32_t h = 2;
-  lvgl::draw::DrawBuf buf(w, h, LV_COLOR_FORMAT_RGB565);
+  lvgl::draw::DrawBuf buf(w, h, lvgl::ColorFormat::RGB565);
 
   // Fill with known value
   uint16_t* p = static_cast<uint16_t*>(buf.data());
@@ -66,7 +66,7 @@ void test_draw_buf_helpers() {
   }
 
   // Test 32-bit
-  lvgl::draw::DrawBuf buf32(w, h, LV_COLOR_FORMAT_ARGB8888);
+  lvgl::draw::DrawBuf buf32(w, h, lvgl::ColorFormat::ARGB8888);
   uint32_t* p32 = static_cast<uint32_t*>(buf32.data());
   uint32_t original_color32 = 0x11223344;
   p32[0] = original_color32;

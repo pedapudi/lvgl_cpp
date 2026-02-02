@@ -45,14 +45,13 @@ void test_get_state() {
   Button btn(screen);
 
   // Initial state check
-  assert((static_cast<lv_state_t>(btn.get_state()) & LV_STATE_CHECKED) == 0);
+  assert((btn.get_state() & State::Checked) == State::Default);
 
   btn.add_state(State::Checked);
-  assert((static_cast<lv_state_t>(btn.get_state()) & LV_STATE_CHECKED) ==
-         LV_STATE_CHECKED);
+  assert((btn.get_state() & State::Checked) == State::Checked);
 
   btn.remove_state(State::Checked);
-  assert((static_cast<lv_state_t>(btn.get_state()) & LV_STATE_CHECKED) == 0);
+  assert((btn.get_state() & State::Checked) == State::Default);
 }
 
 void test_get_screen() {
@@ -73,7 +72,7 @@ void test_get_display() {
   Object screen(lv_screen_active());
   Button btn(screen);
 
-  Display disp = btn.get_display();
+  Display disp(btn.get_display());
   assert(disp.raw() != nullptr);
   // Compare raw pointers since we have a wrapper object
   assert(disp.raw() == lv_display_get_default());

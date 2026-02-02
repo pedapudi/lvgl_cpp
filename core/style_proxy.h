@@ -307,7 +307,11 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_size(int32_t w, int32_t h) {
     lv_obj_set_style_size(obj_, w, h, selector_);
   }
-  void set_align(lv_align_t v) { lv_obj_set_style_align(obj_, v, selector_); }
+  StyleProxy& set_align(Align v) {
+    if (obj_)
+      lv_obj_set_style_align(obj_, static_cast<lv_align_t>(v), selector_);
+    return *this;
+  }
   void set_length(int32_t v) { lv_obj_set_style_length(obj_, v, selector_); }
   int32_t get_length() const {
     return lv_obj_get_style_length(obj_,
@@ -520,17 +524,29 @@ class StyleProxy : public StyleBase<StyleProxy> {
     lv_obj_set_style_transition(obj_, v, selector_);
   }
 
-  void set_flex_flow(lv_flex_flow_t v) {
-    lv_obj_set_style_flex_flow(obj_, v, selector_);
+  StyleProxy& set_flex_flow(FlexFlow v) {
+    if (obj_)
+      lv_obj_set_style_flex_flow(obj_, static_cast<lv_flex_flow_t>(v),
+                                 selector_);
+    return *this;
   }
-  void set_flex_main_place(lv_flex_align_t v) {
-    lv_obj_set_style_flex_main_place(obj_, v, selector_);
+  StyleProxy& set_flex_main_place(FlexAlign v) {
+    if (obj_)
+      lv_obj_set_style_flex_main_place(obj_, static_cast<lv_flex_align_t>(v),
+                                       selector_);
+    return *this;
   }
-  void set_flex_cross_place(lv_flex_align_t v) {
-    lv_obj_set_style_flex_cross_place(obj_, v, selector_);
+  StyleProxy& set_flex_cross_place(FlexAlign v) {
+    if (obj_)
+      lv_obj_set_style_flex_cross_place(obj_, static_cast<lv_flex_align_t>(v),
+                                        selector_);
+    return *this;
   }
-  void set_flex_track_place(lv_flex_align_t v) {
-    lv_obj_set_style_flex_track_place(obj_, v, selector_);
+  StyleProxy& set_flex_track_place(FlexAlign v) {
+    if (obj_)
+      lv_obj_set_style_flex_track_place(obj_, static_cast<lv_flex_align_t>(v),
+                                        selector_);
+    return *this;
   }
   void set_flex_grow(uint8_t v) {
     lv_obj_set_style_flex_grow(obj_, v, selector_);
@@ -542,11 +558,17 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_grid_column_dsc_array(const int32_t* v) {
     lv_obj_set_style_grid_column_dsc_array(obj_, v, selector_);
   }
-  void set_grid_row_align(lv_grid_align_t v) {
-    lv_obj_set_style_grid_row_align(obj_, v, selector_);
+  StyleProxy& set_grid_row_align(GridAlign v) {
+    if (obj_)
+      lv_obj_set_style_grid_row_align(obj_, static_cast<lv_grid_align_t>(v),
+                                      selector_);
+    return *this;
   }
-  void set_grid_column_align(lv_grid_align_t v) {
-    lv_obj_set_style_grid_column_align(obj_, v, selector_);
+  StyleProxy& set_grid_column_align(GridAlign v) {
+    if (obj_)
+      lv_obj_set_style_grid_column_align(obj_, static_cast<lv_grid_align_t>(v),
+                                         selector_);
+    return *this;
   }
   void set_grid_cell_column_pos(int32_t v) {
     lv_obj_set_style_grid_cell_column_pos(obj_, v, selector_);
@@ -560,11 +582,17 @@ class StyleProxy : public StyleBase<StyleProxy> {
   void set_grid_cell_row_span(int32_t v) {
     lv_obj_set_style_grid_cell_row_span(obj_, v, selector_);
   }
-  void set_grid_cell_x_align(lv_grid_align_t v) {
-    lv_obj_set_style_grid_cell_x_align(obj_, v, selector_);
+  StyleProxy& set_grid_cell_x_align(GridAlign v) {
+    if (obj_)
+      lv_obj_set_style_grid_cell_x_align(obj_, static_cast<lv_grid_align_t>(v),
+                                         selector_);
+    return *this;
   }
-  void set_grid_cell_y_align(lv_grid_align_t v) {
-    lv_obj_set_style_grid_cell_y_align(obj_, v, selector_);
+  StyleProxy& set_grid_cell_y_align(GridAlign v) {
+    if (obj_)
+      lv_obj_set_style_grid_cell_y_align(obj_, static_cast<lv_grid_align_t>(v),
+                                         selector_);
+    return *this;
   }
 
   void set_opa(lv_opa_t v) { lv_obj_set_style_opa(obj_, v, selector_); }

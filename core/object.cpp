@@ -505,13 +505,12 @@ void Object::event_proxy(lv_event_t* e) {
   }
 }
 
-Object& Object::add_event_cb(lv_event_code_t event_code,
-                             EventCallback callback) {
+Object& Object::add_event_cb(EventCode event_code, EventCallback callback) {
   if (!obj_) return *this;
   auto node = std::make_unique<CallbackNode>();
-  node->event_code = event_code;
+  node->event_code = static_cast<lv_event_code_t>(event_code);
   node->callback = std::move(callback);
-  lv_obj_add_event_cb(obj_, event_proxy, event_code, node.get());
+  lv_obj_add_event_cb(obj_, event_proxy, node->event_code, node.get());
   callback_nodes_.push_back(std::move(node));
   return *this;
 }

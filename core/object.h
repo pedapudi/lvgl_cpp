@@ -265,10 +265,10 @@ class Object {
 
   /**
    * @brief Get the current state of the object.
-   * @return The LVGL state flags.
+   * @return The state as a State scoped enum.
    */
-  lv_state_t get_state() const {
-    return obj_ ? lv_obj_get_state(obj_) : LV_STATE_ANY;
+  State get_state() const {
+    return obj_ ? static_cast<State>(lv_obj_get_state(obj_)) : State::Default;
   }
 
   /**
@@ -580,8 +580,9 @@ class Object {
    * @param code The event code.
    * @param param Optional parameter for the event.
    */
-  void send_event(lv_event_code_t code, void* param = nullptr) {
-    if (obj_) lv_obj_send_event(obj_, code, param);
+  void send_event(EventCode code, void* param = nullptr) {
+    if (obj_)
+      lv_obj_send_event(obj_, static_cast<lv_event_code_t>(code), param);
   }
 
   /**
@@ -591,11 +592,7 @@ class Object {
    * @return Reference to this object.
    * @note Usually accessed via event().add_cb()
    */
-  Object& add_event_cb(lv_event_code_t event_code, EventCallback callback);
-  Object& add_event_cb(EventCode event_code, EventCallback callback) {
-    return add_event_cb(static_cast<lv_event_code_t>(event_code),
-                        std::move(callback));
-  }
+  Object& add_event_cb(EventCode event_code, EventCallback callback);
 
   /**
    * @brief Remove all event callbacks from this object.
@@ -639,12 +636,6 @@ class Object {
   SubjectProxy on_subject(lv_subject_t* subject);
 
   // --- Flags & States ---
-
-  /**
-   * @brief Add a flag to the object.
-   * @param f The flag to add.
-   */
-  void add_flag(ObjFlag f);
 
   /**
    * @brief Add a flag to the object.

@@ -24,6 +24,10 @@
 
 namespace lvgl {
 
+namespace draw {
+class DrawBuf;
+}
+
 /**
  * @brief Manager for a physical or virtual display.
  */
@@ -36,6 +40,14 @@ class Display {
   // Usually displays are created by drivers, but we can wrap them.
   explicit Display(lv_display_t* disp);
   virtual ~Display() = default;
+
+  // Non-copyable
+  Display(const Display&) = delete;
+  Display& operator=(const Display&) = delete;
+
+  // Moveable
+  Display(Display&& other) noexcept;
+  Display& operator=(Display&& other) noexcept;
 
   /**
    * @brief Create a new display.
@@ -188,10 +200,11 @@ class Display {
                                uint32_t stride, RenderMode render_mode);
 
   /** @brief Set draw buffers using lv_draw_buf_t objects. */
-  void set_draw_buffers(const DrawBuf& buf1, const DrawBuf* buf2 = nullptr);
+  void set_draw_buffers(const draw::DrawBuf& buf1,
+                        const draw::DrawBuf* buf2 = nullptr);
 
   /** @brief Set a third draw buffer for triple buffering. */
-  void set_3rd_draw_buffer(const DrawBuf& buf3);
+  void set_3rd_draw_buffer(const draw::DrawBuf& buf3);
 
   /** @brief Set the rendering mode. */
   void set_render_mode(RenderMode render_mode);

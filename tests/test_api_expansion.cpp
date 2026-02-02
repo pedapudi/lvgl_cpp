@@ -28,7 +28,7 @@ void test_style_expansion() {
   style.arc_color(lvgl::Color::from_hex(0x00FF00));
 
   // Layout
-  style.flex_flow(LV_FLEX_FLOW_ROW);
+  style.flex_flow(lvgl::FlexFlow::Row);
   style.flex_grow(1);
   style.grid_cell_column_span(2);
 
@@ -52,9 +52,9 @@ void test_object_layout() {
   lvgl::Object obj(&screen);
 
   // Test flex container properties
-  obj.set_flex_flow(LV_FLEX_FLOW_COLUMN);
-  obj.set_flex_align(LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START,
-                     LV_FLEX_ALIGN_END);
+  obj.set_flex_flow(lvgl::FlexFlow::Column);
+  obj.set_flex_align(lvgl::FlexAlign::Center, lvgl::FlexAlign::Start,
+                     lvgl::FlexAlign::End);
 
   // Test flex item properties (requires parent)
   obj.set_flex_grow(2);
@@ -78,6 +78,8 @@ void test_label_manipulation() {
   label.cut_text(5, 6);
   assert(label.get_text() == "Hello");
 
+  std::cout << "State::Pressed: " << static_cast<uint32_t>(lvgl::State::Pressed)
+            << std::endl;
   std::cout << "Label Manipulation Passed." << std::endl;
 }
 
@@ -91,7 +93,7 @@ void test_indev_config() {
   // We can create a dummy pointer input device
   lv_indev_t* raw_indev = lv_indev_create();
   lvgl::InputDevice indev(raw_indev, lvgl::Object::Ownership::Managed);
-  indev.set_type(LV_INDEV_TYPE_POINTER);
+  indev.set_type(lvgl::IndevType::Pointer);
 
   indev.set_long_press_time(400);
 

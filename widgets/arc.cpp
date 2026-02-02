@@ -124,7 +124,7 @@ int32_t Arc::get_knob_offset() const {
 }
 
 Arc& Arc::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 

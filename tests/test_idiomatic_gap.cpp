@@ -15,11 +15,11 @@ void test_style_selector_operators() {
 
   // Test Part | State
   lv_style_selector_t s1 = lvgl::Part::Indicator | lvgl::State::Checked;
-  assert((s1 & LV_PART_INDICATOR) && (s1 & LV_STATE_CHECKED));
+  assert((s1 & LV_PART_INDICATOR) && (s1 & lvgl::State::Checked));
 
   // Test State | Part
   lv_style_selector_t s2 = lvgl::State::Pressed | lvgl::Part::Main;
-  assert((s2 & LV_PART_MAIN) && (s2 & LV_STATE_PRESSED));
+  assert((s2 & LV_PART_MAIN) && (s2 & lvgl::State::Pressed));
 
   // Test Part | Part (Masking)
   lvgl::Part p1 = lvgl::Part::Items | lvgl::Part::Selected;

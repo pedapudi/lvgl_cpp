@@ -37,11 +37,12 @@ static void flush_cb(lv_display_t* disp, const lv_area_t* area,
 int main(int argc, char** argv) {
   lv_init();
 
-  lv_display_t* disp = lv_display_create(800, 600);
-  lv_display_set_flush_cb(disp, flush_cb);
+  lv_display_t* d = lv_display_create(800, 600);
+  lvgl::Display display(d);
+  lv_display_set_flush_cb(d, flush_cb);
   static uint8_t buf[800 * 10 * 4];
-  lv_display_set_buffers(disp, buf, NULL, sizeof(buf),
-                         LV_DISPLAY_RENDER_MODE_PARTIAL);
+  display.set_buffers(buf, nullptr, sizeof(buf),
+                      lvgl::Display::RenderMode::Partial);
 
   std::string widget_type = "slider";  // default
   if (argc > 1) widget_type = argv[1];

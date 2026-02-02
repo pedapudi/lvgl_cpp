@@ -62,9 +62,9 @@ InputDevice& InputDevice::operator=(InputDevice&& other) noexcept {
   return *this;
 }
 
-InputDevice InputDevice::create(lv_indev_type_t type) {
+InputDevice InputDevice::create(Type type) {
   lv_indev_t* indev = lv_indev_create();
-  lv_indev_set_type(indev, type);
+  lv_indev_set_type(indev, static_cast<lv_indev_type_t>(type));
   return InputDevice(indev, Object::Ownership::Managed);
 }
 
@@ -99,8 +99,8 @@ void InputDevice::process_read(lv_indev_data_t* data) {
   }
 }
 
-void InputDevice::set_type(lv_indev_type_t type) {
-  if (indev_) lv_indev_set_type(indev_, type);
+void InputDevice::set_type(Type type) {
+  if (indev_) lv_indev_set_type(indev_, static_cast<lv_indev_type_t>(type));
 }
 
 void InputDevice::set_cursor(Object& cursor) {
@@ -140,17 +140,19 @@ void InputDevice::set_button_points(const lv_point_t points[]) {
 }
 
 void InputDevice::add_event_cb(std::function<void(lv_event_t*)> cb,
-                               lv_event_code_t filter) {
+                               EventCode filter) {
   if (!indev_) return;
   auto data = std::make_unique<EventCallbackData>();
   data->cb = cb;
   data->instance = this;
-  lv_indev_add_event_cb(indev_, indev_event_cb_proxy, filter, data.get());
+  lv_indev_add_event_cb(indev_, indev_event_cb_proxy,
+                        static_cast<lv_event_code_t>(filter), data.get());
   event_callbacks_.push_back(std::move(data));
 }
 
-void InputDevice::send_event(lv_event_code_t code, void* param) {
-  if (indev_) lv_indev_send_event(indev_, code, param);
+void InputDevice::send_event(EventCode code, void* param) {
+  if (indev_)
+    lv_indev_send_event(indev_, static_cast<lv_event_code_t>(code), param);
 }
 
 bool InputDevice::remove_event(uint32_t index) {
@@ -293,7 +295,7 @@ GestureProxy& GestureProxy::on_gesture(std::function<void(GestureEvent)> cb) {
           GestureEvent ge(e);
           cb(ge);
         },
-        LV_EVENT_GESTURE);
+        EventCode::Gesture);
   }
   return *this;
 }

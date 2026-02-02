@@ -17,7 +17,7 @@ int main() {
 
   // 1. Create a dummy image data
   std::vector<uint8_t> img_data(100 * 100 * 4, 0xAA);
-  lvgl::ImageDescriptor dsc(100, 100, LV_COLOR_FORMAT_ARGB8888, img_data.data(),
+  lvgl::ImageDescriptor dsc(100, 100, lvgl::ColorFormat::ARGB8888, img_data.data(),
                             img_data.size());
 
   assert(dsc.is_valid());

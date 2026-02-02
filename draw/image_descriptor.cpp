@@ -34,7 +34,7 @@ ImageDescriptor ImageDescriptor::from_svg(const char* svg_src) {
   uint32_t len = std::strlen(svg_src) + 1;
   // Image headers for SVG in LVGL use 0 for w/h as they are determined at draw
   // time or from the raw data.
-  ImageDescriptor dsc(0, 0, LV_COLOR_FORMAT_RAW,
+  ImageDescriptor dsc(0, 0, ColorFormat::Raw,
                       reinterpret_cast<const uint8_t*>(svg_src), len);
   return dsc;
 }
@@ -43,11 +43,11 @@ ImageDescriptor ImageDescriptor::from_svg(const std::string& svg_src) {
   return from_svg(svg_src.c_str());
 }
 
-ImageDescriptor::ImageDescriptor(uint32_t w, uint32_t h, lv_color_format_t cf,
+ImageDescriptor::ImageDescriptor(uint32_t w, uint32_t h, ColorFormat cf,
                                  const uint8_t* data, uint32_t data_size) {
   dsc_.header.w = w;
   dsc_.header.h = h;
-  dsc_.header.cf = cf;
+  dsc_.header.cf = static_cast<lv_color_format_t>(cf);
   dsc_.header.magic = LV_IMAGE_HEADER_MAGIC;
   dsc_.data_size = data_size;
 

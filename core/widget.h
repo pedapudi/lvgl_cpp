@@ -102,21 +102,8 @@ class Widget : public Object {
     return self();
   }
 
-  /** @brief Fluent wrapper for Object::align (raw). */
-  Derived& align(lv_align_t align, int32_t x_ofs = 0, int32_t y_ofs = 0) {
-    Object::align(align, x_ofs, y_ofs);
-    return self();
-  }
-
   /** @brief Fluent wrapper for Object::align_to. */
   Derived& align_to(const Object& base, Align align, int32_t x_ofs = 0,
-                    int32_t y_ofs = 0) {
-    Object::align_to(base, align, x_ofs, y_ofs);
-    return self();
-  }
-
-  /** @brief Fluent wrapper for Object::align_to (raw). */
-  Derived& align_to(const Object& base, lv_align_t align, int32_t x_ofs = 0,
                     int32_t y_ofs = 0) {
     Object::align_to(base, align, x_ofs, y_ofs);
     return self();
@@ -151,17 +138,6 @@ class Widget : public Object {
   // --- Object Lifecycle (Fluent Proxies) ---
 
   /** @brief Fluent wrapper for Object::add_flag. */
-  Derived& add_flag(lv_obj_flag_t f) {
-    Object::add_flag(f);
-    return self();
-  }
-
-  /** @brief Fluent wrapper for Object::remove_flag. */
-  Derived& remove_flag(lv_obj_flag_t f) {
-    Object::remove_flag(f);
-    return self();
-  }
-
   /** @brief Fluent wrapper for Object::add_flag. */
   Derived& add_flag(ObjFlag f) {
     Object::add_flag(f);
@@ -174,26 +150,14 @@ class Widget : public Object {
     return self();
   }
 
-  /** @brief Fluent wrapper for Object::state().add. */
+  /** @brief Fluent wrapper for Object::add_state. */
   Derived& add_state(State state) {
     Object::add_state(state);
     return self();
   }
 
-  /** @brief Fluent wrapper for Object::state().remove. */
+  /** @brief Fluent wrapper for Object::remove_state. */
   Derived& remove_state(State state) {
-    Object::remove_state(state);
-    return self();
-  }
-
-  /** @brief Fluent wrapper for Object::add_state (raw). */
-  Derived& add_state(lv_state_t state) {
-    Object::add_state(state);
-    return self();
-  }
-
-  /** @brief Fluent wrapper for Object::remove_state (raw). */
-  Derived& remove_state(lv_state_t state) {
     Object::remove_state(state);
     return self();
   }
@@ -201,24 +165,13 @@ class Widget : public Object {
   // --- Observer Bindings (Fluent Proxies) ---
 
   /** @brief Conditional flag binding. */
+  /** @brief Conditional flag binding. */
   Observer bind_flag_if_eq(Subject& subject, ObjFlag flag, int32_t ref_value) {
-    return subject.bind_flag_if_eq(*this, flag, ref_value);
-  }
-
-  /** @brief Conditional flag binding (raw). */
-  Observer bind_flag_if_eq(Subject& subject, lv_obj_flag_t flag,
-                           int32_t ref_value) {
     return subject.bind_flag_if_eq(*this, flag, ref_value);
   }
 
   /** @brief Conditional state binding. */
   Observer bind_state_if_eq(Subject& subject, State state, int32_t ref_value) {
-    return subject.bind_state_if_eq(*this, state, ref_value);
-  }
-
-  /** @brief Conditional state binding (raw). */
-  Observer bind_state_if_eq(Subject& subject, lv_state_t state,
-                            int32_t ref_value) {
     return subject.bind_state_if_eq(*this, state, ref_value);
   }
 
@@ -228,12 +181,6 @@ class Widget : public Object {
   }
 
   // --- Events (Fluent Proxies) ---
-
-  /** @brief Fluent wrapper for Object::add_event_cb. */
-  Derived& add_event_cb(lv_event_code_t event_code, EventCallback callback) {
-    Object::add_event_cb(event_code, std::move(callback));
-    return self();
-  }
 
   /** @brief Fluent wrapper for Object::add_event_cb. */
   Derived& add_event_cb(EventCode event_code, EventCallback callback) {
@@ -246,27 +193,75 @@ class Widget : public Object {
 
   /** @brief Observer for all events. */
   Derived& on_event(EventCallback cb) {
-    return add_event_cb(LV_EVENT_ALL, std::move(cb));
+    return add_event_cb(EventCode::All, std::move(cb));
   }
 
   /** @brief Shortcut for clicked event. */
   Derived& on_clicked(EventCallback cb) {
-    return add_event_cb(LV_EVENT_CLICKED, std::move(cb));
+    return add_event_cb(EventCode::Clicked, std::move(cb));
   }
 
   /** @brief Shortcut for pressed event. */
   Derived& on_pressed(EventCallback cb) {
-    return add_event_cb(LV_EVENT_PRESSED, std::move(cb));
+    return add_event_cb(EventCode::Pressed, std::move(cb));
   }
 
   /** @brief Shortcut for released event. */
   Derived& on_released(EventCallback cb) {
-    return add_event_cb(LV_EVENT_RELEASED, std::move(cb));
+    return add_event_cb(EventCode::Released, std::move(cb));
   }
 
   /** @brief Shortcut for long pressed event. */
   Derived& on_long_pressed(EventCallback cb) {
-    return add_event_cb(LV_EVENT_LONG_PRESSED, std::move(cb));
+    return add_event_cb(EventCode::LongPressed, std::move(cb));
+  }
+
+  // --- Layout Shortcuts ---
+
+  Derived& set_flex_flow(FlexFlow flow) {
+    Object::set_flex_flow(flow);
+    return self();
+  }
+
+  Derived& set_flex_align(FlexAlign main_place, FlexAlign cross_place,
+                          FlexAlign track_place) {
+    Object::set_flex_align(main_place, cross_place, track_place);
+    return self();
+  }
+
+  Derived& set_flex_grow(uint8_t grow) {
+    Object::set_flex_grow(grow);
+    return self();
+  }
+
+  Derived& set_grid_dsc_array(const GridLayout& grid) {
+    Object::set_grid_dsc_array(grid);
+    return self();
+  }
+
+  Derived& set_grid_align(GridAlign column_align, GridAlign row_align) {
+    Object::set_grid_align(column_align, row_align);
+    return self();
+  }
+
+  Derived& set_grid_cell(GridAlign column_align, int32_t col_pos,
+                         int32_t col_span, GridAlign row_align, int32_t row_pos,
+                         int32_t row_span) {
+    Object::set_grid_cell(column_align, col_pos, col_span, row_align, row_pos,
+                          row_span);
+    return self();
+  }
+
+  // --- Scroll Shortcuts ---
+
+  Derived& scroll_to_view(AnimEnable anim_en) {
+    Object::scroll_to_view(anim_en);
+    return self();
+  }
+
+  Derived& scroll_by(int32_t x, int32_t y, AnimEnable anim_en) {
+    Object::scroll_by(x, y, anim_en);
+    return self();
   }
 };
 

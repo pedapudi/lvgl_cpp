@@ -1,6 +1,7 @@
 #include "display.h"
 
 #include "../core/object.h"
+#include "../draw/draw_buf.h"
 
 namespace lvgl {
 
@@ -40,6 +41,23 @@ static void display_delete_event_cb(lv_event_t* e) {
 }
 
 Display::Display(lv_display_t* disp) : disp_(disp) {}
+
+Display::Display(Display&& other) noexcept
+    : disp_(other.disp_),
+      buf1_(std::move(other.buf1_)),
+      buf2_(std::move(other.buf2_)) {
+  other.disp_ = nullptr;
+}
+
+Display& Display::operator=(Display&& other) noexcept {
+  if (this != &other) {
+    disp_ = other.disp_;
+    buf1_ = std::move(other.buf1_);
+    buf2_ = std::move(other.buf2_);
+    other.disp_ = nullptr;
+  }
+  return *this;
+}
 
 Display Display::create(int32_t hor_res, int32_t ver_res) {
   lv_display_t* disp = lv_display_create(hor_res, ver_res);
@@ -325,7 +343,7 @@ void Display::auto_configure_buffers(RenderMode mode, bool double_buffer) {
 
   uint32_t hor_res = get_horizontal_resolution();
   uint32_t ver_res = get_vertical_resolution();
-  lv_color_format_t cf = get_color_format();
+  lv_color_format_t cf = static_cast<lv_color_format_t>(get_color_format());
 
   if (hor_res == 0 || ver_res == 0) return;
 

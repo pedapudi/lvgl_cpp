@@ -36,7 +36,7 @@ const char* Checkbox::get_text() const {
 }
 
 Checkbox& Checkbox::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 

@@ -49,6 +49,11 @@ enum class Dir : uint8_t {
   All = LV_DIR_ALL,
 };
 
+inline Dir operator|(Dir lhs, Dir rhs) {
+  return static_cast<Dir>(static_cast<uint8_t>(lhs) |
+                          static_cast<uint8_t>(rhs));
+}
+
 /**
  * @brief Wrapper for lv_part_t.
  */
@@ -659,45 +664,6 @@ enum class FsWhence : uint8_t {
   Set = LV_FS_SEEK_SET,
   Cur = LV_FS_SEEK_CUR,
   End = LV_FS_SEEK_END,
-};
-
-/**
- * @brief Flex flow modes.
- */
-enum class FlexFlow : uint8_t {
-  Row = LV_FLEX_FLOW_ROW,
-  Column = LV_FLEX_FLOW_COLUMN,
-  RowWrap = LV_FLEX_FLOW_ROW_WRAP,
-  RowReverse = LV_FLEX_FLOW_ROW_REVERSE,
-  RowWrapReverse = LV_FLEX_FLOW_ROW_WRAP_REVERSE,
-  ColumnWrap = LV_FLEX_FLOW_COLUMN_WRAP,
-  ColumnReverse = LV_FLEX_FLOW_COLUMN_REVERSE,
-  ColumnWrapReverse = LV_FLEX_FLOW_COLUMN_WRAP_REVERSE,
-};
-
-/**
- * @brief Flex alignment modes.
- */
-enum class FlexAlign : uint8_t {
-  Start = LV_FLEX_ALIGN_START,
-  End = LV_FLEX_ALIGN_END,
-  Center = LV_FLEX_ALIGN_CENTER,
-  SpaceEvenly = LV_FLEX_ALIGN_SPACE_EVENLY,
-  SpaceAround = LV_FLEX_ALIGN_SPACE_AROUND,
-  SpaceBetween = LV_FLEX_ALIGN_SPACE_BETWEEN,
-};
-
-/**
- * @brief Grid alignment modes.
- */
-enum class GridAlign : uint8_t {
-  Start = LV_GRID_ALIGN_START,
-  Center = LV_GRID_ALIGN_CENTER,
-  End = LV_GRID_ALIGN_END,
-  Stretch = LV_GRID_ALIGN_STRETCH,
-  SpaceEvenly = LV_GRID_ALIGN_SPACE_EVENLY,
-  SpaceAround = LV_GRID_ALIGN_SPACE_AROUND,
-  SpaceBetween = LV_GRID_ALIGN_SPACE_BETWEEN,
 };
 
 }  // namespace lvgl

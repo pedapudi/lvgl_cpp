@@ -56,10 +56,7 @@ class InputDevice {
   InputDevice& operator=(InputDevice&& other) noexcept;
 
   // Factory
-  static InputDevice create(lv_indev_type_t type);
-  static InputDevice create(Type type) {
-    return create(static_cast<lv_indev_type_t>(type));
-  }
+  static InputDevice create(Type type);
   static InputDevice wrap(lv_indev_t* indev) {
     return InputDevice(indev, Object::Ownership::Unmanaged);
   }
@@ -89,7 +86,7 @@ class InputDevice {
    * @brief Set the input device type.
    * @param type The type (pointer, keypad, button, encoder).
    */
-  void set_type(lv_indev_type_t type);
+  void set_type(Type type);
 
   /**
    * @brief Set the input device mode.
@@ -152,14 +149,14 @@ class InputDevice {
    * @param filter Event code to filter for.
    */
   void add_event_cb(std::function<void(lv_event_t*)> cb,
-                    lv_event_code_t filter = LV_EVENT_ALL);
+                    EventCode filter = EventCode::All);
 
   /**
    * @brief Send a custom event to the device.
    * @param code Event code.
    * @param param Event parameters.
    */
-  void send_event(lv_event_code_t code, void* param);
+  void send_event(EventCode code, void* param);
 
   /**
    * @brief Remove an event callback by index.

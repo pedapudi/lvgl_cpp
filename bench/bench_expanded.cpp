@@ -3,20 +3,21 @@
  * Covering Core Mechanisms, Layouts, and Complex Widgets
  */
 
+#include <atomic>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "../core/group.h"
+#include "../core/object.h"
+#include "../core/observer.h"
+#include "../misc/layout.h"
+#include "../misc/style.h"
+#include "../misc/timer.h"
+#include "../widgets/label.h"
+#include "../widgets/span.h"
 #include "bench.h"
 #include "lvgl.h"
-#include "lvgl_cpp/core/group.h"
-#include "lvgl_cpp/core/object.h"
-#include "lvgl_cpp/core/observer.h"
-#include "lvgl_cpp/misc/layout.h"
-#include "lvgl_cpp/misc/style.h"
-#include "lvgl_cpp/misc/timer.h"
-#include "lvgl_cpp/widgets/label.h"
-#include "lvgl_cpp/widgets/span.h"
 
 // --- 7.1 Core Mechanisms ---
 
@@ -30,15 +31,10 @@ LVGL_BENCHMARK(Core_Observer) {
   for (int i = 0; i < state.iterations; ++i) {
     auto label = std::make_unique<lvgl::Label>(screen.get());
 
-    // Correction: add_observer_obj takes ObserverCallback which is
-    // std::function<void(Observer*)>. The previous lambda signature was [l =
-    // label.get()](int v). The benchmark intends to update label text on
-    // change.
-
-    subject.add_observer_obj(*label,
-                             [l = label.get(), &subject](lvgl::Observer*) {
-                               l->set_text_fmt("%d", subject.get());
-                             });
+    (void)subject.add_observer_obj(
+        *label, [l = label.get(), &subject](lvgl::Observer*) {
+          l->set_text_fmt("%d", subject.get());
+        });
     labels.push_back(std::move(label));
   }
 
@@ -74,14 +70,15 @@ LVGL_BENCHMARK(Core_Timer) {
   std::vector<lvgl::Timer> timers;
   timers.reserve(state.iterations);
 
-  volatile int counter = 0;
+  std::atomic<int> counter{0};
 
   for (int i = 0; i < state.iterations; ++i) {
     lvgl::Timer t;
-    t.set_period(100).set_cb([&counter](lvgl::Timer*) { counter++; });
+    t.set_period(100).set_cb([&counter](lvgl::Timer*) {
+      counter.fetch_add(1, std::memory_order_relaxed);
+    });
     timers.push_back(std::move(t));
   }
-  // Clean up happens via RAII in vector destruction
 }
 
 // Input Groups: Management overhead
@@ -107,9 +104,9 @@ LVGL_BENCHMARK(Layout_Flex) {
   auto container = std::make_unique<lvgl::Object>(screen.get());
 
   container->set_size(300, 300)
-      .set_flex_flow(LV_FLEX_FLOW_ROW_WRAP)
-      .set_flex_align(LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER,
-                      LV_FLEX_ALIGN_CENTER);
+      .set_flex_flow(lvgl::FlexFlow::RowWrap)
+      .set_flex_align(lvgl::FlexAlign::SpaceBetween, lvgl::FlexAlign::Center,
+                      lvgl::FlexAlign::Center);
 
   std::vector<std::unique_ptr<lvgl::Object>> children;
   for (int i = 0; i < state.iterations; ++i) {

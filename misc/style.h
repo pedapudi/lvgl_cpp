@@ -742,24 +742,24 @@ class Style : public StyleBase<Style> {
     return *this;
   }
 
-  Style& set_flex_flow(lv_flex_flow_t v) {
-    lv_style_set_flex_flow(&style_, v);
+  Style& set_flex_flow(FlexFlow v) {
+    lv_style_set_flex_flow(&style_, static_cast<lv_flex_flow_t>(v));
     return *this;
   }
-  Style& set_flex_main_place(lv_flex_align_t v) {
-    lv_style_set_flex_main_place(&style_, v);
+  Style& set_flex_main_place(FlexAlign v) {
+    lv_style_set_flex_main_place(&style_, static_cast<lv_flex_align_t>(v));
     return *this;
   }
-  Style& set_flex_cross_place(lv_flex_align_t v) {
-    lv_style_set_flex_cross_place(&style_, v);
+  Style& set_flex_cross_place(FlexAlign v) {
+    lv_style_set_flex_cross_place(&style_, static_cast<lv_flex_align_t>(v));
     return *this;
   }
-  Style& set_flex_track_place(lv_flex_align_t v) {
-    lv_style_set_flex_track_place(&style_, v);
+  Style& set_flex_track_place(FlexAlign v) {
+    lv_style_set_flex_track_place(&style_, static_cast<lv_flex_align_t>(v));
     return *this;
   }
-  Style& set_flex_grow(uint8_t v) {
-    lv_style_set_flex_grow(&style_, v);
+  Style& set_flex_grow(uint32_t v) {
+    lv_style_set_flex_grow(&style_, static_cast<uint32_t>(v));
     return *this;
   }
 
@@ -771,12 +771,12 @@ class Style : public StyleBase<Style> {
     lv_style_set_grid_column_dsc_array(&style_, v);
     return *this;
   }
-  Style& set_grid_row_align(lv_grid_align_t v) {
-    lv_style_set_grid_row_align(&style_, v);
+  Style& set_grid_row_align(GridAlign v) {
+    lv_style_set_grid_row_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
-  Style& set_grid_column_align(lv_grid_align_t v) {
-    lv_style_set_grid_column_align(&style_, v);
+  Style& set_grid_column_align(GridAlign v) {
+    lv_style_set_grid_column_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
   Style& set_grid_cell_column_pos(int32_t v) {
@@ -795,12 +795,12 @@ class Style : public StyleBase<Style> {
     lv_style_set_grid_cell_row_span(&style_, v);
     return *this;
   }
-  Style& set_grid_cell_x_align(lv_grid_align_t v) {
-    lv_style_set_grid_cell_x_align(&style_, v);
+  Style& set_grid_cell_x_align(GridAlign v) {
+    lv_style_set_grid_cell_x_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
-  Style& set_grid_cell_y_align(lv_grid_align_t v) {
-    lv_style_set_grid_cell_y_align(&style_, v);
+  Style& set_grid_cell_y_align(GridAlign v) {
+    lv_style_set_grid_cell_y_align(&style_, static_cast<lv_grid_align_t>(v));
     return *this;
   }
 

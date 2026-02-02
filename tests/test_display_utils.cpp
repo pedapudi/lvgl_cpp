@@ -39,7 +39,7 @@ static void test_auto_buffers() {
   disp.set_color_format(LV_COLOR_FORMAT_RGB888);
 
   // 1. Partial Mode
-  disp.auto_configure_buffers(LV_DISPLAY_RENDER_MODE_PARTIAL, false);
+  disp.auto_configure_buffers(lvgl::Display::RenderMode::Partial, false);
   // 800 * 3 bytes * 48 lines approx
   // Just verify no crash and it sets internal vector
 

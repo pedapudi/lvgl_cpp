@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../misc/enums.h"
 #include "lvgl.h"
 
 namespace lvgl {

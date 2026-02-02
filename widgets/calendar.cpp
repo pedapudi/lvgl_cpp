@@ -61,7 +61,7 @@ size_t Calendar::get_highlighted_dates_num() {
 
 bool Calendar::get_pressed_date(lv_calendar_date_t* date) {
   return raw() ? lv_calendar_get_pressed_date(raw(), date) == LV_RESULT_OK
-              : false;
+               : false;
 }
 
 lv_obj_t* Calendar::create_arrow_header() {
@@ -73,7 +73,7 @@ lv_obj_t* Calendar::create_dropdown_header() {
 }
 
 Calendar& Calendar::on_value_changed(std::function<void(lvgl::Event&)> cb) {
-  add_event_cb(LV_EVENT_VALUE_CHANGED, cb);
+  add_event_cb(EventCode::ValueChanged, std::move(cb));
   return *this;
 }
 

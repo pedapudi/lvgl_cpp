@@ -92,9 +92,7 @@ class Slider : public Bar {
   Slider& align(Align align, int32_t x_ofs = 0, int32_t y_ofs = 0);
   Slider& add_state(State state);
   Slider& remove_state(State state);
-  Slider& add_flag(lv_obj_flag_t flag);
   Slider& add_flag(ObjFlag flag);
-  Slider& remove_flag(lv_obj_flag_t flag);
   Slider& remove_flag(ObjFlag flag);
 
   /**

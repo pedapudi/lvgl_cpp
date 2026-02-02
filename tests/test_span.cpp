@@ -14,7 +14,7 @@ void test_span_proxy() {
 
   spangroup.set_size(300, 300);
   spangroup.set_align(lvgl::TextAlign::Center);
-  spangroup.set_mode(LV_SPAN_MODE_BREAK);
+  spangroup.set_mode(lvgl::SpanGroup::Mode::Break);
 
   // Add spans
   lvgl::Span s1 = spangroup.add_span();

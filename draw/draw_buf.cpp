@@ -5,8 +5,10 @@
 namespace lvgl {
 namespace draw {
 
-DrawBuf::DrawBuf(uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride)
-    : buf_(lv_draw_buf_create(w, h, cf, stride)), owns_(true) {}
+DrawBuf::DrawBuf(uint32_t w, uint32_t h, ColorFormat cf, uint32_t stride)
+    : buf_(
+          lv_draw_buf_create(w, h, static_cast<lv_color_format_t>(cf), stride)),
+      owns_(true) {}
 
 DrawBuf::DrawBuf(lv_draw_buf_t* buf, bool take_ownership)
     : buf_(buf), owns_(take_ownership) {}
@@ -40,9 +42,9 @@ uint32_t DrawBuf::width() const { return buf_ ? buf_->header.w : 0; }
 
 uint32_t DrawBuf::height() const { return buf_ ? buf_->header.h : 0; }
 
-lv_color_format_t DrawBuf::format() const {
-  return buf_ ? static_cast<lv_color_format_t>(buf_->header.cf)
-              : LV_COLOR_FORMAT_UNKNOWN;
+ColorFormat DrawBuf::format() const {
+  return buf_ ? static_cast<ColorFormat>(buf_->header.cf)
+              : ColorFormat::Unknown;
 }
 
 void DrawBuf::clear(const lv_area_t* area) {
@@ -72,10 +74,10 @@ size_t DrawBuf::data_size() const { return buf_ ? buf_->data_size : 0; }
 void DrawBuf::swap_endianness() {
   if (!buf_ || !buf_->data) return;
 
-  lv_color_format_t cf = format();
-  if (cf == LV_COLOR_FORMAT_RGB565) {
+  ColorFormat cf = format();
+  if (cf == ColorFormat::RGB565) {
     lv_draw_sw_rgb565_swap(buf_->data, width() * height());
-  } else if (cf == LV_COLOR_FORMAT_ARGB8888 || cf == LV_COLOR_FORMAT_XRGB8888) {
+  } else if (cf == ColorFormat::ARGB8888 || cf == ColorFormat::XRGB8888) {
     uint32_t* p = reinterpret_cast<uint32_t*>(buf_->data);
     size_t count = (width() * height());
     for (size_t i = 0; i < count; ++i) {
@@ -83,7 +85,7 @@ void DrawBuf::swap_endianness() {
     }
   } else {
     // Generic fallback for 16-bit if not exactly RGB565 but still 2 bytes
-    if (LV_COLOR_FORMAT_GET_BPP(cf) == 16) {
+    if (LV_COLOR_FORMAT_GET_BPP(static_cast<lv_color_format_t>(cf)) == 16) {
       uint16_t* p = reinterpret_cast<uint16_t*>(buf_->data);
       size_t count = (width() * height());
       for (size_t i = 0; i < count; ++i) {

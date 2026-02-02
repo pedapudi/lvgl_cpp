@@ -18,8 +18,8 @@ void test_textarea_1() {
   std::cout << "Testing Textarea Example 1..." << std::endl;
   lvgl::Textarea ta;
   ta.set_one_line(true);
-  ta.align(LV_ALIGN_TOP_MID, 0, 10);
-  ta.add_state(LV_STATE_FOCUSED);
+  ta.align(lvgl::Align::TopMid, 0, 10);
+  ta.add_state(lvgl::State::Focused);
   // ButtonMatrix usage skipped or simplified for now to focus on TA
   std::cout << "Textarea Example 1 Passed" << std::endl;
 }
@@ -37,17 +37,17 @@ void test_textarea_2() {
 
   lvgl::Label pwd_label(screen);
   pwd_label.set_text("Password:");
-  pwd_label.align_to(pwd_ta, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+  pwd_label.align_to(pwd_ta, lvgl::Align::OutTopLeft, 0, 0);
 
   lvgl::Textarea text_ta(screen);
   text_ta.set_one_line(true);
   text_ta.set_password_mode(false);
   text_ta.set_width(lv_pct(40));
-  text_ta.align(LV_ALIGN_TOP_RIGHT, -5, 20);
+  text_ta.align(lvgl::Align::TopRight, -5, 20);
 
   lvgl::Label oneline_label(screen);
   oneline_label.set_text("Text:");
-  oneline_label.align_to(text_ta, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+  oneline_label.align_to(text_ta, lvgl::Align::OutTopLeft, 0, 0);
 
   lvgl::Keyboard kb;
   kb.set_textarea(pwd_ta);
@@ -61,12 +61,12 @@ void test_keyboard_1() {
   lvgl::Keyboard kb;
 
   lvgl::Textarea ta1;
-  ta1.align(LV_ALIGN_TOP_LEFT, 10, 10);
+  ta1.align(lvgl::Align::TopLeft, 10, 10);
   ta1.set_placeholder_text("Hello");
   ta1.set_size(140, 80);
 
   lvgl::Textarea ta2;
-  ta2.align(LV_ALIGN_TOP_RIGHT, -10, 10);
+  ta2.align(lvgl::Align::TopRight, -10, 10);
   ta2.set_size(140, 80);
 
   kb.set_textarea(ta1);
@@ -89,12 +89,12 @@ void test_spinbox_1() {
 
   lvgl::Button btn_plus(screen);
   btn_plus.set_size(h, h);
-  btn_plus.align_to(spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+  btn_plus.align_to(spinbox, lvgl::Align::OutRightMid, 5, 0);
   btn_plus.style().bg_image_src(LV_SYMBOL_PLUS);
 
   lvgl::Button btn_minus(screen);
   btn_minus.set_size(h, h);
-  btn_minus.align_to(spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+  btn_minus.align_to(spinbox, lvgl::Align::OutLeftMid, -5, 0);
   btn_minus.style().bg_image_src(LV_SYMBOL_MINUS);
 
   std::cout << "Spinbox Example 1 Passed" << std::endl;
@@ -107,7 +107,7 @@ void test_dropdown_1() {
   dd.set_options(
       "Apple\nBanana\nOrange\nCherry\nGrape\nRaspberry\nMelon\nOrang"
       "e\nLemon\nNuts");
-  dd.align(LV_ALIGN_TOP_MID, 0, 20);
+  dd.align(lvgl::Align::TopMid, 0, 20);
 
   // Example 2 bits
   lvgl::Dropdown dd2;
@@ -125,19 +125,19 @@ void test_roller_1() {
   roller1.set_options(
       "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust"
       "\nSeptember\nOctober\nNovember\nDecember",
-      LV_ROLLER_MODE_INFINITE);
+      lvgl::Roller::Mode::Infinite);
   roller1.set_visible_row_count(4);
   roller1.center();
 
   // Example 2 bits (Styling)
   lvgl::Roller roller2;
   const char* opts = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
-  roller2.set_options(opts, LV_ROLLER_MODE_NORMAL);
+  roller2.set_options(opts, lvgl::Roller::Mode::Normal);
   roller2.set_visible_row_count(2);
   roller2.set_width(100);
   // roller2.add_style... (skipping style def for brevity, focusing on API)
   roller2.style().text_align(lvgl::TextAlign::Left);
-  roller2.set_selected(2, LV_ANIM_OFF);
+  roller2.set_selected(2, lvgl::AnimEnable::Off);
   roller2.align(lvgl::Align::LeftMid, 10, 0);
 
   std::cout << "Roller Example 1 Passed" << std::endl;
@@ -148,7 +148,7 @@ void test_calendar_1() {
   std::cout << "Testing Calendar Example 1..." << std::endl;
   lvgl::Calendar calendar;
   calendar.set_size(185, 230);
-  calendar.align(LV_ALIGN_CENTER, 0, 27);
+  calendar.align(lvgl::Align::Center, 0, 27);
   calendar.set_today_date(2021, 02, 23);
   calendar.set_shown_date(2021, 02);
 

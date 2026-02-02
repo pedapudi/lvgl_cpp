@@ -1,6 +1,7 @@
 /*
  * Benchmark: Baseline Object Creation (C++)
  * Objective: Measure fixed overhead of creating objects in C++ wrapper.
+#include <memory>
  */
 
 #include <sys/resource.h>
@@ -28,10 +29,11 @@ int main(void) {
   // C++ Display wrapper usage would be ideal, but for baseline equivalence
   // we stick to minimum C setup for the display to isolate widget costs.
   lv_display_t* disp = lv_display_create(800, 600);
+  lvgl::Display display(disp);
   lv_display_set_flush_cb(disp, flush_cb);
   static uint8_t buf[800 * 10 * 4];
-  lv_display_set_buffers(disp, buf, NULL, sizeof(buf),
-                         LV_DISPLAY_RENDER_MODE_PARTIAL);
+  display.set_buffers(buf, nullptr, sizeof(buf),
+                      lvgl::Display::RenderMode::Partial);
 
   std::cout << "Starting C++ baseline benchmark (N=" << OBJ_COUNT << ")..."
             << std::endl;

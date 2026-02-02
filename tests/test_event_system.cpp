@@ -32,7 +32,7 @@ static void test_event_basic() {
   });
 
   std::cout << "Sending event..." << std::endl;
-  lv_obj_send_event(obj.raw(), LV_EVENT_CLICKED, nullptr);
+  obj.send_event(EventCode::Clicked);
   std::cout << "Event sent." << std::endl;
   assert(called);
   std::cout << "Basic event passed." << std::endl;
@@ -51,7 +51,7 @@ static void test_event_param() {
     assert(*p == 42);
   });
 
-  lv_obj_send_event(obj.raw(), LV_EVENT_VALUE_CHANGED, &value);
+  obj.send_event(EventCode::ValueChanged, &value);
   assert(called);
   std::cout << "Event param passed." << std::endl;
 }

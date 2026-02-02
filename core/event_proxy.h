@@ -29,22 +29,22 @@ class EventProxy {
 
   // Convenience shortcuts for common events - Inlined for Performance
   EventProxy& on_clicked(EventCallback callback) {
-    return on(LV_EVENT_CLICKED, std::move(callback));
+    return on(EventCode::Clicked, std::move(callback));
   }
   EventProxy& on_pressed(EventCallback callback) {
-    return on(LV_EVENT_PRESSED, std::move(callback));
+    return on(EventCode::Pressed, std::move(callback));
   }
   EventProxy& on_released(EventCallback callback) {
-    return on(LV_EVENT_RELEASED, std::move(callback));
+    return on(EventCode::Released, std::move(callback));
   }
   EventProxy& on_value_changed(EventCallback callback) {
-    return on(LV_EVENT_VALUE_CHANGED, std::move(callback));
+    return on(EventCode::ValueChanged, std::move(callback));
   }
   EventProxy& on_long_pressed(EventCallback callback) {
-    return on(LV_EVENT_LONG_PRESSED, std::move(callback));
+    return on(EventCode::LongPressed, std::move(callback));
   }
   EventProxy& on_all(EventCallback callback) {
-    return on(LV_EVENT_ALL, std::move(callback));
+    return on(EventCode::All, std::move(callback));
   }
 
   EventProxy& on_gesture(std::function<void(GestureEvent&)> callback);

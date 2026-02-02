@@ -1,6 +1,7 @@
 /*
  * Benchmark: Event Overhead (C++)
  * Objective: Measure cost of std::function + wrapper per callback.
+#include <memory>
  */
 
 #include <sys/resource.h>
@@ -11,6 +12,7 @@
 
 #include "lvgl.h"
 #include "lvgl_cpp/core/object.h"
+#include "lvgl_cpp/display/display.h"
 #include "lvgl_cpp/widgets/button.h"
 
 #define OBJ_COUNT 50
@@ -23,11 +25,11 @@ static void flush_cb(lv_display_t* disp, const lv_area_t* area,
 int main(void) {
   lv_init();
 
-  lv_display_t* disp = lv_display_create(800, 600);
-  lv_display_set_flush_cb(disp, flush_cb);
+  lvgl::Display display(lv_display_create(800, 600));
+  lv_display_set_flush_cb(display.raw(), flush_cb);
   static uint8_t buf[800 * 10 * 4];
-  lv_display_set_buffers(disp, buf, NULL, sizeof(buf),
-                         LV_DISPLAY_RENDER_MODE_PARTIAL);
+  display.set_buffers(buf, nullptr, sizeof(buf),
+                      lvgl::Display::RenderMode::Partial);
 
   std::cout << "Starting C++ events benchmark (N=" << OBJ_COUNT << ")..."
             << std::endl;
@@ -43,7 +45,7 @@ int main(void) {
 
     // Add lambda callback (capturing nothing to keep it small, but
     // std::function allocates anyway) Correct signature: lvgl::Event&
-    btn->add_event_cb(LV_EVENT_CLICKED, [](lvgl::Event&) {
+    btn->add_event_cb(lvgl::EventCode::Clicked, [](lvgl::Event&) {
       // No-op
     });
 
