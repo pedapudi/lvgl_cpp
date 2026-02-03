@@ -19,7 +19,7 @@ class Esp32Spi {
     int v_res;
     esp_lcd_panel_handle_t panel_handle;
     esp_lcd_panel_io_handle_t io_handle;
-    bool swap_bytes = true;  ///< Enable software/SIMD byte swapping
+    bool swap_bytes = true;  ///< Enable software (SIMD) byte swapping
     bool invert_colors =
         false;  ///< Invert colors during swap (active low panels)
   };
@@ -38,6 +38,20 @@ class Esp32Spi {
    * @return lvgl::Display*
    */
   lvgl::Display* display() { return display_.get(); }
+
+  /**
+   * @brief Get the ESP-IDF Panel Handle.
+   * Useful for low-level operations like power control or detailed
+   * configuration.
+   */
+  esp_lcd_panel_handle_t get_panel_handle() const {
+    return config_.panel_handle;
+  }
+
+  /**
+   * @brief Get the ESP-IDF IO Handle.
+   */
+  esp_lcd_panel_io_handle_t get_io_handle() const { return config_.io_handle; }
 
  private:
   // SPI DMA completion callback

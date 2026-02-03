@@ -78,10 +78,13 @@ bool IRAM_ATTR Esp32Spi::on_color_trans_done_trampoline(
 
 void Esp32Spi::flush_cb(lvgl::Display* disp, const lv_area_t* area,
                         uint8_t* px_map) {
-  // Optional: Byte Swapping / Color Inversion
-  // -----------------------------------------
-  // High-performance panels often need Big-Endian data (RGB565).
-  // If native swapping isn't available, we use SIMD intrinsics here.
+  // Optional: Software Byte Swapping / Color Inversion
+  // --------------------------------------------------
+  // High-performance RGB565 panels often need Big-Endian data.
+  // Ideally, the ESP32 hardware (LCD/DMA) handles this ('swap_bytes' in panel
+  // config). However, if hardware swapping is disabled or unavailable, we
+  // perform optimized Software Swapping using SIMD (on supported architectures
+  // like Xtensa).
 
   if (config_.swap_bytes) {
     uint16_t* buf = reinterpret_cast<uint16_t*>(px_map);
