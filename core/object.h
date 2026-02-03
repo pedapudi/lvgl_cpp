@@ -21,6 +21,11 @@
 #include "interaction_proxy.h"
 #include "layout_proxy.h"
 #include "lvgl.h"  // IWYU pragma: export
+
+// Fix for 'noreturn' macro collision: lvgl.h might re-define it.
+#if defined(noreturn)
+#undef noreturn
+#endif
 #include "scroll_proxy.h"
 #include "state_proxy.h"
 #include "style_proxy.h"
