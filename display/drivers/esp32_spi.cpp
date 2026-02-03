@@ -90,50 +90,82 @@ void Esp32Spi::flush_cb(lvgl::Display* disp, const lv_area_t* area,
     uint16_t* buf = reinterpret_cast<uint16_t*>(px_map);
     uint32_t len = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1);
 
+    // Check alignment for 32-bit optimization
+    if ((uintptr_t)buf & 0x3) {
+      // Unaligned: Fallback to simple 16-bit processing
+      for (uint32_t i = 0; i < len; i++) {
+        uint16_t val = buf[i];
 #if defined(__XTENSA__)
-    // Xtensa SIMD Optimization
-    if (config_.invert_colors) {
-      // Swap + Invert
-      while (len >= 8) {
-        buf[0] = ~__builtin_bswap16(buf[0]);
-        buf[1] = ~__builtin_bswap16(buf[1]);
-        buf[2] = ~__builtin_bswap16(buf[2]);
-        buf[3] = ~__builtin_bswap16(buf[3]);
-        buf[4] = ~__builtin_bswap16(buf[4]);
-        buf[5] = ~__builtin_bswap16(buf[5]);
-        buf[6] = ~__builtin_bswap16(buf[6]);
-        buf[7] = ~__builtin_bswap16(buf[7]);
-        buf += 8;
-        len -= 8;
+        buf[i] = config_.invert_colors ? ~__builtin_bswap16(val)
+                                       : __builtin_bswap16(val);
+#else
+        val = (val << 8) | (val >> 8);
+        buf[i] = config_.invert_colors ? ~val : val;
+#endif
       }
     } else {
-      // Just Swap
-      while (len >= 8) {
-        buf[0] = __builtin_bswap16(buf[0]);
-        buf[1] = __builtin_bswap16(buf[1]);
-        buf[2] = __builtin_bswap16(buf[2]);
-        buf[3] = __builtin_bswap16(buf[3]);
-        buf[4] = __builtin_bswap16(buf[4]);
-        buf[5] = __builtin_bswap16(buf[5]);
-        buf[6] = __builtin_bswap16(buf[6]);
-        buf[7] = __builtin_bswap16(buf[7]);
-        buf += 8;
-        len -= 8;
-      }
-    }
-#endif  // __XTENSA__
+      // Aligned: Use 32-bit access (process 2 pixels at once)
+      uint32_t* buf32 = reinterpret_cast<uint32_t*>(buf);
+      uint32_t len32 = len / 2;
+      uint32_t i = 0;
 
-    // Fallback or cleanup loop
-    for (uint32_t i = 0; i < len; i++) {
-      uint16_t val = buf[i];
+      // Unroll loop for 8x32-bit operations (16 pixels) per iteration
+      while (i + 8 <= len32) {
+        uint32_t v0 = buf32[i];
+        uint32_t v1 = buf32[i + 1];
+        uint32_t v2 = buf32[i + 2];
+        uint32_t v3 = buf32[i + 3];
+        uint32_t v4 = buf32[i + 4];
+        uint32_t v5 = buf32[i + 5];
+        uint32_t v6 = buf32[i + 6];
+        uint32_t v7 = buf32[i + 7];
+
+        // Swap bytes within 16-bit words: 0xAABBCCDD -> 0xBBAADDCC
+        auto swap32 = [](uint32_t v) {
+          return ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+        };
+
+        if (config_.invert_colors) {
+          buf32[i] = ~swap32(v0);
+          buf32[i + 1] = ~swap32(v1);
+          buf32[i + 2] = ~swap32(v2);
+          buf32[i + 3] = ~swap32(v3);
+          buf32[i + 4] = ~swap32(v4);
+          buf32[i + 5] = ~swap32(v5);
+          buf32[i + 6] = ~swap32(v6);
+          buf32[i + 7] = ~swap32(v7);
+        } else {
+          buf32[i] = swap32(v0);
+          buf32[i + 1] = swap32(v1);
+          buf32[i + 2] = swap32(v2);
+          buf32[i + 3] = swap32(v3);
+          buf32[i + 4] = swap32(v4);
+          buf32[i + 5] = swap32(v5);
+          buf32[i + 6] = swap32(v6);
+          buf32[i + 7] = swap32(v7);
+        }
+        i += 8;
+      }
+
+      // Handle remaining pairs (32-bit)
+      while (i < len32) {
+        uint32_t v = buf32[i];
+        uint32_t swapped = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+        buf32[i] = config_.invert_colors ? ~swapped : swapped;
+        i++;
+      }
+
+      // Handle final odd pixel if exists
+      if (len % 2) {
+        uint16_t v = buf[len - 1];
 #if defined(__XTENSA__)
-      buf[i] = config_.invert_colors ? ~__builtin_bswap16(val)
-                                     : __builtin_bswap16(val);
+        buf[len - 1] = config_.invert_colors ? ~__builtin_bswap16(v)
+                                             : __builtin_bswap16(v);
 #else
-      // Standard C fallback
-      val = (val << 8) | (val >> 8);
-      buf[i] = config_.invert_colors ? ~val : val;
+        uint16_t s = (v << 8) | (v >> 8);
+        buf[len - 1] = config_.invert_colors ? ~s : s;
 #endif
+      }
     }
   }
 
