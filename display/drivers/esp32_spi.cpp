@@ -11,32 +11,45 @@ namespace lvgl {
 
 Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   // 1. Calculate Buffer Size
-  size_t px_count = config_.h_res * config_.v_res;
-  buf_size_ = px_count * sizeof(uint16_t);
+  size_t frame_px = config_.h_res * config_.v_res;
 
-  ESP_LOGI(TAG, "Allocating 2x %zu bytes in SPIRAM for Native Double Buffering",
-           buf_size_);
+  if (config_.render_mode == lvgl::Display::RenderMode::Full) {
+    buf_size_ = frame_px * sizeof(uint16_t);
+    ESP_LOGI(TAG, "Allocating 2x %zu bytes in SPIRAM for Full Double Buffering",
+             buf_size_);
 
-  // 2. Allocate Double Buffers (SPIRAM + DMA capable)
-  // Try SPIRAM first (preferred for large framebuffers)
-  buf1_ = heap_caps_aligned_alloc(64, buf_size_,
-                                  MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
-  if (!buf1_) {
-    ESP_LOGW(TAG, "SPIRAM allocation for Buf 1 failed, trying Internal DMA");
+    // Allocate in SPIRAM (preferred) or Internal DMA fallback
     buf1_ = heap_caps_aligned_alloc(64, buf_size_,
-                                    MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
-  }
+                                    MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
+    if (!buf1_) {
+      ESP_LOGW(TAG, "SPIRAM allocation for Buf 1 failed, trying Internal DMA");
+      buf1_ = heap_caps_aligned_alloc(64, buf_size_,
+                                      MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
+    }
 
-  buf2_ = heap_caps_aligned_alloc(64, buf_size_,
-                                  MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
-  if (!buf2_) {
-    ESP_LOGW(TAG, "SPIRAM allocation for Buf 2 failed, trying Internal DMA");
     buf2_ = heap_caps_aligned_alloc(64, buf_size_,
-                                    MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
+                                    MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
+    if (!buf2_) {
+      ESP_LOGW(TAG, "SPIRAM allocation for Buf 2 failed, trying Internal DMA");
+      buf2_ = heap_caps_aligned_alloc(64, buf_size_,
+                                      MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
+    }
+  } else {
+    // Partial Rendering: Use smaller buffers in Internal SRAM for speed
+    // Default to 1/10th of the screen
+    buf_size_ = (frame_px / 10) * sizeof(uint16_t);
+    ESP_LOGI(TAG,
+             "Allocating 2x %zu bytes in Internal SRAM for Partial Rendering",
+             buf_size_);
+
+    buf1_ = heap_caps_aligned_alloc(64, buf_size_,
+                                    MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA);
+    buf2_ = heap_caps_aligned_alloc(64, buf_size_,
+                                    MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA);
   }
 
   if (!buf1_ || !buf2_) {
-    ESP_LOGE(TAG, "Failed to allocate SPIRAM buffers!");
+    ESP_LOGE(TAG, "Failed to allocate display buffers!");
     abort();
   }
 
@@ -49,9 +62,8 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   // 4. Create LVGL Display
   display_ = std::make_unique<lvgl::Display>(config_.h_res, config_.v_res);
 
-  // 5. Configure Buffers (Full Double Buffering)
-  display_->set_buffers(buf1_, buf2_, buf_size_,
-                        lvgl::Display::RenderMode::Full);
+  // 5. Configure Buffers
+  display_->set_buffers(buf1_, buf2_, buf_size_, config_.render_mode);
 
   // 6. Select Flush Implementation
   if (!config_.swap_bytes) {
