@@ -53,7 +53,16 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   display_->set_buffers(buf1_, buf2_, buf_size_,
                         lvgl::Display::RenderMode::Full);
 
-  // 6. Set Flush Callback
+  // 6. Select Flush Implementation
+  if (!config_.swap_bytes) {
+    selected_flush_ = &Esp32Spi::flush_no_processing;
+  } else if (config_.invert_colors) {
+    selected_flush_ = &Esp32Spi::flush_swap_invert;
+  } else {
+    selected_flush_ = &Esp32Spi::flush_swap;
+  }
+
+  // 7. Set Flush Callback
   display_->set_flush_cb(
       [this](lvgl::Display* d, const lv_area_t* area, uint8_t* px_map) {
         this->flush_cb(d, area, px_map);
@@ -78,99 +87,120 @@ bool IRAM_ATTR Esp32Spi::on_color_trans_done_trampoline(
 
 void Esp32Spi::flush_cb(lvgl::Display* disp, const lv_area_t* area,
                         uint8_t* px_map) {
-  // Optional: Software Byte Swapping / Color Inversion
-  // --------------------------------------------------
-  // High-performance RGB565 panels often need Big-Endian data.
-  // Ideally, the ESP32 hardware (LCD/DMA) handles this ('swap_bytes' in panel
-  // config). However, if hardware swapping is disabled or unavailable, we
-  // perform optimized Software Swapping using SIMD (on supported architectures
-  // like Xtensa).
+  // Call the pre-selected optimized implementation
+  (this->*selected_flush_)(area, px_map);
+}
 
-  if (config_.swap_bytes) {
-    uint16_t* buf = reinterpret_cast<uint16_t*>(px_map);
-    uint32_t len = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1);
+void Esp32Spi::flush_no_processing(const lv_area_t* area, uint8_t* px_map) {
+  esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
+                            area->x2 + 1, area->y2 + 1, px_map);
+}
 
-    // Check alignment for 32-bit optimization
-    if ((uintptr_t)buf & 0x3) {
-      // Unaligned: Fallback to simple 16-bit processing
-      for (uint32_t i = 0; i < len; i++) {
-        uint16_t val = buf[i];
-#if defined(__XTENSA__)
-        buf[i] = config_.invert_colors ? ~__builtin_bswap16(val)
-                                       : __builtin_bswap16(val);
-#else
-        val = (val << 8) | (val >> 8);
-        buf[i] = config_.invert_colors ? ~val : val;
-#endif
-      }
-    } else {
-      // Aligned: Use 32-bit access (process 2 pixels at once)
-      uint32_t* buf32 = reinterpret_cast<uint32_t*>(buf);
-      uint32_t len32 = len / 2;
-      uint32_t i = 0;
+void Esp32Spi::flush_swap(const lv_area_t* area, uint8_t* px_map) {
+  uint16_t* buf = reinterpret_cast<uint16_t*>(px_map);
+  uint32_t len = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1);
 
-      // Unroll loop for 8x32-bit operations (16 pixels) per iteration
-      while (i + 8 <= len32) {
-        uint32_t v0 = buf32[i];
-        uint32_t v1 = buf32[i + 1];
-        uint32_t v2 = buf32[i + 2];
-        uint32_t v3 = buf32[i + 3];
-        uint32_t v4 = buf32[i + 4];
-        uint32_t v5 = buf32[i + 5];
-        uint32_t v6 = buf32[i + 6];
-        uint32_t v7 = buf32[i + 7];
+  // Aligned: Use 32-bit access (process 2 pixels at once)
+  uint32_t* buf32 = reinterpret_cast<uint32_t*>(buf);
+  uint32_t len32 = len / 2;
+  uint32_t i = 0;
 
-        // Swap bytes within 16-bit words: 0xAABBCCDD -> 0xBBAADDCC
-        auto swap32 = [](uint32_t v) {
-          return ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
-        };
+  // Unroll loop for 8x32-bit operations (16 pixels) per iteration
+  while (i + 8 <= len32) {
+    uint32_t v0 = buf32[i];
+    uint32_t v1 = buf32[i + 1];
+    uint32_t v2 = buf32[i + 2];
+    uint32_t v3 = buf32[i + 3];
+    uint32_t v4 = buf32[i + 4];
+    uint32_t v5 = buf32[i + 5];
+    uint32_t v6 = buf32[i + 6];
+    uint32_t v7 = buf32[i + 7];
 
-        if (config_.invert_colors) {
-          buf32[i] = ~swap32(v0);
-          buf32[i + 1] = ~swap32(v1);
-          buf32[i + 2] = ~swap32(v2);
-          buf32[i + 3] = ~swap32(v3);
-          buf32[i + 4] = ~swap32(v4);
-          buf32[i + 5] = ~swap32(v5);
-          buf32[i + 6] = ~swap32(v6);
-          buf32[i + 7] = ~swap32(v7);
-        } else {
-          buf32[i] = swap32(v0);
-          buf32[i + 1] = swap32(v1);
-          buf32[i + 2] = swap32(v2);
-          buf32[i + 3] = swap32(v3);
-          buf32[i + 4] = swap32(v4);
-          buf32[i + 5] = swap32(v5);
-          buf32[i + 6] = swap32(v6);
-          buf32[i + 7] = swap32(v7);
-        }
-        i += 8;
-      }
+    auto swap = [](uint32_t v) {
+      return ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+    };
 
-      // Handle remaining pairs (32-bit)
-      while (i < len32) {
-        uint32_t v = buf32[i];
-        uint32_t swapped = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
-        buf32[i] = config_.invert_colors ? ~swapped : swapped;
-        i++;
-      }
-
-      // Handle final odd pixel if exists
-      if (len % 2) {
-        uint16_t v = buf[len - 1];
-#if defined(__XTENSA__)
-        buf[len - 1] = config_.invert_colors ? ~__builtin_bswap16(v)
-                                             : __builtin_bswap16(v);
-#else
-        uint16_t s = (v << 8) | (v >> 8);
-        buf[len - 1] = config_.invert_colors ? ~s : s;
-#endif
-      }
-    }
+    buf32[i] = swap(v0);
+    buf32[i + 1] = swap(v1);
+    buf32[i + 2] = swap(v2);
+    buf32[i + 3] = swap(v3);
+    buf32[i + 4] = swap(v4);
+    buf32[i + 5] = swap(v5);
+    buf32[i + 6] = swap(v6);
+    buf32[i + 7] = swap(v7);
+    i += 8;
   }
 
-  // DMA Transfer
-  // Pass the buffer directly to the SPI controller.
+  while (i < len32) {
+    uint32_t v = buf32[i];
+    buf32[i] = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+    i++;
+  }
+
+  if (len % 2) {
+    uint16_t v = buf[len - 1];
+#if defined(__XTENSA__)
+    buf[len - 1] = __builtin_bswap16(v);
+#else
+    buf[len - 1] = (v << 8) | (v >> 8);
+#endif
+  }
+
+  esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
+                            area->x2 + 1, area->y2 + 1, px_map);
+}
+
+void Esp32Spi::flush_swap_invert(const lv_area_t* area, uint8_t* px_map) {
+  uint16_t* buf = reinterpret_cast<uint16_t*>(px_map);
+  uint32_t len = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1);
+
+  uint32_t* buf32 = reinterpret_cast<uint32_t*>(buf);
+  uint32_t len32 = len / 2;
+  uint32_t i = 0;
+
+  while (i + 8 <= len32) {
+    uint32_t v0 = buf32[i];
+    uint32_t v1 = buf32[i + 1];
+    uint32_t v2 = buf32[i + 2];
+    uint32_t v3 = buf32[i + 3];
+    uint32_t v4 = buf32[i + 4];
+    uint32_t v5 = buf32[i + 5];
+    uint32_t v6 = buf32[i + 6];
+    uint32_t v7 = buf32[i + 7];
+
+    auto swap_inv = [](uint32_t v) {
+      uint32_t s = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+      return ~s;
+    };
+
+    buf32[i] = swap_inv(v0);
+    buf32[i + 1] = swap_inv(v1);
+    buf32[i + 2] = swap_inv(v2);
+    buf32[i + 3] = swap_inv(v3);
+    buf32[i + 4] = swap_inv(v4);
+    buf32[i + 5] = swap_inv(v5);
+    buf32[i + 6] = swap_inv(v6);
+    buf32[i + 7] = swap_inv(v7);
+    i += 8;
+  }
+
+  while (i < len32) {
+    uint32_t v = buf32[i];
+    uint32_t s = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+    buf32[i] = ~s;
+    i++;
+  }
+
+  if (len % 2) {
+    uint16_t v = buf[len - 1];
+#if defined(__XTENSA__)
+    buf[len - 1] = ~__builtin_bswap16(v);
+#else
+    uint16_t s = (v << 8) | (v >> 8);
+    buf[len - 1] = ~s;
+#endif
+  }
+
   esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
                             area->x2 + 1, area->y2 + 1, px_map);
 }
