@@ -116,7 +116,8 @@ class Esp32Spi {
       void* user_ctx);
 
   // Buffer flush callback
-  void flush_cb(lvgl::Display* disp, const lv_area_t* area, uint8_t* px_map);
+  // Buffer flush callback
+  void flush_cb(const lv_area_t* area, uint8_t* px_map);
 
   // Specialized flush implementations to avoid runtime branching
   void flush_no_processing(const lv_area_t* area, uint8_t* px_map);

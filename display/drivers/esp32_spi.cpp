@@ -77,7 +77,7 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   // 7. Set Flush Callback
   display_->set_flush_cb(
       [this](lvgl::Display* d, const lv_area_t* area, uint8_t* px_map) {
-        this->flush_cb(d, area, px_map);
+        this->flush_cb(area, px_map);
       });
 }
 
@@ -97,8 +97,7 @@ bool IRAM_ATTR Esp32Spi::on_color_trans_done_trampoline(
   return false;
 }
 
-void Esp32Spi::flush_cb(lvgl::Display* disp, const lv_area_t* area,
-                        uint8_t* px_map) {
+void Esp32Spi::flush_cb(const lv_area_t* area, uint8_t* px_map) {
   // Call the pre-selected optimized implementation
   (this->*selected_flush_)(area, px_map);
 }

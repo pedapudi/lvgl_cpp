@@ -107,7 +107,7 @@ class Esp32RgbDisplay {
       const esp_lcd_rgb_panel_event_data_t* event_data, void* user_ctx);
 
   // Buffer flush callback (called by LVGL task)
-  void flush_cb(lvgl::Display* disp, const lv_area_t* area, uint8_t* px_map);
+  void flush_cb(const lv_area_t* area, uint8_t* px_map);
 
   Config config_;
   std::unique_ptr<lvgl::Display> display_;

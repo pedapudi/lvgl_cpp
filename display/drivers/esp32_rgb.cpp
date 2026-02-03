@@ -73,7 +73,7 @@ Esp32RgbDisplay::Esp32RgbDisplay(const Config& config) : config_(config) {
   // 6. Set Flush Callback
   display_->set_flush_cb(
       [this](lvgl::Display* disp, const lv_area_t* area, uint8_t* px_map) {
-        this->flush_cb(disp, area, px_map);
+        this->flush_cb(area, px_map);
       });
 
   ESP_LOGI(TAG, "Initialized ESP32-S3 RGB Display Driver (Mode: %s)",
@@ -97,8 +97,7 @@ bool IRAM_ATTR Esp32RgbDisplay::on_vsync_trampoline(
   return false;
 }
 
-void Esp32RgbDisplay::flush_cb(lvgl::Display* disp, const lv_area_t* area,
-                               uint8_t* px_map) {
+void Esp32RgbDisplay::flush_cb(const lv_area_t* area, uint8_t* px_map) {
   if (config_.render_mode == lvgl::Display::RenderMode::Full) {
     // In Full mode, px_map points directly to one of our PSRAM buffers.
     // We just need to signal a swap to the hardware.
@@ -126,7 +125,7 @@ void Esp32RgbDisplay::flush_cb(lvgl::Display* disp, const lv_area_t* area,
     }
 
     // If this is the last chunk of the frame, trigger the swap
-    if (lv_display_flush_is_last(disp->raw())) {
+    if (lv_display_flush_is_last(display_->raw())) {
       esp_lcd_panel_draw_bitmap(config_.panel_handle, 0, 0, config_.h_res,
                                 config_.v_res, current_back_buffer);
 
@@ -135,7 +134,7 @@ void Esp32RgbDisplay::flush_cb(lvgl::Display* disp, const lv_area_t* area,
     } else {
       // Not the last chunk, we can call flush_ready immediately
       // because the hardware isn't using this buffer yet.
-      lv_display_flush_ready(disp->raw());
+      lv_display_flush_ready(display_->raw());
     }
   }
 }
