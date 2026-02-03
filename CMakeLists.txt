@@ -64,6 +64,7 @@ set(WIDGET_SOURCES
     core/group.cpp
     display/display.cpp
     display/drivers/esp32_rgb.cpp
+    display/drivers/esp32_spi.cpp
 
     indev/input_device.cpp
     misc/timer.cpp

@@ -5,7 +5,6 @@
 #include "esp_lcd_panel_ops.h"
 
 namespace lvgl {
-namespace drivers {
 
 /**
  * @brief Generic ESP32 SPI Display Driver for Native Double Buffering.
@@ -58,5 +57,4 @@ class Esp32Spi {
   size_t buf_size_ = 0;
 };
 
-}  // namespace drivers
 }  // namespace lvgl

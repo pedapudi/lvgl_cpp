@@ -8,7 +8,6 @@
 static const char* TAG = "Esp32Spi";
 
 namespace lvgl {
-namespace drivers {
 
 Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   // 1. Calculate Buffer Size
@@ -19,10 +18,22 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
            buf_size_);
 
   // 2. Allocate Double Buffers (SPIRAM + DMA capable)
+  // Try SPIRAM first (preferred for large framebuffers)
   buf1_ = heap_caps_aligned_alloc(64, buf_size_,
                                   MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
+  if (!buf1_) {
+    ESP_LOGW(TAG, "SPIRAM allocation for Buf 1 failed, trying Internal DMA");
+    buf1_ = heap_caps_aligned_alloc(64, buf_size_,
+                                    MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
+  }
+
   buf2_ = heap_caps_aligned_alloc(64, buf_size_,
                                   MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
+  if (!buf2_) {
+    ESP_LOGW(TAG, "SPIRAM allocation for Buf 2 failed, trying Internal DMA");
+    buf2_ = heap_caps_aligned_alloc(64, buf_size_,
+                                    MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
+  }
 
   if (!buf1_ || !buf2_) {
     ESP_LOGE(TAG, "Failed to allocate SPIRAM buffers!");
@@ -129,5 +140,4 @@ void Esp32Spi::flush_cb(lvgl::Display* disp, const lv_area_t* area,
                             area->x2 + 1, area->y2 + 1, px_map);
 }
 
-}  // namespace drivers
 }  // namespace lvgl
