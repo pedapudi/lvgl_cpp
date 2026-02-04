@@ -75,9 +75,42 @@ set(WIDGET_SOURCES
 list(APPEND SOURCES ${WIDGET_SOURCES})
 
 if(IDF_TARGET)
+    if(IDF_TARGET STREQUAL "esp32s3")
+        message(STATUS "[lvgl_cpp] Enabling ESP32-S3 SIMD Assembly Shim")
+        list(APPEND SOURCES
+            utility/esp32/simd/lv_draw_sw_asm_shim.c
+            utility/esp32/simd/lv_color_blend_to_argb8888_esp32s3.S
+            utility/esp32/simd/lv_color_blend_to_rgb565_esp32s3.S
+            utility/esp32/simd/lv_color_blend_to_rgb888_esp32s3.S
+            utility/esp32/simd/lv_macro_memcpy.S
+            utility/esp32/simd/lv_rgb565_blend_normal_to_rgb565_esp32s3.S
+            utility/esp32/simd/lv_rgb888_blend_normal_to_rgb888_esp32s3.S
+        )
+        
+        # Linker trick to ensure custom assembly routines are kept
+        set(SIMD_LINK_FLAGS
+            "-u lv_color_blend_to_rgb565_shim"
+            "-u lv_rgb565_blend_normal_to_rgb565_shim"
+            "-u lv_color_blend_to_rgb565_esp"
+            "-u lv_rgb565_blend_normal_to_rgb565_esp"
+        )
+    endif()
+
     idf_component_register(SRCS ${SOURCES}
-                        INCLUDE_DIRS "." ".."
+                        INCLUDE_DIRS "." ".." "utility/esp32/simd"
                         REQUIRES lvgl)
+
+    if(SIMD_LINK_FLAGS AND COMPONENT_LIB)
+        foreach(flag ${SIMD_LINK_FLAGS})
+            set_property(TARGET ${COMPONENT_LIB} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${flag})
+        endforeach()
+        
+        # Inject our SIMD headers into the main LVGL library
+        idf_component_get_property(lvgl_lib "lvgl__lvgl" COMPONENT_LIB)
+        if(lvgl_lib)
+            target_include_directories(${lvgl_lib} PUBLIC "utility/esp32/simd")
+        endif()
+    endif()
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type)
     target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_20)
 else()
