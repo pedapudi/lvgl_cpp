@@ -89,7 +89,23 @@ While we achieved the 8-byte target through tagged pointer packing and the remov
 
 ---
 
-## 7. Conclusion and Next Steps
+## 7. Porting Infrastructure and Hardware Hardening (Feb 2026)
+
+The focus in early February shifted toward production-grade porting for current-gen ESP32 hardware.
+
+### 7.1. Event-Driven Scheduling
+The `Esp32Port` utility was refactored from a polling-based `vTaskDelay` loop to an **Event-Driven Scheduler**.
+*   **Mechanism**: The UI task now utilizes `ulTaskNotifyTake` to enter a low-power sleep state.
+*   **Instant Wake-up**: ISRs for DMA completion (SPI) and VSync/GDMA (RGB) now invoke `port->notify_from_isr()`, waking the task instantly. This reduces the input-to-pixel latency by up to 10ms per frame.
+
+### 7.2. DMA Memory Safety (Issue 193)
+We introduced a custom deallocator system to the `DrawBuf` class to handle the complexities of ESP-IDF heap management.
+*   **Alignment & Capabilities**: DMA buffers are allocated with 64-byte alignment and the `MALLOC_CAP_DMA` flag.
+*   **Correct Deallocation**: The RAII lifecycle now correctly maps to `heap_caps_free`, preventing the heap corruption and silent leaks that occurred when using standard `free()` on aligned-offset pointers.
+
+---
+
+## 8. Conclusion and Next Steps
 
 The changes introduced since Jan 26 have transformed `lvgl_cpp` from a collection of wrappers into a cohesive, professional-grade C++ framework. With the **Platinum Bridge** mostly complete, the library is now entering the final phases of development.
 

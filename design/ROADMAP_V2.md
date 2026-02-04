@@ -14,6 +14,7 @@ The focus now shifts from **Structural Migration** to **Behavioral idiomaticness
 | **Phase 3** | Global Expansion | ✅ 100% | All 60+ widgets migrated to `Widget<T>`. |
 | **Phase 4** | Constructor Standardization | ✅ 100% | Standard delegation and `nullptr` handling. |
 | **Phase 5** | Legacy Cleanup | ✅ 100% | Removed deprecated methods from `Object`. |
+| **Phase 8** | Hardware Excellence | 🚧 75% | Event-driven port, DMA safety, Triple Buffering. |
 
 ## 3. The Next Horizon: Phase 6 & 7
 
@@ -38,6 +39,13 @@ Handling the application lifecycle, complex UI flows, and system abstractions.
 - **[x] Modal & Window Management (#38)**: Idiomatic wrappers for `MsgBox` (modals) and `Win` (header/content windows).
 - [x] Animation & Timer System (#39): RAII wrappers for `lv_anim` and `lv_timer` to manage safe lifecycles using C++ functors.
 - **[x] Filesystem & Images (#40)**: C++ wrappers for `lv_fs` and `lv_img` handling, ensuring resource safety.
+
+### Batch D: Hardware Excellence (Phase 8)
+Focusing on platform-specific performance on high-end embedded hardware.
+- **[x] Event-Driven Port (#194)**: Transitioned `Esp32Port` to Task Notification scheduling for instant UI response.
+- **[x] DMA Memory Safety (#193)**: Implemented custom deallocators in `DrawBuf` for aligned heap management.
+- **[ ] Triple Buffering State Machine**: Implementation of wait-free buffer swapping logic for smooth 60fps.
+- **[x] Optimized SWAR Byte-Swapping**: XTensa-optimized SIMD routines for Big-Endian SPI displays.
 
 ## 4. Definition of Done for v0.2.0 Release
 The refactoring is considered complete when:

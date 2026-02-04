@@ -28,9 +28,9 @@ This plan outlines the final steps to transition `lvgl_cpp` from a structural wr
 ## Phase 2: Hardware & Performance Optimization
 **Goal**: Reach parity with raw C performance while shrinking the memory footprint of the wrapper.
 
-### 2.1. DrawBuf Helpers (Issue 181)
-- **Status**: IN PROGRESS.
-- **Action**: Implement portable `swap_endianness` and `premultiply` using compiler intrinsics (`__builtin_bswap`) and LVGL built-ins.
+### 2.1. DrawBuf Helpers (Issue 181, Issue 193)
+- **Status**: COMPLETED.
+- **Action**: Implemented portable `swap_endianness` and `premultiply`. Added custom deallocator system to fix ESP32 heap corruption for DMA buffers (Issue 193).
 
 ### 2.2. Memory Size Optimization
 - [x] **Memory Size Optimization**
@@ -41,6 +41,7 @@ This plan outlines the final steps to transition `lvgl_cpp` from a structural wr
 ### 2.3. Performance Hot-Paths
 - **Devirtualization**: Use `final` and `inline` aggressively in the Proxy layers to eliminate call overhead.
 - **Architecture Dispatch**: Tiered implementation for SIMD-heavy operations, falling back to portable loops.
+- **Esp32Port (Event-Driven)**: COMPLETE. Transitioned from polling to a Task-Notification-driven scheduler (`ulTaskNotifyTake`), enabling instant wake-up from ISRs (DMA/VSync).
 
 ---
 
