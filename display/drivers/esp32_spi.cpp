@@ -37,7 +37,7 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   } else {
     // Partial Rendering: Use smaller buffers in Internal SRAM for speed
     // Default to 1/10th of the screen
-    buf_size_ = (frame_px / 10) * sizeof(uint16_t);
+    buf_size_ = sizeof(uint16_t) * (frame_px / 2);
     ESP_LOGI(TAG,
              "Allocating 2x %zu bytes in Internal SRAM for Partial Rendering",
              buf_size_);
@@ -60,11 +60,17 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
   esp_lcd_panel_io_register_event_callbacks(config_.io_handle, &cbs, this);
 
   // 4. Create LVGL Display
-  display_ = std::make_unique<lvgl::Display>(config_.h_res, config_.v_res);
+  // 4. Create LVGL Display
+  display_ = std::make_unique<lvgl::Display>(
+      lvgl::Display::create(config_.h_res, config_.v_res));
+
+  // Use standard RGB565 (simd assembly routines in LVGL core will use this)
+  display_->set_color_format(lvgl::ColorFormat::RGB565);
 
   // 5. Configure Buffers
   display_->set_buffers(buf1_, buf2_, buf_size_, config_.render_mode);
 
+  // 6. Select Flush Implementation
   // 6. Select Flush Implementation
   if (!config_.swap_bytes) {
     selected_flush_ = &Esp32Spi::flush_no_processing;
@@ -127,38 +133,49 @@ void Esp32Spi::flush_swap(const lv_area_t* area, uint8_t* px_map) {
     uint32_t v6 = buf32[i + 6];
     uint32_t v7 = buf32[i + 7];
 
+    // Optimized: Use Xtensa hardware byte-swap (bswap32) + 16-bit Rotate.
+    // Explanation:
+    // Input:  [A A] [B B] [C C] [D D] (4 bytes, 2 pixels: AABB, CCDD)
+    // bswap32:[D D] [C C] [B B] [A A] (Full reversal: DDCC, BBAA)
+    // Rot16:  [B B] [A A] [D D] [C C] (Correct pairwise swap: BBAA, DDCC)
     auto swap = [](uint32_t v) {
-      return ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
-    };
-
-    buf32[i] = swap(v0);
-    buf32[i + 1] = swap(v1);
-    buf32[i + 2] = swap(v2);
-    buf32[i + 3] = swap(v3);
-    buf32[i + 4] = swap(v4);
-    buf32[i + 5] = swap(v5);
-    buf32[i + 6] = swap(v6);
-    buf32[i + 7] = swap(v7);
-    i += 8;
-  }
-
-  while (i < len32) {
-    uint32_t v = buf32[i];
-    buf32[i] = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
-    i++;
-  }
-
-  if (len % 2) {
-    uint16_t v = buf[len - 1];
 #if defined(__XTENSA__)
-    buf[len - 1] = __builtin_bswap16(v);
+      v = __builtin_bswap32(v);
+      return (v >> 16) | (v << 16);
 #else
-    buf[len - 1] = (v << 8) | (v >> 8);
+      return ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
 #endif
-  }
+    };
+  };
 
-  esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
-                            area->x2 + 1, area->y2 + 1, px_map);
+  buf32[i] = swap(v0);
+  buf32[i + 1] = swap(v1);
+  buf32[i + 2] = swap(v2);
+  buf32[i + 3] = swap(v3);
+  buf32[i + 4] = swap(v4);
+  buf32[i + 5] = swap(v5);
+  buf32[i + 6] = swap(v6);
+  buf32[i + 7] = swap(v7);
+  i += 8;
+}
+
+while (i < len32) {
+  uint32_t v = buf32[i];
+  buf32[i] = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+  i++;
+}
+
+if (len % 2) {
+  uint16_t v = buf[len - 1];
+#if defined(__XTENSA__)
+  buf[len - 1] = __builtin_bswap16(v);
+#else
+  buf[len - 1] = (v << 8) | (v >> 8);
+#endif
+}
+
+esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
+                          area->x2 + 1, area->y2 + 1, px_map);
 }
 
 void Esp32Spi::flush_swap_invert(const lv_area_t* area, uint8_t* px_map) {

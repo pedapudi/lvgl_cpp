@@ -57,7 +57,8 @@ Esp32RgbDisplay::Esp32RgbDisplay(const Config& config) : config_(config) {
   }
 
   // 3. Create LVGL Display
-  display_ = std::make_unique<lvgl::Display>(config.h_res, config.v_res);
+  display_ = std::make_unique<lvgl::Display>(
+      lvgl::Display::create(config.h_res, config.v_res));
   display_->set_color_format(lvgl::ColorFormat::RGB565);
 
   // 4. Set Buffers
