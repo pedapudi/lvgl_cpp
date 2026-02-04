@@ -222,6 +222,23 @@ Animation::Path::Callback Animation::Path::Bezier(int32_t x1, int32_t y1,
   };
 }
 
+Animation::Path::Callback Animation::Path::CubicBezier(int32_t x1, int32_t y1,
+                                                       int32_t x2, int32_t y2) {
+  // Logic migrated from workshop_ui.cpp:svg_bezier_path
+  return [x1, y1, x2, y2](const lv_anim_t* a) -> int32_t {
+    // 1. Map current time to 0..1024 range
+    int32_t t = lv_map(a->act_time, 0, a->duration, 0, LV_BEZIER_VAL_MAX);
+
+    // 2. Compute the Bezier step (0..1024)
+    int32_t step = lv_cubic_bezier(t, x1, y1, x2, y2);
+
+    // 3. Interpolate between start and end values
+    int32_t range = a->end_value - a->start_value;
+    int32_t val = (step * range) >> LV_BEZIER_VAL_SHIFT;
+    return a->start_value + val;
+  };
+}
+
 Animation& Animation::set_completed_cb(CompletedCallback cb) {
   if (!user_data_) user_data_ = std::make_unique<CallbackData>();
   user_data_->completed_cb = cb;

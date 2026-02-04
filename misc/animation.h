@@ -277,6 +277,19 @@ class Animation {
      * @return A PathCallback defined by the Bezier curve.
      */
     static Callback Bezier(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
+
+    /**
+     * @brief Create a cubic Bezier path (SVG/CSS Standard).
+     * This implementation matches standard SVG keySpline behavior,
+     * interpolating the value range based on the curve.
+     *
+     * @param x1 Control point 1 X (0..1024)
+     * @param y1 Control point 1 Y (0..1024)
+     * @param x2 Control point 2 X (0..1024)
+     * @param y2 Control point 2 Y (0..1024)
+     * @return A PathCallback defined by the Bezier curve.
+     */
+    static Callback CubicBezier(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
   };
 
   /**
