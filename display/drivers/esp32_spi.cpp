@@ -103,6 +103,9 @@ bool IRAM_ATTR Esp32Spi::on_color_trans_done_trampoline(
   if (self->display_) {
     lv_display_flush_ready(self->display_->raw());
   }
+  if (self->config_.port) {
+    self->config_.port->notify_from_isr();
+  }
   return false;
 }
 

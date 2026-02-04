@@ -26,6 +26,7 @@ class Esp32RgbDisplay {
         lvgl::Display::RenderMode::Full;  ///< Rendering strategy
     size_t partial_buf_size =
         0;  ///< Size of partial buffer in SRAM. If 0, uses 1/10th.
+    utility::Esp32Port* port = nullptr;  ///< Optional port for wakeups
   };
 
   /**

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../lvgl_cpp.h"
+#include "../../utility/portable/esp32/port.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 
@@ -26,6 +27,7 @@ class Esp32Spi {
         lvgl::Display::RenderMode::Full;  ///< Rendering strategy
     bool swap_bytes = true;      ///< Enable software (SIMD) byte swapping
     bool invert_colors = false;  ///< Invert colors during swap
+    utility::Esp32Port* port = nullptr;  ///< Optional port for wakeups
   };
 
   /**

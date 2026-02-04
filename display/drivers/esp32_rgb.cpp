@@ -112,6 +112,9 @@ bool IRAM_ATTR Esp32RgbDisplay::on_vsync_trampoline(
   // Notify LVGL that the *previous* frame is active on screen,
   // so the buffer we just flushed is now "done" (technically swapped).
   lv_display_flush_ready(self->display_->raw());
+  if (self->config_.port) {
+    self->config_.port->notify_from_isr();
+  }
   return false;
 }
 
@@ -163,6 +166,10 @@ bool IRAM_ATTR Esp32RgbDisplay::on_m2m_done_trampoline(
   } else {
     // Just an intermediate chunk: SRAM is now copied, so it's free for LVGL.
     lv_display_flush_ready(self->display_->raw());
+  }
+
+  if (self->config_.port) {
+    self->config_.port->notify_from_isr();
   }
 
   return false;
