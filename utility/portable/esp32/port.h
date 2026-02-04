@@ -1,6 +1,8 @@
 #ifndef LVGL_CPP_UTILITY_PORTABLE_ESP32_PORT_H_
 #define LVGL_CPP_UTILITY_PORTABLE_ESP32_PORT_H_
 
+#include <atomic>
+#include <cstdint>
 #include <memory>
 
 #include "esp_timer.h"
@@ -44,7 +46,8 @@ class Esp32Port {
    */
   template <typename F>
   void lock(F&& func) {
-    if (xSemaphoreTakeRecursive(api_lock_, portMAX_DELAY) == pdTRUE) {
+    if (api_lock_ &&
+        xSemaphoreTakeRecursive(api_lock_, portMAX_DELAY) == pdTRUE) {
       func();
       xSemaphoreGiveRecursive(api_lock_);
     }
@@ -59,7 +62,7 @@ class Esp32Port {
   SemaphoreHandle_t api_lock_ = nullptr;
   TaskHandle_t task_handle_ = nullptr;
   esp_timer_handle_t tick_timer_ = nullptr;
-  bool running_ = false;
+  std::atomic<bool> running_{false};
 };
 
 }  // namespace utility

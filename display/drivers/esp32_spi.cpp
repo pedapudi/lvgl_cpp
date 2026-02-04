@@ -50,6 +50,9 @@ Esp32Spi::Esp32Spi(const Config& config) : config_(config) {
 
   if (!buf1_ || !buf2_) {
     ESP_LOGE(TAG, "Failed to allocate display buffers!");
+    // In a real application, we might want to return an error instead of
+    // aborting but for this utility, we'll abort to catch configuration issues
+    // early.
     abort();
   }
 
@@ -117,65 +120,56 @@ void Esp32Spi::flush_swap(const lv_area_t* area, uint8_t* px_map) {
   uint16_t* buf = reinterpret_cast<uint16_t*>(px_map);
   uint32_t len = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1);
 
-  // Aligned: Use 32-bit access (process 2 pixels at once)
+  // Use 32-bit access to process 2 pixels at a time
   uint32_t* buf32 = reinterpret_cast<uint32_t*>(buf);
   uint32_t len32 = len / 2;
   uint32_t i = 0;
 
-  // Unroll loop for 8x32-bit operations (16 pixels) per iteration
-  while (i + 8 <= len32) {
+  // Optimized SWAR loop (4 pixels per iteration if we unroll)
+  while (i + 2 <= len32) {
     uint32_t v0 = buf32[i];
     uint32_t v1 = buf32[i + 1];
-    uint32_t v2 = buf32[i + 2];
-    uint32_t v3 = buf32[i + 3];
-    uint32_t v4 = buf32[i + 4];
-    uint32_t v5 = buf32[i + 5];
-    uint32_t v6 = buf32[i + 6];
-    uint32_t v7 = buf32[i + 7];
 
-    // Optimized: Use Xtensa hardware byte-swap (bswap32) + 16-bit Rotate.
-    // Explanation:
-    // Input:  [A A] [B B] [C C] [D D] (4 bytes, 2 pixels: AABB, CCDD)
-    // bswap32:[D D] [C C] [B B] [A A] (Full reversal: DDCC, BBAA)
-    // Rot16:  [B B] [A A] [D D] [C C] (Correct pairwise swap: BBAA, DDCC)
-    auto swap = [](uint32_t v) {
 #if defined(__XTENSA__)
-      v = __builtin_bswap32(v);
-      return (v >> 16) | (v << 16);
+    // Pairwise swap using bswap32 + rotate
+    v0 = __builtin_bswap32(v0);
+    v0 = (v0 >> 16) | (v0 << 16);
+    v1 = __builtin_bswap32(v1);
+    v1 = (v1 >> 16) | (v1 << 16);
 #else
-      return ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
+    v0 = ((v0 & 0xFF00FF00) >> 8) | ((v0 & 0x00FF00FF) << 8);
+    v1 = ((v1 & 0xFF00FF00) >> 8) | ((v1 & 0x00FF00FF) << 8);
 #endif
-    };
-  };
 
-  buf32[i] = swap(v0);
-  buf32[i + 1] = swap(v1);
-  buf32[i + 2] = swap(v2);
-  buf32[i + 3] = swap(v3);
-  buf32[i + 4] = swap(v4);
-  buf32[i + 5] = swap(v5);
-  buf32[i + 6] = swap(v6);
-  buf32[i + 7] = swap(v7);
-  i += 8;
-}
+    buf32[i] = v0;
+    buf32[i + 1] = v1;
+    i += 2;
+  }
 
-while (i < len32) {
-  uint32_t v = buf32[i];
-  buf32[i] = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
-  i++;
-}
-
-if (len % 2) {
-  uint16_t v = buf[len - 1];
+  // Fallback for remaining 32-bit chunk
+  if (i < len32) {
+    uint32_t v = buf32[i];
 #if defined(__XTENSA__)
-  buf[len - 1] = __builtin_bswap16(v);
+    v = __builtin_bswap32(v);
+    buf32[i] = (v >> 16) | (v << 16);
 #else
-  buf[len - 1] = (v << 8) | (v >> 8);
+    buf32[i] = ((v & 0xFF00FF00) >> 8) | ((v & 0x00FF00FF) << 8);
 #endif
-}
+    i++;
+  }
 
-esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
-                          area->x2 + 1, area->y2 + 1, px_map);
+  // Fallback for last odd pixel
+  if (len % 2) {
+    uint16_t v = buf[len - 1];
+#if defined(__XTENSA__)
+    buf[len - 1] = __builtin_bswap16(v);
+#else
+    buf[len - 1] = (v << 8) | (v >> 8);
+#endif
+  }
+
+  esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
+                            area->x2 + 1, area->y2 + 1, px_map);
 }
 
 void Esp32Spi::flush_swap_invert(const lv_area_t* area, uint8_t* px_map) {
