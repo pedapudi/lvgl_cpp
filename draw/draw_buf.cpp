@@ -11,7 +11,19 @@ namespace draw {
 DrawBuf::DrawBuf(uint32_t w, uint32_t h, ColorFormat cf, uint32_t stride)
     : buf_(
           lv_draw_buf_create(w, h, static_cast<lv_color_format_t>(cf), stride)),
-      owns_(true) {}
+      owns_(true),
+      deallocator_(nullptr) {}
+
+#if defined(ESP_PLATFORM)
+static void esp32_dma_deallocator(lv_draw_buf_t* buf) {
+  if (buf) {
+    if (buf->data) {
+      heap_caps_free(buf->data);
+    }
+    lv_free(buf);
+  }
+}
+#endif
 
 DrawBuf DrawBuf::allocate_dma(uint32_t w, uint32_t h, ColorFormat cf,
                               uint32_t caps) {
@@ -36,41 +48,53 @@ DrawBuf DrawBuf::allocate_dma(uint32_t w, uint32_t h, ColorFormat cf,
   }
 
   lv_draw_buf_init(buf, w, h, lv_cf, stride, data, size);
-  return DrawBuf(buf, true);
+  DrawBuf db(buf, true);
+  db.set_deallocator(esp32_dma_deallocator);
+  return db;
 #else
   return DrawBuf(w, h, cf);
 #endif
 }
 
 DrawBuf::DrawBuf(lv_draw_buf_t* buf, bool take_ownership)
-    : buf_(buf), owns_(take_ownership) {}
+    : buf_(buf), owns_(take_ownership), deallocator_(nullptr) {}
 
 DrawBuf::~DrawBuf() {
   if (buf_ && owns_) {
-    // NOTE: On ESP32 with custom allocation, this might need more CARE.
-    // If we used heap_caps_aligned_alloc, we should ideally use heap_caps_free.
-    // However, if the user didn't override lv_free, DrawBuf deallocation
-    // might be inconsistent. For this PR, we assume standard heap behavior
-    // where lv_free can handle it or the user has patched lv_free.
-    lv_draw_buf_destroy(buf_);
+    if (deallocator_) {
+      deallocator_(buf_);
+    } else {
+      lv_draw_buf_destroy(buf_);
+    }
   }
 }
 
+void DrawBuf::set_deallocator(void (*deallocator)(lv_draw_buf_t*)) {
+  deallocator_ = deallocator;
+}
+
 DrawBuf::DrawBuf(DrawBuf&& other) noexcept
-    : buf_(other.buf_), owns_(other.owns_) {
+    : buf_(other.buf_), owns_(other.owns_), deallocator_(other.deallocator_) {
   other.buf_ = nullptr;
   other.owns_ = false;
+  other.deallocator_ = nullptr;
 }
 
 DrawBuf& DrawBuf::operator=(DrawBuf&& other) noexcept {
   if (this != &other) {
     if (buf_ && owns_) {
-      lv_draw_buf_destroy(buf_);
+      if (deallocator_) {
+        deallocator_(buf_);
+      } else {
+        lv_draw_buf_destroy(buf_);
+      }
     }
     buf_ = other.buf_;
     owns_ = other.owns_;
+    deallocator_ = other.deallocator_;
     other.buf_ = nullptr;
     other.owns_ = false;
+    other.deallocator_ = nullptr;
   }
   return *this;
 }

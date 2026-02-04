@@ -69,6 +69,11 @@ class DrawBuf {
   DrawBuf& operator=(DrawBuf&& other) noexcept;
 
   /**
+   * @brief Set a custom deallocator. Only used if owns_ is true.
+   */
+  void set_deallocator(void (*deallocator)(lv_draw_buf_t*));
+
+  /**
    * @brief Get the underlying C struct.
    */
   lv_draw_buf_t* raw() const { return buf_; }
@@ -140,6 +145,7 @@ class DrawBuf {
  private:
   lv_draw_buf_t* buf_ = nullptr;
   bool owns_ = false;
+  void (*deallocator_)(lv_draw_buf_t*) = nullptr;
 };
 
 }  // namespace draw
