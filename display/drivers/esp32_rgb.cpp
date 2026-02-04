@@ -68,9 +68,10 @@ Esp32RgbDisplay::Esp32RgbDisplay(const Config& config) : config_(config) {
                         config_.render_mode);
 
   // 5. Register VSync Callback
-  esp_lcd_rgb_panel_event_callbacks_t cbs = {
-      .on_vsync = on_vsync_trampoline,
-  };
+  esp_lcd_rgb_panel_event_callbacks_t cbs;
+  memset(&cbs, 0, sizeof(cbs));
+  cbs.on_vsync = on_vsync_trampoline;
+
   esp_lcd_rgb_panel_register_event_callbacks(config.panel_handle, &cbs, this);
 
   // 6. Set Flush Callback
@@ -81,10 +82,10 @@ Esp32RgbDisplay::Esp32RgbDisplay(const Config& config) : config_(config) {
 
   // 7. Initialize GDMA for M2M copies if in Partial mode
   if (config_.render_mode == lvgl::Display::RenderMode::Partial) {
-    esp_async_memcpy_config_t m2m_config = {
-        .backlog = 128,  // Support up to 128 sequential row copies
-        .flags = 0,
-    };
+    async_memcpy_config_t m2m_config;
+    memset(&m2m_config, 0, sizeof(m2m_config));
+    m2m_config.backlog = 128;  // Support up to 128 sequential row copies
+
     esp_async_memcpy_install(&m2m_config,
                              reinterpret_cast<async_memcpy_handle_t*>(&m2m_));
     current_back_buffer_ = buf1_;

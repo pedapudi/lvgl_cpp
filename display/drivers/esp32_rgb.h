@@ -4,6 +4,7 @@
 #include "lvgl_cpp/lvgl_cpp.h"
 
 #if __has_include("esp_lcd_panel_rgb.h")
+#include "esp_async_memcpy.h"
 #include "esp_lcd_panel_rgb.h"
 
 namespace lvgl {

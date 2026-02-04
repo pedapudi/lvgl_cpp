@@ -100,7 +100,10 @@ void Esp32Port::task_loop() {
 
     if (sleep_ms == 0) sleep_ms = 1;
     if (sleep_ms > 100) sleep_ms = 100;
-    vTaskDelay(pdMS_TO_TICKS(sleep_ms));
+
+    // Efficiently wait for the next timer or an external notification (e.g.
+    // touch/flush)
+    ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(sleep_ms));
   }
 
   ESP_LOGI(TAG, "LVGL Task Stopping");

@@ -53,6 +53,34 @@ class Esp32Port {
     }
   }
 
+  /**
+   * @brief Get the underlying API lock (mutex).
+   * Useful for manual lock/unlock in legacy code.
+   */
+  SemaphoreHandle_t get_lock() const { return api_lock_; }
+
+  /**
+   * @brief Notify the LVGL task to wake up immediately.
+   */
+  void notify() {
+    if (task_handle_) {
+      xTaskNotifyGive(task_handle_);
+    }
+  }
+
+  /**
+   * @brief Notify the LVGL task from an ISR.
+   */
+  void notify_from_isr() {
+    if (task_handle_) {
+      BaseType_t high_task_wakeup = pdFALSE;
+      vTaskNotifyGiveFromISR(task_handle_, &high_task_wakeup);
+      if (high_task_wakeup) {
+        portYIELD_FROM_ISR();
+      }
+    }
+  }
+
  private:
   static void tick_inc_cb(void* arg);
   static void task_trampoline(void* arg);

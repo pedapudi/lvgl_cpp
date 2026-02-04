@@ -83,8 +83,8 @@ if(IDF_TARGET)
     )
     idf_component_register(SRCS ${SOURCES}
                         INCLUDE_DIRS "." ".."
-                        REQUIRES lvgl esp_lcd)
-    target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type)
+                        REQUIRES lvgl esp_lcd esp_timer driver)
+    target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type -Wno-missing-field-initializers)
     target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_20)
 else()
     project(lvgl_cpp)
