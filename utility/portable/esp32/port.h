@@ -22,7 +22,7 @@ struct Esp32PortConfig {
   uint32_t v_res = 240;
   size_t stack_size = 32 * 1024;
   UBaseType_t task_priority = 5;
-  BaseType_t core_affinity = 1;
+  BaseType_t core_affinity = 1;  ///< Set to tskNO_AFFINITY for no pinning
 };
 
 /**
