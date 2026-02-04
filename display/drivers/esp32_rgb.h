@@ -109,6 +109,11 @@ class Esp32RgbDisplay {
   // Buffer flush callback (called by LVGL task)
   void flush_cb(const lv_area_t* area, uint8_t* px_map);
 
+  // Callback for async memcpy completion
+  static bool on_m2m_done_trampoline(async_memcpy_handle_t m2m,
+                                     async_memcpy_event_t* event,
+                                     void* user_ctx);
+
   Config config_;
   std::unique_ptr<lvgl::Display> display_;
 
@@ -117,6 +122,15 @@ class Esp32RgbDisplay {
   void* buf2_ = nullptr;
   void* sram_buf_ = nullptr;
   size_t buf_size_ = 0;
+  void* current_back_buffer_ = nullptr;
+
+  // State for async copies
+  bool is_last_chunk_ = false;
+  const lv_area_t* current_area_ = nullptr;
+
+  // GDMA handle for SRAM->PSRAM copies
+  void* m2m_ =
+      nullptr;  // Use void* to avoid including esp_async_memcpy.h in header
 };
 
 }  // namespace lvgl

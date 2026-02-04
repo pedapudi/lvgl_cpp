@@ -1,9 +1,11 @@
 #include "lvgl_cpp/display/drivers/esp32_rgb.h"
 
 #if __has_include("esp_lcd_panel_rgb.h")
+#include "esp_async_memcpy.h"
 #include "esp_heap_caps.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 
 static const char* TAG = "Esp32RgbDisplay";
 
@@ -77,12 +79,26 @@ Esp32RgbDisplay::Esp32RgbDisplay(const Config& config) : config_(config) {
         this->flush_cb(area, px_map);
       });
 
+  // 7. Initialize GDMA for M2M copies if in Partial mode
+  if (config_.render_mode == lvgl::Display::RenderMode::Partial) {
+    esp_async_memcpy_config_t m2m_config = {
+        .backlog = 128,  // Support up to 128 sequential row copies
+        .flags = 0,
+    };
+    esp_async_memcpy_install(&m2m_config,
+                             reinterpret_cast<async_memcpy_handle_t*>(&m2m_));
+    current_back_buffer_ = buf1_;
+  }
+
   ESP_LOGI(TAG, "Initialized ESP32-S3 RGB Display Driver (Mode: %s)",
            config_.render_mode == lvgl::Display::RenderMode::Full ? "Full"
                                                                   : "Partial");
 }
 
 Esp32RgbDisplay::~Esp32RgbDisplay() {
+  if (m2m_) {
+    esp_async_memcpy_uninstall(static_cast<async_memcpy_handle_t>(m2m_));
+  }
   if (buf1_) heap_caps_free(buf1_);
   if (buf2_) heap_caps_free(buf2_);
   if (sram_buf_) heap_caps_free(sram_buf_);
@@ -101,43 +117,54 @@ bool IRAM_ATTR Esp32RgbDisplay::on_vsync_trampoline(
 void Esp32RgbDisplay::flush_cb(const lv_area_t* area, uint8_t* px_map) {
   if (config_.render_mode == lvgl::Display::RenderMode::Full) {
     // In Full mode, px_map points directly to one of our PSRAM buffers.
-    // We just need to signal a swap to the hardware.
     esp_lcd_panel_draw_bitmap(config_.panel_handle, area->x1, area->y1,
                               area->x2 + 1, area->y2 + 1, px_map);
   } else {
     // In Partial mode, LVGL renders to SRAM (px_map).
-    // We must copy this chunk into the currently *idle* PSRAM buffer.
-    // Note: This logic assumes we know which buffer is idle.
-    // On S3 RGB panels, draw_bitmap queues the buffer for NEXT VSync.
-    // We'll use a simple internal pointer tracking.
-    static void* current_back_buffer = buf1_;
-    uint16_t* psram_dest = reinterpret_cast<uint16_t*>(current_back_buffer);
-
+    // We offload the copy to PSRAM using GDMA.
+    uint16_t* psram_dest = reinterpret_cast<uint16_t*>(current_back_buffer_);
+    uint16_t* sram_src = reinterpret_cast<uint16_t*>(px_map);
     int width = area->x2 - area->x1 + 1;
     int height = area->y2 - area->y1 + 1;
-    uint16_t* sram_src = reinterpret_cast<uint16_t*>(px_map);
 
-    // Copy row by row to the correct offset in PSRAM
+    this->is_last_chunk_ = lv_display_flush_is_last(display_->raw());
+
+    // Queue row-by-row copies
     for (int y = 0; y < height; y++) {
       int dest_y = area->y1 + y;
       int dest_offset = dest_y * config_.h_res + area->x1;
-      memcpy(&psram_dest[dest_offset], &sram_src[y * width],
-             width * sizeof(uint16_t));
-    }
 
-    // If this is the last chunk of the frame, trigger the swap
-    if (lv_display_flush_is_last(display_->raw())) {
-      esp_lcd_panel_draw_bitmap(config_.panel_handle, 0, 0, config_.h_res,
-                                config_.v_res, current_back_buffer);
-
-      // Switch backbuffer for the next frame
-      current_back_buffer = (current_back_buffer == buf1_) ? buf2_ : buf1_;
-    } else {
-      // Not the last chunk, we can call flush_ready immediately
-      // because the hardware isn't using this buffer yet.
-      lv_display_flush_ready(display_->raw());
+      // The last row of the chunk triggers the completion callback
+      bool is_last_row = (y == height - 1);
+      esp_async_memcpy(static_cast<async_memcpy_handle_t>(m2m_),
+                       &psram_dest[dest_offset], &sram_src[y * width],
+                       width * sizeof(uint16_t),
+                       is_last_row ? on_m2m_done_trampoline : nullptr, this);
     }
   }
+}
+
+bool IRAM_ATTR Esp32RgbDisplay::on_m2m_done_trampoline(
+    async_memcpy_handle_t m2m, async_memcpy_event_t* event, void* user_ctx) {
+  auto* self = static_cast<Esp32RgbDisplay*>(user_ctx);
+
+  if (self->is_last_chunk_) {
+    // End of frame: Trigger the hardware swap to the buffer we just filled.
+    esp_lcd_panel_draw_bitmap(self->config_.panel_handle, 0, 0,
+                              self->config_.h_res, self->config_.v_res,
+                              self->current_back_buffer_);
+
+    // Switch backbuffer for the next frame.
+    // Note: on_vsync_trampoline will call flush_ready when this buffer
+    // actually becomes visible.
+    self->current_back_buffer_ =
+        (self->current_back_buffer_ == self->buf1_) ? self->buf2_ : self->buf1_;
+  } else {
+    // Just an intermediate chunk: SRAM is now copied, so it's free for LVGL.
+    lv_display_flush_ready(self->display_->raw());
+  }
+
+  return false;
 }
 
 }  // namespace lvgl
