@@ -1,5 +1,7 @@
 #include "lvgl_cpp/display/drivers/esp32_rgb.h"
 
+#include "lvgl_cpp/utility/portable/esp32/port.h"
+
 #if __has_include("esp_lcd_panel_rgb.h")
 #include "esp_async_memcpy.h"
 #include "esp_heap_caps.h"

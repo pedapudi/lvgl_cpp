@@ -8,6 +8,9 @@
 #include "esp_lcd_panel_rgb.h"
 
 namespace lvgl {
+namespace utility {
+class Esp32Port;
+}
 
 /**
  * @brief Specialized Display wrapper for ESP32 S3 RGB Panels using
