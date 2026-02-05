@@ -109,6 +109,10 @@ if(IDF_TARGET)
         idf_component_get_property(lvgl_lib "lvgl__lvgl" COMPONENT_LIB)
         if(lvgl_lib)
             target_include_directories(${lvgl_lib} PUBLIC "utility/esp32/simd")
+            target_compile_definitions(${lvgl_lib} PUBLIC 
+                LV_USE_DRAW_SW_ASM=255
+                LV_DRAW_SW_ASM_CUSTOM_INCLUDE="lv_draw_sw_asm_custom.h"
+            )
         endif()
     endif()
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type)
