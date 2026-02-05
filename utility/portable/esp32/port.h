@@ -43,6 +43,7 @@ class Esp32Port {
 
   /**
    * @brief Execute a function with the LVGL API lock held.
+   * @param func Function or lambda to execute.
    */
   template <typename F>
   void lock(F&& func) {
@@ -54,8 +55,26 @@ class Esp32Port {
   }
 
   /**
+   * @brief RAII helper for locking the LVGL API.
+   */
+  class Lock {
+   public:
+    explicit Lock(const Esp32Port& port) : lock_(port.get_lock()) {
+      if (lock_) xSemaphoreTakeRecursive(lock_, portMAX_DELAY);
+    }
+    ~Lock() {
+      if (lock_) xSemaphoreGiveRecursive(lock_);
+    }
+    Lock(const Lock&) = delete;
+    Lock& operator=(const Lock&) = delete;
+
+   private:
+    SemaphoreHandle_t lock_;
+  };
+
+  /**
    * @brief Get the underlying API lock (mutex).
-   * Useful for manual lock/unlock in legacy code.
+   * @return Handle to the recursive mutex.
    */
   SemaphoreHandle_t get_lock() const { return api_lock_; }
 
