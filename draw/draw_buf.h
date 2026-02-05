@@ -39,6 +39,19 @@ class DrawBuf {
           uint32_t stride = 0);
 
   /**
+   * @brief Static factory to allocate a DMA-capable buffer (ESP32-S3
+   * optimized).
+   * @param w Width in pixels.
+   * @param h Height in pixels.
+   * @param cf Color format.
+   * @param caps Memory capabilities (default: internal DMA).
+   * @return DrawBuf instance.
+   */
+  static DrawBuf allocate_dma(
+      uint32_t w, uint32_t h, ColorFormat cf = ColorFormat::RGB565,
+      uint32_t caps = 0 /* MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL */);
+
+  /**
    * @brief Wrap an existing C draw buffer.
    * @param buf Pointer to the C struct.
    * @param take_ownership If true, will destroy the buffer in destructor.
@@ -54,6 +67,11 @@ class DrawBuf {
   // Movable
   DrawBuf(DrawBuf&& other) noexcept;
   DrawBuf& operator=(DrawBuf&& other) noexcept;
+
+  /**
+   * @brief Set a custom deallocator. Only used if owns_ is true.
+   */
+  void set_deallocator(void (*deallocator)(lv_draw_buf_t*));
 
   /**
    * @brief Get the underlying C struct.
@@ -112,9 +130,22 @@ class DrawBuf {
    */
   void premultiply();
 
+  /**
+   * @brief Invert all colors in the buffer (bitwise NOT).
+   * Useful for active-low LCD panels.
+   */
+  void invert_colors();
+
+  /**
+   * @brief Manually swap bytes of all pixels (endianness correction).
+   * Uses hardware intrinsics where available.
+   */
+  void swap_bytes();
+
  private:
   lv_draw_buf_t* buf_ = nullptr;
   bool owns_ = false;
+  void (*deallocator_)(lv_draw_buf_t*) = nullptr;
 };
 
 }  // namespace draw

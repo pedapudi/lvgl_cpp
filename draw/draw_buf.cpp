@@ -1,6 +1,9 @@
 #include "draw_buf.h"
 
 #include <utility>
+#if defined(ESP_PLATFORM)
+#include "esp_heap_caps.h"
+#endif
 
 namespace lvgl {
 namespace draw {
@@ -8,32 +11,90 @@ namespace draw {
 DrawBuf::DrawBuf(uint32_t w, uint32_t h, ColorFormat cf, uint32_t stride)
     : buf_(
           lv_draw_buf_create(w, h, static_cast<lv_color_format_t>(cf), stride)),
-      owns_(true) {}
+      owns_(true),
+      deallocator_(nullptr) {}
+
+#if defined(ESP_PLATFORM)
+static void esp32_dma_deallocator(lv_draw_buf_t* buf) {
+  if (buf) {
+    if (buf->data) {
+      heap_caps_free(buf->data);
+    }
+    lv_free(buf);
+  }
+}
+#endif
+
+DrawBuf DrawBuf::allocate_dma(uint32_t w, uint32_t h, ColorFormat cf,
+                              uint32_t caps) {
+#if defined(ESP_PLATFORM)
+  lv_color_format_t lv_cf = static_cast<lv_color_format_t>(cf);
+  uint32_t stride = lv_draw_buf_width_to_stride(w, lv_cf);
+  size_t size = stride * h;
+
+  // Default to internal DMA if nothing specified
+  if (caps == 0) caps = MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL;
+
+  // Use 64-byte alignment for S3 cache safety
+  void* data = heap_caps_aligned_alloc(64, size, caps);
+  if (!data) return DrawBuf(nullptr);
+
+  // Create the draw buffer structure
+  lv_draw_buf_t* buf =
+      static_cast<lv_draw_buf_t*>(lv_malloc(sizeof(lv_draw_buf_t)));
+  if (!buf) {
+    heap_caps_free(data);
+    return DrawBuf(nullptr);
+  }
+
+  lv_draw_buf_init(buf, w, h, lv_cf, stride, data, size);
+  DrawBuf db(buf, true);
+  db.set_deallocator(esp32_dma_deallocator);
+  return db;
+#else
+  return DrawBuf(w, h, cf);
+#endif
+}
 
 DrawBuf::DrawBuf(lv_draw_buf_t* buf, bool take_ownership)
-    : buf_(buf), owns_(take_ownership) {}
+    : buf_(buf), owns_(take_ownership), deallocator_(nullptr) {}
 
 DrawBuf::~DrawBuf() {
   if (buf_ && owns_) {
-    lv_draw_buf_destroy(buf_);
+    if (deallocator_) {
+      deallocator_(buf_);
+    } else {
+      lv_draw_buf_destroy(buf_);
+    }
   }
 }
 
+void DrawBuf::set_deallocator(void (*deallocator)(lv_draw_buf_t*)) {
+  deallocator_ = deallocator;
+}
+
 DrawBuf::DrawBuf(DrawBuf&& other) noexcept
-    : buf_(other.buf_), owns_(other.owns_) {
+    : buf_(other.buf_), owns_(other.owns_), deallocator_(other.deallocator_) {
   other.buf_ = nullptr;
   other.owns_ = false;
+  other.deallocator_ = nullptr;
 }
 
 DrawBuf& DrawBuf::operator=(DrawBuf&& other) noexcept {
   if (this != &other) {
     if (buf_ && owns_) {
-      lv_draw_buf_destroy(buf_);
+      if (deallocator_) {
+        deallocator_(buf_);
+      } else {
+        lv_draw_buf_destroy(buf_);
+      }
     }
     buf_ = other.buf_;
     owns_ = other.owns_;
+    deallocator_ = other.deallocator_;
     other.buf_ = nullptr;
     other.owns_ = false;
+    other.deallocator_ = nullptr;
   }
   return *this;
 }
@@ -71,7 +132,9 @@ const void* DrawBuf::data() const { return buf_ ? buf_->data : nullptr; }
 
 size_t DrawBuf::data_size() const { return buf_ ? buf_->data_size : 0; }
 
-void DrawBuf::swap_endianness() {
+void DrawBuf::swap_endianness() { swap_bytes(); }
+
+void DrawBuf::swap_bytes() {
   if (!buf_ || !buf_->data) return;
 
   ColorFormat cf = format();
@@ -84,7 +147,7 @@ void DrawBuf::swap_endianness() {
       p[i] = __builtin_bswap32(p[i]);
     }
   } else {
-    // Generic fallback for 16-bit if not exactly RGB565 but still 2 bytes
+    // Generic fallback for 16-bit
     if (LV_COLOR_FORMAT_GET_BPP(static_cast<lv_color_format_t>(cf)) == 16) {
       uint16_t* p = reinterpret_cast<uint16_t*>(buf_->data);
       size_t count = (width() * height());
@@ -92,6 +155,14 @@ void DrawBuf::swap_endianness() {
         p[i] = __builtin_bswap16(p[i]);
       }
     }
+  }
+}
+
+void DrawBuf::invert_colors() {
+  if (!buf_ || !buf_->data) return;
+  uint8_t* p = static_cast<uint8_t*>(buf_->data);
+  for (size_t i = 0; i < buf_->data_size; i++) {
+    p[i] = ~p[i];
   }
 }
 
