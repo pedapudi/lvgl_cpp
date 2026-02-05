@@ -2,9 +2,13 @@
 
 #include <algorithm>
 
+#include "esp_heap_caps.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_log.h"
 #include "lvgl.h"
+#if __has_include("esp_lcd_panel_rgb.h")
+#include "esp_lcd_panel_rgb.h"
+#endif
 
 static const char* TAG = "LvglPort";
 
@@ -37,14 +41,14 @@ void LvglPort::init(esp_lcd_panel_handle_t panel_handle,
     return;
   }
   display_ = std::make_unique<lvgl::Display>(raw_disp);
-  display_->set_color_format(LV_COLOR_FORMAT_RGB565);
+  display_->set_color_format(lvgl::ColorFormat::RGB565);
 
   size_t draw_buffer_sz =
       config_.h_res * 20 * 2;  // 2 bytes per pixel for RGB565
   draw_buf_.resize(draw_buffer_sz);
 
   display_->set_buffers(draw_buf_.data(), nullptr, draw_buffer_sz,
-                        LV_DISPLAY_RENDER_MODE_PARTIAL);
+                        lvgl::Display::RenderMode::Partial);
 
   display_->set_flush_cb(
       [this](lvgl::Display* disp, const lv_area_t* area, uint8_t* px_map) {

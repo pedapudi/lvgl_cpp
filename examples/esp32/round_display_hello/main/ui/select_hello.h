@@ -1,11 +1,17 @@
 #pragma once
 
+#include <functional>
+
 #include "lvgl_cpp/core/group.h"
 #include "lvgl_cpp/lvgl_cpp.h"
 
 class SelectHello {
  public:
   SelectHello();
+
+  void set_on_backlight_changed(std::function<void(bool)> cb) {
+    on_backlight_changed_ = cb;
+  }
 
   /**
    * @brief Initialize and show the selection menu.
@@ -59,7 +65,15 @@ class SelectHello {
    * By keeping this as a class member, we ensure the wrapper lives as long as
    * the SelectHello instance, keeping our "back" button handler active.
    */
+  /**
+   * @brief Persistent wrapper for the active screen.
+   */
   lvgl::Object active_screen_;
+  lvgl::Object menu_screen_;
+  lvgl::Object hello_screen_;
+  lvgl::Switch bl_switch_;
+  lvgl::Timer hint_timer_;
+  std::function<void(bool)> on_backlight_changed_;
 
   /**
    * @brief Load the hello screen for a specific index.
