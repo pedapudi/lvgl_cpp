@@ -151,6 +151,7 @@ The `Esp32Port` utility provides a "Battle-Tested" infrastructure that:
 1.  **Guarantees Tick Accuracy**: Uses an internal `esp_timer` (Hardware-backed) to call `lv_tick_inc(1)` exactly every 1ms, regardless of Task priority or CPU load.
 2.  **Enforces API Safety**: Provides a `lock()` mechanism using a recursive mutex. This ensures that any UI update (e.g., `label.set_text()`) only happens when the LVGL timer handler is not running.
 3.  **Prevents Stack Overflow**: Automatically allocates a 32KB-64KB stack for the UI task, which is necessary for complex LVGL 9.x features like ThorVG (vector graphics) that would otherwise overflow the standard 4KB FreeRTOS stack.
+4.  **Event-Driven Scheduling**: Instead of a fixed polling loop, the task utilizes FreeRTOS Task Notifications (`ulTaskNotifyTake`). This allows external events like touch input or DMA completion to "wake up" the UI task instantly, reducing perceived input-to-pixel latency.
 
 ### Implementation Strategy
 ```cpp
