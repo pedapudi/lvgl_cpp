@@ -218,7 +218,12 @@ Animation::Path::Callback Animation::Path::Bezier(int32_t x1, int32_t y1,
   // To support custom Bezier curves, we'll use a lambda that captures the
   // coordinates.
   return [x1, y1, x2, y2](const lv_anim_t* a) -> int32_t {
-    return lv_cubic_bezier(lv_anim_path_linear(a), x1, y1, x2, y2);
+    // 1. Solve the Bezier y for progress x (0..1024)
+    int32_t step = lv_cubic_bezier(lv_anim_path_linear(a), x1, y1, x2, y2);
+
+    // 2. Map the solved 0..1024 step to the actual start..end range
+    // Using LVGL's map utility for consistency and integer safety
+    return lv_map(step, 0, 1024, a->start_value, a->end_value);
   };
 }
 
