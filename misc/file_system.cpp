@@ -10,11 +10,16 @@ namespace lvgl {
 
 static lv_fs_res_t fallback_fs_get_size(lv_fs_file_t* file, uint32_t* size) {
   uint32_t cur = 0;
-  lv_fs_tell(file, &cur);
-  lv_fs_seek(file, 0, LV_FS_SEEK_END);
-  lv_fs_tell(file, size);
-  lv_fs_seek(file, cur, LV_FS_SEEK_SET);
-  return LV_FS_RES_OK;
+  lv_fs_res_t res = lv_fs_tell(file, &cur);
+  if (res != LV_FS_RES_OK) return res;
+
+  res = lv_fs_seek(file, 0, LV_FS_SEEK_END);
+  if (res != LV_FS_RES_OK) return res;
+
+  res = lv_fs_tell(file, size);
+  if (res != LV_FS_RES_OK) return res;
+
+  return lv_fs_seek(file, cur, LV_FS_SEEK_SET);
 }
 
 static lv_fs_res_t fallback_fs_path_get_size(const char* path, uint32_t* size) {
