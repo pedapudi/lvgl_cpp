@@ -29,7 +29,9 @@
 #include "scroll_proxy.h"
 #include "state_proxy.h"
 #include "style_proxy.h"
+#if LV_USE_OBSERVER
 #include "subject_proxy.h"
+#endif
 #include "traits.h"
 #include "tree_proxy.h"
 
@@ -616,6 +618,7 @@ class Object {
    */
   Object find_by_id(const void* id) const;
 
+#if LV_USE_OBSERVER
   /**
    * @brief Get a fluent proxy for subject-based interaction.
    * @param subject The subject to bind to.
@@ -629,6 +632,7 @@ class Object {
    * @return A SubjectProxy object.
    */
   SubjectProxy on_subject(lv_subject_t* subject);
+#endif
 
   // --- Flags & States ---
 

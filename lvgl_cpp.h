@@ -1,9 +1,12 @@
 #ifndef LVGL_CPP_LVGLCPP_H_
 #define LVGL_CPP_LVGLCPP_H_
 
+#include "core/compatibility.h"  // IWYU pragma: export
 #include "core/group.h"          // IWYU pragma: export
 #include "core/object.h"         // IWYU pragma: export
-#include "core/observer.h"       // IWYU pragma: export
+#if LV_USE_OBSERVER
+#include "core/observer.h"  // IWYU pragma: export
+#endif
 #include "display/display.h"     // IWYU pragma: export
 #include "draw/draw.h"           // IWYU pragma: export
 #include "draw/image_decoder.h"  // IWYU pragma: export

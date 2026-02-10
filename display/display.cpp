@@ -153,6 +153,7 @@ Display::Rotation Display::get_rotation() const {
                : Rotation::ROT_0;
 }
 
+#if LV_DRAW_TRANSFORM_USE_MATRIX
 void Display::set_matrix_rotation(bool enable) {
   if (disp_) lv_display_set_matrix_rotation(disp_, enable);
 }
@@ -160,6 +161,7 @@ void Display::set_matrix_rotation(bool enable) {
 bool Display::get_matrix_rotation() const {
   return disp_ ? lv_display_get_matrix_rotation(disp_) : false;
 }
+#endif
 
 void Display::set_dpi(int32_t dpi) {
   if (disp_) lv_display_set_dpi(disp_, dpi);

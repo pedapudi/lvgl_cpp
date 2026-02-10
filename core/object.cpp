@@ -523,6 +523,7 @@ void Object::remove_all_event_cbs() {
   callback_nodes_.clear();
 }
 
+#if LV_USE_OBSERVER
 SubjectProxy Object::on_subject(Subject& subject) {
   return SubjectProxy(obj_, subject.raw());
 }
@@ -530,6 +531,7 @@ SubjectProxy Object::on_subject(Subject& subject) {
 SubjectProxy Object::on_subject(lv_subject_t* subject) {
   return SubjectProxy(obj_, subject);
 }
+#endif
 
 EventProxy Object::event() { return EventProxy(this); }
 

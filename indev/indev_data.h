@@ -109,23 +109,33 @@ class IndevData {
    * @brief Set the timestamp of the event.
    */
   IndevData& set_timestamp(uint32_t timestamp) {
+#if LVGL_CPP_HAS_INDEV_TIMESTAMP
     data_->timestamp = timestamp;
+#endif
     return *this;
   }
 
   /**
    * @brief Get the timestamp of the event.
    */
-  uint32_t get_timestamp() const { return data_->timestamp; }
+  uint32_t get_timestamp() const {
+#if LVGL_CPP_HAS_INDEV_TIMESTAMP
+    return data_->timestamp;
+#else
+    return 0;
+#endif
+  }
 
   /**
    * @brief Set gesture type for a specific gesture index.
    */
   IndevData& set_gesture_type(lv_indev_gesture_type_t gesture,
                               lv_indev_gesture_type_t type) {
+#if LVGL_CPP_HAS_INDEV_GESTURE_ARRAY
     if (gesture < LV_INDEV_GESTURE_CNT) {
       data_->gesture_type[gesture] = type;
     }
+#endif
     return *this;
   }
 
@@ -134,17 +144,23 @@ class IndevData {
    */
   lv_indev_gesture_type_t get_gesture_type(
       lv_indev_gesture_type_t gesture) const {
+#if LVGL_CPP_HAS_INDEV_GESTURE_ARRAY
     return (gesture < LV_INDEV_GESTURE_CNT) ? data_->gesture_type[gesture]
                                             : LV_INDEV_GESTURE_NONE;
+#else
+    return LV_INDEV_GESTURE_NONE;
+#endif
   }
 
   /**
    * @brief Set gesture data for a specific gesture index.
    */
   IndevData& set_gesture_data(lv_indev_gesture_type_t gesture, void* data) {
+#if LVGL_CPP_HAS_INDEV_GESTURE_ARRAY
     if (gesture < LV_INDEV_GESTURE_CNT) {
       data_->gesture_data[gesture] = data;
     }
+#endif
     return *this;
   }
 
@@ -152,8 +168,12 @@ class IndevData {
    * @brief Get gesture data for a specific gesture index.
    */
   void* get_gesture_data(lv_indev_gesture_type_t gesture) const {
+#if LVGL_CPP_HAS_INDEV_GESTURE_ARRAY
     return (gesture < LV_INDEV_GESTURE_CNT) ? data_->gesture_data[gesture]
                                             : nullptr;
+#else
+    return nullptr;
+#endif
   }
 
   /**

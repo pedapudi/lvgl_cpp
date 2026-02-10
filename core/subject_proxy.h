@@ -2,9 +2,12 @@
 #define LVGL_CPP_CORE_SUBJECT_PROXY_H_
 
 #include "../misc/enums.h"
+#include "compatibility.h"
 #include "lvgl.h"
 
 namespace lvgl {
+
+#if LV_USE_OBSERVER
 
 class Subject;  // Forward declaration
 
@@ -98,6 +101,8 @@ class SubjectProxy {
   lv_obj_t* obj_;
   lv_subject_t* subject_;
 };
+
+#endif  // LV_USE_OBSERVER
 
 }  // namespace lvgl
 

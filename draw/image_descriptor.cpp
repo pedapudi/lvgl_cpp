@@ -53,9 +53,9 @@ ImageDescriptor::ImageDescriptor(uint32_t w, uint32_t h, ColorFormat cf,
 
   // Allocate and copy data with alignment
   // LVGL often requires 64-byte alignment for draw buffers
-  void* ptr = nullptr;
-  if (posix_memalign(&ptr, 64, data_size) == 0) {
-    owned_data_ = static_cast<uint8_t*>(ptr);
+  // Allocate and copy data
+  owned_data_ = static_cast<uint8_t*>(lv_malloc(data_size));
+  if (owned_data_) {
     std::memcpy(owned_data_, data, data_size);
     dsc_.data = owned_data_;
     owns_data_ = true;
@@ -69,7 +69,7 @@ ImageDescriptor::ImageDescriptor(uint32_t w, uint32_t h, ColorFormat cf,
 
 ImageDescriptor::~ImageDescriptor() {
   if (owns_data_ && owned_data_) {
-    std::free(owned_data_);
+    lv_free(owned_data_);
   }
 }
 
@@ -78,9 +78,9 @@ ImageDescriptor::ImageDescriptor(const ImageDescriptor& other) {
   owns_data_ = other.owns_data_;
   if (owns_data_ && other.owned_data_) {
     // Deep copy data with alignment
-    void* ptr = nullptr;
-    if (posix_memalign(&ptr, 64, dsc_.data_size) == 0) {
-      owned_data_ = static_cast<uint8_t*>(ptr);
+    // Deep copy data
+    owned_data_ = static_cast<uint8_t*>(lv_malloc(dsc_.data_size));
+    if (owned_data_) {
       std::memcpy(owned_data_, other.owned_data_, dsc_.data_size);
       dsc_.data = owned_data_;
     } else {
@@ -98,15 +98,14 @@ ImageDescriptor& ImageDescriptor::operator=(const ImageDescriptor& other) {
   if (this != &other) {
     // Clean up current if needed
     if (owns_data_ && owned_data_) {
-      std::free(owned_data_);
+      lv_free(owned_data_);
     }
 
     dsc_ = other.dsc_;
     owns_data_ = other.owns_data_;
     if (owns_data_ && other.owned_data_) {
-      void* ptr = nullptr;
-      if (posix_memalign(&ptr, 64, dsc_.data_size) == 0) {
-        owned_data_ = static_cast<uint8_t*>(ptr);
+      owned_data_ = static_cast<uint8_t*>(lv_malloc(dsc_.data_size));
+      if (owned_data_) {
         std::memcpy(owned_data_, other.owned_data_, dsc_.data_size);
         dsc_.data = owned_data_;
       } else {
@@ -136,7 +135,7 @@ ImageDescriptor& ImageDescriptor::operator=(ImageDescriptor&& other) noexcept {
   if (this != &other) {
     // Clean up current
     if (owns_data_ && owned_data_) {
-      std::free(owned_data_);
+      lv_free(owned_data_);
     }
 
     dsc_ = other.dsc_;

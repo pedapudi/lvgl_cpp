@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "compatibility.h"
 #include "lvgl.h"    // IWYU pragma: export
 #include "object.h"  // For bindings // IWYU pragma: export
 

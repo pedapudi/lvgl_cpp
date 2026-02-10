@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 
+#include "../core/compatibility.h"
 #include "../core/object.h"
 #include "lvgl.h"
 
@@ -139,11 +140,13 @@ class Display {
   /** @brief Get current rotation. */
   Rotation get_rotation() const;
 
+#if LV_DRAW_TRANSFORM_USE_MATRIX
   /** @brief Enable or disable software rotation matrix. */
   void set_matrix_rotation(bool enable);
 
   /** @brief Check if software rotation matrix is enabled. */
   bool get_matrix_rotation() const;
+#endif
 
   // DPI
   /** @brief Set display DPI. */

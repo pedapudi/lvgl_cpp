@@ -2,7 +2,53 @@
 
 #include <cstring>  // for memset
 
+#include "../core/compatibility.h"
+
 namespace lvgl {
+
+#if !LVGL_CPP_HAS_NEW_FS_HELPERS
+
+static lv_fs_res_t fallback_fs_get_size(lv_fs_file_t* file, uint32_t* size) {
+  uint32_t cur = 0;
+  lv_fs_tell(file, &cur);
+  lv_fs_seek(file, 0, LV_FS_SEEK_END);
+  lv_fs_tell(file, size);
+  lv_fs_seek(file, cur, LV_FS_SEEK_SET);
+  return LV_FS_RES_OK;
+}
+
+static lv_fs_res_t fallback_fs_path_get_size(const char* path, uint32_t* size) {
+  lv_fs_file_t f;
+  lv_fs_res_t res = lv_fs_open(&f, path, LV_FS_MODE_RD);
+  if (res != LV_FS_RES_OK) return res;
+  fallback_fs_get_size(&f, size);
+  lv_fs_close(&f);
+  return LV_FS_RES_OK;
+}
+
+static lv_fs_res_t fallback_fs_load_to_buf(void* buf, uint32_t size,
+                                           const char* path) {
+  lv_fs_file_t f;
+  lv_fs_res_t res = lv_fs_open(&f, path, LV_FS_MODE_RD);
+  if (res != LV_FS_RES_OK) return res;
+  uint32_t br;
+  res = lv_fs_read(&f, buf, size, &br);
+  lv_fs_close(&f);
+  return res;
+}
+
+static void fallback_fs_path_join(char* buf, uint32_t buf_len, const char* path,
+                                  const char* part) {
+  (void)buf_len;
+  size_t path_len = std::strlen(path);
+  std::strcpy(buf, path);
+  if (path_len > 0 && path[path_len - 1] != '/' && path[path_len - 1] != '\\') {
+    std::strcat(buf, "/");
+  }
+  std::strcat(buf, part);
+}
+
+#endif  // !LVGL_CPP_HAS_NEW_FS_HELPERS
 
 // --- File ---
 
@@ -76,7 +122,11 @@ FsRes File::tell(uint32_t* pos) {
 uint32_t File::size() {
   if (!is_opened_) return 0;
   uint32_t s = 0;
+#if LVGL_CPP_HAS_NEW_FS_HELPERS
   lv_fs_get_size(&file_, &s);
+#else
+  fallback_fs_get_size(&file_, &s);
+#endif
   return s;
 }
 
@@ -171,7 +221,11 @@ std::string FileSystem::up(const std::string& path) {
 std::string FileSystem::join_path(const std::string& base,
                                   const std::string& part) {
   char buf[LV_FS_MAX_PATH_LENGTH];
+#if LVGL_CPP_HAS_NEW_FS_HELPERS
   lv_fs_path_join(buf, sizeof(buf), base.c_str(), part.c_str());
+#else
+  fallback_fs_path_join(buf, sizeof(buf), base.c_str(), part.c_str());
+#endif
   return std::string(buf);
 }
 
@@ -179,28 +233,42 @@ bool FileSystem::is_ready(char letter) { return lv_fs_is_ready(letter); }
 
 bool FileSystem::exists(const std::string& path) {
   uint32_t size = 0;
+#if LVGL_CPP_HAS_NEW_FS_HELPERS
   return lv_fs_path_get_size(path.c_str(), &size) == LV_FS_RES_OK;
+#else
+  return fallback_fs_path_get_size(path.c_str(), &size) == LV_FS_RES_OK;
+#endif
 }
 
 uint32_t FileSystem::get_size(const std::string& path) {
   uint32_t size = 0;
+#if LVGL_CPP_HAS_NEW_FS_HELPERS
   if (lv_fs_path_get_size(path.c_str(), &size) != LV_FS_RES_OK) {
     return 0;
   }
+#else
+  if (fallback_fs_path_get_size(path.c_str(), &size) != LV_FS_RES_OK) {
+    return 0;
+  }
+#endif
   return size;
 }
 
 std::vector<uint8_t> File::load_to_buffer(const std::string& path) {
-  uint32_t size = 0;
-  if (lv_fs_path_get_size(path.c_str(), &size) != LV_FS_RES_OK) {
-    return {};
-  }
+  // Use get_size logic (which we just defined to use helpers)
+  uint32_t size = FileSystem::get_size(path);
+  if (size == 0) return {};
 
   std::vector<uint8_t> buf(size);
+#if LVGL_CPP_HAS_NEW_FS_HELPERS
   if (lv_fs_load_to_buf(buf.data(), size, path.c_str()) != LV_FS_RES_OK) {
     return {};
   }
-
+#else
+  if (fallback_fs_load_to_buf(buf.data(), size, path.c_str()) != LV_FS_RES_OK) {
+    return {};
+  }
+#endif
   return buf;
 }
 
