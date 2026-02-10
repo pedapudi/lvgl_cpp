@@ -82,7 +82,8 @@
 
 // Helper macro to detect if we have the new FS helpers
 // (heuristically defined; in a real scenario we might check LV_VERSION_CHECK)
-#if LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 4
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 4)
 #define LVGL_CPP_HAS_NEW_FS_HELPERS 1
 #define LVGL_CPP_HAS_IMAGE_SIZE_HELPERS 1
 #define LVGL_CPP_HAS_LABEL_VFORMAT 1
