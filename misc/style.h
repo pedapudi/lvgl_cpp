@@ -228,6 +228,26 @@ class Style : public StyleBase<Style> {
     return *this;
   }
 
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+  Style& set_blur_radius(int32_t v) {
+    lv_style_set_blur_radius(&style_, v);
+    return *this;
+  }
+  Style& set_blur_backdrop(bool v) {
+    lv_style_set_blur_backdrop(&style_, v);
+    return *this;
+  }
+  Style& set_blur_quality(lv_blur_quality_t v) {
+    lv_style_set_blur_quality(&style_, v);
+    return *this;
+  }
+  Style& set_drop_shadow_quality(lv_blur_quality_t v) {
+    lv_style_set_drop_shadow_quality(&style_, v);
+    return *this;
+  }
+#endif
+
   Style& set_pad_all(int32_t v) {
     lv_style_set_pad_all(&style_, v);
     return *this;

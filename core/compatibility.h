@@ -80,6 +80,17 @@
 // unless explicitly disabled. However, for ZMK/v9.3, we know certain things
 // fail.
 
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+#define LVGL_CPP_HAS_PROPERTIES 1
+#define LVGL_CPP_HAS_NATIVE_BLUR 1
+#define LVGL_CPP_HAS_CURVED_CHARTS 1
+#else
+#define LVGL_CPP_HAS_PROPERTIES 0
+#define LVGL_CPP_HAS_NATIVE_BLUR 0
+#define LVGL_CPP_HAS_CURVED_CHARTS 0
+#endif
+
 // Helper macro to detect if we have the new FS helpers
 // (heuristically defined; in a real scenario we might check LV_VERSION_CHECK)
 #if LVGL_VERSION_MAJOR > 9 || \

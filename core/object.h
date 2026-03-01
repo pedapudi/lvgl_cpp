@@ -15,6 +15,7 @@
 
 #include "../misc/enums.h"
 #include "../misc/geometry.h"
+#include "compatibility.h"
 #include "event.h"
 #include "event_proxy.h"
 #include "group_proxy.h"
@@ -643,6 +644,16 @@ class Object {
   void add_flag(ObjFlag f);
 
   /**
+   * @brief Add the LV_OBJ_FLAG_RADIO_BUTTON flag to the object.
+   */
+  void flag_radio_button() {
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+    add_flag(static_cast<ObjFlag>(LV_OBJ_FLAG_RADIO_BUTTON));
+#endif
+  }
+
+  /**
    * @brief Remove a flag from the object.
    * @param f The flag to remove.
    */
@@ -743,6 +754,42 @@ class Object {
    */
   void install_delete_hook();
 };
+
+#if LVGL_CPP_HAS_PROPERTIES
+// LVGL 9.5+ Implementation via Properties
+template <typename T>
+inline T& set_widget_property(T& widget, lv_property_id_t id,
+                              const lv_property_value_t& val) {
+  lv_obj_set_property(widget.raw(), id, &val);
+  return widget;
+}
+
+template <typename T>
+inline T& set_widget_property_int(T& widget, lv_property_id_t id, int32_t val) {
+  lv_property_value_t pv;
+  pv.num = val;
+  lv_obj_set_property(widget.raw(), id, &pv);
+  return widget;
+}
+
+template <typename T>
+inline T& set_widget_property_ptr(T& widget, lv_property_id_t id,
+                                  const void* val) {
+  lv_property_value_t pv;
+  pv.ptr = val;
+  lv_obj_set_property(widget.raw(), id, &pv);
+  return widget;
+}
+
+template <typename T>
+inline T& set_widget_property_color(T& widget, lv_property_id_t id,
+                                    lv_color_t val) {
+  lv_property_value_t pv;
+  pv.color = val;
+  lv_obj_set_property(widget.raw(), id, &pv);
+  return widget;
+}
+#endif
 
 // =========================================================================
 // Event Template Implementations

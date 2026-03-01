@@ -262,6 +262,26 @@ class StyleBase {
     return self();
   }
 
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+  Derived& blur_radius(int32_t radius) {
+    self().set_blur_radius(radius);
+    return self();
+  }
+  Derived& blur_backdrop(bool backdrop) {
+    self().set_blur_backdrop(backdrop);
+    return self();
+  }
+  Derived& blur_quality(BlurQuality quality) {
+    self().set_blur_quality(static_cast<lv_blur_quality_t>(quality));
+    return self();
+  }
+  Derived& drop_shadow_quality(BlurQuality quality) {
+    self().set_drop_shadow_quality(static_cast<lv_blur_quality_t>(quality));
+    return self();
+  }
+#endif
+
   /** @} */
 
   /**
