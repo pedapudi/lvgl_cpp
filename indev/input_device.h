@@ -137,6 +137,24 @@ class InputDevice {
   void set_driver_data(void* data);
 
   /**
+   * @brief Set the minimum velocity threshold for gesture detection.
+   * @param min_velocity Minimum velocity in pixels.
+   */
+  void set_gesture_min_velocity(uint8_t min_velocity);
+
+  /**
+   * @brief Set the minimum distance threshold for gesture detection.
+   * @param min_distance Minimum distance in pixels.
+   */
+  void set_gesture_min_distance(uint8_t min_distance);
+
+  /**
+   * @brief Set key remapping callback (for keypad devices).
+   * @param remap_cb Callback function.
+   */
+  void set_key_remap_cb(lv_indev_key_remap_cb_t remap_cb);
+
+  /**
    * @brief Assign physical points to virtual buttons.
    * @param points Array of points.
    */

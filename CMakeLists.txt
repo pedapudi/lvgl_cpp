@@ -60,6 +60,8 @@ set(WIDGET_SOURCES
     widgets/spinner.cpp
     widgets/screen.cpp
     widgets/lottie.cpp
+    widgets/arclabel.cpp
+    widgets/3dtexture.cpp
     
     core/group.cpp
     display/display.cpp

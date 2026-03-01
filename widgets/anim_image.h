@@ -28,9 +28,23 @@ class AnimImage : public Widget<AnimImage> {
   explicit AnimImage(lv_obj_t* obj, Ownership ownership = Ownership::Default);
 
   AnimImage& set_src(const void* dsc[], size_t num);
+  AnimImage& set_src_reverse(const void* dsc[], size_t num);
   AnimImage& start();
   AnimImage& set_duration(uint32_t duration);
   AnimImage& set_repeat_count(uint32_t count);
+  AnimImage& set_reverse_duration(uint32_t duration);
+  AnimImage& set_reverse_delay(uint32_t duration);
+
+  // Callbacks
+  AnimImage& set_start_cb(lv_anim_start_cb_t cb);
+  AnimImage& set_completed_cb(lv_anim_completed_cb_t cb);
+
+  // Getters
+  const void** get_src() const;
+  uint8_t get_src_count() const;
+  uint32_t get_duration() const;
+  uint32_t get_repeat_count() const;
+  lv_anim_t* get_anim() const;
 };
 
 }  // namespace lvgl

@@ -242,9 +242,92 @@ class Style : public StyleBase<Style> {
     lv_style_set_blur_quality(&style_, v);
     return *this;
   }
+  BlurQuality get_blur_quality() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_BLUR_QUALITY, &v) ==
+        LV_STYLE_RES_FOUND)
+      return static_cast<BlurQuality>(v.num);
+    return BlurQuality::Low;
+  }
+  Style& set_drop_shadow_radius(int32_t v) {
+    lv_style_set_drop_shadow_radius(&style_, v);
+    return *this;
+  }
+  int32_t get_drop_shadow_radius() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_RADIUS, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.num;
+    return 0;
+  }
+  Style& set_drop_shadow_offset_x(int32_t v) {
+    lv_style_set_drop_shadow_offset_x(&style_, v);
+    return *this;
+  }
+  int32_t get_drop_shadow_offset_x() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_OFFSET_X, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.num;
+    return 0;
+  }
+  Style& set_drop_shadow_offset_y(int32_t v) {
+    lv_style_set_drop_shadow_offset_y(&style_, v);
+    return *this;
+  }
+  int32_t get_drop_shadow_offset_y() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_OFFSET_Y, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.num;
+    return 0;
+  }
+  Style& set_drop_shadow_color(lv_color_t v) {
+    lv_style_set_drop_shadow_color(&style_, v);
+    return *this;
+  }
+  lv_color_t get_drop_shadow_color() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_COLOR, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.color;
+    return lv_color_black();
+  }
+  Style& set_drop_shadow_opa(lv_opa_t v) {
+    lv_style_set_drop_shadow_opa(&style_, v);
+    return *this;
+  }
+  lv_opa_t get_drop_shadow_opa() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_OPA, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.num;
+    return LV_OPA_COVER;
+  }
   Style& set_drop_shadow_quality(lv_blur_quality_t v) {
     lv_style_set_drop_shadow_quality(&style_, v);
     return *this;
+  }
+  BlurQuality get_drop_shadow_quality() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_QUALITY, &v) ==
+        LV_STYLE_RES_FOUND)
+      return static_cast<BlurQuality>(v.num);
+    return BlurQuality::Low;
+  }
+  int32_t get_blur_radius() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_BLUR_RADIUS, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.num;
+    return 0;
+  }
+  bool get_blur_backdrop() const {
+    lv_style_value_t v;
+    if (lv_style_get_prop(raw(), LV_STYLE_BLUR_BACKDROP, &v) ==
+        LV_STYLE_RES_FOUND)
+      return v.num;
+    return false;
   }
 #endif
 

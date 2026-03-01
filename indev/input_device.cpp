@@ -139,6 +139,18 @@ void InputDevice::set_button_points(const lv_point_t points[]) {
   if (indev_) lv_indev_set_button_points(indev_, points);
 }
 
+void InputDevice::set_gesture_min_velocity(uint8_t min_velocity) {
+  if (indev_) lv_indev_set_gesture_min_velocity(indev_, min_velocity);
+}
+
+void InputDevice::set_gesture_min_distance(uint8_t min_distance) {
+  if (indev_) lv_indev_set_gesture_min_distance(indev_, min_distance);
+}
+
+void InputDevice::set_key_remap_cb(lv_indev_key_remap_cb_t cb) {
+  if (indev_) lv_indev_set_key_remap_cb(indev_, cb);
+}
+
 void InputDevice::add_event_cb(std::function<void(lv_event_t*)> cb,
                                EventCode filter) {
   if (!indev_) return;
