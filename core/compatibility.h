@@ -89,6 +89,11 @@
 #define LVGL_CPP_HAS_PROPERTIES 0
 #define LVGL_CPP_HAS_NATIVE_BLUR 0
 #define LVGL_CPP_HAS_CURVED_CHARTS 0
+
+#ifndef LV_CHART_TYPE_CURVE
+#define LV_CHART_TYPE_CURVE 3
+#endif
+
 #endif
 
 // Helper macro to detect if we have the new FS helpers

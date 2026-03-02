@@ -21,18 +21,30 @@ Keyboard& Keyboard::set_textarea(lv_obj_t* ta) {
 }
 
 Keyboard& Keyboard::set_textarea(Object& ta) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_KEYBOARD_TEXTAREA, &ta);
+#else
   if (raw()) lv_keyboard_set_textarea(raw(), ta.raw());
   return *this;
+#endif
 }
 
 Keyboard& Keyboard::set_mode(Mode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_KEYBOARD_MODE, static_cast<int32_t>(mode));
+#else
   if (raw()) lv_keyboard_set_mode(raw(), static_cast<lv_keyboard_mode_t>(mode));
   return *this;
+#endif
 }
 
 Keyboard& Keyboard::set_popovers(bool en) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_KEYBOARD_POPOVERS, en);
+#else
   if (raw()) lv_keyboard_set_popovers(raw(), en);
   return *this;
+#endif
 }
 
 Keyboard& Keyboard::set_map(Mode mode, const char* const map[],

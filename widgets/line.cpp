@@ -28,8 +28,12 @@ Line& Line::set_points_mutable(PointPrecise points[], uint32_t point_num) {
 }
 
 Line& Line::set_y_invert(bool en) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_LINE_Y_INVERT, en);
+#else
   if (raw()) lv_line_set_y_invert(raw(), en);
   return *this;
+#endif
 }
 
 const PointPrecise* Line::get_points() const {

@@ -16,15 +16,26 @@ Roller::Roller(Object& parent) : Roller(&parent) {}
 Roller::Roller(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Roller& Roller::set_options(const char* options, Mode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ROLLER_OPTIONS, options,
+                      static_cast<int32_t>(mode));
+#else
   if (raw())
     lv_roller_set_options(raw(), options, static_cast<lv_roller_mode_t>(mode));
   return *this;
+#endif
 }
 
 Roller& Roller::set_selected(uint32_t sel_opt, AnimEnable anim) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ROLLER_SELECTED,
+                      static_cast<int32_t>(sel_opt),
+                      anim == AnimEnable::On ? 1 : 0);
+#else
   if (raw())
     lv_roller_set_selected(raw(), sel_opt, static_cast<lv_anim_enable_t>(anim));
   return *this;
+#endif
 }
 
 bool Roller::set_selected_str(const char* sel_opt, AnimEnable anim) {
@@ -34,8 +45,13 @@ bool Roller::set_selected_str(const char* sel_opt, AnimEnable anim) {
 }
 
 Roller& Roller::set_visible_row_count(uint32_t row_cnt) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ROLLER_VISIBLE_ROW_COUNT,
+                      static_cast<int32_t>(row_cnt));
+#else
   if (raw()) lv_roller_set_visible_row_count(raw(), row_cnt);
   return *this;
+#endif
 }
 
 Roller& Roller::on_value_changed(std::function<void(lvgl::Event&)> cb) {

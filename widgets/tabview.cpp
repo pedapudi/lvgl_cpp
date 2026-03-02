@@ -25,14 +25,25 @@ TabView& TabView::rename_tab(uint32_t idx, const char* new_name) {
 }
 
 TabView& TabView::set_active(uint32_t idx, AnimEnable anim) {
+#if LVGL_CPP_HAS_PROPERTIES
+  /* Properties takes animation flag properly now */
+  return set_property(LV_PROPERTY_TABVIEW_TAB_ACTIVE, static_cast<int32_t>(idx),
+                      static_cast<int32_t>(anim));
+#else
   if (raw())
     lv_tabview_set_active(raw(), idx, static_cast<lv_anim_enable_t>(anim));
   return *this;
+#endif
 }
 
 TabView& TabView::set_tab_bar_position(Dir dir) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_TABVIEW_TAB_BAR_POSITION,
+                      static_cast<int32_t>(dir));
+#else
   if (raw()) lv_tabview_set_tab_bar_position(raw(), static_cast<lv_dir_t>(dir));
   return *this;
+#endif
 }
 
 TabView& TabView::set_tab_bar_size(int32_t size) {

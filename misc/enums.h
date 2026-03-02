@@ -689,9 +689,9 @@ enum class FsWhence : uint8_t {
  * @brief Wrapper for lv_blur_quality_t.
  */
 enum class BlurQuality : uint8_t {
-  Low = LV_BLUR_QUALITY_LOW,
-  Medium = LV_BLUR_QUALITY_MEDIUM,
-  High = LV_BLUR_QUALITY_HIGH,
+  Auto = LV_BLUR_QUALITY_AUTO,
+  Speed = LV_BLUR_QUALITY_SPEED,
+  Precision = LV_BLUR_QUALITY_PRECISION,
 };
 #endif
 

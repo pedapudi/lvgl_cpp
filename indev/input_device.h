@@ -143,6 +143,12 @@ class InputDevice {
   void set_gesture_min_velocity(uint8_t min_velocity);
 
   /**
+   * @brief Set the gesture min distance or threshold.
+   * @param threshold Minimum distance in pixels.
+   */
+  void set_gesture_threshold(uint8_t threshold);
+
+  /**
    * @brief Set the minimum distance threshold for gesture detection.
    * @param min_distance Minimum distance in pixels.
    */
@@ -152,7 +158,7 @@ class InputDevice {
    * @brief Set key remapping callback (for keypad devices).
    * @param remap_cb Callback function.
    */
-  void set_key_remap_cb(lv_indev_key_remap_cb_t remap_cb);
+  void set_key_remap(lv_indev_key_remap_cb_t remap_cb);
 
   /**
    * @brief Assign physical points to virtual buttons.

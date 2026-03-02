@@ -20,29 +20,45 @@ Slider::Slider(Object& parent, int32_t min, int32_t max) : Slider(parent) {
 Slider::Slider(lv_obj_t* obj, Ownership ownership) : Bar(obj, ownership) {}
 
 Slider& Slider::set_value(int32_t value, AnimEnable anim) {
+#if LV_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SLIDER_VALUE, value, anim == AnimEnable::On);
+#else
   Bar::set_value(value, anim);
   return *this;
+#endif
 }
 
 Slider& Slider::set_start_value(int32_t value, AnimEnable anim) {
+#if LV_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SLIDER_LEFT_VALUE, value,
+                      anim == AnimEnable::On);
+#else
   Bar::set_start_value(value, anim);
   return *this;
+#endif
 }
 
 Slider& Slider::set_range(int32_t min, int32_t max) {
+#if LV_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SLIDER_RANGE, min, max);
+#else
   Bar::set_range(min, max);
   return *this;
+#endif
 }
 
 Slider& Slider::set_mode(Mode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SLIDER_MODE, static_cast<int32_t>(mode));
+  return *this;
+#else
   if (raw()) lv_slider_set_mode(raw(), static_cast<lv_slider_mode_t>(mode));
   return *this;
+#endif
 }
 
 Slider& Slider::set_left_value(int32_t value, AnimEnable anim) {
-  if (raw())
-    lv_slider_set_left_value(raw(), value, static_cast<lv_anim_enable_t>(anim));
-  return *this;
+  return set_start_value(value, anim);
 }
 
 Slider& Slider::set_width(int32_t width) {

@@ -48,6 +48,22 @@ class StyleProxy : public StyleBase<StyleProxy> {
   lv_obj_t* obj() const { return obj_; }
   lv_style_selector_t selector() const { return selector_; }
 
+#if LV_USE_OBSERVER
+  /**
+   * @brief Bind a style property of this object/part/state to a subject.
+   * @param prop Style property to bind.
+   * @param subject Subject to bind to.
+   * @return Reference to this proxy.
+   */
+  StyleProxy& bind(lv_style_prop_t prop, lv_subject_t* subject) {
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+    if (obj_) lv_obj_bind_style_prop(obj_, prop, selector_, subject);
+#endif
+    return *this;
+  }
+#endif
+
  private:
   friend class StyleBase<StyleProxy>;
 

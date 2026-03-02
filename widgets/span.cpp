@@ -77,29 +77,50 @@ void SpanGroup::delete_span(Span& span) {
 }
 
 SpanGroup& SpanGroup::set_align(TextAlign align) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SPAN_ALIGN, static_cast<int32_t>(align));
+#else
   if (raw()) lv_spangroup_set_align(raw(), static_cast<lv_text_align_t>(align));
   return *this;
+#endif
 }
 
 SpanGroup& SpanGroup::set_overflow(Overflow overflow) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SPAN_OVERFLOW,
+                      static_cast<int32_t>(overflow));
+#else
   if (raw())
     lv_spangroup_set_overflow(raw(), static_cast<lv_span_overflow_t>(overflow));
   return *this;
+#endif
 }
 
 SpanGroup& SpanGroup::set_indent(int32_t indent) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SPAN_INDENT, indent);
+#else
   if (raw()) lv_spangroup_set_indent(raw(), indent);
   return *this;
+#endif
 }
 
 SpanGroup& SpanGroup::set_mode(Mode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SPAN_MODE, static_cast<int32_t>(mode));
+#else
   if (raw()) lv_spangroup_set_mode(raw(), static_cast<lv_span_mode_t>(mode));
   return *this;
+#endif
 }
 
 SpanGroup& SpanGroup::set_max_lines(int32_t lines) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SPAN_MAX_LINES, lines);
+#else
   if (raw()) lv_spangroup_set_max_lines(raw(), lines);
   return *this;
+#endif
 }
 
 Span SpanGroup::get_child(int32_t id) {

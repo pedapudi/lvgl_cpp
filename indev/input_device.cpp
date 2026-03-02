@@ -147,7 +147,11 @@ void InputDevice::set_gesture_min_distance(uint8_t min_distance) {
   if (indev_) lv_indev_set_gesture_min_distance(indev_, min_distance);
 }
 
-void InputDevice::set_key_remap_cb(lv_indev_key_remap_cb_t cb) {
+void InputDevice::set_gesture_threshold(uint8_t threshold) {
+  if (indev_) lv_indev_set_gesture_min_distance(indev_, threshold);
+}
+
+void InputDevice::set_key_remap(lv_indev_key_remap_cb_t cb) {
   if (indev_) lv_indev_set_key_remap_cb(indev_, cb);
 }
 

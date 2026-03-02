@@ -553,6 +553,23 @@ void Object::remove_style(Style* style, lv_style_selector_t selector) {
   if (obj_) lv_obj_remove_style(obj_, style ? style->raw() : nullptr, selector);
 }
 
+void Object::remove_theme(lv_style_selector_t selector) {
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+  if (obj_) lv_obj_remove_theme(obj_, selector);
+#endif
+}
+
+#if LV_USE_OBSERVER
+void Object::bind_style_prop(lv_style_prop_t prop, lv_subject_t* subject,
+                             lv_style_selector_t selector) {
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+  if (obj_) lv_obj_bind_style_prop(obj_, prop, selector, subject);
+#endif
+}
+#endif
+
 // --- Layout & Scroll ---
 
 }  // namespace lvgl

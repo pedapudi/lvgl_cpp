@@ -247,7 +247,7 @@ class Style : public StyleBase<Style> {
     if (lv_style_get_prop(raw(), LV_STYLE_BLUR_QUALITY, &v) ==
         LV_STYLE_RES_FOUND)
       return static_cast<BlurQuality>(v.num);
-    return BlurQuality::Low;
+    return BlurQuality::Auto;
   }
   Style& set_drop_shadow_radius(int32_t v) {
     lv_style_set_drop_shadow_radius(&style_, v);
@@ -313,7 +313,7 @@ class Style : public StyleBase<Style> {
     if (lv_style_get_prop(raw(), LV_STYLE_DROP_SHADOW_QUALITY, &v) ==
         LV_STYLE_RES_FOUND)
       return static_cast<BlurQuality>(v.num);
-    return BlurQuality::Low;
+    return BlurQuality::Auto;
   }
   int32_t get_blur_radius() const {
     lv_style_value_t v;

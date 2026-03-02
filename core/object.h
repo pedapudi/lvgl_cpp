@@ -649,7 +649,7 @@ class Object {
   void flag_radio_button() {
 #if LVGL_VERSION_MAJOR > 9 || \
     (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
-    add_flag(static_cast<ObjFlag>(LV_OBJ_FLAG_RADIO_BUTTON));
+    if (obj_) lv_obj_set_radio_button(obj_, true);
 #endif
   }
 
@@ -727,6 +727,20 @@ class Object {
    */
   void remove_style(Style* style, lv_style_selector_t selector = LV_PART_MAIN);
 
+  /**
+   * @brief Remove a theme from the object.
+   * @param selector The part/state selector.
+   */
+  void remove_theme(lv_style_selector_t selector = LV_PART_MAIN);
+
+#if LV_USE_OBSERVER
+  /**
+   * @brief Bind a style property to a subject.
+   */
+  void bind_style_prop(lv_style_prop_t prop, lv_subject_t* subject,
+                       lv_style_selector_t selector = LV_PART_MAIN);
+#endif
+
   // Local style properties (legacy setters removed, use using style())
 
  protected:
@@ -756,39 +770,104 @@ class Object {
 };
 
 #if LVGL_CPP_HAS_PROPERTIES
-// LVGL 9.5+ Implementation via Properties
+/**
+ * @brief Mixin to provide property-based setters for widgets.
+ *
+ * In LVGL 9.5+, many widget-specific functions are replaced by a generic
+ * property interface. This mixin allows widgets to use these properties
+ * while maintaining a fluent C++ API.
+ *
+ * @tparam T The concrete widget class.
+ */
 template <typename T>
-inline T& set_widget_property(T& widget, lv_property_id_t id,
-                              const lv_property_value_t& val) {
-  lv_obj_set_property(widget.raw(), id, &val);
-  return widget;
-}
+class PropertySetters {
+ public:
+  T& set_property(lv_prop_id_t id, int32_t num) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.num = num;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
 
-template <typename T>
-inline T& set_widget_property_int(T& widget, lv_property_id_t id, int32_t val) {
-  lv_property_value_t pv;
-  pv.num = val;
-  lv_obj_set_property(widget.raw(), id, &pv);
-  return widget;
-}
+  T& set_property(lv_prop_id_t id, bool enable) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.enable = enable;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
 
-template <typename T>
-inline T& set_widget_property_ptr(T& widget, lv_property_id_t id,
-                                  const void* val) {
-  lv_property_value_t pv;
-  pv.ptr = val;
-  lv_obj_set_property(widget.raw(), id, &pv);
-  return widget;
-}
+  T& set_property(lv_prop_id_t id, const void* ptr) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.ptr = ptr;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
 
-template <typename T>
-inline T& set_widget_property_color(T& widget, lv_property_id_t id,
-                                    lv_color_t val) {
-  lv_property_value_t pv;
-  pv.color = val;
-  lv_obj_set_property(widget.raw(), id, &pv);
-  return widget;
-}
+  T& set_property(lv_prop_id_t id, lv_color_t color) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.color = color;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
+
+  T& set_property(lv_prop_id_t id, int32_t val1, bool val2) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.arg1.num = val1;
+    pv.arg2.enable = val2;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
+
+  T& set_property(lv_prop_id_t id, int32_t val1, int32_t val2) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.arg1.num = val1;
+    pv.arg2.num = val2;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
+
+  T& set_property(lv_prop_id_t id, const void* ptr, int32_t num) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.arg1.ptr = ptr;
+    pv.arg2.num = num;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
+
+  T& set_property(lv_prop_id_t id, const Object* obj) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.ptr = obj ? obj->raw() : nullptr;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
+
+#if LV_USE_FLOAT
+  T& set_property(lv_prop_id_t id, float precise) {
+    if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
+    lv_property_t pv;
+    pv.id = id;
+    pv.precise = precise;
+    lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
+    return *static_cast<T*>(this);
+  }
+#endif
+};
 #endif
 
 // =========================================================================

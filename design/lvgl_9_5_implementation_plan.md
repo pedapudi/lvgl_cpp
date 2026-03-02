@@ -37,24 +37,33 @@ This document breaks down the migration strategy detailed in `design/lvgl_9_5_mi
 - Update the Github Actions CI matrix mappings (done in YAML, but reflected in CMake configurable defaults) to enforce the triple-epoch testing (ZMK v9.3, v9.4 stable, v9.5 edge).
 
 ### The Widget Property Interface Migration
+### 🏁 Completed & Merged
 
+- [x] SIMD Architecture Refactor (9.5 Native registration)
+- [x] Widget Property Interface Migration (Complete)
+    - [x] Arc
+    - [x] Bar
+    - [x] Slider
+    - [x] Switch
+    - [x] Roller
+    - [x] Keyboard
 The following 15 files will follow the exact same structural redesign: replacing hard-coded `lv_widget_set_x(obj, val)` with the property macro `LV_PROPERTY_WIDGET_X` wrapped internally via `#if LVGL_CPP_HAS_PROPERTIES`, guaranteeing C++ return types `WidgetT&` are preserved.
 
-#### [MODIFY] [arc.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/arc.cpp)
-#### [MODIFY] [bar.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/bar.cpp)
-#### [MODIFY] [switch.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/switch.cpp)
-#### [MODIFY] [checkbox.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/checkbox.cpp)
-#### [MODIFY] [led.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/led.cpp)
-#### [MODIFY] [line.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/line.cpp)
-#### [MODIFY] [scale.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/scale.cpp)
-#### [MODIFY] [spinbox.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/spinbox.cpp)
-#### [MODIFY] [spinner.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/spinner.cpp)
-#### [MODIFY] [table.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/table.cpp)
-#### [MODIFY] [tabview.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/tabview.cpp)
-#### [MODIFY] [button_matrix.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/button_matrix.cpp)
-#### [MODIFY] [span.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/span.cpp)
-#### [MODIFY] [menu.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/menu.cpp)
-#### [MODIFY] [chart.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/chart.cpp)
+#### [x] [arc.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/arc.cpp)
+#### [x] [bar.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/bar.cpp)
+#### [x] [switch.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/switch.cpp)
+#### [x] [checkbox.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/checkbox.cpp)
+#### [x] [led.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/led.cpp)
+#### [x] [line.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/line.cpp)
+#### [x] [scale.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/scale.cpp)
+#### [x] [spinbox.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/spinbox.cpp)
+#### [x] [spinner.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/spinner.cpp)
+#### [x] [table.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/table.cpp)
+#### [x] [tabview.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/tabview.cpp)
+#### [x] [button_matrix.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/button_matrix.cpp)
+#### [x] [span.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/span.cpp)
+#### [x] [menu.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/menu.cpp)
+#### [x] [chart.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/chart.cpp)
 - Chart specific: Implement the new `LV_CHART_TYPE_CURVE` Bézier enum fallback.
 
 ### New Features & Miscellaneous Updates
@@ -89,6 +98,32 @@ The following 15 files will follow the exact same structural redesign: replacing
 - Highlight the new `State::Alt`, Blur/Shadow APIs, and new `ArcLabel` widgets available via the fluent interface.
 
 ---
+
+### 9. Core Native Enhancements (9.5 Specific)
+
+#### 9.1. 3D Rendering & math
+* [x] Implement `misc/math_3d.h` wrapping `lv_3dpoint_t`, `lv_quaternion_t`, etc.
+* [x] Implement `widgets/gltf.h` wrapper for `lv_gltf` widget.
+* [x] Expose 3D raycasting and coordinate transformation APIs in `Gltf`.
+
+#### 9.2. SIMD Architecture Refactor (9.5+)
+* [x] Replace assembly shim hooks with the new `lv_draw_sw_register_blend_handler` API.
+* [x] Create `utility/esp32/simd/simd_plugin.cpp` to register handlers at runtime.
+* [x] Remove legacy linker `-u` flags from `CMakeLists.txt`.
+
+#### 9.3. Style & Theme Management
+* [x] Add `Object::remove_theme()` and `Object::bind_style_prop()`.
+* [x] Add `StyleProxy::bind()` for data-driven styling.
+
+### 10. Verification & Benchmarking
+
+#### 10.1. Integration Tests
+* [x] Create `tests/test_gltf.cpp` for 3D model interaction.
+* [x] Create `tests/test_style_binding.cpp` for observer-based styling.
+
+#### 10.2. Performance Analysis
+* [x] Profile SIMD performance using the new blend handler registration method.
+* [x] Compare `lv_obj_set_property` vs legacy setters for high-frequency updates.
 
 ## Verification Plan
 

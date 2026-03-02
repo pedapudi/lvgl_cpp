@@ -33,8 +33,13 @@ ButtonMatrix& ButtonMatrix::set_ctrl_map(
 }
 
 ButtonMatrix& ButtonMatrix::set_selected_button(uint32_t btn_id) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_BUTTONMATRIX_SELECTED_BUTTON,
+                      static_cast<int32_t>(btn_id));
+#else
   if (raw()) lv_buttonmatrix_set_selected_button(raw(), btn_id);
   return *this;
+#endif
 }
 
 ButtonMatrix& ButtonMatrix::set_button_ctrl(uint32_t btn_id, Control ctrl) {
@@ -71,8 +76,12 @@ ButtonMatrix& ButtonMatrix::set_button_width(uint32_t btn_id, uint32_t width) {
 }
 
 ButtonMatrix& ButtonMatrix::set_one_checked(bool en) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_BUTTONMATRIX_ONE_CHECKED, en);
+#else
   if (raw()) lv_buttonmatrix_set_one_checked(raw(), en);
   return *this;
+#endif
 }
 
 const char* const* ButtonMatrix::get_map() {

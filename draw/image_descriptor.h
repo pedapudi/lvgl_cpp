@@ -65,6 +65,14 @@ class ImageDescriptor {
    */
   static ImageDescriptor from_svg(const std::string& svg_src);
 
+  /**
+   * @brief Create an image descriptor from raw WEBP image data.
+   * @param data The WEBP raw image data.
+   * @param data_size Size of the WEBP data.
+   * @return An ImageDescriptor owning a copy of the WEBP data.
+   */
+  static ImageDescriptor from_webp(const uint8_t* data, uint32_t data_size);
+
   ~ImageDescriptor();
 
   // Move-only primarily to manage owned data if we implement that.

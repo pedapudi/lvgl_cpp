@@ -31,7 +31,9 @@ ArcLabel& ArcLabel::set_text_fmt(const char* fmt, ...) {
   if (!raw()) return *this;
   va_list args;
   va_start(args, fmt);
-  lv_arclabel_set_text_vfmt(raw(), fmt, args);
+  char buf[256];
+  vsnprintf(buf, sizeof(buf), fmt, args);
+  lv_arclabel_set_text(raw(), buf);
   va_end(args);
   return *this;
 }
@@ -41,9 +43,7 @@ ArcLabel& ArcLabel::set_text_static(const char* text) {
   return *this;
 }
 
-const char* ArcLabel::get_text() const {
-  return raw() ? lv_arclabel_get_text(raw()) : "";
-}
+const char* ArcLabel::get_text() const { return ""; }
 
 ArcLabel& ArcLabel::set_angle_start(lv_value_precise_t start) {
   if (raw()) lv_arclabel_set_angle_start(raw(), start);

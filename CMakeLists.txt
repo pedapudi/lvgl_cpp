@@ -65,8 +65,6 @@ set(WIDGET_SOURCES
     
     core/group.cpp
     display/display.cpp
-    display/drivers/esp32_rgb.cpp
-    display/drivers/esp32_spi.cpp
 
     indev/input_device.cpp
     misc/timer.cpp
@@ -83,13 +81,15 @@ if(IDF_TARGET)
     # Common ESP32 sources
     list(APPEND SOURCES 
         utility/portable/esp32/port.cpp
+        display/drivers/esp32_rgb.cpp
+        display/drivers/esp32_spi.cpp
     )
 
     # S3 Specific SIMD
     if(IDF_TARGET STREQUAL "esp32s3")
-        message(STATUS "[lvgl_cpp] Enabling ESP32-S3 SIMD Assembly Shim")
+        message(STATUS "[lvgl_cpp] Enabling ESP32-S3 SIMD Runtime Plugin (LVGL 9.5+)")
         list(APPEND SOURCES
-            utility/esp32/simd/lv_draw_sw_asm_shim.c
+            utility/esp32/simd/simd_plugin.cpp
             utility/esp32/simd/lv_color_blend_to_argb8888_esp32s3.S
             utility/esp32/simd/lv_color_blend_to_rgb565_esp32s3.S
             utility/esp32/simd/lv_color_blend_to_rgb888_esp32s3.S
@@ -97,35 +97,12 @@ if(IDF_TARGET)
             utility/esp32/simd/lv_rgb565_blend_normal_to_rgb565_esp32s3.S
             utility/esp32/simd/lv_rgb888_blend_normal_to_rgb888_esp32s3.S
         )
-        
-        # Linker trick to ensure custom assembly routines are kept (referenced via macros in LVGL C code)
-        set(SIMD_LINK_FLAGS
-            "-u lv_color_blend_to_rgb565_shim"
-            "-u lv_rgb565_blend_normal_to_rgb565_shim"
-            "-u lv_color_blend_to_rgb565_esp"
-            "-u lv_rgb565_blend_normal_to_rgb565_esp"
-        )
     endif()
 
     idf_component_register(SRCS ${SOURCES}
                         INCLUDE_DIRS "." ".." "utility/esp32/simd"
                         REQUIRES lvgl esp_lcd esp_timer driver)
 
-    if(SIMD_LINK_FLAGS AND COMPONENT_LIB)
-        foreach(flag ${SIMD_LINK_FLAGS})
-            set_property(TARGET ${COMPONENT_LIB} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${flag})
-        endforeach()
-        
-        # Inject our SIMD headers and defines into the main LVGL library
-        idf_component_get_property(lvgl_lib "lvgl__lvgl" COMPONENT_LIB)
-        if(lvgl_lib)
-            target_include_directories(${lvgl_lib} PUBLIC "utility/esp32/simd")
-            target_compile_definitions(${lvgl_lib} PUBLIC 
-                LV_USE_DRAW_SW_ASM=255
-                LV_DRAW_SW_ASM_CUSTOM_INCLUDE="lv_draw_sw_asm_custom.h"
-            )
-        endif()
-    endif()
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type -Wno-missing-field-initializers)
     target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_20)
 else()
@@ -272,6 +249,12 @@ target_link_libraries(test_issue_161 PRIVATE lvgl_cpp)
     add_executable(test_callbacks tests/test_callbacks.cpp)
     target_link_libraries(test_callbacks PRIVATE lvgl_cpp)
 
+    add_executable(test_gltf tests/test_gltf.cpp)
+    target_link_libraries(test_gltf PRIVATE lvgl_cpp)
+
+    add_executable(test_style_binding tests/test_style_binding.cpp)
+    target_link_libraries(test_style_binding PRIVATE lvgl_cpp)
+
     add_executable(test_screen tests/test_screen.cpp)
     target_link_libraries(test_screen PRIVATE lvgl_cpp)
     # add_test(NAME test_screen COMMAND test_screen) <--- Already added above effectively? 
@@ -342,10 +325,13 @@ add_test(NAME test_menu COMMAND test_menu)
     target_link_libraries(test_vector PRIVATE lvgl_cpp)
     add_test(NAME test_vector COMMAND test_vector)
 
-    add_executable(test_api_expansion    tests/test_api_expansion.cpp
-)
+    add_executable(test_api_expansion tests/test_api_expansion.cpp)
     target_link_libraries(test_api_expansion PRIVATE lvgl_cpp)
     add_test(NAME test_api_expansion COMMAND test_api_expansion)
+
+    add_executable(test_api_properties tests/test_api_properties.cpp)
+    target_link_libraries(test_api_properties PRIVATE lvgl_cpp)
+    add_test(NAME test_api_properties COMMAND test_api_properties)
 
     add_executable(test_obj_proxies tests/test_obj_proxies.cpp)
     target_link_libraries(test_obj_proxies PRIVATE lvgl_cpp)

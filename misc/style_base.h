@@ -262,6 +262,7 @@ class StyleBase {
     return self();
   }
 
+#if LVGL_CPP_HAS_NATIVE_BLUR
   Derived& drop_shadow_radius(int32_t radius) {
     self().set_drop_shadow_radius(radius);
     return self();
