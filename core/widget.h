@@ -37,8 +37,13 @@ namespace lvgl {
  *
  * @tparam Derived The concrete widget class (e.g., Button, Label).
  */
+#if LVGL_CPP_HAS_PROPERTIES
+template <typename Derived>
+class Widget : public Object, public PropertySetters<Derived> {
+#else
 template <typename Derived>
 class Widget : public Object {
+#endif
  public:
   /** @brief Reference to the concrete derived object. */
   Derived& self() { return *static_cast<Derived*>(this); }

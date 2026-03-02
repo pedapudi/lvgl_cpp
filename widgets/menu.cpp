@@ -50,16 +50,25 @@ Menu& Menu::set_sidebar_page(MenuPage& page) {
 }
 
 Menu& Menu::set_mode_header(HeaderMode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_MENU_MODE_HEADER, static_cast<int32_t>(mode));
+#else
   if (raw())
     lv_menu_set_mode_header(raw(), static_cast<lv_menu_mode_header_t>(mode));
   return *this;
+#endif
 }
 
 Menu& Menu::set_mode_root_back_button(RootBackButtonMode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_MENU_MODE_ROOT_BACK_BUTTON,
+                      static_cast<int32_t>(mode));
+#else
   if (raw())
     lv_menu_set_mode_root_back_button(
         raw(), static_cast<lv_menu_mode_root_back_button_t>(mode));
   return *this;
+#endif
 }
 
 Menu& Menu::set_load_page_event(Object& obj, MenuPage& page) {

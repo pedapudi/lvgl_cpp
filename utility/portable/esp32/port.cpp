@@ -2,6 +2,10 @@
 
 #include "esp_log.h"
 
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+#include "utility/esp32/simd/simd_plugin.h"
+#endif
+
 static const char* TAG = "Esp32Port";
 
 namespace lvgl {
@@ -50,6 +54,9 @@ bool Esp32Port::init(const Esp32PortConfig& config) {
   static bool lvgl_inited = false;
   if (!lvgl_inited) {
     lv_init();
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+    lvgl::utility::Esp32S3SimdPlugin::apply();
+#endif
     lvgl_inited = true;
   }
 

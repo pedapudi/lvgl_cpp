@@ -14,10 +14,15 @@ Switch::Switch(Object& parent) : Switch(&parent) {}
 Switch::Switch(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Switch& Switch::set_orientation(Orientation orientation) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SWITCH_ORIENTATION,
+                      static_cast<int32_t>(orientation));
+#else
   if (raw())
     lv_switch_set_orientation(
         raw(), static_cast<lv_switch_orientation_t>(orientation));
   return *this;
+#endif
 }
 
 Switch::Orientation Switch::get_orientation() const {

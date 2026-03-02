@@ -58,6 +58,6 @@ To maintain a clean C++ ecosystem, the following C APIs are explicitly excluded 
 3. **Consistency Check**: Use the `check_lvgl_cpp_consistency` skill to verify naming conventions across new proxies.
 
 ## 6. References
-- [Missing Object Methods](file:///home/sunil/git/lvgl/lvgl_cpp/design/missing_obj_methods.md)
-- [Redundancy Audit](file:///home/sunil/git/lvgl/lvgl_cpp/design/redundancy_audit.md)
-- [Idiomatic Gap Analysis](file:///home/sunil/git/lvgl/lvgl_cpp/design/idiomatic_gap_analysis.md)
+- [Missing Object Methods](../design/missing_obj_methods.md)
+- [Redundancy Audit](../design/redundancy_audit.md)
+- [Idiomatic Gap Analysis](../design/idiomatic_gap_analysis.md)

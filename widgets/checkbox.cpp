@@ -22,8 +22,12 @@ Checkbox::Checkbox(Object& parent, const std::string& text) : Checkbox(parent) {
 }
 
 Checkbox& Checkbox::set_text(const char* txt) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_CHECKBOX_TEXT, txt);
+#else
   if (raw()) lv_checkbox_set_text(raw(), txt);
   return *this;
+#endif
 }
 
 Checkbox& Checkbox::set_text_static(const char* txt) {

@@ -123,6 +123,10 @@ enum class State : uint16_t {
   User2 = LV_STATE_USER_2,
   User3 = LV_STATE_USER_3,
   User4 = LV_STATE_USER_4,
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+  Alt = LV_STATE_ALT,
+#endif
   Any = LV_STATE_ANY,
 };
 
@@ -678,6 +682,18 @@ enum class FsWhence : uint8_t {
   Cur = LV_FS_SEEK_CUR,
   End = LV_FS_SEEK_END,
 };
+
+#if LVGL_VERSION_MAJOR > 9 || \
+    (LVGL_VERSION_MAJOR == 9 && LVGL_VERSION_MINOR >= 5)
+/**
+ * @brief Wrapper for lv_blur_quality_t.
+ */
+enum class BlurQuality : uint8_t {
+  Auto = LV_BLUR_QUALITY_AUTO,
+  Speed = LV_BLUR_QUALITY_SPEED,
+  Precision = LV_BLUR_QUALITY_PRECISION,
+};
+#endif
 
 }  // namespace lvgl
 

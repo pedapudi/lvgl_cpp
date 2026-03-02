@@ -16,13 +16,21 @@ Arc::Arc(Object& parent) : Arc(&parent) {}
 Arc::Arc(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Arc& Arc::set_start_angle(lv_value_precise_t start) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_START_ANGLE, start);
+#else
   if (raw()) lv_arc_set_start_angle(raw(), start);
   return *this;
+#endif
 }
 
 Arc& Arc::set_end_angle(lv_value_precise_t end) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_END_ANGLE, end);
+#else
   if (raw()) lv_arc_set_end_angle(raw(), end);
   return *this;
+#endif
 }
 
 Arc& Arc::set_angles(lv_value_precise_t start, lv_value_precise_t end) {
@@ -31,13 +39,21 @@ Arc& Arc::set_angles(lv_value_precise_t start, lv_value_precise_t end) {
 }
 
 Arc& Arc::set_bg_start_angle(lv_value_precise_t start) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_BG_START_ANGLE, start);
+#else
   if (raw()) lv_arc_set_bg_start_angle(raw(), start);
   return *this;
+#endif
 }
 
 Arc& Arc::set_bg_end_angle(lv_value_precise_t end) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_BG_END_ANGLE, end);
+#else
   if (raw()) lv_arc_set_bg_end_angle(raw(), end);
   return *this;
+#endif
 }
 
 Arc& Arc::set_bg_angles(lv_value_precise_t start, lv_value_precise_t end) {
@@ -46,18 +62,30 @@ Arc& Arc::set_bg_angles(lv_value_precise_t start, lv_value_precise_t end) {
 }
 
 Arc& Arc::set_rotation(int32_t rotation) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_ROTATION, rotation);
+#else
   if (raw()) lv_arc_set_rotation(raw(), rotation);
   return *this;
+#endif
 }
 
 Arc& Arc::set_mode(Mode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_MODE, static_cast<int32_t>(mode));
+#else
   if (raw()) lv_arc_set_mode(raw(), static_cast<lv_arc_mode_t>(mode));
   return *this;
+#endif
 }
 
 Arc& Arc::set_value(int32_t value) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_VALUE, value);
+#else
   if (raw()) lv_arc_set_value(raw(), value);
   return *this;
+#endif
 }
 
 Arc& Arc::set_range(int32_t min, int32_t max) {
@@ -66,23 +94,39 @@ Arc& Arc::set_range(int32_t min, int32_t max) {
 }
 
 Arc& Arc::set_min_value(int32_t min) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_MIN_VALUE, min);
+#else
   if (raw()) lv_arc_set_min_value(raw(), min);
   return *this;
+#endif
 }
 
 Arc& Arc::set_max_value(int32_t max) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_MAX_VALUE, max);
+#else
   if (raw()) lv_arc_set_max_value(raw(), max);
   return *this;
+#endif
 }
 
 Arc& Arc::set_change_rate(uint32_t rate) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_CHANGE_RATE, static_cast<int32_t>(rate));
+#else
   if (raw()) lv_arc_set_change_rate(raw(), rate);
   return *this;
+#endif
 }
 
 Arc& Arc::set_knob_offset(int32_t offset) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_ARC_KNOB_OFFSET, offset);
+#else
   if (raw()) lv_arc_set_knob_offset(raw(), offset);
   return *this;
+#endif
 }
 
 lv_value_precise_t Arc::get_angle_start() {

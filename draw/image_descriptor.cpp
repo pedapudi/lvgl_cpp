@@ -43,6 +43,14 @@ ImageDescriptor ImageDescriptor::from_svg(const std::string& svg_src) {
   return from_svg(svg_src.c_str());
 }
 
+ImageDescriptor ImageDescriptor::from_webp(const uint8_t* data,
+                                           uint32_t data_size) {
+  if (!data || data_size == 0) return ImageDescriptor();
+  // The WEBP decoder will parse the width, height, and color format from the
+  // raw data.
+  return ImageDescriptor(0, 0, ColorFormat::Raw, data, data_size);
+}
+
 ImageDescriptor::ImageDescriptor(uint32_t w, uint32_t h, ColorFormat cf,
                                  const uint8_t* data, uint32_t data_size) {
   dsc_.header.w = w;

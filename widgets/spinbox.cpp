@@ -18,14 +18,24 @@ Spinbox::Spinbox(Object& parent) : Spinbox(&parent) {}
 Spinbox::Spinbox(lv_obj_t* obj, Ownership ownership)
     : Textarea(obj, ownership) {}
 
-Spinbox& Spinbox::set_value(int32_t v) {
-  if (raw()) lv_spinbox_set_value(raw(), v);
+Spinbox& Spinbox::set_value(int32_t value) {
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_VALUE, value);
   return *this;
+#else
+  if (raw()) lv_spinbox_set_value(raw(), value);
+  return *this;
+#endif
 }
 
-Spinbox& Spinbox::set_rollover(bool rollover) {
-  if (raw()) lv_spinbox_set_rollover(raw(), rollover);
+Spinbox& Spinbox::set_rollover(bool b) {
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_ROLLOVER, b);
   return *this;
+#else
+  if (raw()) lv_spinbox_set_rollover(raw(), b);
+  return *this;
+#endif
 }
 
 Spinbox& Spinbox::set_digit_format(uint32_t digit_count, uint32_t sep_pos) {
@@ -34,18 +44,35 @@ Spinbox& Spinbox::set_digit_format(uint32_t digit_count, uint32_t sep_pos) {
 }
 
 Spinbox& Spinbox::set_digit_count(uint32_t digit_count) {
-  if (raw()) lv_spinbox_set_digit_count(raw(), digit_count);
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_DIGIT_COUNT,
+               static_cast<int32_t>(digit_count));
   return *this;
+#else
+  if (raw()) lv_spinbox_set_digit_format(raw(), digit_count, 0);
+  return *this;
+#endif
 }
 
-Spinbox& Spinbox::set_dec_point_pos(uint32_t dec_point_pos) {
-  if (raw()) lv_spinbox_set_dec_point_pos(raw(), dec_point_pos);
+Spinbox& Spinbox::set_dec_point_pos(uint32_t separator_position) {
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_DEC_POINT_POS,
+               static_cast<int32_t>(separator_position));
   return *this;
+#else
+  if (raw()) lv_spinbox_set_digit_format(raw(), 0, separator_position);
+  return *this;
+#endif
 }
 
 Spinbox& Spinbox::set_step(uint32_t step) {
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_STEP, static_cast<int32_t>(step));
+  return *this;
+#else
   if (raw()) lv_spinbox_set_step(raw(), step);
   return *this;
+#endif
 }
 
 Spinbox& Spinbox::set_range(int32_t min_value, int32_t max_value) {
@@ -54,13 +81,23 @@ Spinbox& Spinbox::set_range(int32_t min_value, int32_t max_value) {
 }
 
 Spinbox& Spinbox::set_min_value(int32_t min_value) {
-  if (raw()) lv_spinbox_set_min_value(raw(), min_value);
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_MIN_VALUE, min_value);
   return *this;
+#else
+  if (raw()) lv_spinbox_set_range(raw(), min_value, 0);
+  return *this;
+#endif
 }
 
 Spinbox& Spinbox::set_max_value(int32_t max_value) {
-  if (raw()) lv_spinbox_set_max_value(raw(), max_value);
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_MAX_VALUE, max_value);
   return *this;
+#else
+  if (raw()) lv_spinbox_set_range(raw(), 0, max_value);
+  return *this;
+#endif
 }
 
 Spinbox& Spinbox::set_cursor_pos(uint32_t pos) {
@@ -69,10 +106,16 @@ Spinbox& Spinbox::set_cursor_pos(uint32_t pos) {
 }
 
 Spinbox& Spinbox::set_digit_step_direction(Dir direction) {
+#if LVGL_CPP_HAS_PROPERTIES
+  set_property(LV_PROPERTY_SPINBOX_DIGIT_STEP_DIRECTION,
+               static_cast<int32_t>(direction));
+  return *this;
+#else
   if (raw())
     lv_spinbox_set_digit_step_direction(raw(),
                                         static_cast<lv_dir_t>(direction));
   return *this;
+#endif
 }
 
 bool Spinbox::get_rollover() {

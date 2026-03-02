@@ -99,7 +99,9 @@ class Chart : public Widget<Chart> {
   enum class Type : uint8_t {
     None = LV_CHART_TYPE_NONE,
     Line = LV_CHART_TYPE_LINE,
+    Curve = LV_CHART_TYPE_CURVE,
     Bar = LV_CHART_TYPE_BAR,
+    Stacked = LV_CHART_TYPE_STACKED,
     Scatter = LV_CHART_TYPE_SCATTER,
   };
 

@@ -262,6 +262,70 @@ class StyleBase {
     return self();
   }
 
+#if LVGL_CPP_HAS_NATIVE_BLUR
+  Derived& drop_shadow_radius(int32_t radius) {
+    self().set_drop_shadow_radius(radius);
+    return self();
+  }
+  int32_t drop_shadow_radius() const { return self().get_drop_shadow_radius(); }
+
+  Derived& drop_shadow_offset_x(int32_t offset) {
+    self().set_drop_shadow_offset_x(offset);
+    return self();
+  }
+  int32_t drop_shadow_offset_x() const {
+    return self().get_drop_shadow_offset_x();
+  }
+
+  Derived& drop_shadow_offset_y(int32_t offset) {
+    self().set_drop_shadow_offset_y(offset);
+    return self();
+  }
+  int32_t drop_shadow_offset_y() const {
+    return self().get_drop_shadow_offset_y();
+  }
+
+  Derived& drop_shadow_color(Color color) {
+    self().set_drop_shadow_color(color);
+    return self();
+  }
+  Color drop_shadow_color() const { return self().get_drop_shadow_color(); }
+
+  Derived& drop_shadow_opa(Opacity opa) {
+    self().set_drop_shadow_opa(static_cast<lv_opa_t>(opa));
+    return self();
+  }
+  Opacity drop_shadow_opa() const {
+    return static_cast<Opacity>(self().get_drop_shadow_opa());
+  }
+
+  Derived& blur_radius(int32_t radius) {
+    self().set_blur_radius(radius);
+    return self();
+  }
+  int32_t blur_radius() const { return self().get_blur_radius(); }
+
+  Derived& blur_backdrop(bool backdrop) {
+    self().set_blur_backdrop(backdrop);
+    return self();
+  }
+  bool blur_backdrop() const { return self().get_blur_backdrop(); }
+
+  Derived& blur_quality(BlurQuality quality) {
+    self().set_blur_quality(static_cast<lv_blur_quality_t>(quality));
+    return self();
+  }
+  BlurQuality blur_quality() const { return self().get_blur_quality(); }
+
+  Derived& drop_shadow_quality(BlurQuality quality) {
+    self().set_drop_shadow_quality(static_cast<lv_blur_quality_t>(quality));
+    return self();
+  }
+  BlurQuality drop_shadow_quality() const {
+    return self().get_drop_shadow_quality();
+  }
+#endif
+
   /** @} */
 
   /**

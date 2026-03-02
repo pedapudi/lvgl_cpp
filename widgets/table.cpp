@@ -70,13 +70,23 @@ Table::Table(Object& parent) : Table(&parent) {}
 Table::Table(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Table& Table::set_row_count(uint32_t row_cnt) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_TABLE_ROW_COUNT,
+                      static_cast<int32_t>(row_cnt));
+#else
   if (raw()) lv_table_set_row_count(raw(), row_cnt);
   return *this;
+#endif
 }
 
 Table& Table::set_column_count(uint32_t col_cnt) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_TABLE_COLUMN_COUNT,
+                      static_cast<int32_t>(col_cnt));
+#else
   if (raw()) lv_table_set_column_count(raw(), col_cnt);
   return *this;
+#endif
 }
 
 Table& Table::set_column_width(uint32_t col_id, int32_t w) {

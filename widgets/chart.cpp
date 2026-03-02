@@ -50,13 +50,21 @@ Chart::Chart(Object& parent) : Chart(&parent) {}
 Chart::Chart(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Chart& Chart::set_type(Type type) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_CHART_TYPE, static_cast<int32_t>(type));
+#else
   if (raw()) lv_chart_set_type(raw(), static_cast<lv_chart_type_t>(type));
   return *this;
+#endif
 }
 
 Chart& Chart::set_point_count(uint32_t cnt) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_CHART_POINT_COUNT, static_cast<int32_t>(cnt));
+#else
   if (raw()) lv_chart_set_point_count(raw(), cnt);
   return *this;
+#endif
 }
 
 Chart& Chart::set_axis_range(Axis axis, int32_t min, int32_t max) {
@@ -67,15 +75,29 @@ Chart& Chart::set_axis_range(Axis axis, int32_t min, int32_t max) {
 }
 
 Chart& Chart::set_div_line_count(uint32_t hdiv, uint32_t vdiv) {
-  if (raw()) lv_chart_set_div_line_count(raw(), hdiv, vdiv);
+  if (raw()) {
+#if LVGL_CPP_HAS_PROPERTIES
+    set_property(LV_PROPERTY_CHART_HOR_DIV_LINE_COUNT,
+                 static_cast<int32_t>(hdiv));
+    set_property(LV_PROPERTY_CHART_VER_DIV_LINE_COUNT,
+                 static_cast<int32_t>(vdiv));
+#else
+    lv_chart_set_div_line_count(raw(), hdiv, vdiv);
+#endif
+  }
   return *this;
 }
 
 Chart& Chart::set_update_mode(UpdateMode update_mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_CHART_UPDATE_MODE,
+                      static_cast<int32_t>(update_mode));
+#else
   if (raw())
     lv_chart_set_update_mode(raw(),
                              static_cast<lv_chart_update_mode_t>(update_mode));
   return *this;
+#endif
 }
 
 Chart::Type Chart::get_type() const {

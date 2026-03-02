@@ -15,23 +15,41 @@ Scale::Scale(Object& parent) : Scale(&parent) {}
 Scale::Scale(lv_obj_t* obj, Ownership ownership) : Widget(obj, ownership) {}
 
 Scale& Scale::set_mode(Mode mode) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SCALE_MODE, static_cast<int32_t>(mode));
+#else
   if (raw()) lv_scale_set_mode(raw(), static_cast<lv_scale_mode_t>(mode));
   return *this;
+#endif
 }
 
 Scale& Scale::set_total_tick_count(uint32_t total_tick_count) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SCALE_TOTAL_TICK_COUNT,
+                      static_cast<int32_t>(total_tick_count));
+#else
   if (raw()) lv_scale_set_total_tick_count(raw(), total_tick_count);
   return *this;
+#endif
 }
 
 Scale& Scale::set_major_tick_every(uint32_t major_tick_every) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SCALE_MAJOR_TICK_EVERY,
+                      static_cast<int32_t>(major_tick_every));
+#else
   if (raw()) lv_scale_set_major_tick_every(raw(), major_tick_every);
   return *this;
+#endif
 }
 
 Scale& Scale::set_label_show(bool show_label) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SCALE_LABEL_SHOW, show_label);
+#else
   if (raw()) lv_scale_set_label_show(raw(), show_label);
   return *this;
+#endif
 }
 
 Scale& Scale::set_range(int32_t min, int32_t max) {
@@ -40,13 +58,22 @@ Scale& Scale::set_range(int32_t min, int32_t max) {
 }
 
 Scale& Scale::set_angle_range(uint32_t angle_range) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SCALE_ANGLE_RANGE,
+                      static_cast<int32_t>(angle_range));
+#else
   if (raw()) lv_scale_set_angle_range(raw(), angle_range);
   return *this;
+#endif
 }
 
 Scale& Scale::set_rotation(int32_t rotation) {
+#if LVGL_CPP_HAS_PROPERTIES
+  return set_property(LV_PROPERTY_SCALE_ROTATION, rotation);
+#else
   if (raw()) lv_scale_set_rotation(raw(), rotation);
   return *this;
+#endif
 }
 
 Scale& Scale::set_line_needle_value(lv_obj_t* needle_line,
