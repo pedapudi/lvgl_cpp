@@ -2,10 +2,10 @@
 #include <iostream>
 
 #include "../display/display.h"
+#include "../lvgl_cpp.h"
 #include "../misc/style.h"
 #include "../widgets/button.h"
 #include "../widgets/label.h"
-#include "../lvgl_cpp.h"
 
 // Helper to check color equality
 bool color_eq(lv_color_t c1, lv_color_t c2) {
@@ -90,13 +90,14 @@ void test_selector_usage() {
     std::cout << "State::Pressed IS SET on btn" << std::endl;
   }
 
-  // 1. Check default state (should NOT be green)
+  // Check state resolution (should be green because it is PRESSED)
   lv_color_t main_color = lv_obj_get_style_bg_color(btn.raw(), LV_PART_MAIN);
-  assert(!color_eq(main_color, lv_color_hex(0x00FF00)));
+  assert(color_eq(main_color, lv_color_hex(0x00FF00)));
 
-  // FIXME: Above assertion fails in test env (Got default blue vs green).
-  // Raw C check passes, suggesting subtle Proxy interaction issue.
-  // Disabling to unblock release.
+  // Remove state and check it is no longer green
+  btn.remove_state(lvgl::State::Pressed);
+  main_color = lv_obj_get_style_bg_color(btn.raw(), LV_PART_MAIN);
+  assert(!color_eq(main_color, lv_color_hex(0x00FF00)));
 
   // Verify Scrollbar part
   lv_color_t scroll_color =

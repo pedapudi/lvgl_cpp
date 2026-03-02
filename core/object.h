@@ -784,7 +784,7 @@ class PropertySetters {
  public:
   T& set_property(lv_prop_id_t id, int32_t num) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.num = num;
     lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
@@ -793,7 +793,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, bool enable) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.enable = enable;
     lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
@@ -802,7 +802,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, const void* ptr) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.ptr = ptr;
     lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
@@ -811,7 +811,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, lv_color_t color) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.color = color;
     lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
@@ -820,7 +820,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, int32_t val1, bool val2) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.arg1.num = val1;
     pv.arg2.enable = val2;
@@ -830,7 +830,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, int32_t val1, int32_t val2) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.arg1.num = val1;
     pv.arg2.num = val2;
@@ -840,7 +840,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, const void* ptr, int32_t num) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.arg1.ptr = ptr;
     pv.arg2.num = num;
@@ -850,7 +850,7 @@ class PropertySetters {
 
   T& set_property(lv_prop_id_t id, const Object* obj) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.ptr = obj ? obj->raw() : nullptr;
     lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
@@ -860,7 +860,7 @@ class PropertySetters {
 #if LV_USE_FLOAT
   T& set_property(lv_prop_id_t id, float precise) {
     if (!static_cast<T*>(this)->raw()) return *static_cast<T*>(this);
-    lv_property_t pv;
+    lv_property_t pv{};
     pv.id = id;
     pv.precise = precise;
     lv_obj_set_property(static_cast<T*>(this)->raw(), &pv);
