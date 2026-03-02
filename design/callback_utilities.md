@@ -344,7 +344,7 @@ namespace lvgl {
 
 ```bash
 # Build and run
-cd /home/sunil/git/lvgl/lvgl_cpp/build
+cd ../build
 cmake .. && make -j$(nproc)
 ./test_async
 ```
@@ -375,7 +375,7 @@ The existing test infrastructure uses a simple pattern. Each test is a standalon
 
 ```bash
 # Run all tests
-cd /home/sunil/git/lvgl/lvgl_cpp/build
+cd ../build
 ctest --output-on-failure
 ```
 

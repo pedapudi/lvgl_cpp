@@ -25,16 +25,16 @@ Standardize all widget constructors across the `lvgl_cpp` library to ensure type
 ## Proposed Changes
 
 ### Skills & Workflows
-#### [MODIFY] [manage_git_workflow](file:///home/sunil/git/lvgl/.agent/skills/manage_git_workflow/SKILL.md)
+#### [MODIFY] [manage_git_workflow](../../.agent/skills/manage_git_workflow/SKILL.md)
 - Formalize "One Issue, One Branch" rule.
 - Prohibit direct work on `main`.
 
-#### [NEW] [preflight_and_debug](file:///home/sunil/git/lvgl/.agent/skills/preflight_and_debug/SKILL.md)
+#### [NEW] [preflight_and_debug](../../.agent/skills/preflight_and_debug/SKILL.md)
 - Guidelines for token-efficient debugging (batching checks, targeted greps).
 - Use of `cat -A` for whitespace hygiene.
 
 ### Automation Scripts
-#### [NEW] [diagnose_constructors.py](file:///home/sunil/git/lvgl/.agent/scripts/diagnose_constructors.py)
+#### [NEW] [diagnose_constructors.py](../../.agent/scripts/diagnose_constructors.py)
 - Verifies constructor patterns and delegation.
 - Robust class detection from source content.
 

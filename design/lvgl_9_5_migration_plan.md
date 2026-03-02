@@ -483,7 +483,7 @@ LVGL v9.5 officially introduces the **RISC-V Vector Extension (`LV_DRAW_SW_ASM_R
 **Risk:** The introduction of standard RISC-V V-extension hooks may have caused the internal `LV_DRAW_SW_ASM_CUSTOM` hook (`255`) and the signatures of blending functions (e.g., `lv_color_blend_to_rgb565_shim`) to diverge or require new alignment macros.
 
 ### 7.3 Reconciliation Execution Plan
-1. **Signature Audit:** Immediately compare the function prototypes in `/home/sunil/git/lvgl/lvgl_cpp/utility/esp32/simd/lv_draw_sw_asm_custom.h` against the 9.5 `src/draw/sw/blend/lv_draw_sw_blend_to_*.h` definitions.
+1. **Signature Audit:** Immediately compare the function prototypes in `../utility/esp32/simd/lv_draw_sw_asm_custom.h` against the 9.5 `src/draw/sw/blend/lv_draw_sw_blend_to_*.h` definitions.
 2. **Custom Hook Verification:** Verify `LV_USE_DRAW_SW_ASM=255` is still honored by the LVGL 9.5 Kconfig and CMake scripts. If LVGL deprecated `255` in favor of a specific registration API, we must migrate the `CMakeLists.txt` compile definitions.
 3. **RGB565 Swapped Format:** LVGL 9.5 introduces explicit fixes for `RGB565_SWAPPED` rendering in software blur and blending. Our ESP32-S3 SIMD routines currently assume standard RGB565. We must ensure the SPI drivers (`esp32_spi.cpp`) which handle byte-swapping (`flush_swap`) do not implicitly conflict with new 9.5 swapped representations when using our custom ASM.
 4. **Cache Alignment:** 9.5 adds strict D-Cache flush requirements spanning `draw_buf`. We must audit `lv_draw_sw_asm_shim.c` to ensure we invoke `lv_draw_buf_invalidate_cache()` before executing Xtensa assembly loops to prevent stale artifacts, especially on ESP32-S3 with PSRAM.

@@ -13,26 +13,26 @@ This document breaks down the migration strategy detailed in `design/lvgl_9_5_mi
 
 ### Core Engine & Compatibility Layer
 
-#### [MODIFY] [compatibility.h](file:///home/sunil/git/lvgl/lvgl_cpp/core/compatibility.h)
+#### [MODIFY] [compatibility.h](../core/compatibility.h)
 - Introduce explicit `#define LVGL_CPP_HAS_PROPERTIES 1` if LVGL >= 9.5.
 - Add macros mapping `LV_STATE_ALT` and fallback stubs if missing.
 - Define feature macros for `LVGL_CPP_HAS_NATIVE_BLUR` and `LV_CHART_TYPE_CURVE`.
 
-#### [MODIFY] [object.h](file:///home/sunil/git/lvgl/lvgl_cpp/core/object.h)
+#### [MODIFY] [object.h](../core/object.h)
 - Inject the `PropertySetters<WidgetT>` templated mixin that wraps `lv_obj_set_property`.
 - Add `.flag_radio_button()` to the fluent builder.
 - Add `State::Alt` to the overarching C++ state enums, ensuring it maps to `LV_STATE_ALT`.
 
-#### [MODIFY] [style.h](file:///home/sunil/git/lvgl/lvgl_cpp/misc/style.h)
+#### [MODIFY] [style.h](../misc/style.h)
 - Add `.blur()` and `.drop_shadow()` using the generic properties if underlying LVGL >= 9.5.
 - Wrap `lv_obj_bind_style_prop` for reactive property binding.
 
 ### Display & Render Drivers
 
-#### [MODIFY] [esp32_spi.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/display/drivers/esp32_spi.cpp)
+#### [MODIFY] [esp32_spi.cpp](../display/drivers/esp32_spi.cpp)
 - Validate byte-swapping logic (`flush_swap`) against the new explicit `RGB565_SWAPPED` software operations in v9.5.
 
-#### [MODIFY] [CMakeLists.txt](file:///home/sunil/git/lvgl/lvgl_cpp/CMakeLists.txt)
+#### [MODIFY] [CMakeLists.txt](../CMakeLists.txt)
 - Audit the injected SIMD header `LV_DRAW_SW_ASM_CUSTOM_INCLUDE` against the new RISC-V V-extension integration to ensure ESP32-S3 Xtensa assembly routines continue to effectively override default C loops.
 - Update the Github Actions CI matrix mappings (done in YAML, but reflected in CMake configurable defaults) to enforce the triple-epoch testing (ZMK v9.3, v9.4 stable, v9.5 edge).
 
@@ -49,49 +49,49 @@ This document breaks down the migration strategy detailed in `design/lvgl_9_5_mi
     - [x] Keyboard
 The following 15 files will follow the exact same structural redesign: replacing hard-coded `lv_widget_set_x(obj, val)` with the property macro `LV_PROPERTY_WIDGET_X` wrapped internally via `#if LVGL_CPP_HAS_PROPERTIES`, guaranteeing C++ return types `WidgetT&` are preserved.
 
-#### [x] [arc.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/arc.cpp)
-#### [x] [bar.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/bar.cpp)
-#### [x] [switch.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/switch.cpp)
-#### [x] [checkbox.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/checkbox.cpp)
-#### [x] [led.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/led.cpp)
-#### [x] [line.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/line.cpp)
-#### [x] [scale.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/scale.cpp)
-#### [x] [spinbox.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/spinbox.cpp)
-#### [x] [spinner.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/spinner.cpp)
-#### [x] [table.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/table.cpp)
-#### [x] [tabview.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/tabview.cpp)
-#### [x] [button_matrix.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/button_matrix.cpp)
-#### [x] [span.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/span.cpp)
-#### [x] [menu.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/menu.cpp)
-#### [x] [chart.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/chart.cpp)
+#### [x] [arc.cpp](../widgets/arc.cpp)
+#### [x] [bar.cpp](../widgets/bar.cpp)
+#### [x] [switch.cpp](../widgets/switch.cpp)
+#### [x] [checkbox.cpp](../widgets/checkbox.cpp)
+#### [x] [led.cpp](../widgets/led.cpp)
+#### [x] [line.cpp](../widgets/line.cpp)
+#### [x] [scale.cpp](../widgets/scale.cpp)
+#### [x] [spinbox.cpp](../widgets/spinbox.cpp)
+#### [x] [spinner.cpp](../widgets/spinner.cpp)
+#### [x] [table.cpp](../widgets/table.cpp)
+#### [x] [tabview.cpp](../widgets/tabview.cpp)
+#### [x] [button_matrix.cpp](../widgets/button_matrix.cpp)
+#### [x] [span.cpp](../widgets/span.cpp)
+#### [x] [menu.cpp](../widgets/menu.cpp)
+#### [x] [chart.cpp](../widgets/chart.cpp)
 - Chart specific: Implement the new `LV_CHART_TYPE_CURVE` Bézier enum fallback.
 
 ### New Features & Miscellaneous Updates
 
-#### [NEW] [arclabel.h](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/arclabel.h)
-#### [NEW] [arclabel.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/widgets/arclabel.cpp)
+#### [NEW] [arclabel.h](../widgets/arclabel.h)
+#### [NEW] [arclabel.cpp](../widgets/arclabel.cpp)
 - Wrapper for the newly stabilized `lv_arclabel` widget.
 
-#### [MODIFY] [image_descriptor.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/draw/image_descriptor.cpp)
+#### [MODIFY] [image_descriptor.cpp](../draw/image_descriptor.cpp)
 - Add native recognition of `.webp` files utilizing the new decoder plugin hook.
 
-#### [MODIFY] [input_device.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/indev/input_device.cpp)
+#### [MODIFY] [input_device.cpp](../indev/input_device.cpp)
 - Add `.set_key_remap(...)` and `.set_gesture_threshold(...)` wrappers for the new pointer/keyboard abstractions.
 
 ### Testing & Benchmarking Suite
 
-#### [NEW] [test_api_properties.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/tests/test_api_properties.cpp)
+#### [NEW] [test_api_properties.cpp](../tests/test_api_properties.cpp)
 - Exhaustive reflections testing of the 15 refactored widgets using the generic property interface.
 
-#### [MODIFY] [test_visual_widgets.cpp](file:///home/sunil/git/lvgl/lvgl_cpp/tests/test_visual_widgets.cpp)
+#### [MODIFY] [test_visual_widgets.cpp](../tests/test_visual_widgets.cpp)
 - Add visual screenshots for Bézier curves (`LV_CHART_TYPE_CURVE`) and `State::Alt` theme rendering.
 
-#### [MODIFY] [bench_suite](file:///home/sunil/git/lvgl/lvgl_cpp/bench/bench.cpp)
+#### [MODIFY] [bench_suite](../bench/bench.cpp)
 - Update layout churn profiles to ensure the new Flex + `LV_SIZE_CONTENT` layouts do not regress frametimes.
 
 ### Documentation
 
-#### [MODIFY] [MIGRATION_GUIDE.md](file:///home/sunil/git/lvgl/lvgl_cpp/docs/MIGRATION_GUIDE.md)
+#### [MODIFY] [MIGRATION_GUIDE.md](../docs/MIGRATION_GUIDE.md)
 - Extend the public migration guide for `lvgl_cpp` users.
 - Outline the transparent nature of the property interface (no C++ changes required).
 - Detail instructions for enabling NanoVG in Linux deployments and Wayland client chrome adjustments.
