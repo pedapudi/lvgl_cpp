@@ -99,13 +99,44 @@ if(IDF_TARGET)
         )
     endif()
 
+    # Robust path resolution for LVGL private headers (necessary for SIMD plugin)
+    set(LVGL_ROOT_DIR "")
+    set(POTENTIAL_LVGL_PATHS 
+        "${COMPONENT_DIR}/managed_components/lvgl__lvgl"
+        "${COMPONENT_DIR}/../managed_components/lvgl__lvgl"
+        "${COMPONENT_DIR}/../../managed_components/lvgl__lvgl"
+        "${COMPONENT_DIR}/../lvgl"
+        "${COMPONENT_DIR}/../../lvgl"
+    )
+    
+    foreach(path ${POTENTIAL_LVGL_PATHS})
+        if(EXISTS "${path}/src/lvgl.h")
+            set(LVGL_ROOT_DIR "${path}")
+            break()
+        endif()
+    endforeach()
+
+    if(LVGL_ROOT_DIR)
+        message(STATUS "[lvgl_cpp] Found LVGL root for private headers: ${LVGL_ROOT_DIR}")
+        set(LV_PRIV_INCLUDES 
+            "${LVGL_ROOT_DIR}/src/draw"
+            "${LVGL_ROOT_DIR}/src/draw/sw"
+            "${LVGL_ROOT_DIR}/src/draw/sw/blend"
+            "${LVGL_ROOT_DIR}/src/misc"
+        )
+    else()
+        message(WARNING "[lvgl_cpp] Could not find LVGL root directory. Falling back to default relative paths.")
+        set(LV_PRIV_INCLUDES 
+            "managed_components/lvgl__lvgl/src/draw"
+            "managed_components/lvgl__lvgl/src/draw/sw"
+            "managed_components/lvgl__lvgl/src/draw/sw/blend"
+            "managed_components/lvgl__lvgl/src/misc"
+        )
+    endif()
+
     idf_component_register(SRCS ${SOURCES}
                         INCLUDE_DIRS "." ".." "utility/esp32/simd"
-                        PRIV_INCLUDE_DIRS 
-                            "managed_components/lvgl__lvgl/src/draw"
-                            "managed_components/lvgl__lvgl/src/draw/sw"
-                            "managed_components/lvgl__lvgl/src/draw/sw/blend"
-                            "managed_components/lvgl__lvgl/src/misc"
+                        PRIV_INCLUDE_DIRS ${LV_PRIV_INCLUDES}
                         REQUIRES lvgl esp_lcd esp_timer driver)
 
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type -Wno-missing-field-initializers)
