@@ -4,6 +4,7 @@
 
 #include "lv_draw_private.h"
 #include "lv_draw_sw.h"
+#include "lv_area_private.h"
 #include "lv_draw_sw_blend_private.h"
 #include "lv_draw_sw_blend_to_rgb565.h"
 #include "lv_draw_sw_blend_to_rgb888.h"
@@ -107,7 +108,7 @@ void Esp32S3SimdPlugin::blend_handler_rgb565(
       asm_dsc.mask_buf = fill_dsc.mask_buf;
       asm_dsc.mask_stride = fill_dsc.mask_stride;
 
-      if (lv_color_blend_to_rgb565_esp(&asm_dsc)) return;  // Handled
+      if (asm_dsc.mask_buf == nullptr && lv_color_blend_to_rgb565_esp(&asm_dsc)) return;  // Handled
     }
 
     // Fallback
@@ -173,7 +174,7 @@ void Esp32S3SimdPlugin::blend_handler_rgb565(
         asm_dsc.mask_buf = image_dsc.mask_buf;
         asm_dsc.mask_stride = image_dsc.mask_stride;
 
-        if (lv_rgb565_blend_normal_to_rgb565_esp(&asm_dsc)) return;  // Handled
+        if (asm_dsc.mask_buf == nullptr && lv_rgb565_blend_normal_to_rgb565_esp(&asm_dsc)) return;  // Handled
       }
     }
 
@@ -239,7 +240,7 @@ void Esp32S3SimdPlugin::blend_handler_rgb888(
       asm_dsc.mask_buf = fill_dsc.mask_buf;
       asm_dsc.mask_stride = fill_dsc.mask_stride;
 
-      if (lv_color_blend_to_rgb888_esp(&asm_dsc)) return;
+      if (asm_dsc.mask_buf == nullptr && lv_color_blend_to_rgb888_esp(&asm_dsc)) return;
     }
 
     // Fallback
@@ -305,7 +306,7 @@ void Esp32S3SimdPlugin::blend_handler_rgb888(
         asm_dsc.mask_buf = image_dsc.mask_buf;
         asm_dsc.mask_stride = image_dsc.mask_stride;
 
-        if (lv_rgb888_blend_normal_to_rgb888_esp(&asm_dsc)) return;
+        if (asm_dsc.mask_buf == nullptr && lv_rgb888_blend_normal_to_rgb888_esp(&asm_dsc)) return;
       }
     }
 

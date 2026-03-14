@@ -117,6 +117,16 @@
 #if LV_USE_WIN
 #include "widgets/win.h"  // IWYU pragma: export
 #endif
+#include "widgets/screen.h"  // IWYU pragma: export
+#if LV_USE_ARCLABEL
+#include "widgets/arclabel.h"  // IWYU pragma: export
+#endif
+#if LV_USE_3DTEXTURE
+#include "widgets/3dtexture.h"  // IWYU pragma: export
+#endif
+#if LV_USE_GLTF
+#include "widgets/gltf.h"  // IWYU pragma: export
+#endif
 
 // Expose underlying LVGL headers if needed (optional)
 #include "lvgl.h"  // IWYU pragma: export

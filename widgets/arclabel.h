@@ -84,6 +84,11 @@ class ArcLabel : public Widget<ArcLabel> {
   lv_value_precise_t get_angle_size() const;
 
   /**
+   * @brief Set both start and size angles.
+   */
+  ArcLabel& set_angles(lv_value_precise_t start, lv_value_precise_t size);
+
+  /**
    * @brief Set the rotation offset.
    */
   ArcLabel& set_offset(int32_t offset);

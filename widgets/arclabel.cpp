@@ -43,7 +43,7 @@ ArcLabel& ArcLabel::set_text_static(const char* text) {
   return *this;
 }
 
-const char* ArcLabel::get_text() const { return ""; }
+const char* ArcLabel::get_text() const { return nullptr; }
 
 ArcLabel& ArcLabel::set_angle_start(lv_value_precise_t start) {
   if (raw()) lv_arclabel_set_angle_start(raw(), start);
@@ -61,6 +61,14 @@ ArcLabel& ArcLabel::set_angle_size(lv_value_precise_t size) {
 
 lv_value_precise_t ArcLabel::get_angle_size() const {
   return raw() ? lv_arclabel_get_angle_size(raw()) : 0;
+}
+
+ArcLabel& ArcLabel::set_angles(lv_value_precise_t start, lv_value_precise_t size) {
+  if (raw()) {
+    lv_arclabel_set_angle_start(raw(), start);
+    lv_arclabel_set_angle_size(raw(), size);
+  }
+  return *this;
 }
 
 ArcLabel& ArcLabel::set_offset(int32_t offset) {

@@ -101,6 +101,9 @@ if(IDF_TARGET)
 
     idf_component_register(SRCS ${SOURCES}
                         INCLUDE_DIRS "." ".." "utility/esp32/simd"
+                        PRIV_INCLUDE_DIRS 
+                            "managed_components/lvgl__lvgl/src/draw/sw/blend"
+                            "managed_components/lvgl__lvgl/src/misc"
                         REQUIRES lvgl esp_lcd esp_timer driver)
 
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-cast-function-type -Wno-missing-field-initializers)

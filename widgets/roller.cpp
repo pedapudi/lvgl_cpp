@@ -30,7 +30,7 @@ Roller& Roller::set_selected(uint32_t sel_opt, AnimEnable anim) {
 #if LVGL_CPP_HAS_PROPERTIES
   return set_property(LV_PROPERTY_ROLLER_SELECTED,
                       static_cast<int32_t>(sel_opt),
-                      anim == AnimEnable::On ? 1 : 0);
+                      anim == AnimEnable::On);
 #else
   if (raw())
     lv_roller_set_selected(raw(), sel_opt, static_cast<lv_anim_enable_t>(anim));
